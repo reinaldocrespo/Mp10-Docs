@@ -506,4 +506,4 @@ When contacting support, having these ready will save a round trip:
 - the exact Section and Entry values you have set
 - for a remittance problem, the PDF itself
 
-Structured Systems · <reinaldocrespo@gmail.com> · 954-744-0286
+Structured Systems · <reinaldocrespo@structuredsystems.com> · 954-744-0286
