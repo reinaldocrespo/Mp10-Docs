@@ -177,11 +177,11 @@ carefully</a></li>
 </ul></li>
 <li><a href="#optional-zipping-and-retention" id="toc-optional-zipping-and-retention">Optional: zipping and
 retention</a></li>
-<li><a href="#being-told-it-worked" id="toc-being-told-it-worked">Being
-told it worked</a>
+<li><a href="#being-told-what-happened" id="toc-being-told-what-happened">Being told what happened</a>
 <ul>
 <li><a href="#sending-to-more-than-one-person" id="toc-sending-to-more-than-one-person">Sending to more than one
 person</a></li>
+<li><a href="#when-something-goes-wrong" id="toc-when-something-goes-wrong">When something goes wrong</a></li>
 </ul></li>
 <li><a href="#a-working-example" id="toc-a-working-example">A working
 example</a></li>
@@ -582,10 +582,10 @@ the number of zips in <code>BACKUP_ZIP_PATH</code> exceeds this number,
 the oldest are erased automatically. Keep that folder for backups only,
 and set the number to match the disk space you have.</p>
 </blockquote>
-<h2 id="being-told-it-worked">Being told it worked</h2>
-<p>Backups run at night, when nobody is watching. AutoTasks can e-mail a
-short report each time one finishes, so you find out it is still working
-without having to go and look.</p>
+<h2 id="being-told-what-happened">Being told what happened</h2>
+<p>Backups run at night, when nobody is watching. AutoTasks e-mails a
+short report each time one finishes — <strong>whether it worked or
+not</strong> — so you find out without having to go and look.</p>
 <table>
 <colgroup>
 <col style="width: 25%" />
@@ -610,7 +610,7 @@ without having to go and look.</p>
 </tr>
 </tbody>
 </table>
-<p>You get <strong>two</strong> messages per night:</p>
+<p>On a normal night you get <strong>two</strong> messages:</p>
 <ol type="1">
 <li>when the database backup finishes, and</li>
 <li>when the zip archive finishes — this one also lists any older
@@ -644,16 +644,44 @@ spaces around them do not matter:</p>
 typo in the list does not stop the others receiving their copy. Look in
 <code>AutoTasks.out</code> for <code>Backup notice sent to</code> to see
 how many recipients it actually used.</p>
-<blockquote>
-<p><strong>These messages tell you a backup <em>succeeded</em>. They do
-not tell you one failed.</strong> If a backup fails, or the service is
-not running at all, you get silence in both cases. Treat a night with no
-message as something to look into — the log will say which it was.</p>
-</blockquote>
 <p>Delivery uses the same <code>eMail</code> settings as automated
 reports (see <em>Making sure e-mail actually goes out</em>). If those
 are not configured, backups still run normally; only the notification is
 lost, and the log records that it could not be sent.</p>
+<h3 id="when-something-goes-wrong">When something goes wrong</h3>
+<p>Failures are e-mailed too, with <code>FAILED</code> in the subject so
+you can spot or filter them. There are two, and they mean very different
+things.</p>
+<p><strong><code>Mp10 backup FAILED</code></strong> — the database
+backup did not happen. There is no new copy of your data today. The
+message carries the error the database server reported, which is usually
+enough to identify the cause:</p>
+<pre><code>The Mp10 hot backup FAILED.  NO BACKUP WAS TAKEN TODAY.
+
+Data dictionary : \\adsserver\data\mp10\mp10.add
+Destination     : \\adsserver\backup\mp10\
+Started         : 2026-08-01 02:00:03
+Failed          : 2026-08-01 02:00:09
+Ran for         : 00:00:06
+
+ADS error       : 7077
+ADS message     : The specified path is invalid</code></pre>
+<p><strong><code>Mp10 backup archive FAILED</code></strong> — less
+serious. The backup itself worked and today’s data is safe in
+<code>BACKUP_PATH</code>; only the zip step failed, so there is no dated
+archive for today and nothing was rotated. Usually a full disk or a
+permission problem on <code>BACKUP_ZIP_PATH</code>.</p>
+<blockquote>
+<p><strong>You are e-mailed once per problem per day, not once per
+attempt.</strong> AutoTasks keeps retrying a failed backup during the
+day, and mailing every attempt would bury the first message. So a single
+failure e-mail can mean one failure or a hundred — check
+<code>AutoTasks.out</code> on the server for the full picture before
+deciding it was a one-off.</p>
+</blockquote>
+<p>Silence still means something is wrong: if the service itself is
+stopped, it cannot send anything at all. A night with no message of any
+kind is worth looking into.</p>
 <h2 id="a-working-example">A working example</h2>
 <table>
 <colgroup>
@@ -1203,9 +1231,18 @@ is blank there is nothing to archive, and the first message says so</td>
 line gives the count actually used</td>
 </tr>
 <tr class="odd">
+<td>A <code>FAILED</code> message, then nothing more that day</td>
+<td>Working as designed — one message per problem per day, however many
+times it retries. The log has every attempt</td>
+</tr>
+<tr class="even">
 <td>No message at all, on a night you expected one</td>
-<td>The backup did not succeed. Silence is not confirmation — check the
-log</td>
+<td>The service is not running, or never reached the backup. Silence is
+not confirmation — check the log</td>
+</tr>
+<tr class="odd">
+<td><code>already sent today; not repeating</code> in the log</td>
+<td>The same problem recurred; the first e-mail already went out</td>
 </tr>
 </tbody>
 </table>

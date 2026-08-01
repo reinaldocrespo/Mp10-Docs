@@ -205,17 +205,17 @@ path reachable from the Mp10 server is fine.
 > Keep that folder for backups only, and set the number to match the disk space
 > you have.
 
-## Being told it worked
+## Being told what happened
 
-Backups run at night, when nobody is watching. AutoTasks can e-mail a short
-report each time one finishes, so you find out it is still working without
+Backups run at night, when nobody is watching. AutoTasks e-mails a short report
+each time one finishes — **whether it worked or not** — so you find out without
 having to go and look.
 
 | Entry | Example | Default | What it means |
 |---|---|---|---|
 | `NOTIFY_EMAIL` | `support@structuredsystems.com` | `support@structuredsystems.com` | Who to notify. Blank = do not send |
 
-You get **two** messages per night:
+On a normal night you get **two** messages:
 
 1. when the database backup finishes, and
 2. when the zip archive finishes — this one also lists any older archives that
@@ -255,15 +255,47 @@ Anything that is not an address is ignored rather than sent, so one typo in the
 list does not stop the others receiving their copy. Look in `AutoTasks.out` for
 `Backup notice sent to` to see how many recipients it actually used.
 
-> **These messages tell you a backup *succeeded*. They do not tell you one
-> failed.** If a backup fails, or the service is not running at all, you get
-> silence in both cases. Treat a night with no message as something to look
-> into — the log will say which it was.
-
 Delivery uses the same `eMail` settings as automated reports (see *Making sure
 e-mail actually goes out*). If those are not configured, backups still run
 normally; only the notification is lost, and the log records that it could not
 be sent.
+
+### When something goes wrong
+
+Failures are e-mailed too, with `FAILED` in the subject so you can spot or
+filter them. There are two, and they mean very different things.
+
+**`Mp10 backup FAILED`** — the database backup did not happen. There is no new
+copy of your data today. The message carries the error the database server
+reported, which is usually enough to identify the cause:
+
+```
+The Mp10 hot backup FAILED.  NO BACKUP WAS TAKEN TODAY.
+
+Data dictionary : \\adsserver\data\mp10\mp10.add
+Destination     : \\adsserver\backup\mp10\
+Started         : 2026-08-01 02:00:03
+Failed          : 2026-08-01 02:00:09
+Ran for         : 00:00:06
+
+ADS error       : 7077
+ADS message     : The specified path is invalid
+```
+
+**`Mp10 backup archive FAILED`** — less serious. The backup itself worked and
+today's data is safe in `BACKUP_PATH`; only the zip step failed, so there is no
+dated archive for today and nothing was rotated. Usually a full disk or a
+permission problem on `BACKUP_ZIP_PATH`.
+
+> **You are e-mailed once per problem per day, not once per attempt.**
+> AutoTasks keeps retrying a failed backup during the day, and mailing every
+> attempt would bury the first message. So a single failure e-mail can mean one
+> failure or a hundred — check `AutoTasks.out` on the server for the full
+> picture before deciding it was a one-off.
+
+Silence still means something is wrong: if the service itself is stopped, it
+cannot send anything at all. A night with no message of any kind is worth
+looking into.
 
 ## A working example
 
@@ -554,7 +586,9 @@ the e-mail did not go out", and those need different fixes.
 |---|---|
 | Only one message instead of two | The second comes from the zip step. If `BACKUP_ZIP_PATH` is blank there is nothing to archive, and the first message says so |
 | Some recipients got it, others did not | An entry in the list is not a valid address and was skipped. The log line gives the count actually used |
-| No message at all, on a night you expected one | The backup did not succeed. Silence is not confirmation — check the log |
+| A `FAILED` message, then nothing more that day | Working as designed — one message per problem per day, however many times it retries. The log has every attempt |
+| No message at all, on a night you expected one | The service is not running, or never reached the backup. Silence is not confirmation — check the log |
+| `already sent today; not repeating` in the log | The same problem recurred; the first e-mail already went out |
 
 ## Remittance PDFs are not being picked up
 
