@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Structured Systems · www.structuredsystems.com" />
+  <meta name="dcterms.date" content="2026-08-01" />
+  <title>Mp10 Web — Signature Pads</title>
+  <style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+  <style type="text/css">
+:root {
+color-scheme: light dark;
+--fg: #1a1a1a;
+--bg: #ffffff;
+--muted: #5a5a5a;
+--rule: #d8d8d8;
+--accent: #0b5cad;
+--code-bg: #f4f4f6;
+--note-bg: #f7f7f9;
+}
+@media (prefers-color-scheme: dark) {
+:root {
+--fg: #e6e6e6;
+--bg: #16181d;
+--muted: #a2a2a8;
+--rule: #33363d;
+--accent: #6cb0f5;
+--code-bg: #22252c;
+--note-bg: #1d2027;
+}
+}
+html { -webkit-text-size-adjust: 100%; }
+body {
+font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+color: var(--fg);
+background: var(--bg);
+max-width: 52rem;
+margin: 0 auto;
+padding: 2.5rem 1.25rem 5rem;
+line-height: 1.65;
+font-size: 1.02rem;
+}
+
+header#title-block-header { border-bottom: 2px solid var(--rule); margin-bottom: 2rem; }
+h1.title { margin-bottom: .2rem; font-size: 2rem; line-height: 1.2; }
+p.subtitle { margin-top: 0; color: var(--muted); font-size: 1.1rem; }
+p.author, p.date { margin: .2rem 0; color: var(--muted); font-size: .92rem; }
+h1, h2, h3, h4 { line-height: 1.25; margin-top: 2.2rem; }
+h1 { font-size: 1.7rem; padding-bottom: .3rem; border-bottom: 1px solid var(--rule); }
+h2 { font-size: 1.3rem; }
+h3 { font-size: 1.1rem; }
+a { color: var(--accent); }
+
+nav#TOC {
+background: var(--note-bg);
+border: 1px solid var(--rule);
+border-radius: .5rem;
+padding: 1rem 1.25rem;
+margin-bottom: 2.5rem;
+}
+nav#TOC > ul { margin: 0; padding-left: 1.1rem; }
+nav#TOC ul { list-style: none; padding-left: 1.1rem; }
+nav#TOC li { margin: .18rem 0; }
+nav#TOC a { text-decoration: none; }
+nav#TOC a:hover { text-decoration: underline; }
+
+table {
+border-collapse: collapse;
+width: 100%;
+margin: 1.25rem 0;
+font-size: .94rem;
+display: block;
+overflow-x: auto; 
+}
+th, td {
+border-bottom: 1px solid var(--rule);
+padding: .5rem .6rem;
+text-align: left;
+vertical-align: top;
+}
+thead th { border-bottom: 2px solid var(--rule); white-space: nowrap; }
+tbody tr:hover { background: var(--note-bg); }
+code, pre {
+font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
+font-size: .9em;
+}
+code { background: var(--code-bg); padding: .12em .35em; border-radius: .25rem; }
+pre {
+background: var(--code-bg);
+padding: .9rem 1rem;
+border-radius: .4rem;
+overflow-x: auto;
+}
+pre code { background: none; padding: 0; }
+
+blockquote {
+margin: 1.25rem 0;
+padding: .75rem 1.1rem;
+background: var(--note-bg);
+border-left: 4px solid var(--accent);
+border-radius: 0 .35rem .35rem 0;
+}
+blockquote p { margin: .35rem 0; }
+
+img {
+max-width: 100%;
+height: auto;
+display: block;
+margin: 1.25rem auto;
+border: 1px solid var(--rule);
+border-radius: .35rem;
+}
+figcaption {
+text-align: center;
+color: var(--muted);
+font-size: .9rem;
+margin-top: -.6rem;
+}
+@media print {
+body { max-width: none; font-size: 11pt; }
+nav#TOC { break-after: page; }
+h1 { break-before: page; }
+h1:first-of-type { break-before: avoid; }
+a { color: inherit; }
+}
+</style>
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Mp10 Web — Signature Pads</h1>
+<p class="subtitle">Capturing patient signatures from a Topaz pad</p>
+<p class="author">Structured Systems · www.structuredsystems.com</p>
+<p class="date">01 August 2026</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#about-this-guide" id="toc-about-this-guide">About this
+guide</a></li>
+<li><a href="#using-it" id="toc-using-it">Using it</a>
+<ul>
+<li><a href="#where-the-button-is" id="toc-where-the-button-is">Where
+the button is</a></li>
+<li><a href="#taking-a-signature" id="toc-taking-a-signature">Taking a
+signature</a></li>
+<li><a href="#things-it-will-not-let-you-do" id="toc-things-it-will-not-let-you-do">Things it will not let you
+do</a></li>
+<li><a href="#if-there-is-no-pad" id="toc-if-there-is-no-pad">If there
+is no pad</a></li>
+<li><a href="#when-something-is-wrong" id="toc-when-something-is-wrong">When something is wrong</a></li>
+</ul></li>
+<li><a href="#installing-it-it-task" id="toc-installing-it-it-task">Installing it — IT task</a>
+<ul>
+<li><a href="#what-sigweb-is" id="toc-what-sigweb-is">What SigWeb
+is</a></li>
+<li><a href="#install-sigweb-on-the-workstation" id="toc-install-sigweb-on-the-workstation">1. Install SigWeb on the
+workstation</a></li>
+<li><a href="#put-sigwebtablet.js-on-the-web-server" id="toc-put-sigwebtablet.js-on-the-web-server">2. Put
+<code>SigWebTablet.js</code> on the web server</a></li>
+<li><a href="#check-it" id="toc-check-it">3. Check it</a></li>
+<li><a href="#if-a-pad-works-in-the-desktop-app-but-not-here" id="toc-if-a-pad-works-in-the-desktop-app-but-not-here">If a pad works
+in the desktop app but not here</a></li>
+<li><a href="#what-gets-stored" id="toc-what-gets-stored">What gets
+stored</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="about-this-guide">About this guide</h1>
+<p>Mp10 Web can take a patient’s signature directly from a <strong>Topaz
+signature pad</strong> plugged into the workstation, the same way the
+desktop application does.</p>
+<p>This guide has two halves:</p>
+<ul>
+<li><strong>Using it</strong> — for the person at the front desk. Two
+pages, no setup.</li>
+<li><strong>Installing it</strong> — for whoever looks after the
+computers. This is marked <strong>IT task</strong> throughout.</li>
+</ul>
+<p>There is one hard limitation to know before you start, because it
+decides who can use this at all:</p>
+<blockquote>
+<p><strong>Signature pads only work on Windows computers.</strong> The
+software Topaz supplies is Windows-only. On a Mac, an iPad, or a phone,
+the <strong>Capture signature</strong> button will tell you so and point
+you at the other way of attaching a signature (see <em>If there is no
+pad</em>). This is a limitation of the pad’s software, not of Mp10 Web,
+and there is no way around it.</p>
+</blockquote>
+<h1 id="using-it">Using it</h1>
+<h2 id="where-the-button-is">Where the button is</h2>
+<p>Select an encounter, then choose <strong>Capture signature</strong>.
+The button is on both encounters screens:</p>
+<ul>
+<li>the <strong>Encounters</strong> list on the left-hand menu, and</li>
+<li>the <strong>Encounters</strong> list for one patient — both on the
+patient’s record and in the Encounters window that opens from the
+patients list.</li>
+</ul>
+<p><strong>The button only lights up for an encounter that has no
+signature yet.</strong> If it is greyed out, hover over it: it will say
+<em>“This encounter already has a signature”</em>. That is deliberate —
+it stops one patient’s signature being written over another’s by
+accident.</p>
+<p>To replace a signature that is already there, open the encounter
+itself and use the <strong>Signature</strong> panel on the encounter
+form.</p>
+<h2 id="taking-a-signature">Taking a signature</h2>
+<ol type="1">
+<li>Select the encounter and choose <strong>Capture
+signature</strong>.</li>
+<li>A window opens with an empty signing area. It says <em>“Connecting
+to the signature pad…”</em> for a moment.</li>
+<li>Ask the patient to sign <strong>on the pad</strong>. Their signature
+appears in the window as they write.</li>
+<li>If they want to start again, choose <strong>Clear</strong> and let
+them sign again. This clears both the pad and the screen.</li>
+<li>Choose <strong>Save signature</strong>.</li>
+</ol>
+<p>The window confirms <em>“Signature saved”</em> and closes itself. The
+encounter’s <strong>Signature</strong> column now shows a tick, and
+<strong>Capture signature</strong> greys out for that encounter.</p>
+<h2 id="things-it-will-not-let-you-do">Things it will not let you
+do</h2>
+<ul>
+<li><strong>Saving an empty pad.</strong> If nobody has signed,
+<strong>Save signature</strong> refuses and says so. A blank image is
+worse than none: the encounter would look signed when it is not.</li>
+<li><strong>Signing the wrong encounter.</strong> The window’s title
+shows the encounter number the signature will be attached to. Check it
+matches before saving.</li>
+</ul>
+<h2 id="if-there-is-no-pad">If there is no pad</h2>
+<p>You can always attach a signature without a pad:</p>
+<ol type="1">
+<li>Open the encounter.</li>
+<li>Use the <strong>Signature</strong> panel’s <strong>Capture /
+Upload</strong> button.</li>
+<li>On a computer this opens a file picker — choose a scanned image. On
+a phone or tablet it can open the camera, so you can photograph a
+signature on paper.</li>
+</ol>
+<p>This is also the way to <strong>replace</strong> a signature that has
+already been taken.</p>
+<h2 id="when-something-is-wrong">When something is wrong</h2>
+<p>The signature window explains problems in place rather than failing
+silently. The message tells you which of these it is:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>What it says</th>
+<th>What it means</th>
+<th>Who fixes it</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Signature pads are only supported on Windows workstations</td>
+<td>You are on a Mac, tablet or phone</td>
+<td>Use the encounter form instead</td>
+</tr>
+<tr class="even">
+<td>Topaz’s <code>SigWebTablet.js</code> was not found</td>
+<td>The web server is missing a Topaz file</td>
+<td><strong>IT task</strong> — see below</td>
+</tr>
+<tr class="odd">
+<td>SigWeb … is not running on this workstation</td>
+<td>The Topaz software is not installed or not started on this PC</td>
+<td><strong>IT task</strong> — see below</td>
+</tr>
+<tr class="even">
+<td>Nothing has been signed yet</td>
+<td>The pad is connected but nobody signed</td>
+<td>Ask the patient to sign</td>
+</tr>
+</tbody>
+</table>
+<p>In every one of these cases <strong>nothing is saved</strong> and the
+encounter stays unsigned, so it is always safe to close the window and
+try again.</p>
+<h1 id="installing-it-it-task">Installing it — IT task</h1>
+<p>Two separate things have to be in place. They are independent, and
+the error messages above tell you which one is missing.</p>
+<ol type="1">
+<li><strong>On each Windows workstation</strong> that has a pad: Topaz’s
+<strong>SigWeb</strong>.</li>
+<li><strong>On the web server</strong>, once: Topaz’s
+<code>SigWebTablet.js</code> file.</li>
+</ol>
+<h2 id="what-sigweb-is">What SigWeb is</h2>
+<p>SigWeb is Topaz’s browser-facing component. It installs as a Windows
+service that talks to the pad, and web pages drive it through a
+JavaScript file Topaz supplies. There is <strong>no browser plug-in and
+no ActiveX</strong>, so it works in Chrome, Edge and Firefox — but only
+on Windows.</p>
+<h2 id="install-sigweb-on-the-workstation">1. Install SigWeb on the
+workstation</h2>
+<p>Download SigWeb from Topaz’s site (<a href="https://www.topazsystems.com" class="uri">https://www.topazsystems.com</a>) and run the installer on
+each Windows PC that has a pad. Plug the pad in and confirm Windows
+recognises it.</p>
+<blockquote>
+<p><strong>Confirm with Topaz which component your pads need.</strong>
+SigWeb is the usual answer for a browser-based application, but Topaz
+also ships SigPlusExtLite for some situations, and licensing terms
+differ. Check this against your model of pad and your licence before
+rolling it out to every workstation.</p>
+</blockquote>
+<h2 id="put-sigwebtablet.js-on-the-web-server">2. Put
+<code>SigWebTablet.js</code> on the web server</h2>
+<p>The SigWeb installation includes a JavaScript file called
+<code>SigWebTablet.js</code>. Copy it to the Mp10 Web server so the
+browser can load it:</p>
+<pre><code>&lt;Mp10 Web&gt;/frontend/public/sigweb/SigWebTablet.js</code></pre>
+<p>On a built/deployed site, the same file must end up in the served
+folder:</p>
+<pre><code>&lt;Mp10 Web&gt;/frontend/dist/sigweb/SigWebTablet.js</code></pre>
+<p>Anything in <code>public/</code> is copied into <code>dist/</code> by
+<code>npm run build</code>, so putting it in <code>public/</code> before
+a build covers both.</p>
+<blockquote>
+<p><strong>Why this file is not shipped with Mp10 Web.</strong> It is
+Topaz’s file, under Topaz’s licence, and it changes between SigWeb
+versions. Taking it from the installer you actually ran keeps the
+browser and the workstation on the same version.</p>
+</blockquote>
+<h2 id="check-it">3. Check it</h2>
+<p>On a workstation with a pad, sign in to Mp10 Web, select an encounter
+with no signature and choose <strong>Capture signature</strong>.</p>
+<ul>
+<li>Signing area appears, no error → <strong>working</strong>.</li>
+<li><em>“SigWebTablet.js was not found”</em> → step 2 was missed, or the
+file is in the wrong folder. Browse to
+<code>https://&lt;your-server&gt;/sigweb/SigWebTablet.js</code> — you
+should get JavaScript, not a “not found” page.</li>
+<li><em>“SigWeb … is not running on this workstation”</em> → step 1 was
+missed on this PC, or the SigWeb service is stopped. Check Windows
+Services.</li>
+</ul>
+<h2 id="if-a-pad-works-in-the-desktop-app-but-not-here">If a pad works
+in the desktop app but not here</h2>
+<p>The desktop application and Mp10 Web use <strong>different</strong>
+Topaz components. The desktop app talks to the pad directly; the browser
+needs SigWeb as well. A pad working in the desktop app therefore proves
+the hardware and the cable are fine — it does not mean SigWeb is
+installed. Do step 1 anyway.</p>
+<h2 id="what-gets-stored">What gets stored</h2>
+<p>The signature is stored as a <strong>PNG image</strong> on the
+encounter, in exactly the same place a scanned or photographed signature
+goes. Nothing about the rest of Mp10 changes, and the desktop
+application reads these signatures normally.</p>
+</body>
+</html>
