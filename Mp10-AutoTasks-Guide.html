@@ -177,6 +177,12 @@ carefully</a></li>
 </ul></li>
 <li><a href="#optional-zipping-and-retention" id="toc-optional-zipping-and-retention">Optional: zipping and
 retention</a></li>
+<li><a href="#being-told-it-worked" id="toc-being-told-it-worked">Being
+told it worked</a>
+<ul>
+<li><a href="#sending-to-more-than-one-person" id="toc-sending-to-more-than-one-person">Sending to more than one
+person</a></li>
+</ul></li>
 <li><a href="#a-working-example" id="toc-a-working-example">A working
 example</a></li>
 <li><a href="#backups-are-not-a-disaster-recovery-plan-on-their-own" id="toc-backups-are-not-a-disaster-recovery-plan-on-their-own">Backups
@@ -225,6 +231,7 @@ actually goes out</a></li>
 happening</a></li>
 <li><a href="#the-backup-never-runs" id="toc-the-backup-never-runs">The
 backup never runs</a></li>
+<li><a href="#no-backup-e-mail-arrived" id="toc-no-backup-e-mail-arrived">No backup e-mail arrived</a></li>
 <li><a href="#remittance-pdfs-are-not-being-picked-up" id="toc-remittance-pdfs-are-not-being-picked-up">Remittance PDFs are not
 being picked up</a></li>
 <li><a href="#a-scheduled-report-did-not-arrive" id="toc-a-scheduled-report-did-not-arrive">A scheduled report did not
@@ -575,8 +582,85 @@ the number of zips in <code>BACKUP_ZIP_PATH</code> exceeds this number,
 the oldest are erased automatically. Keep that folder for backups only,
 and set the number to match the disk space you have.</p>
 </blockquote>
+<h2 id="being-told-it-worked">Being told it worked</h2>
+<p>Backups run at night, when nobody is watching. AutoTasks can e-mail a
+short report each time one finishes, so you find out it is still working
+without having to go and look.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Entry</th>
+<th>Example</th>
+<th>Default</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>NOTIFY_EMAIL</code></td>
+<td><code>support@structuredsystems.com</code></td>
+<td><code>support@structuredsystems.com</code></td>
+<td>Who to notify. Blank = do not send</td>
+</tr>
+</tbody>
+</table>
+<p>You get <strong>two</strong> messages per night:</p>
+<ol type="1">
+<li>when the database backup finishes, and</li>
+<li>when the zip archive finishes — this one also lists any older
+archives that were deleted to stay within
+<code>MAX_BACKUPS_TO_KEEP</code>.</li>
+</ol>
+<p>The second message is the more useful of the two, because rotation is
+the only part of the process that destroys anything, and this is the
+only record you get of it.</p>
+<pre><code>The Mp10 backup archive was created successfully.
+
+Data dictionary : \\adsserver\data\mp10\mp10.add
+Archive         : D:\Backups\Zips\Mp10Data-2026-08-01.zip
+Size            : 3072.0 MB (3,221,225,472 bytes)
+Files archived  : 428
+Started         : 2026-08-01 04:37:11
+Finished        : 2026-08-01 04:52:44
+Duration        : 00:15:33
+
+Retention       : keeping the most recent 30 archives
+Removed         : 2 older archive(s)
+                  Mp10Data-2026-06-28.zip
+                  Mp10Data-2026-06-29.zip</code></pre>
+<h3 id="sending-to-more-than-one-person">Sending to more than one
+person</h3>
+<p><code>NOTIFY_EMAIL</code> takes as many addresses as you like.
+Separate them with commas or semicolons — you can mix the two, and
+spaces around them do not matter:</p>
+<pre><code>support@structuredsystems.com; manager@yourpractice.com, it@yourpractice.com</code></pre>
+<p>Anything that is not an address is ignored rather than sent, so one
+typo in the list does not stop the others receiving their copy. Look in
+<code>AutoTasks.out</code> for <code>Backup notice sent to</code> to see
+how many recipients it actually used.</p>
+<blockquote>
+<p><strong>These messages tell you a backup <em>succeeded</em>. They do
+not tell you one failed.</strong> If a backup fails, or the service is
+not running at all, you get silence in both cases. Treat a night with no
+message as something to look into — the log will say which it was.</p>
+</blockquote>
+<p>Delivery uses the same <code>eMail</code> settings as automated
+reports (see <em>Making sure e-mail actually goes out</em>). If those
+are not configured, backups still run normally; only the notification is
+lost, and the log records that it could not be sent.</p>
 <h2 id="a-working-example">A working example</h2>
 <table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th>Section</th>
@@ -610,10 +694,16 @@ and set the number to match the disk space you have.</p>
 <td><code>MAX_BACKUPS_TO_KEEP</code></td>
 <td><code>30</code></td>
 </tr>
+<tr class="even">
+<td><code>BACKUPS</code></td>
+<td><code>NOTIFY_EMAIL</code></td>
+<td><code>support@structuredsystems.com; manager@yourpractice.com</code></td>
+</tr>
 </tbody>
 </table>
 <p>This takes a backup Monday through Saturday, any time after 2 a.m.,
-zips it to a local disk, and keeps the last 30 zips.</p>
+zips it to a local disk, keeps the last 30 zips, and e-mails two people
+when it is done.</p>
 <h2 id="backups-are-not-a-disaster-recovery-plan-on-their-own">Backups
 are not a disaster recovery plan on their own</h2>
 <p>A backup that has never been restored is a hope, not a backup. Copy
@@ -1042,6 +1132,80 @@ table — 1 is Sunday, not Monday</td>
 <td>Zips are disappearing</td>
 <td><code>MAX_BACKUPS_TO_KEEP</code> is pruning them. Raise it or move
 zips off elsewhere</td>
+</tr>
+</tbody>
+</table>
+<h2 id="no-backup-e-mail-arrived">No backup e-mail arrived</h2>
+<p>Check the log first — it distinguishes “the backup did not run” from
+“it ran but the e-mail did not go out”, and those need different
+fixes.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>In <code>AutoTasks.out</code></th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Backup notice sent to N recipient(s)</code></td>
+<td>It was sent. Look in the recipients’ spam folder</td>
+</tr>
+<tr class="even">
+<td><code>Backup notice FAILED to send to</code></td>
+<td>The mail server rejected it — check the <code>eMail</code>
+settings</td>
+</tr>
+<tr class="odd">
+<td><code>Backup notice could not be sent (mail error)</code></td>
+<td>The mail server could not be reached at all</td>
+</tr>
+<tr class="even">
+<td><code>notifications are switched off</code></td>
+<td><code>NOTIFY_EMAIL</code> is blank</td>
+</tr>
+<tr class="odd">
+<td><code>holds no usable address</code></td>
+<td>Nothing in <code>NOTIFY_EMAIL</code> looks like an address — check
+for a typo</td>
+</tr>
+<tr class="even">
+<td>Nothing at all about a notice</td>
+<td>The backup itself never completed. See <em>The backup never
+runs</em></td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Symptom</th>
+<th>Likely cause</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Only one message instead of two</td>
+<td>The second comes from the zip step. If <code>BACKUP_ZIP_PATH</code>
+is blank there is nothing to archive, and the first message says so</td>
+</tr>
+<tr class="even">
+<td>Some recipients got it, others did not</td>
+<td>An entry in the list is not a valid address and was skipped. The log
+line gives the count actually used</td>
+</tr>
+<tr class="odd">
+<td>No message at all, on a night you expected one</td>
+<td>The backup did not succeed. Silence is not confirmation — check the
+log</td>
 </tr>
 </tbody>
 </table>

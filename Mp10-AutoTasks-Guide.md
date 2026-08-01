@@ -205,6 +205,66 @@ path reachable from the Mp10 server is fine.
 > Keep that folder for backups only, and set the number to match the disk space
 > you have.
 
+## Being told it worked
+
+Backups run at night, when nobody is watching. AutoTasks can e-mail a short
+report each time one finishes, so you find out it is still working without
+having to go and look.
+
+| Entry | Example | Default | What it means |
+|---|---|---|---|
+| `NOTIFY_EMAIL` | `support@structuredsystems.com` | `support@structuredsystems.com` | Who to notify. Blank = do not send |
+
+You get **two** messages per night:
+
+1. when the database backup finishes, and
+2. when the zip archive finishes — this one also lists any older archives that
+   were deleted to stay within `MAX_BACKUPS_TO_KEEP`.
+
+The second message is the more useful of the two, because rotation is the only
+part of the process that destroys anything, and this is the only record you get
+of it.
+
+```
+The Mp10 backup archive was created successfully.
+
+Data dictionary : \\adsserver\data\mp10\mp10.add
+Archive         : D:\Backups\Zips\Mp10Data-2026-08-01.zip
+Size            : 3072.0 MB (3,221,225,472 bytes)
+Files archived  : 428
+Started         : 2026-08-01 04:37:11
+Finished        : 2026-08-01 04:52:44
+Duration        : 00:15:33
+
+Retention       : keeping the most recent 30 archives
+Removed         : 2 older archive(s)
+                  Mp10Data-2026-06-28.zip
+                  Mp10Data-2026-06-29.zip
+```
+
+### Sending to more than one person
+
+`NOTIFY_EMAIL` takes as many addresses as you like. Separate them with commas
+or semicolons — you can mix the two, and spaces around them do not matter:
+
+```
+support@structuredsystems.com; manager@yourpractice.com, it@yourpractice.com
+```
+
+Anything that is not an address is ignored rather than sent, so one typo in the
+list does not stop the others receiving their copy. Look in `AutoTasks.out` for
+`Backup notice sent to` to see how many recipients it actually used.
+
+> **These messages tell you a backup *succeeded*. They do not tell you one
+> failed.** If a backup fails, or the service is not running at all, you get
+> silence in both cases. Treat a night with no message as something to look
+> into — the log will say which it was.
+
+Delivery uses the same `eMail` settings as automated reports (see *Making sure
+e-mail actually goes out*). If those are not configured, backups still run
+normally; only the notification is lost, and the log records that it could not
+be sent.
+
 ## A working example
 
 | Section | Entry | Value |
@@ -214,9 +274,10 @@ path reachable from the Mp10 server is fine.
 | `BACKUPS` | `BACKUP_DAYS` | `234567` |
 | `BACKUPS` | `BACKUP_ZIP_PATH` | `D:\Backups\Zips\` |
 | `BACKUPS` | `MAX_BACKUPS_TO_KEEP` | `30` |
+| `BACKUPS` | `NOTIFY_EMAIL` | `support@structuredsystems.com; manager@yourpractice.com` |
 
 This takes a backup Monday through Saturday, any time after 2 a.m., zips it to
-a local disk, and keeps the last 30 zips.
+a local disk, keeps the last 30 zips, and e-mails two people when it is done.
 
 ## Backups are not a disaster recovery plan on their own
 
@@ -474,6 +535,26 @@ happen. Almost every question below is answered by a line in that file.
 | Runs some days but not others | Check the digits in `BACKUP_DAYS` against the day-code table — 1 is Sunday, not Monday |
 | Ran once, never again the same day | Working as designed — one backup per calendar day |
 | Zips are disappearing | `MAX_BACKUPS_TO_KEEP` is pruning them. Raise it or move zips off elsewhere |
+
+## No backup e-mail arrived
+
+Check the log first — it distinguishes "the backup did not run" from "it ran but
+the e-mail did not go out", and those need different fixes.
+
+| In `AutoTasks.out` | Meaning |
+|---|---|
+| `Backup notice sent to N recipient(s)` | It was sent. Look in the recipients' spam folder |
+| `Backup notice FAILED to send to` | The mail server rejected it — check the `eMail` settings |
+| `Backup notice could not be sent (mail error)` | The mail server could not be reached at all |
+| `notifications are switched off` | `NOTIFY_EMAIL` is blank |
+| `holds no usable address` | Nothing in `NOTIFY_EMAIL` looks like an address — check for a typo |
+| Nothing at all about a notice | The backup itself never completed. See *The backup never runs* |
+
+| Symptom | Likely cause |
+|---|---|
+| Only one message instead of two | The second comes from the zip step. If `BACKUP_ZIP_PATH` is blank there is nothing to archive, and the first message says so |
+| Some recipients got it, others did not | An entry in the list is not a valid address and was skipped. The log line gives the count actually used |
+| No message at all, on a night you expected one | The backup did not succeed. Silence is not confirmation — check the log |
 
 ## Remittance PDFs are not being picked up
 
