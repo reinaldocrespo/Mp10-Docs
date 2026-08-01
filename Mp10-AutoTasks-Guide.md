@@ -177,8 +177,15 @@ A 24-hour time, `HH:MM:SS`. `02:00:00` means "any time from 2 a.m. onward".
 Pick a time when the practice is quiet. A hot backup does not lock anybody out,
 but it does work the server hard.
 
-**A backup runs at most once per calendar day.** If one has already been taken
-today, AutoTasks will not take another, however many times it wakes up.
+**A backup is attempted at most once per calendar day.** Once AutoTasks has
+started one, it will not start another today, however many times it wakes up.
+
+> **A failed attempt still counts as the day's attempt.** If the backup fails,
+> AutoTasks does not keep retrying — it waits until tomorrow. This is
+> deliberate: a hot backup runs for hours and hammering the database server all
+> day cannot fix a wrong path or a full disk. It does mean **a failure needs
+> somebody to act on it**, which is what the failure e-mail is for. If you fix
+> the cause and want a backup the same day, restart the AutoTasks service.
 
 ## Optional: zipping and retention
 
@@ -287,15 +294,24 @@ today's data is safe in `BACKUP_PATH`; only the zip step failed, so there is no
 dated archive for today and nothing was rotated. Usually a full disk or a
 permission problem on `BACKUP_ZIP_PATH`.
 
-> **You are e-mailed once per problem per day, not once per attempt.**
-> AutoTasks keeps retrying a failed backup during the day, and mailing every
-> attempt would bury the first message. So a single failure e-mail can mean one
-> failure or a hundred — check `AutoTasks.out` on the server for the full
-> picture before deciding it was a one-off.
+> **A failure e-mail means no backup today, and none is coming without you.**
+> AutoTasks does not retry after a failure — see *BACKUP_TIMES* above — so the
+> message is not a warning about a passing glitch. Somebody has to fix the cause
+> and, if the practice cannot go a day without a backup, restart the service.
 
 Silence still means something is wrong: if the service itself is stopped, it
 cannot send anything at all. A night with no message of any kind is worth
 looking into.
+
+### E-mail has to be set up first
+
+The notices go out through the practice's outgoing mail server, configured in
+the `eMail` section (see *Making sure e-mail actually goes out*). If that has
+not been set up, AutoTasks does not attempt to send at all — it writes a line to
+`AutoTasks.out` naming the settings that are blank and carries on.
+
+Backups themselves are unaffected either way. Notification is the last step, and
+nothing about it can stop a backup from running or succeeding.
 
 ## A working example
 
@@ -586,9 +602,10 @@ the e-mail did not go out", and those need different fixes.
 |---|---|
 | Only one message instead of two | The second comes from the zip step. If `BACKUP_ZIP_PATH` is blank there is nothing to archive, and the first message says so |
 | Some recipients got it, others did not | An entry in the list is not a valid address and was skipped. The log line gives the count actually used |
-| A `FAILED` message, then nothing more that day | Working as designed — one message per problem per day, however many times it retries. The log has every attempt |
+| A `FAILED` message, then nothing more that day | Working as designed — AutoTasks does not retry a failed backup until the next day |
 | No message at all, on a night you expected one | The service is not running, or never reached the backup. Silence is not confirmation — check the log |
-| `already sent today; not repeating` in the log | The same problem recurred; the first e-mail already went out |
+| `No outgoing mail server is configured` in the log | The `eMail` settings are blank. The backup still ran; only the notice was skipped |
+| `already sent today; not repeating` in the log | A notice of that kind had already gone out today |
 
 ## Remittance PDFs are not being picked up
 

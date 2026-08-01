@@ -182,6 +182,8 @@ retention</a></li>
 <li><a href="#sending-to-more-than-one-person" id="toc-sending-to-more-than-one-person">Sending to more than one
 person</a></li>
 <li><a href="#when-something-goes-wrong" id="toc-when-something-goes-wrong">When something goes wrong</a></li>
+<li><a href="#e-mail-has-to-be-set-up-first" id="toc-e-mail-has-to-be-set-up-first">E-mail has to be set up
+first</a></li>
 </ul></li>
 <li><a href="#a-working-example" id="toc-a-working-example">A working
 example</a></li>
@@ -529,9 +531,18 @@ allowed day:</p>
 “any time from 2 a.m. onward”.</p>
 <p>Pick a time when the practice is quiet. A hot backup does not lock
 anybody out, but it does work the server hard.</p>
-<p><strong>A backup runs at most once per calendar day.</strong> If one
-has already been taken today, AutoTasks will not take another, however
+<p><strong>A backup is attempted at most once per calendar day.</strong>
+Once AutoTasks has started one, it will not start another today, however
 many times it wakes up.</p>
+<blockquote>
+<p><strong>A failed attempt still counts as the day’s attempt.</strong>
+If the backup fails, AutoTasks does not keep retrying — it waits until
+tomorrow. This is deliberate: a hot backup runs for hours and hammering
+the database server all day cannot fix a wrong path or a full disk. It
+does mean <strong>a failure needs somebody to act on it</strong>, which
+is what the failure e-mail is for. If you fix the cause and want a
+backup the same day, restart the AutoTasks service.</p>
+</blockquote>
 <h2 id="optional-zipping-and-retention">Optional: zipping and
 retention</h2>
 <p>If you also set a zip path, AutoTasks compresses each backup into a
@@ -672,16 +683,25 @@ serious. The backup itself worked and today’s data is safe in
 archive for today and nothing was rotated. Usually a full disk or a
 permission problem on <code>BACKUP_ZIP_PATH</code>.</p>
 <blockquote>
-<p><strong>You are e-mailed once per problem per day, not once per
-attempt.</strong> AutoTasks keeps retrying a failed backup during the
-day, and mailing every attempt would bury the first message. So a single
-failure e-mail can mean one failure or a hundred — check
-<code>AutoTasks.out</code> on the server for the full picture before
-deciding it was a one-off.</p>
+<p><strong>A failure e-mail means no backup today, and none is coming
+without you.</strong> AutoTasks does not retry after a failure — see
+<em>BACKUP_TIMES</em> above — so the message is not a warning about a
+passing glitch. Somebody has to fix the cause and, if the practice
+cannot go a day without a backup, restart the service.</p>
 </blockquote>
 <p>Silence still means something is wrong: if the service itself is
 stopped, it cannot send anything at all. A night with no message of any
 kind is worth looking into.</p>
+<h3 id="e-mail-has-to-be-set-up-first">E-mail has to be set up
+first</h3>
+<p>The notices go out through the practice’s outgoing mail server,
+configured in the <code>eMail</code> section (see <em>Making sure e-mail
+actually goes out</em>). If that has not been set up, AutoTasks does not
+attempt to send at all — it writes a line to <code>AutoTasks.out</code>
+naming the settings that are blank and carries on.</p>
+<p>Backups themselves are unaffected either way. Notification is the
+last step, and nothing about it can stop a backup from running or
+succeeding.</p>
 <h2 id="a-working-example">A working example</h2>
 <table>
 <colgroup>
@@ -1232,8 +1252,8 @@ line gives the count actually used</td>
 </tr>
 <tr class="odd">
 <td>A <code>FAILED</code> message, then nothing more that day</td>
-<td>Working as designed — one message per problem per day, however many
-times it retries. The log has every attempt</td>
+<td>Working as designed — AutoTasks does not retry a failed backup until
+the next day</td>
 </tr>
 <tr class="even">
 <td>No message at all, on a night you expected one</td>
@@ -1241,8 +1261,13 @@ times it retries. The log has every attempt</td>
 not confirmation — check the log</td>
 </tr>
 <tr class="odd">
+<td><code>No outgoing mail server is configured</code> in the log</td>
+<td>The <code>eMail</code> settings are blank. The backup still ran;
+only the notice was skipped</td>
+</tr>
+<tr class="even">
 <td><code>already sent today; not repeating</code> in the log</td>
-<td>The same problem recurred; the first e-mail already went out</td>
+<td>A notice of that kind had already gone out today</td>
 </tr>
 </tbody>
 </table>
