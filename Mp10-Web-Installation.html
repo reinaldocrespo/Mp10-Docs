@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Structured Systems · www.structuredsystems.com" />
+  <meta name="dcterms.date" content="2026-08-03" />
+  <title>Mp10 Web — Installation</title>
+  <style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+  <style type="text/css">
+:root {
+color-scheme: light dark;
+--fg: #1a1a1a;
+--bg: #ffffff;
+--muted: #5a5a5a;
+--rule: #d8d8d8;
+--accent: #0b5cad;
+--code-bg: #f4f4f6;
+--note-bg: #f7f7f9;
+}
+@media (prefers-color-scheme: dark) {
+:root {
+--fg: #e6e6e6;
+--bg: #16181d;
+--muted: #a2a2a8;
+--rule: #33363d;
+--accent: #6cb0f5;
+--code-bg: #22252c;
+--note-bg: #1d2027;
+}
+}
+html { -webkit-text-size-adjust: 100%; }
+body {
+font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+color: var(--fg);
+background: var(--bg);
+max-width: 52rem;
+margin: 0 auto;
+padding: 2.5rem 1.25rem 5rem;
+line-height: 1.65;
+font-size: 1.02rem;
+}
+
+header#title-block-header { border-bottom: 2px solid var(--rule); margin-bottom: 2rem; }
+h1.title { margin-bottom: .2rem; font-size: 2rem; line-height: 1.2; }
+p.subtitle { margin-top: 0; color: var(--muted); font-size: 1.1rem; }
+p.author, p.date { margin: .2rem 0; color: var(--muted); font-size: .92rem; }
+h1, h2, h3, h4 { line-height: 1.25; margin-top: 2.2rem; }
+h1 { font-size: 1.7rem; padding-bottom: .3rem; border-bottom: 1px solid var(--rule); }
+h2 { font-size: 1.3rem; }
+h3 { font-size: 1.1rem; }
+a { color: var(--accent); }
+
+nav#TOC {
+background: var(--note-bg);
+border: 1px solid var(--rule);
+border-radius: .5rem;
+padding: 1rem 1.25rem;
+margin-bottom: 2.5rem;
+}
+nav#TOC > ul { margin: 0; padding-left: 1.1rem; }
+nav#TOC ul { list-style: none; padding-left: 1.1rem; }
+nav#TOC li { margin: .18rem 0; }
+nav#TOC a { text-decoration: none; }
+nav#TOC a:hover { text-decoration: underline; }
+
+table {
+border-collapse: collapse;
+width: 100%;
+margin: 1.25rem 0;
+font-size: .94rem;
+display: block;
+overflow-x: auto; 
+}
+th, td {
+border-bottom: 1px solid var(--rule);
+padding: .5rem .6rem;
+text-align: left;
+vertical-align: top;
+}
+thead th { border-bottom: 2px solid var(--rule); white-space: nowrap; }
+tbody tr:hover { background: var(--note-bg); }
+code, pre {
+font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
+font-size: .9em;
+}
+code { background: var(--code-bg); padding: .12em .35em; border-radius: .25rem; }
+pre {
+background: var(--code-bg);
+padding: .9rem 1rem;
+border-radius: .4rem;
+overflow-x: auto;
+}
+pre code { background: none; padding: 0; }
+
+blockquote {
+margin: 1.25rem 0;
+padding: .75rem 1.1rem;
+background: var(--note-bg);
+border-left: 4px solid var(--accent);
+border-radius: 0 .35rem .35rem 0;
+}
+blockquote p { margin: .35rem 0; }
+
+img {
+max-width: 100%;
+height: auto;
+display: block;
+margin: 1.25rem auto;
+border: 1px solid var(--rule);
+border-radius: .35rem;
+}
+figcaption {
+text-align: center;
+color: var(--muted);
+font-size: .9rem;
+margin-top: -.6rem;
+}
+@media print {
+body { max-width: none; font-size: 11pt; }
+nav#TOC { break-after: page; }
+h1 { break-before: page; }
+h1:first-of-type { break-before: avoid; }
+a { color: inherit; }
+}
+</style>
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Mp10 Web — Installation</h1>
+<p class="subtitle">Installing and updating the browser application</p>
+<p class="author">Structured Systems · www.structuredsystems.com</p>
+<p class="date">03 August 2026</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#about-this-guide" id="toc-about-this-guide">About this
+guide</a></li>
+<li><a href="#prerequisites" id="toc-prerequisites">Prerequisites</a></li>
+<li><a href="#before-you-install-verify-the-download" id="toc-before-you-install-verify-the-download">Before you install:
+verify the download</a></li>
+<li><a href="#installing" id="toc-installing">Installing</a>
+<ul>
+<li><a href="#the-six-questions" id="toc-the-six-questions">The six
+questions</a></li>
+<li><a href="#the-admin-password" id="toc-the-admin-password">The admin
+password</a></li>
+<li><a href="#when-it-finishes" id="toc-when-it-finishes">When it
+finishes</a></li>
+</ul></li>
+<li><a href="#what-it-touches" id="toc-what-it-touches">What it
+touches</a>
+<ul>
+<li><a href="#the-dedicated-apache-instance" id="toc-the-dedicated-apache-instance">The dedicated Apache
+instance</a></li>
+</ul></li>
+<li><a href="#tls-certificate" id="toc-tls-certificate">TLS
+certificate</a>
+<ul>
+<li><a href="#replacing-the-placeholder" id="toc-replacing-the-placeholder">Replacing the placeholder</a></li>
+</ul></li>
+<li><a href="#updating" id="toc-updating">Updating</a></li>
+<li><a href="#removing-it" id="toc-removing-it">Removing it</a></li>
+<li><a href="#fault-finding" id="toc-fault-finding">Fault-finding</a>
+<ul>
+<li><a href="#step-08-privileges" id="toc-step-08-privileges">Step 0/8 —
+Privileges</a></li>
+<li><a href="#step-18-verify-the-bundle" id="toc-step-18-verify-the-bundle">Step 1/8 — Verify the bundle</a></li>
+<li><a href="#step-28-preflight" id="toc-step-28-preflight">Step 2/8 —
+Preflight</a></li>
+<li><a href="#step-38-configuration" id="toc-step-38-configuration">Step
+3/8 — Configuration</a></li>
+<li><a href="#step-48-test-the-dictionary-connection" id="toc-step-48-test-the-dictionary-connection">Step 4/8 — Test the
+dictionary connection</a></li>
+<li><a href="#step-58-deploy-files" id="toc-step-58-deploy-files">Step
+5/8 — Deploy files</a></li>
+<li><a href="#step-78-apache-dedicated-instance" id="toc-step-78-apache-dedicated-instance">Step 7/8 — Apache (dedicated
+instance)</a></li>
+<li><a href="#step-88-database" id="toc-step-88-database">Step 8/8 —
+Database</a></li>
+<li><a href="#smoke-test" id="toc-smoke-test">Smoke test</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="about-this-guide">About this guide</h1>
+<p>Mp10 Web is the browser-based front end for patients, encounters and
+insurance — a PHP 8 API and a Vue 3 single-page app, reading and writing
+the same Advantage Database Server dictionary (<code>mp.add</code>) the
+Mp10 Win32 desktop applications already use.</p>
+<p>This guide is for whoever installs and maintains it on a server. It
+covers one thing: taking a published bundle (a single zip) and turning
+it into a running site with <code>install.ps1</code>, the script the
+bundle ships. Everything here is <strong>IT task</strong> — there is
+nothing in this guide for clinic staff.</p>
+<p>If you are setting up a development copy from source instead of a
+customer site, see <code>Web/INSTALL.md</code> in the repository — the
+manual, step-by-step path remains there. This guide is the
+server-install path: one script, six questions, and a running site.</p>
+<h1 id="prerequisites">Prerequisites</h1>
+<p>The bundle carries the application only. PHP, Apache and the ADS
+client belong to the server, and the installer can only diagnose a wrong
+one, not fix it — so get these right first:</p>
+<ul>
+<li><strong>PHP 8.x, the ZTS (thread-safe) build, x64, with
+<code>php_ads</code> loaded.</strong> Windows PHP ships four builds
+(NTS/ZTS × x86/x64); this needs the <em>Thread Safe</em> x64 zip from
+windows.php.net, with <code>extension=ads</code> enabled in
+<code>php.ini</code> and <code>php_ads.dll</code> in the extension
+directory.</li>
+<li><strong>The 64-bit ACE client on <code>PATH</code></strong> —
+<code>ace64.dll</code>, <code>adsloc64.dll</code>,
+<code>aicu64.dll</code>, <code>axcws64.dll</code>. <strong>The Mp10
+desktop applications install the 32-bit ACE client.</strong> That is a
+different, separate install: it satisfies the desktop apps and will not
+satisfy this PHP. The installer’s preflight check exists specifically to
+catch this and says so by name.</li>
+<li><strong><code>php-cgi.exe</code> next to
+<code>php.exe</code>.</strong> Mp10 Web serves PHP through
+<code>mod_fcgid</code>, which needs the CGI build alongside the CLI one;
+a PHP zip normally ships both together, but confirm it.</li>
+<li><strong>Apache 2.4, a full build such as Apache Lounge’s</strong>,
+with its standard module set on disk under
+<code>&lt;Apache root&gt;\modules\</code> — specifically
+<code>mod_rewrite.so</code>, <code>mod_fcgid.so</code>,
+<code>mod_ssl.so</code> and <code>mod_socache_shmcb.so</code>. Nothing
+needs <em>enabling</em> in that Apache’s own <code>httpd.conf</code> —
+see “What it touches” below for why — but the <code>.so</code> files
+themselves must exist on disk, because Mp10 Web’s own configuration
+loads them directly. A minimal or trimmed-down Apache build that omits
+<code>mod_fcgid</code> will not do.</li>
+<li><strong><code>openssl.exe</code> in that Apache’s <code>bin\</code>
+folder</strong> (Apache Lounge ships it), <em>unless</em> you are
+supplying your own TLS certificate up front — see “TLS certificate”
+below.</li>
+</ul>
+<h1 id="before-you-install-verify-the-download">Before you install:
+verify the download</h1>
+<p>The bundle publishes as two files: a zip
+(<code>mpweb-update-&lt;version&gt;.zip</code>) and a
+<code>.sha256</code> sidecar beside it. <code>manifest.json</code>
+inside the zip verifies every file <em>once extracted</em>, but it
+cannot verify itself, or the zip that carries it — that is what the
+sidecar is for, and it has to be checked <strong>before</strong> you
+extract, not after:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Get<span class="op">-</span>FileHash <span class="op">.</span>\mpweb<span class="op">-</span>update<span class="op">-&lt;</span>version<span class="op">&gt;.</span><span class="fu">zip</span> <span class="op">-</span>Algorithm SHA256</span></code></pre></div>
+<p>Compare the <code>Hash</code> value against the contents of
+<code>mpweb-update-&lt;version&gt;.zip.sha256</code> (a plain text file:
+the hash, two spaces, the filename). If they do not match, download
+again — do not extract a zip whose checksum does not match its sidecar,
+even if it looks fine.</p>
+<p>Once that checks out, extract the zip. <code>manifest.json</code> and
+<code>install.ps1</code> land beside each other at the top of the
+extracted folder — that is the “bundle” the rest of this guide refers
+to.</p>
+<h1 id="installing">Installing</h1>
+<p>From an <strong>elevated</strong> PowerShell, in the extracted bundle
+folder:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">.</span>\install<span class="op">.</span><span class="fu">ps1</span></span></code></pre></div>
+<p>Two optional parameters, if the defaults are wrong for this
+machine:</p>
+<ul>
+<li><code>-InstallRoot &lt;path&gt;</code> — where Mp10 Web is deployed.
+Defaults to <code>C:\Mp10Web</code>.</li>
+<li><code>-PhpPath &lt;path to php.exe&gt;</code> — which PHP to use.
+Defaults to whatever <code>php.exe</code> resolves to on
+<code>PATH</code>, or <code>C:\php\php.exe</code>.</li>
+</ul>
+<p>The script runs eight steps plus a smoke test, in an order
+deliberately chosen so that <strong>nothing is written until every check
+that can run has run</strong> — a half-configured install is worse than
+a refused one:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Step</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0/8 Privileges</td>
+<td>Confirms you are elevated.</td>
+</tr>
+<tr class="even">
+<td>1/8 Verify the bundle</td>
+<td>Hashes every file in <code>manifest.json</code> against what is
+actually on disk.</td>
+</tr>
+<tr class="odd">
+<td>2/8 Preflight</td>
+<td>Checks PHP’s version, bitness, thread-safety and the
+<code>ads</code> extension; checks Apache and its module files.</td>
+</tr>
+<tr class="even">
+<td>3/8 Configuration</td>
+<td>Asks the six questions below.</td>
+</tr>
+<tr class="odd">
+<td>4/8 Test the dictionary connection</td>
+<td>Connects to <code>mp.add</code> with what you just typed,
+<strong>before writing anything</strong>.</td>
+</tr>
+<tr class="even">
+<td>5/8 Deploy files</td>
+<td>Copies the application into the install root.</td>
+</tr>
+<tr class="odd">
+<td>6/8 Configuration file</td>
+<td>Writes <code>database.local.php</code> (fresh install only — see
+“Updating”).</td>
+</tr>
+<tr class="even">
+<td>7/8 Apache (dedicated instance)</td>
+<td>Renders and validates a complete <code>httpd.conf</code>, generates
+a TLS certificate if needed, registers and starts the
+<code>Mp10Web</code> Windows service.</td>
+</tr>
+<tr class="odd">
+<td>8/8 Database</td>
+<td>Runs the migration: creates <code>web_users</code>,
+<code>web_groups</code>, <code>web_group_members</code> if they don’t
+exist, seeds the <code>admin</code> account, grants permissions.</td>
+</tr>
+<tr class="even">
+<td>Smoke test</td>
+<td>Confirms an unauthenticated request to the running site is correctly
+refused.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="the-six-questions">The six questions</h2>
+<p>Asked once, interactively (skipped in favour of defaults or a saved
+answer under <code>-NonInteractive</code>):</p>
+<ol type="1">
+<li><strong>ADS mode — Remote or Local.</strong> Remote is normal: the
+dictionary lives on an ADS server elsewhere on the network.</li>
+<li><strong>Path to <code>mp.add</code>.</strong> The existing
+dictionary — remote paths look like
+<code>\\HOST:6262\VOLUME\path\mp.add</code>.</li>
+<li><strong>ADS username.</strong> Defaults to <code>adssys</code>.</li>
+<li><strong>ADS password</strong> (typed hidden).</li>
+<li><strong>Port for Mp10 Web.</strong> Suggests 8443, or the next free
+port above it if that one is taken.</li>
+<li><strong>Public origin.</strong> The exact address staff will type
+into their browser — sets both <code>cors_origins</code> (in
+<code>database.local.php</code>) and the certificate’s hostname.
+Defaults to
+<code>https://&lt;this machine&#39;s name&gt;:&lt;the port above&gt;</code>.</li>
+</ol>
+<h2 id="the-admin-password">The admin password</h2>
+<p>On a <strong>first</strong> install, step 8/8 creates the
+<code>admin</code> account and prints a randomly generated password to
+the terminal — once:</p>
+<pre><code>&gt;&gt;&gt; ADMIN PASSWORD: &lt;generated&gt;
+    Recorded nowhere else. Write it down now.</code></pre>
+<p>That is not an exaggeration. The password is bcrypt-hashed into
+<code>web_users</code> immediately; nothing on the server keeps the
+plain text anywhere, and there is no “forgot password” flow — only a
+reset. If it scrolls past before you copy it, the account is not lost,
+but recovering access means resetting it, not retrieving it.</p>
+<h2 id="when-it-finishes">When it finishes</h2>
+<p>A successful run ends with a summary:</p>
+<pre><code>Mp10 Web is installed.
+  URL          : https://&lt;host&gt;:&lt;port&gt;
+  Install root : C:\Mp10Web
+  Config       : C:\Mp10Web\backend\php\config\database.local.php
+  Logs         : C:\Mp10Web\logs
+  Apache conf  : C:\Mp10Web\apache\conf\httpd.conf
+  Apache svc   : Mp10Web
+  TLS cert     : C:\Mp10Web\apache\conf\server.pem</code></pre>
+<p>Open the URL. If the certificate is the self-signed placeholder (see
+below), the browser will warn — that is expected until it is
+replaced.</p>
+<h1 id="what-it-touches">What it touches</h1>
+<p>Deliberately little, and every bit of it is listed here:</p>
+<ul>
+<li><strong>Three tables in the dictionary</strong>:
+<code>web_users</code>, <code>web_groups</code>,
+<code>web_group_members</code>. The clinical schema, its stored
+procedures, and the <code>NewSeqKey</code> key-minting function all
+belong to the <strong>Win32 Admin module</strong> — this installer
+neither creates nor inspects them. If a dictionary is missing something
+Mp10 Web needs at that level, that is fixed by running Admin, not by
+this installer.</li>
+<li><strong>One row in the existing <code>sequences</code>
+table</strong>, <code>field = &#39;recno&#39;</code>. Every install and update
+reads the current highest <code>patients.recno</code> and raises
+<code>sequences</code>’s <code>recno</code> counter to match, if it is
+not already there — so a record number Mp10 Web mints can never collide
+with one that already exists. It only ever raises the value, never
+lowers it, and does nothing on a run where the counter is already caught
+up. This is a write to dictionary infrastructure the desktop apps also
+read, not a Mp10-Web-owned table — see “Removing it” below for why it
+must not be deleted.</li>
+<li><strong>One config file</strong>, <code>database.local.php</code>,
+under the install root.</li>
+<li><strong>One rendered Apache configuration and one certificate/key
+pair</strong>, both under the install root — never under the system
+Apache’s own configuration directory.</li>
+<li><strong>One Windows service</strong>, named
+<code>Mp10Web</code>.</li>
+</ul>
+<h2 id="the-dedicated-apache-instance">The dedicated Apache
+instance</h2>
+<p>Mp10 Web does <strong>not</strong> add a virtual host or an
+<code>Include</code> line to the server’s existing Apache. It runs its
+<strong>own</strong>, complete, standalone Apache instance:</p>
+<ul>
+<li>A full <code>httpd.conf</code> is rendered under
+<code>&lt;install root&gt;\apache\conf\</code> — its own explicit
+<code>LoadModule</code> list, its own <code>Listen</code> port, its own
+logs, its own service (<code>Mp10Web</code>).</li>
+<li><code>ServerRoot</code> in that rendered config points at the
+<strong>existing</strong> Apache installation, purely so
+<code>modules/mod_*.so</code> and <code>conf/mime.types</code> resolve —
+nothing under the existing installation is ever written to, and its own
+<code>httpd.conf</code> and its own service are never read, edited, or
+restarted.</li>
+<li>PHP is served through <code>mod_fcgid</code>, wired to the server’s
+<strong>existing</strong> <code>php-cgi.exe</code> and
+<code>php.ini</code> — the same PHP the preflight step already
+validated. The bundle ships no PHP of its own.</li>
+<li>TLS is terminated on this instance (see below) — it is not layered
+behind the system Apache or any other reverse proxy.</li>
+</ul>
+<p>Because the system Apache’s configuration and service are never
+touched, there is nothing to undo on it when Mp10 Web is removed, and
+nothing on it that a later Mp10 Web update can break.</p>
+<h1 id="tls-certificate">TLS certificate</h1>
+<p>The dedicated instance always serves over HTTPS. On a fresh install,
+if no certificate is already present, <code>install.ps1</code> generates
+a <strong>self-signed placeholder</strong> using the existing Apache’s
+<code>openssl.exe</code>, and says so loudly:</p>
+<pre><code>[ .. ] No certificate found at &#39;...\apache\conf\server.pem&#39; - generating a self-signed placeholder
+[ OK ] Generated self-signed certificate: CN=&lt;host&gt;
+[WARN] SELF-SIGNED placeholder installed. Replace ...\server.pem and
+[WARN] ...\server.key with a real certificate, then restart the &#39;Mp10Web&#39; service.</code></pre>
+<p><strong>Browsers will show a certificate warning until this is
+replaced.</strong> That is expected for the placeholder and is not
+itself a fault.</p>
+<h2 id="replacing-the-placeholder">Replacing the placeholder</h2>
+<p>Put a real certificate and private key at:</p>
+<pre><code>&lt;install root&gt;\apache\conf\server.pem
+&lt;install root&gt;\apache\conf\server.key</code></pre>
+<p>then restart the <code>Mp10Web</code> service. If the certificate
+lives somewhere else instead, hand-edit the rendered
+<code>httpd.conf</code>’s <code>SSLCertificateFile</code> /
+<code>SSLCertificateKeyFile</code> lines to point at it — a later update
+honours whatever the <em>live</em> config already points at, so the edit
+survives.</p>
+<p>Either way, once a real certificate is in place,
+<code>install.ps1</code> will never regenerate or overwrite it on a
+later update — the same rule that protects
+<code>database.local.php</code>’s secrets applies here.</p>
+<h1 id="updating">Updating</h1>
+<p>Run the same command against the same install root:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="op">.</span>\install<span class="op">.</span><span class="fu">ps1</span></span></code></pre></div>
+<p>(<code>-InstallRoot</code> only needs to be given again if you did
+not install to the default <code>C:\Mp10Web</code> in the first
+place.)</p>
+<p><strong>The six questions come back — pre-filled with the answers
+already on file.</strong> Step 3/8 reads the existing
+<code>database.local.php</code> and offers its values (dictionary path,
+ADS username and password, port, public origin) as the default for each
+prompt; pressing Enter through all six keeps the site exactly as it is.
+This is also what makes an unattended <code>-NonInteractive</code>
+update work at all — with no console to prompt at, every answer falls
+back to what was already on file, so nothing needs to be typed for a
+routine update.</p>
+<p>What is kept, deliberately, beyond that:</p>
+<ul>
+<li><strong><code>database.local.php</code></strong> — never rewritten
+once it exists. It holds the generated JWT secret; regenerating it would
+sign out every currently logged-in user.</li>
+<li><strong>The TLS certificate</strong> — never regenerated once real
+files exist at the resolved cert/key paths. Same fingerprint before and
+after.</li>
+<li><strong>The <code>Mp10Web</code> service</strong> — restarted only
+if the rendered Apache configuration actually changed; left alone
+otherwise.</li>
+</ul>
+<p>What always re-runs: <strong>the migration</strong> (step 8/8). It is
+idempotent — a second run reports what was already there
+(<code>already present</code>, <code>already granted</code>) rather than
+doing it again — but it is not optional. <strong>New permissions arrive
+only through the migration.</strong> Permissions are stored as data in
+<code>web_groups.perms</code>, with no admin screen to grant them yet,
+so a feature gated on a permission that shipped in this update is simply
+invisible — no error, no empty state — until the migration that grants
+it actually runs. Skipping the update-and-rerun step because “nothing
+looked different” is exactly how that gap gets missed.</p>
+<h1 id="removing-it">Removing it</h1>
+<p>There is no <code>httpd.conf</code> <code>Include</code> line to
+un-edit — the dedicated instance is self-contained, so removal is:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>path to existing Apache<span class="op">&gt;</span>\bin\httpd<span class="op">.</span><span class="fu">exe</span> <span class="op">-</span>k stop <span class="op">-</span>n Mp10Web</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>path to existing Apache<span class="op">&gt;</span>\bin\httpd<span class="op">.</span><span class="fu">exe</span> <span class="op">-</span>k uninstall <span class="op">-</span>n Mp10Web</span></code></pre></div>
+<p>then drop the three tables (<code>web_users</code>,
+<code>web_groups</code>, <code>web_group_members</code>) from the
+dictionary, and delete the install root. The system Apache was never
+touched, so nothing there needs reverting.</p>
+<p><strong>Do not delete the <code>sequences</code> row for
+<code>field = &#39;recno&#39;</code>.</strong> It is not Mp10-Web-owned data —
+it is shared dictionary infrastructure the desktop apps read too, and
+removing it (rather than merely leaving Mp10 Web’s own three tables
+behind) would affect record-number minting outside this application
+entirely. Removing Mp10 Web means dropping the three <code>web_*</code>
+tables; it does not mean touching <code>sequences</code>.</p>
+<h1 id="fault-finding">Fault-finding</h1>
+<p>Every failure the installer can produce is printed with
+<code>[FAIL]</code> and stops the run at that point. <strong>Before step
+5/8 (Deploy files)</strong>, that means nothing was written — whatever
+was there before, if anything, is exactly as it was. <strong>From step
+5/8 onward</strong>, though, the application files under the install
+root have already been replaced by the time a later step can fail — a
+failure past that point leaves a partially-updated tree, not a
+rolled-back one. Treat any such failure as <strong>incomplete, not
+safe</strong>: fix the problem and re-run to a clean completion before
+trusting the site again. Apache’s own rendered configuration is the one
+deliberate exception even within that range — it is always written to a
+temporary file and validated with <code>httpd -t</code> before it is
+ever moved into the path the running service actually reads (step 7/8),
+so a rejected render never touches what is currently live. The table
+below is keyed to the exact message text; where a message embeds a value
+(a path, a count, a port), that part is shown as
+<code>&lt;...&gt;</code>.</p>
+<h2 id="step-08-privileges">Step 0/8 — Privileges</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Message</th>
+<th>What it means</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Run this from an elevated PowerShell. It writes to the Apache
+configuration and the install root.</td>
+<td>PowerShell was not run as Administrator.</td>
+<td>Re-open PowerShell with “Run as administrator” and re-run.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="step-18-verify-the-bundle">Step 1/8 — Verify the bundle</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Message</th>
+<th>What it means</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>No manifest.json beside install.ps1 - is this an extracted Mp10 Web
+bundle?</td>
+<td><code>install.ps1</code> was run from somewhere other than the
+extracted bundle.</td>
+<td>Run it from inside the extracted zip, next to
+<code>manifest.json</code>.</td>
+</tr>
+<tr class="even">
+<td><code>&lt;n&gt;</code> file(s) missing or corrupt. Re-copy the
+bundle and extract it again.</td>
+<td>Extraction was incomplete, or a file changed after extracting.</td>
+<td>Delete the extracted folder and re-extract from a zip you have
+already checked against its <code>.sha256</code> sidecar.</td>
+</tr>
+<tr class="odd">
+<td>manifest.json claims <code>&lt;N&gt;</code> files but lists
+<code>&lt;M&gt;</code> - the manifest itself looks corrupt. Re-copy the
+bundle and extract it again.</td>
+<td><code>manifest.json</code> itself is damaged.</td>
+<td>Re-download the zip (checksum it first) and re-extract.</td>
+</tr>
+<tr class="even">
+<td>This installer build handles the ‘update’ flavour; this bundle says
+‘<code>&lt;flavour&gt;</code>’.</td>
+<td>The extracted bundle is not an <code>update</code>-flavour
+bundle.</td>
+<td>Use the bundle that matches this installer; do not mix bundle
+types.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="step-28-preflight">Step 2/8 — Preflight</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Message</th>
+<th>What it means</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>PHP not found at ‘<code>&lt;path&gt;</code>’. Install PHP 8.x ZTS
+x64, or pass -PhpPath &lt;path to php.exe&gt;.</td>
+<td>No PHP at the default location or on <code>PATH</code>.</td>
+<td>Install PHP 8.x ZTS x64, or pass <code>-PhpPath</code>.</td>
+</tr>
+<tr class="even">
+<td>The PHP probe produced no output. ‘<code>&lt;path&gt;</code>’ may
+not be a working PHP: <code>&lt;raw&gt;</code></td>
+<td>The file at that path is not a functioning
+<code>php.exe</code>.</td>
+<td>Confirm the path is really <code>php.exe</code>; the quoted
+<code>&lt;raw&gt;</code> text is whatever it actually printed.</td>
+</tr>
+<tr class="odd">
+<td>PHP <code>&lt;version&gt;</code> found; Mp10 Web needs PHP 8.x.
+Install an 8.x build and re-run.</td>
+<td>PHP is the wrong major version.</td>
+<td>Install PHP 8.</td>
+</tr>
+<tr class="even">
+<td>PHP is <code>&lt;bits&gt;</code>-bit; Mp10 Web needs the x64 build.
+Note the Mp10 DESKTOP applications are 32-bit - this is a different PHP,
+not the same one.</td>
+<td><strong>The 32-bit trap.</strong> A 32-bit PHP was found — commonly
+because that is what happens to be on the machine already.</td>
+<td>Install a separate PHP 8 <strong>x64</strong> build for Mp10 Web; do
+not point it at whatever 32-bit PHP is already there.</td>
+</tr>
+<tr class="odd">
+<td>PHP is the NTS (non-thread-safe) build; Mp10 Web’s php_ads.dll needs
+the ZTS build. Download the ‘Thread Safe’ x64 zip from
+windows.php.net.</td>
+<td>Wrong PHP thread-safety variant.</td>
+<td>Install the <em>Thread Safe</em> x64 zip, not the <em>Non Thread
+Safe</em> one.</td>
+</tr>
+<tr class="even">
+<td>The Advantage PHP extension is not loaded - AdsConnection does not
+exist. Copy php_ads.dll into <code>&lt;ext_dir&gt;</code> and add
+extension=ads to <code>&lt;ini&gt;</code>. It also needs the 64-BIT ACE
+client (ace64.dll, adsloc64.dll, aicu64.dll, axcws64.dll) on PATH - the
+Mp10 desktop applications install the 32-bit client, which will NOT
+satisfy this.</td>
+<td><code>php_ads</code> is missing, disabled, or the 64-bit ACE client
+isn’t on <code>PATH</code>.</td>
+<td>Enable <code>extension=ads</code> in the named <code>php.ini</code>
+with <code>php_ads.dll</code> in the named extension directory, and put
+the <strong>64-bit</strong> ACE DLLs on <code>PATH</code> — not the
+desktop’s 32-bit ones.</td>
+</tr>
+<tr class="odd">
+<td>Apache (httpd.exe) not found on PATH or at <code>C:\Apache24</code>.
+Install Apache 2.4 and re-run.</td>
+<td>No Apache installation found.</td>
+<td>Install Apache 2.4 (an Apache Lounge build is fine), or put
+<code>httpd.exe</code> on <code>PATH</code>.</td>
+</tr>
+<tr class="even">
+<td>Apache at ‘<code>&lt;modules dir&gt;</code>’ is missing:
+<code>&lt;mod_rewrite.so, mod_fcgid.so&gt;</code>. Mp10 Web’s own Apache
+instance (step 7/8) needs mod_rewrite (the API’s .htaccess re-attaches
+the Authorization header Apache strips from the CGI environment -
+without it every signed-in request 401s WITH a valid token) and
+mod_fcgid (runs PHP). Install a full Apache 2.4 build that ships both
+modules.</td>
+<td>The found Apache’s <code>modules\</code> folder is missing one or
+both files.</td>
+<td>Install a full Apache 2.4 build (e.g. Apache Lounge) that ships
+<code>mod_rewrite.so</code> and <code>mod_fcgid.so</code> — a
+trimmed-down build will not do.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="step-38-configuration">Step 3/8 — Configuration</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Message</th>
+<th>What it means</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A dictionary path is required.</td>
+<td>The “Path to mp.add” prompt was left blank.</td>
+<td>Supply the real path to <code>mp.add</code>.</td>
+</tr>
+<tr class="even">
+<td>An ADS username is required.</td>
+<td>The username prompt was left blank.</td>
+<td>Supply an ADS username.</td>
+</tr>
+<tr class="odd">
+<td>ADS password is required and this session cannot prompt for one
+(-NonInteractive, or no console, with no existing install to reuse).
+Re-run interactively, or install once interactively first.</td>
+<td>Running unattended with no saved password to fall back on.</td>
+<td>Install once interactively so a password is on file, or run
+interactively this time.</td>
+</tr>
+<tr class="even">
+<td>Port <code>&lt;port&gt;</code> is in use by another process (not the
+install being updated). Choose another.</td>
+<td>The chosen port is held by something other than this same
+install.</td>
+<td>Pick a different port at the prompt.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="step-48-test-the-dictionary-connection">Step 4/8 — Test the
+dictionary connection</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Message</th>
+<th>What it means</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>The connection test produced no result. Check that php_ads is
+loadable.</td>
+<td>PHP failed to run the connection probe at all.</td>
+<td>Run <code>php -m</code> and confirm <code>ads</code> loads without
+error.</td>
+</tr>
+<tr class="even">
+<td>Could not open the dictionary: <code>&lt;ADS error&gt;</code></td>
+<td>The path, credentials, or network path to <code>mp.add</code> is
+wrong, or the server is unreachable.</td>
+<td>Read the quoted ADS error — it states exactly which of those it was.
+Password is redacted from this message even on a credential
+failure.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="step-58-deploy-files">Step 5/8 — Deploy files</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Message</th>
+<th>What it means</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>robocopy failed copying ‘<code>&lt;dir&gt;</code>’ to
+<code>&lt;root&gt;</code> (exit code <code>&lt;code&gt;</code>). Check
+permissions on the destination.</td>
+<td>The install root could not be written to (permissions, a locked
+file, antivirus).</td>
+<td>Check NTFS permissions on the install root and that nothing has a
+file there open/locked. Directories copied earlier in this same step may
+have already succeeded before this one failed, so the install root is
+now a MIXED, incomplete tree — do not point Apache at it or consider the
+site trustworthy until you fix the problem and re-run to a clean
+completion.</td>
+</tr>
+</tbody>
+</table>
+<p>Step 6/8 (Configuration file) has no row here on purpose: writing a
+fresh <code>database.local.php</code>, or keeping an existing one, has
+no distinct failure message to catch — nothing was skipped.</p>
+<h2 id="step-78-apache-dedicated-instance">Step 7/8 — Apache (dedicated
+instance)</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Message</th>
+<th>What it means</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>php-cgi.exe not found next to ‘<code>&lt;PhpPath&gt;</code>’ (looked
+for ‘<code>&lt;phpCgi&gt;</code>’). Mp10 Web serves PHP through
+mod_fcgid, which needs the CGI build alongside the CLI one you pointed
+-PhpPath at.</td>
+<td><code>php-cgi.exe</code> is missing beside
+<code>php.exe</code>.</td>
+<td>Install/copy <code>php-cgi.exe</code> into the same folder as the
+<code>php.exe</code> being used.</td>
+</tr>
+<tr class="even">
+<td>Public origin ‘<code>&lt;origin&gt;</code>’ is not a valid
+host[:port] or URL.</td>
+<td>The “Public origin” answer could not be parsed at all.</td>
+<td>Re-enter it as <code>host</code>, <code>host:port</code>, or a full
+<code>https://host:port</code> URL.</td>
+</tr>
+<tr class="odd">
+<td>Could not derive a hostname from public origin
+‘<code>&lt;origin&gt;</code>’.</td>
+<td>The answer parsed but produced no host.</td>
+<td>Same fix as above.</td>
+</tr>
+<tr class="even">
+<td>openssl.exe not found at ‘<code>&lt;path&gt;</code>’. Mp10 Web needs
+it once, to generate a self-signed placeholder certificate. Either
+install an Apache build that ships OpenSSL, or place a real certificate
+yourself at ‘<code>&lt;pem&gt;</code>’ / ‘<code>&lt;key&gt;</code>’
+before re-running.</td>
+<td>No certificate exists yet, and the existing Apache has no
+<code>openssl.exe</code> to generate a placeholder.</td>
+<td>Use an Apache Lounge build (ships OpenSSL), or supply your own
+certificate/key at the named paths before re-running.</td>
+</tr>
+<tr class="odd">
+<td>Certificate generation failed - see <code>&lt;log&gt;</code></td>
+<td><code>openssl req</code> itself failed.</td>
+<td>Read the tail of the named log file for the OpenSSL error.</td>
+</tr>
+<tr class="even">
+<td>Apache rejected the configuration - see above.
+<code>&lt;conf&gt;</code> was left untouched, but the application files
+under <code>&lt;root&gt;</code> were already updated by step 5/8 of this
+run. This update is INCOMPLETE - fix the problem above and re-run to a
+clean completion before trusting this site.</td>
+<td><code>httpd -t</code> found a problem in the rendered config — most
+commonly a missing module file (<code>mod_ssl.so</code>,
+<code>mod_socache_shmcb.so</code>, etc.) that preflight does not check
+by name.</td>
+<td>Read the <code>httpd -t</code> output printed just above this line;
+confirm every module file the template loads exists under Apache’s
+<code>modules\</code>. The Apache config itself is unchanged, but do NOT
+treat this run as complete — the application files were already deployed
+— until you fix the problem and re-run to a clean finish.</td>
+</tr>
+<tr class="odd">
+<td>Could not register the ‘<code>&lt;serviceName&gt;</code>’ service -
+see above.</td>
+<td><code>httpd -k install</code> failed — commonly a stale service left
+in a bad state, or a permissions issue.</td>
+<td>Read the output above; confirm elevation, and check for a leftover
+<code>Mp10Web</code> service (<code>Get-Service Mp10Web</code>) that
+needs removing first.</td>
+</tr>
+<tr class="even">
+<td>Could not start/restart ‘<code>&lt;serviceName&gt;</code>’:
+<code>&lt;error&gt;</code></td>
+<td>The service was registered but would not start.</td>
+<td>The install log’s last 20 lines from
+<code>&lt;root&gt;\logs\mpweb-error.log</code> print automatically above
+this message — read them.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="step-88-database">Step 8/8 — Database</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Message</th>
+<th>What it means</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>The database step failed - see above.</td>
+<td><code>tools\migrate.php</code> exited with an error, or printed a
+real (uppercase) <code>FAILED</code> line.</td>
+<td>Read the migration output printed above — it names the specific step
+that failed.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="smoke-test">Smoke test</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Message</th>
+<th>What it means</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>GET /api/auth/me returned <code>&lt;code&gt;</code>; 401 was
+expected. Check <code>&lt;root&gt;\logs</code>.</td>
+<td>The site answered, but not the way a healthy, unauthenticated
+request should.</td>
+<td>Check <code>&lt;root&gt;\logs\mpweb-error.log</code> and the API’s
+own logs for what happened on that request.</td>
+</tr>
+<tr class="even">
+<td>GET /api/auth/me returned <code>&lt;code&gt;</code> without a token;
+401 was expected.</td>
+<td>An unauthenticated request was <strong>not</strong> refused — treat
+this as serious, not cosmetic.</td>
+<td>Do not consider the site ready until this passes; check the logs as
+above.</td>
+</tr>
+<tr class="odd">
+<td>Could not reach <code>&lt;base&gt;</code>/api/auth/me after 20s
+(connection refused/not listening): <code>&lt;err&gt;</code>. Check the
+‘<code>&lt;serviceName&gt;</code>’ service and
+<code>&lt;root&gt;\logs</code>.</td>
+<td>Nothing answered the configured port within 20 seconds of the
+service starting.</td>
+<td>Check <code>Get-Service Mp10Web</code> and
+<code>&lt;root&gt;\logs\mpweb-error.log</code>.</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

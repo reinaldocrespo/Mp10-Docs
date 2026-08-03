@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Structured Systems · www.structuredsystems.com" />
+  <meta name="dcterms.date" content="2026-08-03" />
+  <title>Mp10 Web — Printing</title>
+  <style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+  <style type="text/css">
+:root {
+color-scheme: light dark;
+--fg: #1a1a1a;
+--bg: #ffffff;
+--muted: #5a5a5a;
+--rule: #d8d8d8;
+--accent: #0b5cad;
+--code-bg: #f4f4f6;
+--note-bg: #f7f7f9;
+}
+@media (prefers-color-scheme: dark) {
+:root {
+--fg: #e6e6e6;
+--bg: #16181d;
+--muted: #a2a2a8;
+--rule: #33363d;
+--accent: #6cb0f5;
+--code-bg: #22252c;
+--note-bg: #1d2027;
+}
+}
+html { -webkit-text-size-adjust: 100%; }
+body {
+font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+color: var(--fg);
+background: var(--bg);
+max-width: 52rem;
+margin: 0 auto;
+padding: 2.5rem 1.25rem 5rem;
+line-height: 1.65;
+font-size: 1.02rem;
+}
+
+header#title-block-header { border-bottom: 2px solid var(--rule); margin-bottom: 2rem; }
+h1.title { margin-bottom: .2rem; font-size: 2rem; line-height: 1.2; }
+p.subtitle { margin-top: 0; color: var(--muted); font-size: 1.1rem; }
+p.author, p.date { margin: .2rem 0; color: var(--muted); font-size: .92rem; }
+h1, h2, h3, h4 { line-height: 1.25; margin-top: 2.2rem; }
+h1 { font-size: 1.7rem; padding-bottom: .3rem; border-bottom: 1px solid var(--rule); }
+h2 { font-size: 1.3rem; }
+h3 { font-size: 1.1rem; }
+a { color: var(--accent); }
+
+nav#TOC {
+background: var(--note-bg);
+border: 1px solid var(--rule);
+border-radius: .5rem;
+padding: 1rem 1.25rem;
+margin-bottom: 2.5rem;
+}
+nav#TOC > ul { margin: 0; padding-left: 1.1rem; }
+nav#TOC ul { list-style: none; padding-left: 1.1rem; }
+nav#TOC li { margin: .18rem 0; }
+nav#TOC a { text-decoration: none; }
+nav#TOC a:hover { text-decoration: underline; }
+
+table {
+border-collapse: collapse;
+width: 100%;
+margin: 1.25rem 0;
+font-size: .94rem;
+display: block;
+overflow-x: auto; 
+}
+th, td {
+border-bottom: 1px solid var(--rule);
+padding: .5rem .6rem;
+text-align: left;
+vertical-align: top;
+}
+thead th { border-bottom: 2px solid var(--rule); white-space: nowrap; }
+tbody tr:hover { background: var(--note-bg); }
+code, pre {
+font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
+font-size: .9em;
+}
+code { background: var(--code-bg); padding: .12em .35em; border-radius: .25rem; }
+pre {
+background: var(--code-bg);
+padding: .9rem 1rem;
+border-radius: .4rem;
+overflow-x: auto;
+}
+pre code { background: none; padding: 0; }
+
+blockquote {
+margin: 1.25rem 0;
+padding: .75rem 1.1rem;
+background: var(--note-bg);
+border-left: 4px solid var(--accent);
+border-radius: 0 .35rem .35rem 0;
+}
+blockquote p { margin: .35rem 0; }
+
+img {
+max-width: 100%;
+height: auto;
+display: block;
+margin: 1.25rem auto;
+border: 1px solid var(--rule);
+border-radius: .35rem;
+}
+figcaption {
+text-align: center;
+color: var(--muted);
+font-size: .9rem;
+margin-top: -.6rem;
+}
+@media print {
+body { max-width: none; font-size: 11pt; }
+nav#TOC { break-after: page; }
+h1 { break-before: page; }
+h1:first-of-type { break-before: avoid; }
+a { color: inherit; }
+}
+</style>
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Mp10 Web — Printing</h1>
+<p class="subtitle">Encounter forms and labels from the browser, and the
+helper behind them</p>
+<p class="author">Structured Systems · www.structuredsystems.com</p>
+<p class="date">03 August 2026</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#about-this-guide" id="toc-about-this-guide">About this
+guide</a>
+<ul>
+<li><a href="#why-there-is-a-separate-program-at-all" id="toc-why-there-is-a-separate-program-at-all">Why there is a separate
+program at all</a></li>
+</ul></li>
+<li><a href="#using-it" id="toc-using-it">Using it</a>
+<ul>
+<li><a href="#printing-an-encounter-form-or-a-label" id="toc-printing-an-encounter-form-or-a-label">Printing an encounter
+form or a label</a></li>
+<li><a href="#preview-checking-before-you-spend-a-label" id="toc-preview-checking-before-you-spend-a-label">Preview — checking
+before you spend a label</a></li>
+<li><a href="#printing-claims" id="toc-printing-claims">Printing
+claims</a></li>
+<li><a href="#what-it-does-not-do" id="toc-what-it-does-not-do">What it
+does not do</a></li>
+</ul></li>
+<li><a href="#when-something-is-wrong" id="toc-when-something-is-wrong">When something is wrong</a>
+<ul>
+<li><a href="#admin-print-helper" id="toc-admin-print-helper">Admin →
+Print helper</a>
+<ul>
+<li><a href="#when-to-use-restart" id="toc-when-to-use-restart">When to
+use Restart</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#installing-it-it-task" id="toc-installing-it-it-task">Installing it — IT task</a>
+<ul>
+<li><a href="#what-to-copy" id="toc-what-to-copy">What to copy</a></li>
+<li><a href="#settings" id="toc-settings">1. Settings</a></li>
+<li><a href="#name-the-printers" id="toc-name-the-printers">2. Name the
+printers</a></li>
+<li><a href="#install-the-service" id="toc-install-the-service">3.
+Install the service</a></li>
+<li><a href="#the-session-0-trap" id="toc-the-session-0-trap">4. The
+session 0 trap</a></li>
+<li><a href="#check-it" id="toc-check-it">5. Check it</a></li>
+<li><a href="#updating-a-workstation-later" id="toc-updating-a-workstation-later">6. Updating a workstation
+later</a></li>
+<li><a href="#where-to-look-when-it-misbehaves" id="toc-where-to-look-when-it-misbehaves">7. Where to look when it
+misbehaves</a></li>
+</ul></li>
+<li><a href="#notes-for-the-curious" id="toc-notes-for-the-curious">Notes for the curious</a>
+<ul>
+<li><a href="#is-it-safe-to-have-a-program-listening-on-the-workstation" id="toc-is-it-safe-to-have-a-program-listening-on-the-workstation">Is it
+safe to have a program listening on the workstation?</a></li>
+<li><a href="#what-happens-if-a-print-job-hangs" id="toc-what-happens-if-a-print-job-hangs">What happens if a print job
+hangs</a></li>
+<li><a href="#does-an-https-site-really-reach-a-http127.0.0.1-helper" id="toc-does-an-https-site-really-reach-a-http127.0.0.1-helper">Does an
+https site really reach a http://127.0.0.1 helper?</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="about-this-guide">About this guide</h1>
+<p>Mp10 Web prints encounter forms and labels on the <strong>printer
+attached to the workstation you are sitting at</strong>, using the same
+templates as the desktop application — so a label printed from the
+browser and a label printed from Mp10 come out identical.</p>
+<p>It does that through a small companion program,
+<strong>MpPrintSrv</strong>, installed on each workstation that prints.
+This guide has three parts:</p>
+<ul>
+<li><strong>Using it</strong> — for the person at the front desk. No
+setup.</li>
+<li><strong>Installing it</strong> — for whoever looks after the
+computers. Marked <strong>IT task</strong>.</li>
+<li><strong>When something is wrong</strong> — a fault-finding table,
+and the one trap that catches most installations.</li>
+</ul>
+<h2 id="why-there-is-a-separate-program-at-all">Why there is a separate
+program at all</h2>
+<p>Three reasons, and they are worth knowing because they explain every
+other decision in this guide:</p>
+<ol type="1">
+<li><strong>The printer is chosen by name from the workstation’s own
+printer list.</strong> Label printers sit at the desk, so the printing
+has to be started at the desk. A web server in a rack cannot see
+them.</li>
+<li><strong>The report templates bind to the database in a way only
+Mp10’s own toolchain can reproduce.</strong> MpPrintSrv is built from
+the same code as the desktop application, which is what guarantees the
+output matches.</li>
+<li><strong>The templates live in the database</strong>, not in files on
+disk, so there is nothing to copy to each workstation and nothing that
+can drift out of date.</li>
+</ol>
+<h1 id="using-it">Using it</h1>
+<h2 id="printing-an-encounter-form-or-a-label">Printing an encounter
+form or a label</h2>
+<p>On either Encounters grid — the standalone
+<strong>Encounters</strong> list, or a patient’s own
+<strong>Encounters</strong> tab — select the encounter, then choose:</p>
+<ul>
+<li><strong>Print encounter</strong> — the encounter form, to the
+workstation’s <code>FORMS</code> printer.</li>
+<li><strong>Print label</strong> — the encounter label, to the
+workstation’s <code>LABELS</code> printer.</li>
+</ul>
+<p>The printer is chosen automatically. Nothing asks you which one.</p>
+<h2 id="preview-checking-before-you-spend-a-label">Preview — checking
+before you spend a label</h2>
+<p><strong>Preview</strong> produces exactly what would have been
+printed, as a PDF in a new browser tab, without sending anything to a
+printer.</p>
+<p>Use it when you want to check a form looks right, when a label came
+out wrong and you want to see whether the problem is the data or the
+printer, or when somebody just wants to read what is on the
+encounter.</p>
+<p>It is the same template and the same data as printing — not an
+approximation.</p>
+<blockquote>
+<p>If nothing opens, your browser has blocked the new tab. Allow pop-ups
+for this site; Mp10 Web tells you when this has happened rather than
+appearing to do nothing.</p>
+</blockquote>
+<h2 id="printing-claims">Printing claims</h2>
+<p>The <strong>Print</strong> button on the Claims dialog is wired up
+but not finished: it reports that claim printing is still to be built.
+Print claims from the desktop application in the meantime.</p>
+<h2 id="what-it-does-not-do">What it does not do</h2>
+<p><strong>Designing and editing the report templates stays in the
+desktop application.</strong> That is deliberate, not an oversight — a
+template is shared by everyone, and editing one is a deskbound job.
+There is no way to reach it from a browser.</p>
+<h1 id="when-something-is-wrong">When something is wrong</h1>
+<p>Every failure is reported in the page with a message that names the
+cause. Nothing is ever printed silently or half-printed.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>What it says</th>
+<th>What it means</th>
+<th>Who fixes it</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>No printer whose name contains <strong>LABELS</strong> <em>(or
+FORMS)</em> is installed on this workstation</td>
+<td>The printer is missing, misnamed — or the helper is a service that
+cannot see it. See <em>The session 0 trap</em></td>
+<td><strong>IT task</strong></td>
+</tr>
+<tr class="even">
+<td>The print helper is not answering on this workstation</td>
+<td>MpPrintSrv is not running here, <strong>or</strong> its
+allowed-origins setting does not list this site</td>
+<td><strong>IT task</strong></td>
+</tr>
+<tr class="odd">
+<td>Encounter not found</td>
+<td>The encounter number did not match a record</td>
+<td>Check the encounter</td>
+</tr>
+<tr class="even">
+<td>A print job stopped responding at <em>(time)</em> … needs
+restarting</td>
+<td>A job hung; the helper has stopped accepting new ones on
+purpose</td>
+<td><strong>Admin → Print helper</strong>, then
+<strong>Restart</strong></td>
+</tr>
+<tr class="odd">
+<td>The print job did not finish within 60 seconds</td>
+<td>Same as above, reported to whoever was waiting</td>
+<td>As above</td>
+</tr>
+<tr class="even">
+<td>Claim printing is not built yet</td>
+<td>Expected — see above</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>Report design is a desktop function</td>
+<td>Expected — see above</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td><em>An update was applied but nothing changed</em></td>
+<td>The service is still running the old program</td>
+<td><strong>Restart</strong> it, then check the <strong>Build</strong>
+line</td>
+</tr>
+</tbody>
+</table>
+<p>The message <em>“The print helper is not answering”</em> covers two
+different problems on purpose: <strong>a browser cannot tell them
+apart.</strong> When a page is refused by the helper’s origin list, the
+browser blocks the reply before Mp10 Web can read the explanation, and
+it looks exactly like nothing listening. Check both.</p>
+<h2 id="admin-print-helper">Admin → Print helper</h2>
+<p>Users with the <code>system.printhelper</code> permission get an
+<strong>Admin → Print helper</strong> page. It reports on the helper
+running on <strong>whichever workstation has the browser open</strong> —
+sitting at a different desk shows you that desk’s helper.</p>
+<p>It shows:</p>
+<ul>
+<li><strong>State</strong> — whether it is answering, <strong>which
+build it is running</strong>, whether it is installed as a Windows
+service, which account it runs as, and when it started.</li>
+<li><strong>Jobs</strong> — how many have printed, how many failed, and
+the last error.</li>
+<li><strong>Printers this helper can see</strong> — which printer it
+would pick for <code>FORMS</code> and for <code>LABELS</code>, and the
+full list. <strong>This is the page that solves most printing
+problems.</strong></li>
+<li><strong>Allowed origins</strong> — the addresses it will accept
+requests from.</li>
+</ul>
+<p>And a <strong>Restart</strong> button.</p>
+<h3 id="when-to-use-restart">When to use Restart</h3>
+<p>Use it when the page reports that a job <strong>stopped
+responding</strong>. The helper deliberately refuses further jobs after
+that rather than queueing them behind a job that is never going to
+finish, and a restart is what clears it.</p>
+<p>The button only works when MpPrintSrv was installed as a Windows
+service. A copy that somebody started by hand can only be stopped, and
+the page says so rather than leaving you waiting for a comeback that is
+not coming.</p>
+<p>A restart takes a few seconds. The page waits for a genuinely new
+instance before it tells you it worked — not merely for something to
+answer, because the old copy keeps replying for a moment after being
+asked to stop.</p>
+<h1 id="installing-it-it-task">Installing it — IT task</h1>
+<h2 id="what-to-copy">What to copy</h2>
+<p>From the Mp10 installation folder, onto each workstation that prints
+— <strong>four files</strong>:</p>
+<table>
+<thead>
+<tr class="header">
+<th>File</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>MpPrintSrv.exe</code></td>
+<td>the helper itself</td>
+</tr>
+<tr class="even">
+<td><code>FrSystH.dll</code></td>
+<td>the report engine that renders the templates</td>
+</tr>
+<tr class="odd">
+<td><code>ace32.dll</code></td>
+<td>the Advantage database client</td>
+</tr>
+<tr class="even">
+<td><code>Mp10.ini</code></td>
+<td>settings — copy <code>Mp10.ini.example</code> and edit it</td>
+</tr>
+</tbody>
+</table>
+<p><code>ace32.dll</code> is the one that gets forgotten, because on a
+PC that already runs the Mp10 desktop applications it is there already
+and nobody notices. On a workstation that only ever uses the browser it
+is <strong>not</strong>, and without it <code>MpPrintSrv.exe</code> will
+not start at all.</p>
+<h2 id="settings">1. Settings</h2>
+<p>Two settings matter, both in <code>Mp10.ini</code> next to the
+program:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[RDD]</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">RDD-VERSION</span><span class="ot">=</span><span class="st">REMOTE</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">PATH</span><span class="ot">=</span><span class="st">\\adsserver\adsdata\sfi\</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">[PRINT]</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="dt">PORT</span><span class="ot">=</span><span class="dv">6265</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="dt">ORIGIN</span><span class="ot">=</span><span class="st">https://mp10web.example.org</span></span></code></pre></div>
+<ul>
+<li><strong><code>[RDD] PATH</code></strong> — the folder holding
+<code>mp.add</code>, the same value the desktop applications use.</li>
+<li><strong><code>[PRINT] ORIGIN</code></strong> — <strong>the address
+staff open Mp10 Web at</strong>, exactly as the browser sends it: scheme
+and host, no trailing slash, and the port too when it is not 80 or
+443.</li>
+</ul>
+<p><code>ORIGIN</code> is not a formality. It is the whole of the access
+control: a page served from any other address is stopped by the browser
+before its request is ever sent. Get it wrong and <strong>nothing
+prints</strong>, with the message <em>“The print helper is not
+answering”</em>. Several may be listed, comma separated, which is what a
+site reachable over both <code>http</code> and <code>https</code>
+needs.</p>
+<p><code>PORT</code> is 6265 on both sides. Changing it here means
+changing it in Mp10 Web’s build as well, so leave it alone unless
+something else on the workstation already wants that port.</p>
+<h2 id="name-the-printers">2. Name the printers</h2>
+<p>The printer is found <strong>by name</strong>. This is the same
+convention the desktop application already uses:</p>
+<ul>
+<li>the label printer’s Windows name must contain
+<strong><code>LABELS</code></strong></li>
+<li>the form printer’s Windows name must contain
+<strong><code>FORMS</code></strong></li>
+</ul>
+<p>Case does not matter. <code>Zebra ZD410 LABELS</code> and
+<code>labels-front-desk</code> both work.</p>
+<h2 id="install-the-service">3. Install the service</h2>
+<p>From an <strong>elevated</strong> command prompt, in the folder
+holding <code>MpPrintSrv.exe</code>:</p>
+<pre><code>MpPrintSrv.exe -i</code></pre>
+<p>It starts immediately, and again at every boot. The other verbs:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>MpPrintSrv.exe -i</code></td>
+<td>Install and start</td>
+</tr>
+<tr class="even">
+<td><code>MpPrintSrv.exe -u</code></td>
+<td>Stop and remove</td>
+</tr>
+<tr class="odd">
+<td><code>MpPrintSrv.exe -start</code></td>
+<td>Start</td>
+</tr>
+<tr class="even">
+<td><code>MpPrintSrv.exe -stop</code></td>
+<td>Stop</td>
+</tr>
+<tr class="odd">
+<td><code>MpPrintSrv.exe -restart</code></td>
+<td>Stop and start</td>
+</tr>
+<tr class="even">
+<td><code>MpPrintSrv.exe -status</code></td>
+<td>Report the service state</td>
+</tr>
+<tr class="odd">
+<td><code>MpPrintSrv.exe -listen</code></td>
+<td>Run in the foreground instead, without installing</td>
+</tr>
+</tbody>
+</table>
+<p>Install also configures Windows to restart the service automatically
+if it ever crashes.</p>
+<blockquote>
+<p>All of these need an elevated prompt. Without one,
+<code>-status</code> reports <em>“unknown (needs an elevated prompt to
+ask)”</em> rather than guessing.</p>
+</blockquote>
+<h2 id="the-session-0-trap">4. The session 0 trap</h2>
+<p><strong>Read this one even if everything appears to
+work.</strong></p>
+<p>A Windows service runs in what Windows calls <em>session 0</em>, and
+<strong>session 0 cannot see printers that a signed-in user
+added</strong>. Since MpPrintSrv picks its printer by name out of that
+list, the result is:</p>
+<blockquote>
+<p>No printer whose name contains LABELS is installed on this
+workstation</p>
+</blockquote>
+<p>which sounds like a naming mistake and is not. The printer is
+installed. The service simply cannot see it.</p>
+<p>Two fixes, either is fine:</p>
+<ul>
+<li><p><strong>Install the printers for the whole machine</strong>
+rather than for one user; or</p></li>
+<li><p><strong>Run the service as a user</strong> who has them:</p>
+<pre><code>MpPrintSrv.exe -u
+MpPrintSrv.exe -i -account=DOMAIN\user -svcpwd=secret</code></pre></li>
+</ul>
+<p>To tell which situation you are in, open <strong>Admin → Print
+helper</strong> on that workstation. It names the account the service
+runs as and lists every printer that account can see. If the account is
+<code>SYSTEM</code> and the list is missing the label printer, this is
+your problem.</p>
+<h2 id="check-it">5. Check it</h2>
+<p>Without a browser, from the folder holding the program:</p>
+<pre><code>MpPrintSrv.exe -enc=&lt;an encounter number&gt; -what=label -mode=pdf -out=c:\temp\t.pdf</code></pre>
+<p>A PDF means the database connection, the template and the data are
+all working, and <strong>only the printer is left to sort out</strong>.
+That single command separates half the possible faults from the other
+half.</p>
+<p>Then, from a browser on that workstation, select an encounter and
+choose <strong>Preview</strong>, then <strong>Print label</strong>.</p>
+<h2 id="updating-a-workstation-later">6. Updating a workstation
+later</h2>
+<p><strong>Stop the service before copying, and start it
+afterwards.</strong></p>
+<p>Copying a new <code>MpPrintSrv.exe</code> over a running service
+<em>looks</em> like it worked — the copy succeeds, with no error and no
+warning — but the service goes on running the <strong>old</strong>
+program until it is restarted. Measured: with one build running and a
+newer one already on disk, the service still reported the older one, and
+only a restart changed it.</p>
+<pre><code>MpPrintSrv.exe -stop
+   ... copy the new files ...
+MpPrintSrv.exe -start</code></pre>
+<p>Then open <strong>Admin → Print helper</strong> on that workstation
+and check the <strong>Build</strong> line. It reports the build the
+helper is <em>actually running</em>, not the one sitting in the folder —
+which is exactly the question worth asking after an update, and the only
+way to catch a workstation that was missed.</p>
+<h2 id="where-to-look-when-it-misbehaves">7. Where to look when it
+misbehaves</h2>
+<p><code>MpPrintSrv.log</code>, beside the program, records every job
+and every refusal with a timestamp — what was printed, which template,
+and what went wrong. It is the first thing to read and usually the last
+thing you need.</p>
+<h1 id="notes-for-the-curious">Notes for the curious</h1>
+<h2 id="is-it-safe-to-have-a-program-listening-on-the-workstation">Is it
+safe to have a program listening on the workstation?</h2>
+<p>It listens on <code>127.0.0.1</code> only — the loopback address — so
+nothing else on the network can reach it, only software already running
+on that PC. On top of that it accepts requests only from the web
+addresses listed in <code>[PRINT] ORIGIN</code>; your browser enforces
+that before a request is ever sent.</p>
+<p>This is the same arrangement the practice already relies on for
+signature pads, where Topaz’s SigWeb runs the same way on each
+workstation.</p>
+<h2 id="what-happens-if-a-print-job-hangs">What happens if a print job
+hangs</h2>
+<p>The helper is built so that a stuck job cannot take the rest of it
+down with it. Printing runs separately from the part that answers Mp10
+Web, so <strong>Admin → Print helper</strong> keeps working and keeps
+reporting — which is what makes the <strong>Restart</strong> button
+useful at the moment you actually need it.</p>
+<p>After sixty seconds a job is declared stuck: whoever was waiting is
+told, and further printing is refused with a message naming the time it
+happened, rather than silently queueing work that will never come
+out.</p>
+<h2 id="does-an-https-site-really-reach-a-http127.0.0.1-helper">Does an
+https site really reach a http://127.0.0.1 helper?</h2>
+<p>Yes. Browsers treat the loopback address as trustworthy and exempt it
+from the usual rule against mixed content. SigWeb depends on the same
+behaviour.</p>
+</body>
+</html>

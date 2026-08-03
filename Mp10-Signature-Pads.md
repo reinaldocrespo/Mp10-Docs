@@ -60,11 +60,21 @@ the **Signature** panel on the encounter form.
 
 ## Taking a signature
 
-1. Select the encounter and choose **Capture signature**.
-2. A window opens with an empty signing area. It says *"Connecting to the
-   signature pad…"* for a moment.
-3. Ask the patient to sign **on the pad**. Their signature appears in the window
-   as they write.
+What the patient is shown before they sign — a consent text, and optionally a
+choice to make — is set up by your practice; see *Setting up the consent text*
+below. If nothing has been set up, the window goes straight to the signing area
+and steps 1 and 2 below simply do not appear.
+
+1. **The consent text.** Select the encounter and choose **Capture signature**.
+   The window shows the text your practice configured, one page at a time, with
+   **Next** and **Back**. Let the patient read it. **Continue** stays greyed out
+   until the last page has been reached — nobody can skip past the text.
+2. **The choice**, if your practice configured one. The patient picks one of the
+   options offered. It is one choice, not a tick-list: choosing a second option
+   replaces the first. **Continue** stays greyed out until one is chosen.
+3. **The signature.** The signing area appears; it says *"Connecting to the
+   signature pad…"* for a moment. Ask the patient to sign **on the pad**. Their
+   signature appears in the window as they write.
 4. If they want to start again, choose **Clear** and let them sign again. This
    clears both the pad and the screen.
 5. Choose **Save signature**.
@@ -72,6 +82,15 @@ the **Signature** panel on the encounter form.
 The window confirms *"Signature saved"* and closes itself. The encounter's
 **Signature** column now shows a tick, and **Capture signature** greys out for
 that encounter.
+
+**If the patient changes their choice after signing, the signature is cleared**
+and they are asked to sign again. This is deliberate, and the desktop
+application does the same: the signature has to belong to the choice actually
+made, or it is not evidence of anything. The window tells you when it happens.
+
+What the patient chose is stored **with** the signature, along with every option
+they were offered — so a form printed later shows the decision they were
+actually making, not just which box ended up ticked.
 
 ## Things it will not let you do
 
@@ -167,6 +186,64 @@ signature and choose **Capture signature**.
   should get JavaScript, not a "not found" page.
 - *"SigWeb … is not running on this workstation"* → step 1 was missed on this
   PC, or the SigWeb service is stopped. Check Windows Services.
+
+## Setting up the consent text — IT task
+
+Mp10 Web reads **exactly the same setting the desktop application reads**, so
+there is only one place to change it and both stay in step. It lives in the Mp10
+System Registry (not the Windows registry):
+
+| Field | Value |
+|---|---|
+| Section | `TOPAZ` |
+| Entry | `ENCOUNTER-SIGNATURE-DISPLAYMESSAGE` |
+
+Leave it unset and signatures are simply collected with no consent text.
+
+### Put the text in a file, not in the setting
+
+> **The setting itself holds only 250 characters.** Anything longer is cut off
+> without warning. A real consent will not fit, so the setting should hold the
+> **full path to a file**, and the file holds the text. Mp10 reads the file
+> every time, so editing the file is all that is needed to change the wording.
+
+The file may be either plain text, or JSON if you want options as well.
+
+**Plain text** — the whole file is the message:
+
+```
+I authorise the practice to provide the treatment discussed with me.
+```
+
+**JSON** — a message plus a choice for the patient to make:
+
+```json
+{
+  "ShowTextOnPad": "CONSENT TO TREATMENT\n\nI authorise the practice to...",
+  "Options": [
+    { "id": 1, "Option": "I consent to the treatment described above" },
+    { "id": 2, "Option": "I decline the treatment described above" }
+  ],
+  "NewPageForOptions": true,
+  "NewPageForSignature": true
+}
+```
+
+- `ShowTextOnPad` — the message. `\n` starts a new line. Length is not limited;
+  it is paged automatically.
+- `Options` — the choice. Each needs an `id` (what gets stored) and an `Option`
+  (what the patient reads). Omit `Options` entirely for consent with no choice.
+- `NewPageForOptions` / `NewPageForSignature` — whether each step starts a fresh
+  page.
+
+If the file is meant to be JSON but has a syntax error, nothing breaks: it is
+treated as plain text, so the patient sees the raw JSON instead of a formatted
+consent. If that is what you are seeing, the file has a typo in it.
+
+### Checking a change
+
+Change the file, then take a signature on any encounter. The new wording appears
+immediately — there is nothing to restart and no cache to clear.
 
 ## If a pad works in the desktop app but not here
 

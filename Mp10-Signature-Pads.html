@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-08-01" />
+  <meta name="dcterms.date" content="2026-08-03" />
   <title>Mp10 Web — Signature Pads</title>
   <style>
 code{white-space: pre-wrap;}
@@ -22,6 +22,70 @@ margin: 0 0.8em 0.2em -1.6em;
 vertical-align: middle;
 }
 .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
   <style type="text/css">
 :root {
@@ -147,7 +211,7 @@ a { color: inherit; }
 <h1 class="title">Mp10 Web — Signature Pads</h1>
 <p class="subtitle">Capturing patient signatures from a Topaz pad</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">01 August 2026</p>
+<p class="date">03 August 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -174,6 +238,14 @@ workstation</a></li>
 <li><a href="#put-sigwebtablet.js-on-the-web-server" id="toc-put-sigwebtablet.js-on-the-web-server">2. Put
 <code>SigWebTablet.js</code> on the web server</a></li>
 <li><a href="#check-it" id="toc-check-it">3. Check it</a></li>
+<li><a href="#setting-up-the-consent-text-it-task" id="toc-setting-up-the-consent-text-it-task">Setting up the consent text
+— IT task</a>
+<ul>
+<li><a href="#put-the-text-in-a-file-not-in-the-setting" id="toc-put-the-text-in-a-file-not-in-the-setting">Put the text in a
+file, not in the setting</a></li>
+<li><a href="#checking-a-change" id="toc-checking-a-change">Checking a
+change</a></li>
+</ul></li>
 <li><a href="#if-a-pad-works-in-the-desktop-app-but-not-here" id="toc-if-a-pad-works-in-the-desktop-app-but-not-here">If a pad works
 in the desktop app but not here</a></li>
 <li><a href="#what-gets-stored" id="toc-what-gets-stored">What gets
@@ -221,13 +293,26 @@ accident.</p>
 itself and use the <strong>Signature</strong> panel on the encounter
 form.</p>
 <h2 id="taking-a-signature">Taking a signature</h2>
+<p>What the patient is shown before they sign — a consent text, and
+optionally a choice to make — is set up by your practice; see
+<em>Setting up the consent text</em> below. If nothing has been set up,
+the window goes straight to the signing area and steps 1 and 2 below
+simply do not appear.</p>
 <ol type="1">
-<li>Select the encounter and choose <strong>Capture
-signature</strong>.</li>
-<li>A window opens with an empty signing area. It says <em>“Connecting
-to the signature pad…”</em> for a moment.</li>
-<li>Ask the patient to sign <strong>on the pad</strong>. Their signature
-appears in the window as they write.</li>
+<li><strong>The consent text.</strong> Select the encounter and choose
+<strong>Capture signature</strong>. The window shows the text your
+practice configured, one page at a time, with <strong>Next</strong> and
+<strong>Back</strong>. Let the patient read it.
+<strong>Continue</strong> stays greyed out until the last page has been
+reached — nobody can skip past the text.</li>
+<li><strong>The choice</strong>, if your practice configured one. The
+patient picks one of the options offered. It is one choice, not a
+tick-list: choosing a second option replaces the first.
+<strong>Continue</strong> stays greyed out until one is chosen.</li>
+<li><strong>The signature.</strong> The signing area appears; it says
+<em>“Connecting to the signature pad…”</em> for a moment. Ask the
+patient to sign <strong>on the pad</strong>. Their signature appears in
+the window as they write.</li>
 <li>If they want to start again, choose <strong>Clear</strong> and let
 them sign again. This clears both the pad and the screen.</li>
 <li>Choose <strong>Save signature</strong>.</li>
@@ -235,6 +320,15 @@ them sign again. This clears both the pad and the screen.</li>
 <p>The window confirms <em>“Signature saved”</em> and closes itself. The
 encounter’s <strong>Signature</strong> column now shows a tick, and
 <strong>Capture signature</strong> greys out for that encounter.</p>
+<p><strong>If the patient changes their choice after signing, the
+signature is cleared</strong> and they are asked to sign again. This is
+deliberate, and the desktop application does the same: the signature has
+to belong to the choice actually made, or it is not evidence of
+anything. The window tells you when it happens.</p>
+<p>What the patient chose is stored <strong>with</strong> the signature,
+along with every option they were offered — so a form printed later
+shows the decision they were actually making, not just which box ended
+up ticked.</p>
 <h2 id="things-it-will-not-let-you-do">Things it will not let you
 do</h2>
 <ul>
@@ -357,6 +451,73 @@ should get JavaScript, not a “not found” page.</li>
 missed on this PC, or the SigWeb service is stopped. Check Windows
 Services.</li>
 </ul>
+<h2 id="setting-up-the-consent-text-it-task">Setting up the consent text
+— IT task</h2>
+<p>Mp10 Web reads <strong>exactly the same setting the desktop
+application reads</strong>, so there is only one place to change it and
+both stay in step. It lives in the Mp10 System Registry (not the Windows
+registry):</p>
+<table>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Section</td>
+<td><code>TOPAZ</code></td>
+</tr>
+<tr class="even">
+<td>Entry</td>
+<td><code>ENCOUNTER-SIGNATURE-DISPLAYMESSAGE</code></td>
+</tr>
+</tbody>
+</table>
+<p>Leave it unset and signatures are simply collected with no consent
+text.</p>
+<h3 id="put-the-text-in-a-file-not-in-the-setting">Put the text in a
+file, not in the setting</h3>
+<blockquote>
+<p><strong>The setting itself holds only 250 characters.</strong>
+Anything longer is cut off without warning. A real consent will not fit,
+so the setting should hold the <strong>full path to a file</strong>, and
+the file holds the text. Mp10 reads the file every time, so editing the
+file is all that is needed to change the wording.</p>
+</blockquote>
+<p>The file may be either plain text, or JSON if you want options as
+well.</p>
+<p><strong>Plain text</strong> — the whole file is the message:</p>
+<pre><code>I authorise the practice to provide the treatment discussed with me.</code></pre>
+<p><strong>JSON</strong> — a message plus a choice for the patient to
+make:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;ShowTextOnPad&quot;</span><span class="fu">:</span> <span class="st">&quot;CONSENT TO TREATMENT</span><span class="ch">\n\n</span><span class="st">I authorise the practice to...&quot;</span><span class="fu">,</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;Options&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span> <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span> <span class="dt">&quot;Option&quot;</span><span class="fu">:</span> <span class="st">&quot;I consent to the treatment described above&quot;</span> <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span> <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="dv">2</span><span class="fu">,</span> <span class="dt">&quot;Option&quot;</span><span class="fu">:</span> <span class="st">&quot;I decline the treatment described above&quot;</span> <span class="fu">}</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;NewPageForOptions&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;NewPageForSignature&quot;</span><span class="fu">:</span> <span class="kw">true</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<ul>
+<li><code>ShowTextOnPad</code> — the message. <code>\n</code> starts a
+new line. Length is not limited; it is paged automatically.</li>
+<li><code>Options</code> — the choice. Each needs an <code>id</code>
+(what gets stored) and an <code>Option</code> (what the patient reads).
+Omit <code>Options</code> entirely for consent with no choice.</li>
+<li><code>NewPageForOptions</code> / <code>NewPageForSignature</code> —
+whether each step starts a fresh page.</li>
+</ul>
+<p>If the file is meant to be JSON but has a syntax error, nothing
+breaks: it is treated as plain text, so the patient sees the raw JSON
+instead of a formatted consent. If that is what you are seeing, the file
+has a typo in it.</p>
+<h3 id="checking-a-change">Checking a change</h3>
+<p>Change the file, then take a signature on any encounter. The new
+wording appears immediately — there is nothing to restart and no cache
+to clear.</p>
 <h2 id="if-a-pad-works-in-the-desktop-app-but-not-here">If a pad works
 in the desktop app but not here</h2>
 <p>The desktop application and Mp10 Web use <strong>different</strong>

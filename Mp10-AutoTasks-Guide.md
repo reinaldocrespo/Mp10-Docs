@@ -24,10 +24,18 @@ Mp10 includes a background service called **AutoTasks**. It runs unattended on
 your server and takes care of work that would otherwise have to be done by hand
 every day:
 
-- taking a **backup** of your data on a schedule you choose,
-- reading **electronic remittances** (payment advices) that you download from
-  your insurers, and posting them into Mp10, and
+- taking a **backup** of your data on a schedule you choose, archiving it and
+  checking the archive is sound,
+- **collecting files from your clearinghouse** — remittances, claim status
+  responses and acknowledgements — and posting them into Mp10,
+- reading **remittance PDFs** downloaded from insurer portals,
+- asking insurers whether a patient's **coverage is active**,
+- texting patients an **appointment reminder** they can reply to, and
 - running **reports** on a schedule and e-mailing them to whoever needs them.
+
+Each of those is turned on separately. Nothing in this list happens until you
+set the corresponding entry in the System Registry, with one exception noted in
+its own chapter: eligibility requests default to on.
 
 This guide is for the person who administers Mp10 at the practice. It does not
 assume you are a programmer. It does assume you can open the **Admin10** module
@@ -190,7 +198,7 @@ started one, it will not start another today, however many times it wakes up.
 ## Optional: zipping and retention
 
 If you also set a zip path, AutoTasks compresses each backup into a dated
-archive and prunes old ones.
+archive, **reads that archive back to check it**, and only then prunes old ones.
 
 | Entry | Example | Default | What it means |
 |---|---|---|---|
@@ -211,6 +219,61 @@ path reachable from the Mp10 server is fine.
 > `BACKUP_ZIP_PATH` exceeds this number, the oldest are erased automatically.
 > Keep that folder for backups only, and set the number to match the disk space
 > you have.
+
+### The archive is checked before it counts as a backup
+
+An archive is not treated as a backup until AutoTasks has opened it again and
+confirmed every file inside it is intact and the right size. Only then does it
+delete anything older.
+
+This matters more than it sounds. If the archive cannot be written or does not
+check out, **nothing is deleted** — the previous archives are left exactly as
+they were, and you get a failure e-mail. Older backups are never traded away
+for a new one that might not work.
+
+A failed archive is renamed so it cannot be mistaken for a good one:
+
+```
+Mp10Data-2026-07-31.zip.failed
+```
+
+> **`.failed` files are never deleted automatically.** They are left for
+> inspection and they do not count towards `MAX_BACKUPS_TO_KEEP`. If archiving
+> keeps failing night after night, they will accumulate and can fill the disk.
+> Treat a `.failed` file as something to investigate and then remove by hand
+> once you no longer need it.
+
+### Restoring from an archive
+
+To get files back out of an archive, use the archiving program directly. From
+the folder holding the AutoTasks program:
+
+```
+python backup_zip.py restore --zip "D:\Backups\Zips\Mp10Data-2026-07-31.zip" --target "D:\Restored"
+```
+
+To check an archive without extracting anything:
+
+```
+python backup_zip.py verify --zip "D:\Backups\Zips\Mp10Data-2026-07-31.zip" --mode full
+```
+
+`verify` finishes with a status of `0` when the archive is sound and `4` when it
+is not, and writes what it found to `backup_zip.result.json`. The `full` check
+reads every byte, so on a large archive it takes a while — that is why the
+nightly run uses a faster structural check instead, and why this thorough one is
+available to run by hand whenever you want reassurance.
+
+### What must be installed for backups to work
+
+| What | Why | Where |
+|---|---|---|
+| Python 3 | Creates and checks the zip archive | `GENERAL` / `PYTHONPATH` — folder holding `python.exe`, with a trailing backslash. Blank = rely on the system `PATH` |
+| `backup_zip.py` | The archiving program itself | Must sit in the same folder as the AutoTasks program |
+
+> **If either is missing, no archive is created.** The database backup itself
+> still runs and your data is still written to `BACKUP_PATH` — but there will be
+> no zip, and you will get a failure e-mail saying so.
 
 ## Being told what happened
 
@@ -233,21 +296,25 @@ part of the process that destroys anything, and this is the only record you get
 of it.
 
 ```
-The Mp10 backup archive was created successfully.
+The Mp10 backup archive was created and verified.
 
 Data dictionary : \\adsserver\data\mp10\mp10.add
 Archive         : D:\Backups\Zips\Mp10Data-2026-08-01.zip
 Size            : 3072.0 MB (3,221,225,472 bytes)
 Files archived  : 428
+Source          : \\adsserver\backup\mp10\
 Started         : 2026-08-01 04:37:11
 Finished        : 2026-08-01 04:52:44
 Duration        : 00:15:33
+Verification    : headers - passed
 
-Retention       : keeping the most recent 30 archives
 Removed         : 2 older archive(s)
                   Mp10Data-2026-06-28.zip
                   Mp10Data-2026-06-29.zip
 ```
+
+The **Verification** line is the one to read. If it is not there, or the subject
+says FAILED, nothing was deleted and the archive should not be relied on.
 
 ### Sending to more than one person
 
@@ -291,8 +358,17 @@ ADS message     : The specified path is invalid
 
 **`Mp10 backup archive FAILED`** — less serious. The backup itself worked and
 today's data is safe in `BACKUP_PATH`; only the zip step failed, so there is no
-dated archive for today and nothing was rotated. Usually a full disk or a
-permission problem on `BACKUP_ZIP_PATH`.
+dated archive for today and **nothing was rotated or deleted**. Usually a full
+disk, a permission problem on `BACKUP_ZIP_PATH`, or Python missing from the
+server.
+
+The message names what actually went wrong and where to look. Two files next to
+the AutoTasks program carry the detail:
+
+| File | What is in it |
+|---|---|
+| `backup_zip.log` | What the archiver did, file by file, and why it stopped |
+| `backup_zip.stdout.log` | Anything Python itself printed. **Look here first if `backup_zip.log` does not exist at all** — that combination means Python could not start |
 
 > **A failure e-mail means no backup today, and none is coming without you.**
 > AutoTasks does not retry after a failure — see *BACKUP_TIMES* above — so the
@@ -313,7 +389,7 @@ not been set up, AutoTasks does not attempt to send at all — it writes a line 
 Backups themselves are unaffected either way. Notification is the last step, and
 nothing about it can stop a backup from running or succeeding.
 
-## A working example
+## A working example — backups
 
 | Section | Entry | Value |
 |---|---|---|
@@ -323,22 +399,458 @@ nothing about it can stop a backup from running or succeeding.
 | `BACKUPS` | `BACKUP_ZIP_PATH` | `D:\Backups\Zips\` |
 | `BACKUPS` | `MAX_BACKUPS_TO_KEEP` | `30` |
 | `BACKUPS` | `NOTIFY_EMAIL` | `support@structuredsystems.com; manager@yourpractice.com` |
+| `GENERAL` | `PYTHONPATH` | `C:\Program Files\Python313\` |
 
 This takes a backup Monday through Saturday, any time after 2 a.m., zips it to
-a local disk, keeps the last 30 zips, and e-mails two people when it is done.
+a local disk, checks the archive, keeps the last 30 zips, and e-mails two people
+when it is done.
 
 ## Backups are not a disaster recovery plan on their own
 
 A backup that has never been restored is a hope, not a backup. Copy the zips
 off-site — or at minimum onto a different physical machine — and test a restore
-periodically. AutoTasks writes the file; making sure it survives a fire, a theft
-or a ransomware event is a decision only the practice can make.
+periodically. AutoTasks writes the file and checks that it is readable; making
+sure it survives a fire, a theft or a ransomware event is a decision only the
+practice can make.
+
+Restoring is a single command, and it is worth running once so you know it works
+before you ever need it:
+
+```
+python backup_zip.py restore --zip "D:\Backups\Zips\Mp10Data-2026-07-31.zip" --target "D:\RestoreTest"
+```
+
+# Electronic remittances: the two kinds
+
+Payment advices reach a practice in two different shapes, and AutoTasks handles
+them with two separate mechanisms. They are configured independently, in
+different sections of the System Registry, and turning one on does nothing for
+the other.
+
+| | **X12 835 files** | **EOB / ERA PDFs** |
+|---|---|---|
+| What it is | The standard electronic remittance format, a data file | A printed advice saved as a PDF |
+| Where it comes from | A clearinghouse, usually downloaded automatically | Downloaded by hand from an insurer's portal |
+| Turned on by | `AUTOTASKS` / `PROCESS_835` | `SCANNING` / `EOBIMAGESPATH` |
+| Folder settings live in | `X12FILE_PATH` | `SCANNING` |
+| Needs Python | No | Yes |
+
+If your clearinghouse delivers 835 files, that is the path to use — it carries
+more detail and needs no interpretation. The PDF route exists for payers who
+will only give you a printed advice.
+
+Both post into the same remittances table once processed.
+
+# Collecting files from the clearinghouse
+
+Rather than have somebody log into the clearinghouse portal and download files
+by hand, AutoTasks can collect them itself on a schedule. One mechanism brings
+down everything the clearinghouse has routed to you.
+
+## What gets collected
+
+The clearinghouse tags each file it sends with a document type. AutoTasks saves
+each one with that type at the front of the file name, so you can tell at a
+glance what arrived:
+
+| Arrives as | What it is | Processed by |
+|---|---|---|
+| `835_…​.txt` | An electronic remittance — a payment | *X12 835 electronic remittances* |
+| `277_…​.txt` | A claim status response — what the payer did with a claim | *Claim status responses (277)* |
+| `EDI_…​.txt` | An acknowledgement or notice about a claim submission | *Claim acknowledgements (EDI)* |
+
+> **Everything lands in one folder — the one named by `X12FILE_PATH` / `835`** —
+> whatever its type. That folder is the clearinghouse in-tray, not the "835
+> folder", despite the setting's name. Each processor then picks out the files
+> belonging to it. This is why the 835 processor only looks at names containing
+> `835`.
+
+A file that has already been collected is not written a second time: AutoTasks
+checks both the in-tray and the history folder before saving.
+
+## Turning collection on
+
+| Section | Entry | Example | What it means |
+|---|---|---|---|
+| `AUTOTASKS` | `GetRoutedFiles` | `YES` | Collect files from the clearinghouse. Anything other than `YES` = off |
+| `AUTOTASKS` | `GetRoutedFilesStartTime` | `07:00:00` | Earliest time of day it may run. Blank = no lower bound |
+| `AUTOTASKS` | `GetRoutedFilesEndTime` | `19:00:00` | Latest time of day it may run. Blank = no upper bound |
+| `AUTOTASKS` | `GetRoutedFilesFrequency` | `60` | Minutes to wait between runs on the same day |
+| `AUTOTASKS` | `GetRoutedFilesDays` | `23456` | Which days it may run on, using the same day codes as `BACKUP_DAYS` |
+
+> **Collection stops at 7 p.m. regardless of what you set.** There is a fixed
+> cut-off in the program, described in the log as *"Past working hrs not
+> fetching routed files to give Inmediata a rest."* Setting
+> `GetRoutedFilesEndTime` later than `19:00:00` will not extend collection past
+> it.
+
+## The clearinghouse account
+
+| Section | Entry | What it means |
+|---|---|---|
+| `X12WebService` | `UserName` | Clearinghouse user name |
+| `X12WebService` | `Password` | Clearinghouse password |
+| `X12WebService` | `FileTransfer_Url` | The file-transfer service address |
+| `X12WebService` | `TimeOut` | How long to wait for a response, in milliseconds. Default `30000` |
+| `X12WebService` | `MarkDownloadsAsDownloaded` | `NO` (recommended) — see below |
+
+## `MarkDownloadsAsDownloaded` — leave this alone unless asked
+
+Once a file is marked as downloaded, the clearinghouse will not offer it again.
+When that marking happens is the whole question.
+
+- **`NO` (the default, and the safe choice).** AutoTasks fetches the files,
+  writes them to disk, and *then* tells the clearinghouse they were collected.
+  If the download is interrupted or the disk is full, nothing was marked, so the
+  clearinghouse still has the files and the next run collects them again.
+- **`YES`.** The files are marked as downloaded as part of the fetch itself,
+  before AutoTasks has written anything. If the run fails at that point, the
+  clearinghouse considers the files delivered and **will not offer them again** —
+  they would have to be retrieved from the portal by hand.
+
+Set it to `YES` only if the clearinghouse specifically asks you to.
+
+## Checking it is working
+
+```
+GetRoutedFiles
+7 routed files downloaded
+\\server\data\x12files\835_20260803074113.txt
+\\server\data\x12files\277_20260803074115.txt
+```
+
+A run that finds nothing logs `0 routed files downloaded`, which is normal
+outside business hours or when the clearinghouse has nothing new.
+
+# X12 835 electronic remittances
+
+An 835 is the standard electronic remittance file. AutoTasks can collect them
+from the clearinghouse, read them, post the payments, and file the used ones
+away — with no manual step at all once it is set up.
+
+## The journey of an 835 file
+
+```
+   clearinghouse
+        |
+        |  (1) downloaded  -- AUTOTASKS / GetRoutedFiles
+        v
+   X12FILE_PATH / 835              <- the working folder
+        |
+        |  (2) processed  -- AUTOTASKS / PROCESS_835
+        v
+   payments posted into Mp10
+        |
+        |  (3) filed away
+        v
+   X12FILE_PATH / 835_COPY_PATH    <- the history folder
+```
+
+The file is **copied** to the history folder and then **erased** from the
+working folder. Erasing is the point: it is what stops the same remittance being
+processed again the next time round.
+
+## Step 1 — Create the two folders
+
+You need two folders, and **both must exist before you start**. AutoTasks does
+not create them for you.
+
+| Folder | Purpose |
+|---|---|
+| Working folder | Where 835 files arrive and wait to be processed |
+| History folder | Where they are filed after they have been posted |
+
+Requirements:
+
+- The AutoTasks service account needs permission to **read, write and delete**
+  in the working folder — it erases files there once they are safely filed.
+- It needs permission to **write** in the history folder.
+- Keep them separate. Do not make the history folder a subfolder that the
+  working folder's file search would find.
+- Do not use the working folder for anything else.
+
+## Step 2 — Declare the folders
+
+| Section | Entry | Example value | What it means |
+|---|---|---|---|
+| `X12FILE_PATH` | `835` | `\\server\data\x12files\` | The working folder — where 835 files are read from |
+| `X12FILE_PATH` | `835_COPY_PATH` | `\\server\data\x12files\history\` | The history folder — where they are moved after posting |
+
+Include the trailing backslash on both.
+
+> **`835_COPY_PATH` is not optional in practice.** If you leave it blank,
+> processed files are never erased from the working folder, so AutoTasks finds
+> and reprocesses the same remittances on every single cycle, for ever. The same
+> happens if the history folder does not exist or cannot be written to: the copy
+> fails, so the erase is skipped. **If you see the same remittances being
+> processed over and over, this is why.**
+
+## Step 3 — Turn processing on
+
+| Section | Entry | Value | What it means |
+|---|---|---|---|
+| `AUTOTASKS` | `PROCESS_835` | `YES` | Read and post 835 files. Anything other than `YES` = off |
+
+## Step 4 — Optional: collect the files automatically
+
+AutoTasks can fetch files from the clearinghouse itself, so nobody has to
+download anything by hand. That mechanism collects remittances, claim status
+responses and acknowledgements together — see *Collecting files from the
+clearinghouse* below.
+
+If you leave `GetRoutedFiles` off, everything else still works; somebody just
+has to put the 835 files into the working folder themselves.
+
+## Two things that catch people out
+
+**The file name has to contain `835`.** AutoTasks only looks at files whose name
+includes those three digits — `*835*`. A remittance saved as `remit_0731.txt`
+will sit in the folder untouched, for ever, with nothing in the log to say why.
+If files are being ignored, check the name first.
+
+**Files older than six months are skipped.** Anything more than 180 days old is
+left alone and noted in the log as `File more than 6 mo old`. This stops an old
+archive folder being reposted by accident. If you genuinely need to post
+something older, it has to be done by hand.
+
+## A working example — 835 files
+
+| Section | Entry | Value |
+|---|---|---|
+| `AUTOTASKS` | `PROCESS_835` | `YES` |
+| `X12FILE_PATH` | `835` | `\\server\data\x12files\` |
+| `X12FILE_PATH` | `835_COPY_PATH` | `\\server\data\x12files\history\` |
+| `AUTOTASKS` | `GetRoutedFiles` | `YES` |
+| `AUTOTASKS` | `GetRoutedFilesStartTime` | `07:00:00` |
+| `AUTOTASKS` | `GetRoutedFilesEndTime` | `19:00:00` |
+| `AUTOTASKS` | `GetRoutedFilesFrequency` | `60` |
+| `AUTOTASKS` | `GetRoutedFilesDays` | `23456` |
+
+This collects remittances from the clearinghouse once an hour, Monday to Friday,
+between 7 a.m. and 7 p.m., posts them, and files them into the history folder.
+
+## Checking it is working
+
+At startup AutoTasks writes the state of each X12 folder into `AutoTasks.out`:
+
+```
+X12 835 dir  \\server\data\x12files\  exists
+```
+
+If that line says the folder is missing, nothing else in this chapter will work.
+During a run you will see how many files were found:
+
+```
+ProcessAll835OnDir  12 Files found on \\server\data\x12files\
+```
+
+Then, as each is filed away, the copy and the erase are both logged. A file that
+is found but never erased is the signature of a history-folder problem — see the
+warning under *Step 2*.
+
+# Claim status responses (277)
+
+A 277 tells you what the payer did with a claim you submitted — accepted,
+rejected, pending, and why. AutoTasks reads them and posts the status against
+the claim, so the billing staff can see it without logging into a portal.
+
+| Section | Entry | Value | What it means |
+|---|---|---|---|
+| `AUTOTASKS` | `PROCESS_277` | `YES` | Read and post 277 files. Anything other than `YES` = off |
+| `X12FILE_PATH` | `277` | `\\server\data\x12files\` | The folder 277 files are read from |
+| `X12FILE_PATH` | `277_COPY_PATH` | `\\server\data\x12files\history\` | Where they are filed after posting |
+
+The same rule as for 835 files applies: **the history folder must exist and be
+writable**, or the file is never erased and gets reprocessed on every cycle.
+
+> **`X12FILE_PATH` / `277` and `X12FILE_PATH` / `835` should normally name the
+> same folder.** Automatic collection puts *everything* it downloads into the
+> folder named by the `835` entry — including 277s. If the `277` entry points
+> somewhere else, downloaded 277 files will sit in the in-tray and never be
+> processed. Unless you have a specific reason to separate them, set both to the
+> same path.
+
+AutoTasks accepts three shapes of status file: a standard X12 277, an XML status
+report, and a tab-delimited validation report. It works out which it is by
+reading the file, so you do not have to tell it.
+
+A file that is not any of those is left alone and logged as `Unlegit 277`. That
+line is normal in a shared in-tray — it is what an 835 looks like to the 277
+reader — and is not an error.
+
+# Claim acknowledgements (EDI)
+
+When you submit claims, the clearinghouse sends back acknowledgements saying it
+received them. AutoTasks reads these and records them against the claims.
+
+| Section | Entry | Value | What it means |
+|---|---|---|---|
+| `AUTOTASKS` | `ProcessEDIs` | `YES` | Read acknowledgement files. Anything other than `YES` = off |
+| `X12FILE_PATH` | `277` | `\\server\data\x12files\` | Read from the same folder as 277s |
+| `X12FILE_PATH` | `277_COPY_PATH` | `\\server\data\x12files\history\` | Filed here afterwards |
+
+There are no separate path settings — acknowledgements use the 277 pair.
+
+> **Low-level acknowledgements are deleted, not filed.** Files named `TA1_…`,
+> `_TA1_…`, `999_…` and `_999_…` are transport-level receipts that carry nothing
+> a practice needs. AutoTasks erases them on sight to stop them accumulating.
+> They are **not** copied to the history folder first, so if you want to keep
+> them for an audit, this is not the mechanism that will do it.
+
+# Insurance eligibility (270 / 271)
+
+AutoTasks can ask insurers whether a patient's coverage is active — a 270
+request out, a 271 response back — and store the answer against the patient, so
+front-desk staff see current coverage without phoning anyone.
+
+| Section | Entry | Default | What it means |
+|---|---|---|---|
+| `AUTOTASKS` | `AutoSend_270` | `NO` | Send eligibility requests. Anything other than `YES` = off |
+| `X12FILE_PATH` | `270` | `\\server\data\x12files\` | Working folder for eligibility files |
+
+> **On an existing installation this is probably already set to `YES`.** Earlier
+> versions turned eligibility on by default, and that value was written into the
+> System Registry the first time the service ran. Changing the default does not
+> change what is already stored. If you do not want eligibility requests going
+> out, check the `AutoSend_270` entry and set it to `NO` yourself.
+
+## When it happens
+
+There is no schedule to configure. Eligibility runs on **every service cycle**,
+alongside the other tasks, and asks about three groups:
+
+1. **Patients** whose insurance record was added or changed recently
+2. **Claims** awaiting submission
+3. **Encounters** being prepared
+
+## Why a patient might not be checked
+
+This is the part that generates support calls, because nothing appears in the
+log to explain a patient who was skipped. A patient's insurance record is only
+asked about when **all** of these are true:
+
+- the insurance plan is flagged to fetch eligibility — `isFetch271` ticked on the
+  plan record in **Planfile**
+- the plan has its **Submitter**, **Receiver** and **GS03** identifiers filled in
+- the insurance record was added or changed **within the last 7 days**
+- there is a **member/contract number** on the record
+- it is the patient's **primary** insurance
+- no eligibility response has already come back since the record was last changed
+
+The first two are the usual culprits, and they live on the **plan**, not the
+patient. If eligibility works for one insurer and not another, compare their
+plan records before looking anywhere else.
+
+The 7-day window is deliberate: it checks coverage that has recently changed
+rather than re-asking about every patient in the practice every day. To force a
+re-check on an older record, open and re-save it — that updates its modified
+date and brings it back into the window.
+
+# Appointment reminders by text message
+
+Appointments entered in the calendar can be confirmed by text, so the practice
+finds out about a cancellation before the slot is wasted rather than after.
+
+AutoTasks watches **every appointments table in the data dictionary** — any
+table whose name contains `appntmnts` — so a practice running more than one
+calendar is covered without extra configuration.
+
+## How a reminder happens
+
+```
+   appointment entered in the calendar
+        |
+        |  (1) unconfirmed, and inside the alert window
+        v
+   added to the SMS queue (SMSMessages)
+        |
+        |  (2) sent through Twilio
+        v
+   patient's mobile
+        |
+        |  (3) patient replies to confirm
+        v
+   appointment marked confirmed
+```
+
+Queueing and sending are separate steps, both on every service cycle. A message
+that cannot be sent stays in the queue and is retried.
+
+## The settings
+
+| Section | Entry | Example | Default | What it means |
+|---|---|---|---|---|
+| `SMS` | `SEND_APPOINTMENT_REMINDERS` | `YES` | `NO` | The on/off switch |
+| `SMS` | `APPOINTMENT_REMINDERS_ALERT_DAYS` | `3` | `3` | How many days ahead to look. **Must be more than 0 or nothing is sent** |
+| `SMS` | `APPREMINDER-TEXT` | see below | *(blank)* | The message itself |
+| `SMS` | `COOLING_PERIOD` | `1` | `1` | Hours to wait after an appointment is changed before texting about it |
+| `SMS` | `MAX-DAILY-SMS` | `100` | `100` | Most messages to send in one day, as a spend guard |
+| `SMS` | `SMS_STATUS_CALLBACK_URL` | *(a web address)* | *(blank)* | Where Twilio reports delivery status. Blank = no delivery reporting |
+
+The Twilio account lives in its own section — **IT task**:
+
+| Section | Entry | What it means |
+|---|---|---|
+| `TWILIO` | `ACCOUNT_SID` | Twilio account identifier |
+| `TWILIO` | `AUTH_TOKEN` | Twilio authentication token |
+| `TWILIO` | `TEL_FROM` | The number messages are sent from |
+
+## Writing the message
+
+`APPREMINDER-TEXT` is the text the patient receives. Three placeholders are
+replaced as each message is built:
+
+| Placeholder | Replaced with |
+|---|---|
+| `[date]` | The appointment date and time, e.g. `08/05/2026 2:30 PM` |
+| `[tel]` | The patient's mobile number |
+| `[guid]` | The appointment's internal reference, for use in a confirmation link |
+
+For example:
+
+```
+Reminder: your appointment is on [date]. Reply C to confirm or R to reschedule.
+```
+
+> Keep it short. Long messages are split and billed as more than one.
+
+## Which appointments get a reminder
+
+An appointment is texted when **all** of these are true:
+
+- it is in the future, and within `APPOINTMENT_REMINDERS_ALERT_DAYS` days
+- it has **not** already been confirmed or cancelled
+- no reminder has been sent for it already
+- there is a mobile number of at least 10 digits on the appointment
+- the appointment has a real time on it, not `00:00:00`
+- it was last changed more than `COOLING_PERIOD` hours ago
+
+**One text per patient per day, however many appointments they have.** If a
+patient is booked twice on the same day, they get a single reminder about the
+first. This is deliberate — it stops a patient with a morning and an afternoon
+slot receiving two texts.
+
+## Keeping the cost under control
+
+`MAX-DAILY-SMS` is a hard stop. Once that many messages have been sent today,
+the queue is left alone until tomorrow and the log records why:
+
+```
+Maximum number of SMS reached.  Total used: 100  Maximum set to: 100
+```
+
+If reminders stop partway through a busy day, this is the first thing to check.
+The messages are not lost — they stay queued and go out the following day, by
+which time the appointment may have passed.
 
 # Electronic remittances (EOB / ERA PDFs)
 
 Insurers publish payment advices — remittance notices, ERAs, EOBs — to their
 provider portals as PDF files. AutoTasks can read those PDFs and post the
 payments into Mp10 automatically, so nobody has to key them in.
+
+This is the **PDF** route. If your payer sends X12 835 files instead, see the
+previous chapter — the two are configured separately.
 
 ## What you have to do
 
@@ -406,6 +918,12 @@ On its next wake-up, for each PDF in the folder, AutoTasks:
 ```
 ...\scannedEOBs\history\C6472004.pdf
 ```
+
+> **Create the `history` sub-folder yourself.** Unlike the 835 history folder,
+> this one has no setting — it is always a folder called `history` directly
+> inside `EOBIMAGESPATH`, and AutoTasks does not create it. If it is missing, or
+> the service account cannot write to it, the PDF cannot be moved and the same
+> remittance is read again on every cycle.
 
 If you want to know what happened to a particular file, search `AutoTasks.out`
 for its name.
@@ -619,6 +1137,59 @@ the e-mail did not go out", and those need different fixes.
 
 Once processed, the PDF is in the `history` sub-folder — it has not been lost.
 
+## 835 files are not being processed
+
+| Symptom | Likely cause |
+|---|---|
+| The same remittances are processed over and over | `X12FILE_PATH` / `835_COPY_PATH` is blank, or the history folder does not exist, or the service cannot write to it. The copy fails, so the erase is skipped. This is the most common 835 problem |
+| Files sit in the folder, nothing in the log | `AUTOTASKS` / `PROCESS_835` is not `YES`, or the service was not restarted after changing it |
+| Some files are processed, others ignored entirely | The ignored ones do not have `835` in the file name. Only `*835*` is looked at |
+| `File more than 6 mo old` in the log | Working as designed — anything over 180 days is skipped |
+| `X12 835 dir ... does not exist` at startup | `X12FILE_PATH` / `835` is wrong, or is a Windows path on a Linux server |
+| `is not a legit 835` in the log | The file is not a valid 835 — often an acknowledgement or a report the clearinghouse routed alongside the remittances |
+| Nothing is ever downloaded | `AUTOTASKS` / `GetRoutedFiles` is not `YES`, today is not in `GetRoutedFilesDays`, or the time is outside the start/end window |
+| `Error connecting to Host` in the log | The `X12WebService` user name or password is wrong, or the server cannot reach the clearinghouse |
+
+## Nothing is being downloaded from the clearinghouse
+
+| Symptom | Likely cause |
+|---|---|
+| `0 routed files downloaded`, every time | Normal if the clearinghouse has nothing new. If it never changes, check `AUTOTASKS` / `GetRoutedFiles` is `YES` |
+| Nothing after 7 p.m. | Working as designed — there is a fixed cut-off no setting can move |
+| Nothing on certain days | Today is not in `GetRoutedFilesDays` |
+| `Error connecting to Host` | `X12WebService` user name or password, or the server cannot reach the clearinghouse |
+| Files download but 277s are never processed | `X12FILE_PATH` / `277` points somewhere other than `X12FILE_PATH` / `835`. Everything is downloaded into the `835` folder |
+| A file was collected once and never again | It was marked as downloaded at the clearinghouse. Retrieve it from the portal by hand |
+
+## Claim statuses or acknowledgements are not appearing
+
+| Symptom | Likely cause |
+|---|---|
+| Nothing happens at all | `AUTOTASKS` / `PROCESS_277` or `ProcessEDIs` is not `YES` |
+| The same files process repeatedly | `X12FILE_PATH` / `277_COPY_PATH` is blank, missing, or not writable |
+| `Unlegit 277` in the log | Normal — that is a file in the shared in-tray that is not a 277, most often an 835 |
+| Acknowledgements vanish without reaching history | Working as designed — `TA1_` and `999_` files are deleted, not filed |
+
+## Eligibility is not being checked
+
+| Symptom | Likely cause |
+|---|---|
+| No patients at all are checked | `AUTOTASKS` / `AutoSend_270` has been set to something other than `YES` |
+| One insurer works, another does not | The failing insurer's plan record: `isFetch271` not ticked, or Submitter / Receiver / GS03 blank |
+| An established patient is never checked | Their insurance record has not changed in the last 7 days. Re-save it to bring it back into the window |
+| A secondary insurance is ignored | Only the primary is checked |
+
+## Appointment reminders are not going out
+
+| Symptom | Likely cause |
+|---|---|
+| No texts at all | `SMS` / `SEND_APPOINTMENT_REMINDERS` is not `YES`, or `APPOINTMENT_REMINDERS_ALERT_DAYS` is `0` |
+| Queued but never sent | The `TWILIO` account settings — check `ACCOUNT_SID`, `AUTH_TOKEN` and `TEL_FROM` |
+| Texts stop partway through the day | `MAX-DAILY-SMS` reached. The log says so explicitly |
+| A patient with two appointments got one text | Working as designed — one reminder per patient per day |
+| An appointment just entered was skipped | It is inside the `COOLING_PERIOD` — it is texted on a later cycle |
+| Nothing for a specific patient | No mobile number on the appointment, a number under 10 digits, no time on the appointment, or it is already confirmed |
+
 ## A scheduled report did not arrive
 
 | Symptom | Likely cause |
@@ -634,8 +1205,9 @@ Once processed, the PDF is in the `history` sub-folder — it has not been lost.
 When contacting support, having these ready will save a round trip:
 
 - the relevant section of `AutoTasks.out`, covering the time in question
-- `python_debug.log`, for remittance problems
+- `python_debug.log`, for remittance PDF problems
+- `backup_zip.log` and `backup_zip.stdout.log`, for backup archive problems
 - the exact Section and Entry values you have set
-- for a remittance problem, the PDF itself
+- for a remittance problem, the PDF or the 835 file itself
 
 Structured Systems · <reinaldocrespo@structuredsystems.com> · 954-744-0286

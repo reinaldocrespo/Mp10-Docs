@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-08-01" />
+  <meta name="dcterms.date" content="2026-08-03" />
   <title>Mp10 AutoTasks — Administrator’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -148,7 +148,7 @@ a { color: inherit; }
 <p class="subtitle">Backups, electronic remittances, and automated
 reports</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">01 August 2026</p>
+<p class="date">03 August 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -176,7 +176,14 @@ carefully</a></li>
 <li><a href="#backup_times" id="toc-backup_times">BACKUP_TIMES</a></li>
 </ul></li>
 <li><a href="#optional-zipping-and-retention" id="toc-optional-zipping-and-retention">Optional: zipping and
-retention</a></li>
+retention</a>
+<ul>
+<li><a href="#the-archive-is-checked-before-it-counts-as-a-backup" id="toc-the-archive-is-checked-before-it-counts-as-a-backup">The archive
+is checked before it counts as a backup</a></li>
+<li><a href="#restoring-from-an-archive" id="toc-restoring-from-an-archive">Restoring from an archive</a></li>
+<li><a href="#what-must-be-installed-for-backups-to-work" id="toc-what-must-be-installed-for-backups-to-work">What must be
+installed for backups to work</a></li>
+</ul></li>
 <li><a href="#being-told-what-happened" id="toc-being-told-what-happened">Being told what happened</a>
 <ul>
 <li><a href="#sending-to-more-than-one-person" id="toc-sending-to-more-than-one-person">Sending to more than one
@@ -185,10 +192,63 @@ person</a></li>
 <li><a href="#e-mail-has-to-be-set-up-first" id="toc-e-mail-has-to-be-set-up-first">E-mail has to be set up
 first</a></li>
 </ul></li>
-<li><a href="#a-working-example" id="toc-a-working-example">A working
-example</a></li>
+<li><a href="#a-working-example-backups" id="toc-a-working-example-backups">A working example — backups</a></li>
 <li><a href="#backups-are-not-a-disaster-recovery-plan-on-their-own" id="toc-backups-are-not-a-disaster-recovery-plan-on-their-own">Backups
 are not a disaster recovery plan on their own</a></li>
+</ul></li>
+<li><a href="#electronic-remittances-the-two-kinds" id="toc-electronic-remittances-the-two-kinds">Electronic remittances:
+the two kinds</a></li>
+<li><a href="#collecting-files-from-the-clearinghouse" id="toc-collecting-files-from-the-clearinghouse">Collecting files from
+the clearinghouse</a>
+<ul>
+<li><a href="#what-gets-collected" id="toc-what-gets-collected">What
+gets collected</a></li>
+<li><a href="#turning-collection-on" id="toc-turning-collection-on">Turning collection on</a></li>
+<li><a href="#the-clearinghouse-account" id="toc-the-clearinghouse-account">The clearinghouse account</a></li>
+<li><a href="#markdownloadsasdownloaded-leave-this-alone-unless-asked" id="toc-markdownloadsasdownloaded-leave-this-alone-unless-asked"><code>MarkDownloadsAsDownloaded</code>
+— leave this alone unless asked</a></li>
+<li><a href="#checking-it-is-working" id="toc-checking-it-is-working">Checking it is working</a></li>
+</ul></li>
+<li><a href="#x12-835-electronic-remittances" id="toc-x12-835-electronic-remittances">X12 835 electronic
+remittances</a>
+<ul>
+<li><a href="#the-journey-of-an-835-file" id="toc-the-journey-of-an-835-file">The journey of an 835 file</a></li>
+<li><a href="#step-1-create-the-two-folders" id="toc-step-1-create-the-two-folders">Step 1 — Create the two
+folders</a></li>
+<li><a href="#step-2-declare-the-folders" id="toc-step-2-declare-the-folders">Step 2 — Declare the
+folders</a></li>
+<li><a href="#step-3-turn-processing-on" id="toc-step-3-turn-processing-on">Step 3 — Turn processing on</a></li>
+<li><a href="#step-4-optional-collect-the-files-automatically" id="toc-step-4-optional-collect-the-files-automatically">Step 4 —
+Optional: collect the files automatically</a></li>
+<li><a href="#two-things-that-catch-people-out" id="toc-two-things-that-catch-people-out">Two things that catch people
+out</a></li>
+<li><a href="#a-working-example-835-files" id="toc-a-working-example-835-files">A working example — 835
+files</a></li>
+<li><a href="#checking-it-is-working-1" id="toc-checking-it-is-working-1">Checking it is working</a></li>
+</ul></li>
+<li><a href="#claim-status-responses-277" id="toc-claim-status-responses-277">Claim status responses
+(277)</a></li>
+<li><a href="#claim-acknowledgements-edi" id="toc-claim-acknowledgements-edi">Claim acknowledgements
+(EDI)</a></li>
+<li><a href="#insurance-eligibility-270-271" id="toc-insurance-eligibility-270-271">Insurance eligibility (270 /
+271)</a>
+<ul>
+<li><a href="#when-it-happens" id="toc-when-it-happens">When it
+happens</a></li>
+<li><a href="#why-a-patient-might-not-be-checked" id="toc-why-a-patient-might-not-be-checked">Why a patient might not be
+checked</a></li>
+</ul></li>
+<li><a href="#appointment-reminders-by-text-message" id="toc-appointment-reminders-by-text-message">Appointment reminders by
+text message</a>
+<ul>
+<li><a href="#how-a-reminder-happens" id="toc-how-a-reminder-happens">How a reminder happens</a></li>
+<li><a href="#the-settings" id="toc-the-settings">The settings</a></li>
+<li><a href="#writing-the-message" id="toc-writing-the-message">Writing
+the message</a></li>
+<li><a href="#which-appointments-get-a-reminder" id="toc-which-appointments-get-a-reminder">Which appointments get a
+reminder</a></li>
+<li><a href="#keeping-the-cost-under-control" id="toc-keeping-the-cost-under-control">Keeping the cost under
+control</a></li>
 </ul></li>
 <li><a href="#electronic-remittances-eob-era-pdfs" id="toc-electronic-remittances-eob-era-pdfs">Electronic remittances (EOB
 / ERA PDFs)</a>
@@ -236,6 +296,16 @@ backup never runs</a></li>
 <li><a href="#no-backup-e-mail-arrived" id="toc-no-backup-e-mail-arrived">No backup e-mail arrived</a></li>
 <li><a href="#remittance-pdfs-are-not-being-picked-up" id="toc-remittance-pdfs-are-not-being-picked-up">Remittance PDFs are not
 being picked up</a></li>
+<li><a href="#files-are-not-being-processed" id="toc-files-are-not-being-processed">835 files are not being
+processed</a></li>
+<li><a href="#nothing-is-being-downloaded-from-the-clearinghouse" id="toc-nothing-is-being-downloaded-from-the-clearinghouse">Nothing is
+being downloaded from the clearinghouse</a></li>
+<li><a href="#claim-statuses-or-acknowledgements-are-not-appearing" id="toc-claim-statuses-or-acknowledgements-are-not-appearing">Claim
+statuses or acknowledgements are not appearing</a></li>
+<li><a href="#eligibility-is-not-being-checked" id="toc-eligibility-is-not-being-checked">Eligibility is not being
+checked</a></li>
+<li><a href="#appointment-reminders-are-not-going-out" id="toc-appointment-reminders-are-not-going-out">Appointment reminders
+are not going out</a></li>
 <li><a href="#a-scheduled-report-did-not-arrive" id="toc-a-scheduled-report-did-not-arrive">A scheduled report did not
 arrive</a></li>
 <li><a href="#getting-help" id="toc-getting-help">Getting help</a></li>
@@ -248,13 +318,23 @@ It runs unattended on your server and takes care of work that would
 otherwise have to be done by hand every day:</p>
 <ul>
 <li>taking a <strong>backup</strong> of your data on a schedule you
-choose,</li>
-<li>reading <strong>electronic remittances</strong> (payment advices)
-that you download from your insurers, and posting them into Mp10,
-and</li>
+choose, archiving it and checking the archive is sound,</li>
+<li><strong>collecting files from your clearinghouse</strong> —
+remittances, claim status responses and acknowledgements — and posting
+them into Mp10,</li>
+<li>reading <strong>remittance PDFs</strong> downloaded from insurer
+portals,</li>
+<li>asking insurers whether a patient’s <strong>coverage is
+active</strong>,</li>
+<li>texting patients an <strong>appointment reminder</strong> they can
+reply to, and</li>
 <li>running <strong>reports</strong> on a schedule and e-mailing them to
 whoever needs them.</li>
 </ul>
+<p>Each of those is turned on separately. Nothing in this list happens
+until you set the corresponding entry in the System Registry, with one
+exception noted in its own chapter: eligibility requests default to
+on.</p>
 <p>This guide is for the person who administers Mp10 at the practice. It
 does not assume you are a programmer. It does assume you can open the
 <strong>Admin10</strong> module and that you know where your practice
@@ -546,7 +626,8 @@ backup the same day, restart the AutoTasks service.</p>
 <h2 id="optional-zipping-and-retention">Optional: zipping and
 retention</h2>
 <p>If you also set a zip path, AutoTasks compresses each backup into a
-dated archive and prunes old ones.</p>
+dated archive, <strong>reads that archive back to check it</strong>, and
+only then prunes old ones.</p>
 <table>
 <colgroup>
 <col style="width: 25%" />
@@ -593,6 +674,76 @@ the number of zips in <code>BACKUP_ZIP_PATH</code> exceeds this number,
 the oldest are erased automatically. Keep that folder for backups only,
 and set the number to match the disk space you have.</p>
 </blockquote>
+<h3 id="the-archive-is-checked-before-it-counts-as-a-backup">The archive
+is checked before it counts as a backup</h3>
+<p>An archive is not treated as a backup until AutoTasks has opened it
+again and confirmed every file inside it is intact and the right size.
+Only then does it delete anything older.</p>
+<p>This matters more than it sounds. If the archive cannot be written or
+does not check out, <strong>nothing is deleted</strong> — the previous
+archives are left exactly as they were, and you get a failure e-mail.
+Older backups are never traded away for a new one that might not
+work.</p>
+<p>A failed archive is renamed so it cannot be mistaken for a good
+one:</p>
+<pre><code>Mp10Data-2026-07-31.zip.failed</code></pre>
+<blockquote>
+<p><strong><code>.failed</code> files are never deleted
+automatically.</strong> They are left for inspection and they do not
+count towards <code>MAX_BACKUPS_TO_KEEP</code>. If archiving keeps
+failing night after night, they will accumulate and can fill the disk.
+Treat a <code>.failed</code> file as something to investigate and then
+remove by hand once you no longer need it.</p>
+</blockquote>
+<h3 id="restoring-from-an-archive">Restoring from an archive</h3>
+<p>To get files back out of an archive, use the archiving program
+directly. From the folder holding the AutoTasks program:</p>
+<pre><code>python backup_zip.py restore --zip &quot;D:\Backups\Zips\Mp10Data-2026-07-31.zip&quot; --target &quot;D:\Restored&quot;</code></pre>
+<p>To check an archive without extracting anything:</p>
+<pre><code>python backup_zip.py verify --zip &quot;D:\Backups\Zips\Mp10Data-2026-07-31.zip&quot; --mode full</code></pre>
+<p><code>verify</code> finishes with a status of <code>0</code> when the
+archive is sound and <code>4</code> when it is not, and writes what it
+found to <code>backup_zip.result.json</code>. The <code>full</code>
+check reads every byte, so on a large archive it takes a while — that is
+why the nightly run uses a faster structural check instead, and why this
+thorough one is available to run by hand whenever you want
+reassurance.</p>
+<h3 id="what-must-be-installed-for-backups-to-work">What must be
+installed for backups to work</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>What</th>
+<th>Why</th>
+<th>Where</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Python 3</td>
+<td>Creates and checks the zip archive</td>
+<td><code>GENERAL</code> / <code>PYTHONPATH</code> — folder holding
+<code>python.exe</code>, with a trailing backslash. Blank = rely on the
+system <code>PATH</code></td>
+</tr>
+<tr class="even">
+<td><code>backup_zip.py</code></td>
+<td>The archiving program itself</td>
+<td>Must sit in the same folder as the AutoTasks program</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>If either is missing, no archive is created.</strong> The
+database backup itself still runs and your data is still written to
+<code>BACKUP_PATH</code> — but there will be no zip, and you will get a
+failure e-mail saying so.</p>
+</blockquote>
 <h2 id="being-told-what-happened">Being told what happened</h2>
 <p>Backups run at night, when nobody is watching. AutoTasks e-mails a
 short report each time one finishes — <strong>whether it worked or
@@ -631,20 +782,24 @@ archives that were deleted to stay within
 <p>The second message is the more useful of the two, because rotation is
 the only part of the process that destroys anything, and this is the
 only record you get of it.</p>
-<pre><code>The Mp10 backup archive was created successfully.
+<pre><code>The Mp10 backup archive was created and verified.
 
 Data dictionary : \\adsserver\data\mp10\mp10.add
 Archive         : D:\Backups\Zips\Mp10Data-2026-08-01.zip
 Size            : 3072.0 MB (3,221,225,472 bytes)
 Files archived  : 428
+Source          : \\adsserver\backup\mp10\
 Started         : 2026-08-01 04:37:11
 Finished        : 2026-08-01 04:52:44
 Duration        : 00:15:33
+Verification    : headers - passed
 
-Retention       : keeping the most recent 30 archives
 Removed         : 2 older archive(s)
                   Mp10Data-2026-06-28.zip
                   Mp10Data-2026-06-29.zip</code></pre>
+<p>The <strong>Verification</strong> line is the one to read. If it is
+not there, or the subject says FAILED, nothing was deleted and the
+archive should not be relied on.</p>
 <h3 id="sending-to-more-than-one-person">Sending to more than one
 person</h3>
 <p><code>NOTIFY_EMAIL</code> takes as many addresses as you like.
@@ -680,8 +835,35 @@ ADS message     : The specified path is invalid</code></pre>
 <p><strong><code>Mp10 backup archive FAILED</code></strong> — less
 serious. The backup itself worked and today’s data is safe in
 <code>BACKUP_PATH</code>; only the zip step failed, so there is no dated
-archive for today and nothing was rotated. Usually a full disk or a
-permission problem on <code>BACKUP_ZIP_PATH</code>.</p>
+archive for today and <strong>nothing was rotated or deleted</strong>.
+Usually a full disk, a permission problem on
+<code>BACKUP_ZIP_PATH</code>, or Python missing from the server.</p>
+<p>The message names what actually went wrong and where to look. Two
+files next to the AutoTasks program carry the detail:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>File</th>
+<th>What is in it</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>backup_zip.log</code></td>
+<td>What the archiver did, file by file, and why it stopped</td>
+</tr>
+<tr class="even">
+<td><code>backup_zip.stdout.log</code></td>
+<td>Anything Python itself printed. <strong>Look here first if
+<code>backup_zip.log</code> does not exist at all</strong> — that
+combination means Python could not start</td>
+</tr>
+</tbody>
+</table>
 <blockquote>
 <p><strong>A failure e-mail means no backup today, and none is coming
 without you.</strong> AutoTasks does not retry after a failure — see
@@ -702,7 +884,7 @@ naming the settings that are blank and carries on.</p>
 <p>Backups themselves are unaffected either way. Notification is the
 last step, and nothing about it can stop a backup from running or
 succeeding.</p>
-<h2 id="a-working-example">A working example</h2>
+<h2 id="a-working-example-backups">A working example — backups</h2>
 <table>
 <colgroup>
 <col style="width: 33%" />
@@ -747,24 +929,859 @@ succeeding.</p>
 <td><code>NOTIFY_EMAIL</code></td>
 <td><code>support@structuredsystems.com; manager@yourpractice.com</code></td>
 </tr>
+<tr class="odd">
+<td><code>GENERAL</code></td>
+<td><code>PYTHONPATH</code></td>
+<td><code>C:\Program Files\Python313\</code></td>
+</tr>
 </tbody>
 </table>
 <p>This takes a backup Monday through Saturday, any time after 2 a.m.,
-zips it to a local disk, keeps the last 30 zips, and e-mails two people
-when it is done.</p>
+zips it to a local disk, checks the archive, keeps the last 30 zips, and
+e-mails two people when it is done.</p>
 <h2 id="backups-are-not-a-disaster-recovery-plan-on-their-own">Backups
 are not a disaster recovery plan on their own</h2>
 <p>A backup that has never been restored is a hope, not a backup. Copy
 the zips off-site — or at minimum onto a different physical machine —
-and test a restore periodically. AutoTasks writes the file; making sure
-it survives a fire, a theft or a ransomware event is a decision only the
-practice can make.</p>
+and test a restore periodically. AutoTasks writes the file and checks
+that it is readable; making sure it survives a fire, a theft or a
+ransomware event is a decision only the practice can make.</p>
+<p>Restoring is a single command, and it is worth running once so you
+know it works before you ever need it:</p>
+<pre><code>python backup_zip.py restore --zip &quot;D:\Backups\Zips\Mp10Data-2026-07-31.zip&quot; --target &quot;D:\RestoreTest&quot;</code></pre>
+<h1 id="electronic-remittances-the-two-kinds">Electronic remittances:
+the two kinds</h1>
+<p>Payment advices reach a practice in two different shapes, and
+AutoTasks handles them with two separate mechanisms. They are configured
+independently, in different sections of the System Registry, and turning
+one on does nothing for the other.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>X12 835 files</strong></th>
+<th><strong>EOB / ERA PDFs</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>What it is</td>
+<td>The standard electronic remittance format, a data file</td>
+<td>A printed advice saved as a PDF</td>
+</tr>
+<tr class="even">
+<td>Where it comes from</td>
+<td>A clearinghouse, usually downloaded automatically</td>
+<td>Downloaded by hand from an insurer’s portal</td>
+</tr>
+<tr class="odd">
+<td>Turned on by</td>
+<td><code>AUTOTASKS</code> / <code>PROCESS_835</code></td>
+<td><code>SCANNING</code> / <code>EOBIMAGESPATH</code></td>
+</tr>
+<tr class="even">
+<td>Folder settings live in</td>
+<td><code>X12FILE_PATH</code></td>
+<td><code>SCANNING</code></td>
+</tr>
+<tr class="odd">
+<td>Needs Python</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<p>If your clearinghouse delivers 835 files, that is the path to use —
+it carries more detail and needs no interpretation. The PDF route exists
+for payers who will only give you a printed advice.</p>
+<p>Both post into the same remittances table once processed.</p>
+<h1 id="collecting-files-from-the-clearinghouse">Collecting files from
+the clearinghouse</h1>
+<p>Rather than have somebody log into the clearinghouse portal and
+download files by hand, AutoTasks can collect them itself on a schedule.
+One mechanism brings down everything the clearinghouse has routed to
+you.</p>
+<h2 id="what-gets-collected">What gets collected</h2>
+<p>The clearinghouse tags each file it sends with a document type.
+AutoTasks saves each one with that type at the front of the file name,
+so you can tell at a glance what arrived:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Arrives as</th>
+<th>What it is</th>
+<th>Processed by</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>835_…​.txt</code></td>
+<td>An electronic remittance — a payment</td>
+<td><em>X12 835 electronic remittances</em></td>
+</tr>
+<tr class="even">
+<td><code>277_…​.txt</code></td>
+<td>A claim status response — what the payer did with a claim</td>
+<td><em>Claim status responses (277)</em></td>
+</tr>
+<tr class="odd">
+<td><code>EDI_…​.txt</code></td>
+<td>An acknowledgement or notice about a claim submission</td>
+<td><em>Claim acknowledgements (EDI)</em></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Everything lands in one folder — the one named by
+<code>X12FILE_PATH</code> / <code>835</code></strong> — whatever its
+type. That folder is the clearinghouse in-tray, not the “835 folder”,
+despite the setting’s name. Each processor then picks out the files
+belonging to it. This is why the 835 processor only looks at names
+containing <code>835</code>.</p>
+</blockquote>
+<p>A file that has already been collected is not written a second time:
+AutoTasks checks both the in-tray and the history folder before
+saving.</p>
+<h2 id="turning-collection-on">Turning collection on</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Section</th>
+<th>Entry</th>
+<th>Example</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>AUTOTASKS</code></td>
+<td><code>GetRoutedFiles</code></td>
+<td><code>YES</code></td>
+<td>Collect files from the clearinghouse. Anything other than
+<code>YES</code> = off</td>
+</tr>
+<tr class="even">
+<td><code>AUTOTASKS</code></td>
+<td><code>GetRoutedFilesStartTime</code></td>
+<td><code>07:00:00</code></td>
+<td>Earliest time of day it may run. Blank = no lower bound</td>
+</tr>
+<tr class="odd">
+<td><code>AUTOTASKS</code></td>
+<td><code>GetRoutedFilesEndTime</code></td>
+<td><code>19:00:00</code></td>
+<td>Latest time of day it may run. Blank = no upper bound</td>
+</tr>
+<tr class="even">
+<td><code>AUTOTASKS</code></td>
+<td><code>GetRoutedFilesFrequency</code></td>
+<td><code>60</code></td>
+<td>Minutes to wait between runs on the same day</td>
+</tr>
+<tr class="odd">
+<td><code>AUTOTASKS</code></td>
+<td><code>GetRoutedFilesDays</code></td>
+<td><code>23456</code></td>
+<td>Which days it may run on, using the same day codes as
+<code>BACKUP_DAYS</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Collection stops at 7 p.m. regardless of what you
+set.</strong> There is a fixed cut-off in the program, described in the
+log as <em>“Past working hrs not fetching routed files to give Inmediata
+a rest.”</em> Setting <code>GetRoutedFilesEndTime</code> later than
+<code>19:00:00</code> will not extend collection past it.</p>
+</blockquote>
+<h2 id="the-clearinghouse-account">The clearinghouse account</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Section</th>
+<th>Entry</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>X12WebService</code></td>
+<td><code>UserName</code></td>
+<td>Clearinghouse user name</td>
+</tr>
+<tr class="even">
+<td><code>X12WebService</code></td>
+<td><code>Password</code></td>
+<td>Clearinghouse password</td>
+</tr>
+<tr class="odd">
+<td><code>X12WebService</code></td>
+<td><code>FileTransfer_Url</code></td>
+<td>The file-transfer service address</td>
+</tr>
+<tr class="even">
+<td><code>X12WebService</code></td>
+<td><code>TimeOut</code></td>
+<td>How long to wait for a response, in milliseconds. Default
+<code>30000</code></td>
+</tr>
+<tr class="odd">
+<td><code>X12WebService</code></td>
+<td><code>MarkDownloadsAsDownloaded</code></td>
+<td><code>NO</code> (recommended) — see below</td>
+</tr>
+</tbody>
+</table>
+<h2 id="markdownloadsasdownloaded-leave-this-alone-unless-asked"><code>MarkDownloadsAsDownloaded</code>
+— leave this alone unless asked</h2>
+<p>Once a file is marked as downloaded, the clearinghouse will not offer
+it again. When that marking happens is the whole question.</p>
+<ul>
+<li><strong><code>NO</code> (the default, and the safe choice).</strong>
+AutoTasks fetches the files, writes them to disk, and <em>then</em>
+tells the clearinghouse they were collected. If the download is
+interrupted or the disk is full, nothing was marked, so the
+clearinghouse still has the files and the next run collects them
+again.</li>
+<li><strong><code>YES</code>.</strong> The files are marked as
+downloaded as part of the fetch itself, before AutoTasks has written
+anything. If the run fails at that point, the clearinghouse considers
+the files delivered and <strong>will not offer them again</strong> —
+they would have to be retrieved from the portal by hand.</li>
+</ul>
+<p>Set it to <code>YES</code> only if the clearinghouse specifically
+asks you to.</p>
+<h2 id="checking-it-is-working">Checking it is working</h2>
+<pre><code>GetRoutedFiles
+7 routed files downloaded
+\\server\data\x12files\835_20260803074113.txt
+\\server\data\x12files\277_20260803074115.txt</code></pre>
+<p>A run that finds nothing logs <code>0 routed files downloaded</code>,
+which is normal outside business hours or when the clearinghouse has
+nothing new.</p>
+<h1 id="x12-835-electronic-remittances">X12 835 electronic
+remittances</h1>
+<p>An 835 is the standard electronic remittance file. AutoTasks can
+collect them from the clearinghouse, read them, post the payments, and
+file the used ones away — with no manual step at all once it is set
+up.</p>
+<h2 id="the-journey-of-an-835-file">The journey of an 835 file</h2>
+<pre><code>   clearinghouse
+        |
+        |  (1) downloaded  -- AUTOTASKS / GetRoutedFiles
+        v
+   X12FILE_PATH / 835              &lt;- the working folder
+        |
+        |  (2) processed  -- AUTOTASKS / PROCESS_835
+        v
+   payments posted into Mp10
+        |
+        |  (3) filed away
+        v
+   X12FILE_PATH / 835_COPY_PATH    &lt;- the history folder</code></pre>
+<p>The file is <strong>copied</strong> to the history folder and then
+<strong>erased</strong> from the working folder. Erasing is the point:
+it is what stops the same remittance being processed again the next time
+round.</p>
+<h2 id="step-1-create-the-two-folders">Step 1 — Create the two
+folders</h2>
+<p>You need two folders, and <strong>both must exist before you
+start</strong>. AutoTasks does not create them for you.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Folder</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Working folder</td>
+<td>Where 835 files arrive and wait to be processed</td>
+</tr>
+<tr class="even">
+<td>History folder</td>
+<td>Where they are filed after they have been posted</td>
+</tr>
+</tbody>
+</table>
+<p>Requirements:</p>
+<ul>
+<li>The AutoTasks service account needs permission to <strong>read,
+write and delete</strong> in the working folder — it erases files there
+once they are safely filed.</li>
+<li>It needs permission to <strong>write</strong> in the history
+folder.</li>
+<li>Keep them separate. Do not make the history folder a subfolder that
+the working folder’s file search would find.</li>
+<li>Do not use the working folder for anything else.</li>
+</ul>
+<h2 id="step-2-declare-the-folders">Step 2 — Declare the folders</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Section</th>
+<th>Entry</th>
+<th>Example value</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>X12FILE_PATH</code></td>
+<td><code>835</code></td>
+<td><code>\\server\data\x12files\</code></td>
+<td>The working folder — where 835 files are read from</td>
+</tr>
+<tr class="even">
+<td><code>X12FILE_PATH</code></td>
+<td><code>835_COPY_PATH</code></td>
+<td><code>\\server\data\x12files\history\</code></td>
+<td>The history folder — where they are moved after posting</td>
+</tr>
+</tbody>
+</table>
+<p>Include the trailing backslash on both.</p>
+<blockquote>
+<p><strong><code>835_COPY_PATH</code> is not optional in
+practice.</strong> If you leave it blank, processed files are never
+erased from the working folder, so AutoTasks finds and reprocesses the
+same remittances on every single cycle, for ever. The same happens if
+the history folder does not exist or cannot be written to: the copy
+fails, so the erase is skipped. <strong>If you see the same remittances
+being processed over and over, this is why.</strong></p>
+</blockquote>
+<h2 id="step-3-turn-processing-on">Step 3 — Turn processing on</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Section</th>
+<th>Entry</th>
+<th>Value</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>AUTOTASKS</code></td>
+<td><code>PROCESS_835</code></td>
+<td><code>YES</code></td>
+<td>Read and post 835 files. Anything other than <code>YES</code> =
+off</td>
+</tr>
+</tbody>
+</table>
+<h2 id="step-4-optional-collect-the-files-automatically">Step 4 —
+Optional: collect the files automatically</h2>
+<p>AutoTasks can fetch files from the clearinghouse itself, so nobody
+has to download anything by hand. That mechanism collects remittances,
+claim status responses and acknowledgements together — see
+<em>Collecting files from the clearinghouse</em> below.</p>
+<p>If you leave <code>GetRoutedFiles</code> off, everything else still
+works; somebody just has to put the 835 files into the working folder
+themselves.</p>
+<h2 id="two-things-that-catch-people-out">Two things that catch people
+out</h2>
+<p><strong>The file name has to contain <code>835</code>.</strong>
+AutoTasks only looks at files whose name includes those three digits —
+<code>*835*</code>. A remittance saved as <code>remit_0731.txt</code>
+will sit in the folder untouched, for ever, with nothing in the log to
+say why. If files are being ignored, check the name first.</p>
+<p><strong>Files older than six months are skipped.</strong> Anything
+more than 180 days old is left alone and noted in the log as
+<code>File more than 6 mo old</code>. This stops an old archive folder
+being reposted by accident. If you genuinely need to post something
+older, it has to be done by hand.</p>
+<h2 id="a-working-example-835-files">A working example — 835 files</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Section</th>
+<th>Entry</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>AUTOTASKS</code></td>
+<td><code>PROCESS_835</code></td>
+<td><code>YES</code></td>
+</tr>
+<tr class="even">
+<td><code>X12FILE_PATH</code></td>
+<td><code>835</code></td>
+<td><code>\\server\data\x12files\</code></td>
+</tr>
+<tr class="odd">
+<td><code>X12FILE_PATH</code></td>
+<td><code>835_COPY_PATH</code></td>
+<td><code>\\server\data\x12files\history\</code></td>
+</tr>
+<tr class="even">
+<td><code>AUTOTASKS</code></td>
+<td><code>GetRoutedFiles</code></td>
+<td><code>YES</code></td>
+</tr>
+<tr class="odd">
+<td><code>AUTOTASKS</code></td>
+<td><code>GetRoutedFilesStartTime</code></td>
+<td><code>07:00:00</code></td>
+</tr>
+<tr class="even">
+<td><code>AUTOTASKS</code></td>
+<td><code>GetRoutedFilesEndTime</code></td>
+<td><code>19:00:00</code></td>
+</tr>
+<tr class="odd">
+<td><code>AUTOTASKS</code></td>
+<td><code>GetRoutedFilesFrequency</code></td>
+<td><code>60</code></td>
+</tr>
+<tr class="even">
+<td><code>AUTOTASKS</code></td>
+<td><code>GetRoutedFilesDays</code></td>
+<td><code>23456</code></td>
+</tr>
+</tbody>
+</table>
+<p>This collects remittances from the clearinghouse once an hour, Monday
+to Friday, between 7 a.m. and 7 p.m., posts them, and files them into
+the history folder.</p>
+<h2 id="checking-it-is-working-1">Checking it is working</h2>
+<p>At startup AutoTasks writes the state of each X12 folder into
+<code>AutoTasks.out</code>:</p>
+<pre><code>X12 835 dir  \\server\data\x12files\  exists</code></pre>
+<p>If that line says the folder is missing, nothing else in this chapter
+will work. During a run you will see how many files were found:</p>
+<pre><code>ProcessAll835OnDir  12 Files found on \\server\data\x12files\</code></pre>
+<p>Then, as each is filed away, the copy and the erase are both logged.
+A file that is found but never erased is the signature of a
+history-folder problem — see the warning under <em>Step 2</em>.</p>
+<h1 id="claim-status-responses-277">Claim status responses (277)</h1>
+<p>A 277 tells you what the payer did with a claim you submitted —
+accepted, rejected, pending, and why. AutoTasks reads them and posts the
+status against the claim, so the billing staff can see it without
+logging into a portal.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Section</th>
+<th>Entry</th>
+<th>Value</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>AUTOTASKS</code></td>
+<td><code>PROCESS_277</code></td>
+<td><code>YES</code></td>
+<td>Read and post 277 files. Anything other than <code>YES</code> =
+off</td>
+</tr>
+<tr class="even">
+<td><code>X12FILE_PATH</code></td>
+<td><code>277</code></td>
+<td><code>\\server\data\x12files\</code></td>
+<td>The folder 277 files are read from</td>
+</tr>
+<tr class="odd">
+<td><code>X12FILE_PATH</code></td>
+<td><code>277_COPY_PATH</code></td>
+<td><code>\\server\data\x12files\history\</code></td>
+<td>Where they are filed after posting</td>
+</tr>
+</tbody>
+</table>
+<p>The same rule as for 835 files applies: <strong>the history folder
+must exist and be writable</strong>, or the file is never erased and
+gets reprocessed on every cycle.</p>
+<blockquote>
+<p><strong><code>X12FILE_PATH</code> / <code>277</code> and
+<code>X12FILE_PATH</code> / <code>835</code> should normally name the
+same folder.</strong> Automatic collection puts <em>everything</em> it
+downloads into the folder named by the <code>835</code> entry —
+including 277s. If the <code>277</code> entry points somewhere else,
+downloaded 277 files will sit in the in-tray and never be processed.
+Unless you have a specific reason to separate them, set both to the same
+path.</p>
+</blockquote>
+<p>AutoTasks accepts three shapes of status file: a standard X12 277, an
+XML status report, and a tab-delimited validation report. It works out
+which it is by reading the file, so you do not have to tell it.</p>
+<p>A file that is not any of those is left alone and logged as
+<code>Unlegit 277</code>. That line is normal in a shared in-tray — it
+is what an 835 looks like to the 277 reader — and is not an error.</p>
+<h1 id="claim-acknowledgements-edi">Claim acknowledgements (EDI)</h1>
+<p>When you submit claims, the clearinghouse sends back acknowledgements
+saying it received them. AutoTasks reads these and records them against
+the claims.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Section</th>
+<th>Entry</th>
+<th>Value</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>AUTOTASKS</code></td>
+<td><code>ProcessEDIs</code></td>
+<td><code>YES</code></td>
+<td>Read acknowledgement files. Anything other than <code>YES</code> =
+off</td>
+</tr>
+<tr class="even">
+<td><code>X12FILE_PATH</code></td>
+<td><code>277</code></td>
+<td><code>\\server\data\x12files\</code></td>
+<td>Read from the same folder as 277s</td>
+</tr>
+<tr class="odd">
+<td><code>X12FILE_PATH</code></td>
+<td><code>277_COPY_PATH</code></td>
+<td><code>\\server\data\x12files\history\</code></td>
+<td>Filed here afterwards</td>
+</tr>
+</tbody>
+</table>
+<p>There are no separate path settings — acknowledgements use the 277
+pair.</p>
+<blockquote>
+<p><strong>Low-level acknowledgements are deleted, not filed.</strong>
+Files named <code>TA1_…</code>, <code>_TA1_…</code>, <code>999_…</code>
+and <code>_999_…</code> are transport-level receipts that carry nothing
+a practice needs. AutoTasks erases them on sight to stop them
+accumulating. They are <strong>not</strong> copied to the history folder
+first, so if you want to keep them for an audit, this is not the
+mechanism that will do it.</p>
+</blockquote>
+<h1 id="insurance-eligibility-270-271">Insurance eligibility (270 /
+271)</h1>
+<p>AutoTasks can ask insurers whether a patient’s coverage is active — a
+270 request out, a 271 response back — and store the answer against the
+patient, so front-desk staff see current coverage without phoning
+anyone.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Section</th>
+<th>Entry</th>
+<th>Default</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>AUTOTASKS</code></td>
+<td><code>AutoSend_270</code></td>
+<td><code>NO</code></td>
+<td>Send eligibility requests. Anything other than <code>YES</code> =
+off</td>
+</tr>
+<tr class="even">
+<td><code>X12FILE_PATH</code></td>
+<td><code>270</code></td>
+<td><code>\\server\data\x12files\</code></td>
+<td>Working folder for eligibility files</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>On an existing installation this is probably already set to
+<code>YES</code>.</strong> Earlier versions turned eligibility on by
+default, and that value was written into the System Registry the first
+time the service ran. Changing the default does not change what is
+already stored. If you do not want eligibility requests going out, check
+the <code>AutoSend_270</code> entry and set it to <code>NO</code>
+yourself.</p>
+</blockquote>
+<h2 id="when-it-happens">When it happens</h2>
+<p>There is no schedule to configure. Eligibility runs on <strong>every
+service cycle</strong>, alongside the other tasks, and asks about three
+groups:</p>
+<ol type="1">
+<li><strong>Patients</strong> whose insurance record was added or
+changed recently</li>
+<li><strong>Claims</strong> awaiting submission</li>
+<li><strong>Encounters</strong> being prepared</li>
+</ol>
+<h2 id="why-a-patient-might-not-be-checked">Why a patient might not be
+checked</h2>
+<p>This is the part that generates support calls, because nothing
+appears in the log to explain a patient who was skipped. A patient’s
+insurance record is only asked about when <strong>all</strong> of these
+are true:</p>
+<ul>
+<li>the insurance plan is flagged to fetch eligibility —
+<code>isFetch271</code> ticked on the plan record in
+<strong>Planfile</strong></li>
+<li>the plan has its <strong>Submitter</strong>,
+<strong>Receiver</strong> and <strong>GS03</strong> identifiers filled
+in</li>
+<li>the insurance record was added or changed <strong>within the last 7
+days</strong></li>
+<li>there is a <strong>member/contract number</strong> on the
+record</li>
+<li>it is the patient’s <strong>primary</strong> insurance</li>
+<li>no eligibility response has already come back since the record was
+last changed</li>
+</ul>
+<p>The first two are the usual culprits, and they live on the
+<strong>plan</strong>, not the patient. If eligibility works for one
+insurer and not another, compare their plan records before looking
+anywhere else.</p>
+<p>The 7-day window is deliberate: it checks coverage that has recently
+changed rather than re-asking about every patient in the practice every
+day. To force a re-check on an older record, open and re-save it — that
+updates its modified date and brings it back into the window.</p>
+<h1 id="appointment-reminders-by-text-message">Appointment reminders by
+text message</h1>
+<p>Appointments entered in the calendar can be confirmed by text, so the
+practice finds out about a cancellation before the slot is wasted rather
+than after.</p>
+<p>AutoTasks watches <strong>every appointments table in the data
+dictionary</strong> — any table whose name contains
+<code>appntmnts</code> — so a practice running more than one calendar is
+covered without extra configuration.</p>
+<h2 id="how-a-reminder-happens">How a reminder happens</h2>
+<pre><code>   appointment entered in the calendar
+        |
+        |  (1) unconfirmed, and inside the alert window
+        v
+   added to the SMS queue (SMSMessages)
+        |
+        |  (2) sent through Twilio
+        v
+   patient&#39;s mobile
+        |
+        |  (3) patient replies to confirm
+        v
+   appointment marked confirmed</code></pre>
+<p>Queueing and sending are separate steps, both on every service cycle.
+A message that cannot be sent stays in the queue and is retried.</p>
+<h2 id="the-settings">The settings</h2>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Section</th>
+<th>Entry</th>
+<th>Example</th>
+<th>Default</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>SMS</code></td>
+<td><code>SEND_APPOINTMENT_REMINDERS</code></td>
+<td><code>YES</code></td>
+<td><code>NO</code></td>
+<td>The on/off switch</td>
+</tr>
+<tr class="even">
+<td><code>SMS</code></td>
+<td><code>APPOINTMENT_REMINDERS_ALERT_DAYS</code></td>
+<td><code>3</code></td>
+<td><code>3</code></td>
+<td>How many days ahead to look. <strong>Must be more than 0 or nothing
+is sent</strong></td>
+</tr>
+<tr class="odd">
+<td><code>SMS</code></td>
+<td><code>APPREMINDER-TEXT</code></td>
+<td>see below</td>
+<td><em>(blank)</em></td>
+<td>The message itself</td>
+</tr>
+<tr class="even">
+<td><code>SMS</code></td>
+<td><code>COOLING_PERIOD</code></td>
+<td><code>1</code></td>
+<td><code>1</code></td>
+<td>Hours to wait after an appointment is changed before texting about
+it</td>
+</tr>
+<tr class="odd">
+<td><code>SMS</code></td>
+<td><code>MAX-DAILY-SMS</code></td>
+<td><code>100</code></td>
+<td><code>100</code></td>
+<td>Most messages to send in one day, as a spend guard</td>
+</tr>
+<tr class="even">
+<td><code>SMS</code></td>
+<td><code>SMS_STATUS_CALLBACK_URL</code></td>
+<td><em>(a web address)</em></td>
+<td><em>(blank)</em></td>
+<td>Where Twilio reports delivery status. Blank = no delivery
+reporting</td>
+</tr>
+</tbody>
+</table>
+<p>The Twilio account lives in its own section — <strong>IT
+task</strong>:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Section</th>
+<th>Entry</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>TWILIO</code></td>
+<td><code>ACCOUNT_SID</code></td>
+<td>Twilio account identifier</td>
+</tr>
+<tr class="even">
+<td><code>TWILIO</code></td>
+<td><code>AUTH_TOKEN</code></td>
+<td>Twilio authentication token</td>
+</tr>
+<tr class="odd">
+<td><code>TWILIO</code></td>
+<td><code>TEL_FROM</code></td>
+<td>The number messages are sent from</td>
+</tr>
+</tbody>
+</table>
+<h2 id="writing-the-message">Writing the message</h2>
+<p><code>APPREMINDER-TEXT</code> is the text the patient receives. Three
+placeholders are replaced as each message is built:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Placeholder</th>
+<th>Replaced with</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>[date]</code></td>
+<td>The appointment date and time,
+e.g. <code>08/05/2026 2:30 PM</code></td>
+</tr>
+<tr class="even">
+<td><code>[tel]</code></td>
+<td>The patient’s mobile number</td>
+</tr>
+<tr class="odd">
+<td><code>[guid]</code></td>
+<td>The appointment’s internal reference, for use in a confirmation
+link</td>
+</tr>
+</tbody>
+</table>
+<p>For example:</p>
+<pre><code>Reminder: your appointment is on [date]. Reply C to confirm or R to reschedule.</code></pre>
+<blockquote>
+<p>Keep it short. Long messages are split and billed as more than
+one.</p>
+</blockquote>
+<h2 id="which-appointments-get-a-reminder">Which appointments get a
+reminder</h2>
+<p>An appointment is texted when <strong>all</strong> of these are
+true:</p>
+<ul>
+<li>it is in the future, and within
+<code>APPOINTMENT_REMINDERS_ALERT_DAYS</code> days</li>
+<li>it has <strong>not</strong> already been confirmed or cancelled</li>
+<li>no reminder has been sent for it already</li>
+<li>there is a mobile number of at least 10 digits on the
+appointment</li>
+<li>the appointment has a real time on it, not
+<code>00:00:00</code></li>
+<li>it was last changed more than <code>COOLING_PERIOD</code> hours
+ago</li>
+</ul>
+<p><strong>One text per patient per day, however many appointments they
+have.</strong> If a patient is booked twice on the same day, they get a
+single reminder about the first. This is deliberate — it stops a patient
+with a morning and an afternoon slot receiving two texts.</p>
+<h2 id="keeping-the-cost-under-control">Keeping the cost under
+control</h2>
+<p><code>MAX-DAILY-SMS</code> is a hard stop. Once that many messages
+have been sent today, the queue is left alone until tomorrow and the log
+records why:</p>
+<pre><code>Maximum number of SMS reached.  Total used: 100  Maximum set to: 100</code></pre>
+<p>If reminders stop partway through a busy day, this is the first thing
+to check. The messages are not lost — they stay queued and go out the
+following day, by which time the appointment may have passed.</p>
 <h1 id="electronic-remittances-eob-era-pdfs">Electronic remittances (EOB
 / ERA PDFs)</h1>
 <p>Insurers publish payment advices — remittance notices, ERAs, EOBs —
 to their provider portals as PDF files. AutoTasks can read those PDFs
 and post the payments into Mp10 automatically, so nobody has to key them
 in.</p>
+<p>This is the <strong>PDF</strong> route. If your payer sends X12 835
+files instead, see the previous chapter — the two are configured
+separately.</p>
 <h2 id="what-you-have-to-do">What you have to do</h2>
 <ol type="1">
 <li><strong>Choose a folder</strong> where remittance PDFs will be
@@ -853,6 +1870,14 @@ to be applied.</li>
 sub-folder so it is not processed twice:</li>
 </ol>
 <pre><code>...\scannedEOBs\history\C6472004.pdf</code></pre>
+<blockquote>
+<p><strong>Create the <code>history</code> sub-folder yourself.</strong>
+Unlike the 835 history folder, this one has no setting — it is always a
+folder called <code>history</code> directly inside
+<code>EOBIMAGESPATH</code>, and AutoTasks does not create it. If it is
+missing, or the service account cannot write to it, the PDF cannot be
+moved and the same remittance is read again on every cycle.</p>
+</blockquote>
 <p>If you want to know what happened to a particular file, search
 <code>AutoTasks.out</code> for its name.</p>
 <h2 id="if-your-server-serves-more-than-one-practice">If your server
@@ -1313,6 +2338,229 @@ extractor script is missing from the server</td>
 </table>
 <p>Once processed, the PDF is in the <code>history</code> sub-folder —
 it has not been lost.</p>
+<h2 id="files-are-not-being-processed">835 files are not being
+processed</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Symptom</th>
+<th>Likely cause</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>The same remittances are processed over and over</td>
+<td><code>X12FILE_PATH</code> / <code>835_COPY_PATH</code> is blank, or
+the history folder does not exist, or the service cannot write to it.
+The copy fails, so the erase is skipped. This is the most common 835
+problem</td>
+</tr>
+<tr class="even">
+<td>Files sit in the folder, nothing in the log</td>
+<td><code>AUTOTASKS</code> / <code>PROCESS_835</code> is not
+<code>YES</code>, or the service was not restarted after changing
+it</td>
+</tr>
+<tr class="odd">
+<td>Some files are processed, others ignored entirely</td>
+<td>The ignored ones do not have <code>835</code> in the file name. Only
+<code>*835*</code> is looked at</td>
+</tr>
+<tr class="even">
+<td><code>File more than 6 mo old</code> in the log</td>
+<td>Working as designed — anything over 180 days is skipped</td>
+</tr>
+<tr class="odd">
+<td><code>X12 835 dir ... does not exist</code> at startup</td>
+<td><code>X12FILE_PATH</code> / <code>835</code> is wrong, or is a
+Windows path on a Linux server</td>
+</tr>
+<tr class="even">
+<td><code>is not a legit 835</code> in the log</td>
+<td>The file is not a valid 835 — often an acknowledgement or a report
+the clearinghouse routed alongside the remittances</td>
+</tr>
+<tr class="odd">
+<td>Nothing is ever downloaded</td>
+<td><code>AUTOTASKS</code> / <code>GetRoutedFiles</code> is not
+<code>YES</code>, today is not in <code>GetRoutedFilesDays</code>, or
+the time is outside the start/end window</td>
+</tr>
+<tr class="even">
+<td><code>Error connecting to Host</code> in the log</td>
+<td>The <code>X12WebService</code> user name or password is wrong, or
+the server cannot reach the clearinghouse</td>
+</tr>
+</tbody>
+</table>
+<h2 id="nothing-is-being-downloaded-from-the-clearinghouse">Nothing is
+being downloaded from the clearinghouse</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Symptom</th>
+<th>Likely cause</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>0 routed files downloaded</code>, every time</td>
+<td>Normal if the clearinghouse has nothing new. If it never changes,
+check <code>AUTOTASKS</code> / <code>GetRoutedFiles</code> is
+<code>YES</code></td>
+</tr>
+<tr class="even">
+<td>Nothing after 7 p.m.</td>
+<td>Working as designed — there is a fixed cut-off no setting can
+move</td>
+</tr>
+<tr class="odd">
+<td>Nothing on certain days</td>
+<td>Today is not in <code>GetRoutedFilesDays</code></td>
+</tr>
+<tr class="even">
+<td><code>Error connecting to Host</code></td>
+<td><code>X12WebService</code> user name or password, or the server
+cannot reach the clearinghouse</td>
+</tr>
+<tr class="odd">
+<td>Files download but 277s are never processed</td>
+<td><code>X12FILE_PATH</code> / <code>277</code> points somewhere other
+than <code>X12FILE_PATH</code> / <code>835</code>. Everything is
+downloaded into the <code>835</code> folder</td>
+</tr>
+<tr class="even">
+<td>A file was collected once and never again</td>
+<td>It was marked as downloaded at the clearinghouse. Retrieve it from
+the portal by hand</td>
+</tr>
+</tbody>
+</table>
+<h2 id="claim-statuses-or-acknowledgements-are-not-appearing">Claim
+statuses or acknowledgements are not appearing</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Symptom</th>
+<th>Likely cause</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Nothing happens at all</td>
+<td><code>AUTOTASKS</code> / <code>PROCESS_277</code> or
+<code>ProcessEDIs</code> is not <code>YES</code></td>
+</tr>
+<tr class="even">
+<td>The same files process repeatedly</td>
+<td><code>X12FILE_PATH</code> / <code>277_COPY_PATH</code> is blank,
+missing, or not writable</td>
+</tr>
+<tr class="odd">
+<td><code>Unlegit 277</code> in the log</td>
+<td>Normal — that is a file in the shared in-tray that is not a 277,
+most often an 835</td>
+</tr>
+<tr class="even">
+<td>Acknowledgements vanish without reaching history</td>
+<td>Working as designed — <code>TA1_</code> and <code>999_</code> files
+are deleted, not filed</td>
+</tr>
+</tbody>
+</table>
+<h2 id="eligibility-is-not-being-checked">Eligibility is not being
+checked</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Symptom</th>
+<th>Likely cause</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>No patients at all are checked</td>
+<td><code>AUTOTASKS</code> / <code>AutoSend_270</code> has been set to
+something other than <code>YES</code></td>
+</tr>
+<tr class="even">
+<td>One insurer works, another does not</td>
+<td>The failing insurer’s plan record: <code>isFetch271</code> not
+ticked, or Submitter / Receiver / GS03 blank</td>
+</tr>
+<tr class="odd">
+<td>An established patient is never checked</td>
+<td>Their insurance record has not changed in the last 7 days. Re-save
+it to bring it back into the window</td>
+</tr>
+<tr class="even">
+<td>A secondary insurance is ignored</td>
+<td>Only the primary is checked</td>
+</tr>
+</tbody>
+</table>
+<h2 id="appointment-reminders-are-not-going-out">Appointment reminders
+are not going out</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Symptom</th>
+<th>Likely cause</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>No texts at all</td>
+<td><code>SMS</code> / <code>SEND_APPOINTMENT_REMINDERS</code> is not
+<code>YES</code>, or <code>APPOINTMENT_REMINDERS_ALERT_DAYS</code> is
+<code>0</code></td>
+</tr>
+<tr class="even">
+<td>Queued but never sent</td>
+<td>The <code>TWILIO</code> account settings — check
+<code>ACCOUNT_SID</code>, <code>AUTH_TOKEN</code> and
+<code>TEL_FROM</code></td>
+</tr>
+<tr class="odd">
+<td>Texts stop partway through the day</td>
+<td><code>MAX-DAILY-SMS</code> reached. The log says so explicitly</td>
+</tr>
+<tr class="even">
+<td>A patient with two appointments got one text</td>
+<td>Working as designed — one reminder per patient per day</td>
+</tr>
+<tr class="odd">
+<td>An appointment just entered was skipped</td>
+<td>It is inside the <code>COOLING_PERIOD</code> — it is texted on a
+later cycle</td>
+</tr>
+<tr class="even">
+<td>Nothing for a specific patient</td>
+<td>No mobile number on the appointment, a number under 10 digits, no
+time on the appointment, or it is already confirmed</td>
+</tr>
+</tbody>
+</table>
 <h2 id="a-scheduled-report-did-not-arrive">A scheduled report did not
 arrive</h2>
 <table>
@@ -1359,9 +2607,11 @@ trip:</p>
 <ul>
 <li>the relevant section of <code>AutoTasks.out</code>, covering the
 time in question</li>
-<li><code>python_debug.log</code>, for remittance problems</li>
+<li><code>python_debug.log</code>, for remittance PDF problems</li>
+<li><code>backup_zip.log</code> and <code>backup_zip.stdout.log</code>,
+for backup archive problems</li>
 <li>the exact Section and Entry values you have set</li>
-<li>for a remittance problem, the PDF itself</li>
+<li>for a remittance problem, the PDF or the 835 file itself</li>
 </ul>
 <p>Structured Systems · <a href="mailto:reinaldocrespo@structuredsystems.com" class="email">reinaldocrespo@structuredsystems.com</a> ·
 954-744-0286</p>
