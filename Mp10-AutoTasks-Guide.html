@@ -178,6 +178,8 @@ carefully</a></li>
 <li><a href="#optional-zipping-and-retention" id="toc-optional-zipping-and-retention">Optional: zipping and
 retention</a>
 <ul>
+<li><a href="#files-that-cannot-be-compressed-are-copied-instead" id="toc-files-that-cannot-be-compressed-are-copied-instead">Files that
+cannot be compressed are copied instead</a></li>
 <li><a href="#the-archive-is-checked-before-it-counts-as-a-backup" id="toc-the-archive-is-checked-before-it-counts-as-a-backup">The archive
 is checked before it counts as a backup</a></li>
 <li><a href="#restoring-from-an-archive" id="toc-restoring-from-an-archive">Restoring from an archive</a></li>
@@ -673,6 +675,25 @@ itself, so an ordinary path reachable from the Mp10 server is fine.</p>
 the number of zips in <code>BACKUP_ZIP_PATH</code> exceeds this number,
 the oldest are erased automatically. Keep that folder for backups only,
 and set the number to match the disk space you have.</p>
+</blockquote>
+<h3 id="files-that-cannot-be-compressed-are-copied-instead">Files that
+cannot be compressed are copied instead</h3>
+<p>Not all data compresses. A memo file holding scanned documents is
+already compressed — the scans are JPEGs or PDFs — and running it
+through compression again reads every byte for nothing, making the
+result very slightly <em>larger</em>.</p>
+<p>AutoTasks samples each file before adding it, and simply copies the
+ones compression cannot help. The archive comes out the same size either
+way; the difference is that no time is wasted on files that were never
+going to shrink.</p>
+<blockquote>
+<p><strong>A practice storing images in Mp10 should not expect a small
+archive.</strong> If most of your data is scanned documents, the zip
+will be close to the size of the backup itself. That is the data, not a
+fault — and it means the archive folder needs roughly as much free space
+as the backup folder, for <strong>each</strong> archive you keep. Check
+<code>MAX_BACKUPS_TO_KEEP</code> against the free space you actually
+have.</p>
 </blockquote>
 <h3 id="the-archive-is-checked-before-it-counts-as-a-backup">The archive
 is checked before it counts as a backup</h3>

@@ -220,6 +220,23 @@ path reachable from the Mp10 server is fine.
 > Keep that folder for backups only, and set the number to match the disk space
 > you have.
 
+### Files that cannot be compressed are copied instead
+
+Not all data compresses. A memo file holding scanned documents is already
+compressed — the scans are JPEGs or PDFs — and running it through compression
+again reads every byte for nothing, making the result very slightly *larger*.
+
+AutoTasks samples each file before adding it, and simply copies the ones
+compression cannot help. The archive comes out the same size either way; the
+difference is that no time is wasted on files that were never going to shrink.
+
+> **A practice storing images in Mp10 should not expect a small archive.** If
+> most of your data is scanned documents, the zip will be close to the size of
+> the backup itself. That is the data, not a fault — and it means the archive
+> folder needs roughly as much free space as the backup folder, for **each**
+> archive you keep. Check `MAX_BACKUPS_TO_KEEP` against the free space you
+> actually have.
+
 ### The archive is checked before it counts as a backup
 
 An archive is not treated as a backup until AutoTasks has opened it again and
