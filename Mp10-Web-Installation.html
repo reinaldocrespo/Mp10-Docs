@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-08-03" />
+  <meta name="dcterms.date" content="2026-08-04" />
   <title>Mp10 Web — Installation</title>
   <style>
 code{white-space: pre-wrap;}
@@ -211,7 +211,7 @@ a { color: inherit; }
 <h1 class="title">Mp10 Web — Installation</h1>
 <p class="subtitle">Installing and updating the browser application</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">03 August 2026</p>
+<p class="date">04 August 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -337,7 +337,7 @@ to.</p>
 <p>From an <strong>elevated</strong> PowerShell, in the extracted bundle
 folder:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">.</span>\install<span class="op">.</span><span class="fu">ps1</span></span></code></pre></div>
-<p>Two optional parameters, if the defaults are wrong for this
+<p>Three optional parameters, if the defaults are wrong for this
 machine:</p>
 <ul>
 <li><code>-InstallRoot &lt;path&gt;</code> — where Mp10 Web is deployed.
@@ -345,7 +345,26 @@ Defaults to <code>C:\Mp10Web</code>.</li>
 <li><code>-PhpPath &lt;path to php.exe&gt;</code> — which PHP to use.
 Defaults to whatever <code>php.exe</code> resolves to on
 <code>PATH</code>, or <code>C:\php\php.exe</code>.</li>
+<li><code>-ApachePath &lt;Apache root, or the bin\httpd.exe inside it&gt;</code>
+— which Apache to borrow binaries and modules from. Either form is
+accepted.</li>
 </ul>
+<p><strong>Pass <code>-ApachePath</code> on any machine with more than
+one Apache.</strong> Without it the installer takes the first
+<code>httpd.exe</code> on <code>PATH</code>, which is whichever Apache
+happens to be registered — not necessarily the one Mp10 Web should use.
+It says so plainly when it falls back that way:</p>
+<pre><code>[WARN] Apache taken from PATH: c:\Apache24\bin\httpd.exe
+[WARN] If that is not the Apache Mp10 Web should use, re-run with -ApachePath.</code></pre>
+<p>That warning is worth acting on. A machine can easily carry an Apache
+that serves something else entirely — through <code>mod_harbour</code>,
+or loading a different set of <code>php_ads</code> libraries — and Mp10
+Web running on it will work until the day the other application’s needs
+and yours diverge.</p>
+<p>Changing <code>-ApachePath</code> on a later run is safe and does the
+whole job: the installer notices the <code>Mp10Web</code> service is
+registered against the old binary, re-registers it against the new one,
+and restarts it. It tells you that is what it is doing.</p>
 <p>The script runs eight steps plus a smoke test, in an order
 deliberately chosen so that <strong>nothing is written until every check
 that can run has run</strong> — a half-configured install is worse than
@@ -539,7 +558,7 @@ later update — the same rule that protects
 <code>database.local.php</code>’s secrets applies here.</p>
 <h1 id="updating">Updating</h1>
 <p>Run the same command against the same install root:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="op">.</span>\install<span class="op">.</span><span class="fu">ps1</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="op">.</span>\install<span class="op">.</span><span class="fu">ps1</span></span></code></pre></div>
 <p>(<code>-InstallRoot</code> only needs to be given again if you did
 not install to the default <code>C:\Mp10Web</code> in the first
 place.)</p>
@@ -577,8 +596,8 @@ looked different” is exactly how that gap gets missed.</p>
 <h1 id="removing-it">Removing it</h1>
 <p>There is no <code>httpd.conf</code> <code>Include</code> line to
 un-edit — the dedicated instance is self-contained, so removal is:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>path to existing Apache<span class="op">&gt;</span>\bin\httpd<span class="op">.</span><span class="fu">exe</span> <span class="op">-</span>k stop <span class="op">-</span>n Mp10Web</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>path to existing Apache<span class="op">&gt;</span>\bin\httpd<span class="op">.</span><span class="fu">exe</span> <span class="op">-</span>k uninstall <span class="op">-</span>n Mp10Web</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>path to existing Apache<span class="op">&gt;</span>\bin\httpd<span class="op">.</span><span class="fu">exe</span> <span class="op">-</span>k stop <span class="op">-</span>n Mp10Web</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>path to existing Apache<span class="op">&gt;</span>\bin\httpd<span class="op">.</span><span class="fu">exe</span> <span class="op">-</span>k uninstall <span class="op">-</span>n Mp10Web</span></code></pre></div>
 <p>then drop the three tables (<code>web_users</code>,
 <code>web_groups</code>, <code>web_group_members</code>) from the
 dictionary, and delete the install root. The system Apache was never
@@ -745,13 +764,26 @@ the <strong>64-bit</strong> ACE DLLs on <code>PATH</code> — not the
 desktop’s 32-bit ones.</td>
 </tr>
 <tr class="odd">
-<td>Apache (httpd.exe) not found on PATH or at <code>C:\Apache24</code>.
-Install Apache 2.4 and re-run.</td>
-<td>No Apache installation found.</td>
-<td>Install Apache 2.4 (an Apache Lounge build is fine), or put
-<code>httpd.exe</code> on <code>PATH</code>.</td>
+<td>No Apache found. Pass
+<code>-ApachePath &lt;Apache root or bin\httpd.exe&gt;</code>, or
+install Apache 2.4 (an Apache Lounge build ships every module needed)
+and re-run.</td>
+<td>No Apache on <code>PATH</code>, none shipped in the bundle, and none
+at <code>C:\Apache24</code>.</td>
+<td>Pass <code>-ApachePath</code> if Apache is installed somewhere else;
+otherwise install Apache 2.4.</td>
 </tr>
 <tr class="even">
+<td>-ApachePath ‘<code>&lt;path&gt;</code>’ does not lead to
+<code>bin\httpd.exe</code> (looked for
+‘<code>&lt;resolved&gt;</code>’).</td>
+<td>The path given is neither an Apache root nor an
+<code>httpd.exe</code>.</td>
+<td>Give either the Apache root (the folder containing <code>bin\</code>
+and <code>modules\</code>) or the full path to
+<code>bin\httpd.exe</code>.</td>
+</tr>
+<tr class="odd">
 <td>Apache at ‘<code>&lt;modules dir&gt;</code>’ is missing:
 <code>&lt;mod_rewrite.so, mod_fcgid.so&gt;</code>. Mp10 Web’s own Apache
 instance (step 7/8) needs mod_rewrite (the API’s .htaccess re-attaches

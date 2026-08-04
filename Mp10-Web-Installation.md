@@ -94,12 +94,34 @@ From an **elevated** PowerShell, in the extracted bundle folder:
 .\install.ps1
 ```
 
-Two optional parameters, if the defaults are wrong for this machine:
+Three optional parameters, if the defaults are wrong for this machine:
 
 - `-InstallRoot <path>` — where Mp10 Web is deployed. Defaults to
   `C:\Mp10Web`.
 - `-PhpPath <path to php.exe>` — which PHP to use. Defaults to whatever
   `php.exe` resolves to on `PATH`, or `C:\php\php.exe`.
+- `-ApachePath <Apache root, or the bin\httpd.exe inside it>` — which Apache
+  to borrow binaries and modules from. Either form is accepted.
+
+**Pass `-ApachePath` on any machine with more than one Apache.** Without it
+the installer takes the first `httpd.exe` on `PATH`, which is whichever
+Apache happens to be registered — not necessarily the one Mp10 Web should
+use. It says so plainly when it falls back that way:
+
+```
+[WARN] Apache taken from PATH: c:\Apache24\bin\httpd.exe
+[WARN] If that is not the Apache Mp10 Web should use, re-run with -ApachePath.
+```
+
+That warning is worth acting on. A machine can easily carry an Apache that
+serves something else entirely — through `mod_harbour`, or loading a
+different set of `php_ads` libraries — and Mp10 Web running on it will work
+until the day the other application's needs and yours diverge.
+
+Changing `-ApachePath` on a later run is safe and does the whole job: the
+installer notices the `Mp10Web` service is registered against the old
+binary, re-registers it against the new one, and restarts it. It tells you
+that is what it is doing.
 
 The script runs eight steps plus a smoke test, in an order deliberately
 chosen so that **nothing is written until every check that can run has
@@ -353,7 +375,8 @@ embeds a value (a path, a count, a port), that part is shown as `<...>`.
 | PHP is `<bits>`-bit; Mp10 Web needs the x64 build. Note the Mp10 DESKTOP applications are 32-bit - this is a different PHP, not the same one. | **The 32-bit trap.** A 32-bit PHP was found — commonly because that is what happens to be on the machine already. | Install a separate PHP 8 **x64** build for Mp10 Web; do not point it at whatever 32-bit PHP is already there. |
 | PHP is the NTS (non-thread-safe) build; Mp10 Web's php_ads.dll needs the ZTS build. Download the 'Thread Safe' x64 zip from windows.php.net. | Wrong PHP thread-safety variant. | Install the *Thread Safe* x64 zip, not the *Non Thread Safe* one. |
 | The Advantage PHP extension is not loaded - AdsConnection does not exist. Copy php_ads.dll into `<ext_dir>` and add extension=ads to `<ini>`. It also needs the 64-BIT ACE client (ace64.dll, adsloc64.dll, aicu64.dll, axcws64.dll) on PATH - the Mp10 desktop applications install the 32-bit client, which will NOT satisfy this. | `php_ads` is missing, disabled, or the 64-bit ACE client isn't on `PATH`. | Enable `extension=ads` in the named `php.ini` with `php_ads.dll` in the named extension directory, and put the **64-bit** ACE DLLs on `PATH` — not the desktop's 32-bit ones. |
-| Apache (httpd.exe) not found on PATH or at `C:\Apache24`. Install Apache 2.4 and re-run. | No Apache installation found. | Install Apache 2.4 (an Apache Lounge build is fine), or put `httpd.exe` on `PATH`. |
+| No Apache found. Pass `-ApachePath <Apache root or bin\httpd.exe>`, or install Apache 2.4 (an Apache Lounge build ships every module needed) and re-run. | No Apache on `PATH`, none shipped in the bundle, and none at `C:\Apache24`. | Pass `-ApachePath` if Apache is installed somewhere else; otherwise install Apache 2.4. |
+| -ApachePath '`<path>`' does not lead to `bin\httpd.exe` (looked for '`<resolved>`'). | The path given is neither an Apache root nor an `httpd.exe`. | Give either the Apache root (the folder containing `bin\` and `modules\`) or the full path to `bin\httpd.exe`. |
 | Apache at '`<modules dir>`' is missing: `<mod_rewrite.so, mod_fcgid.so>`. Mp10 Web's own Apache instance (step 7/8) needs mod_rewrite (the API's .htaccess re-attaches the Authorization header Apache strips from the CGI environment - without it every signed-in request 401s WITH a valid token) and mod_fcgid (runs PHP). Install a full Apache 2.4 build that ships both modules. | The found Apache's `modules\` folder is missing one or both files. | Install a full Apache 2.4 build (e.g. Apache Lounge) that ships `mod_rewrite.so` and `mod_fcgid.so` — a trimmed-down build will not do. |
 
 ## Step 3/8 — Configuration
