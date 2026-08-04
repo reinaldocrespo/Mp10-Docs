@@ -248,17 +248,28 @@ check out, **nothing is deleted** — the previous archives are left exactly as
 they were, and you get a failure e-mail. Older backups are never traded away
 for a new one that might not work.
 
-A failed archive is renamed so it cannot be mistaken for a good one:
+What happens to the failed archive depends on how it failed, because the two
+cases are worth different things to you.
+
+**It was written but did not check out.** The archive is complete and wrong.
+That is worth keeping to look at, so it is renamed out of the way:
 
 ```
-Mp10Data-2026-07-31.zip.failed
+Mp10Data-2026-07-31.failed
 ```
 
-> **`.failed` files are never deleted automatically.** They are left for
-> inspection and they do not count towards `MAX_BACKUPS_TO_KEEP`. If archiving
-> keeps failing night after night, they will accumulate and can fill the disk.
-> Treat a `.failed` file as something to investigate and then remove by hand
-> once you no longer need it.
+Note the name replaces `.zip` rather than adding to it, so these can never be
+mistaken for archives or counted as one.
+
+**It ran out of room, or could not be written.** The file is truncated. There is
+nothing to learn from half an archive, and keeping a partial copy of a very
+large backup on a disk that has just filled up only makes the next night worse —
+so it is deleted, and the failure e-mail says so.
+
+> **Kept `.failed` files are pruned, but only the most recent few survive.**
+> They do not count towards `MAX_BACKUPS_TO_KEEP`; AutoTasks keeps the last
+> three and erases older ones, naming each in the log and in the notice. Treat a
+> `.failed` file as something to investigate, then delete it once you are done.
 
 ### Restoring from an archive
 
