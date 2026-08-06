@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="dcterms.date" content="2026-08-06" />
+  <title>shrink-image-tables</title>
+  <style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+  <style type="text/css">
+:root {
+color-scheme: light dark;
+--fg: #1a1a1a;
+--bg: #ffffff;
+--muted: #5a5a5a;
+--rule: #d8d8d8;
+--accent: #0b5cad;
+--code-bg: #f4f4f6;
+--note-bg: #f7f7f9;
+}
+@media (prefers-color-scheme: dark) {
+:root {
+--fg: #e6e6e6;
+--bg: #16181d;
+--muted: #a2a2a8;
+--rule: #33363d;
+--accent: #6cb0f5;
+--code-bg: #22252c;
+--note-bg: #1d2027;
+}
+}
+html { -webkit-text-size-adjust: 100%; }
+body {
+font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+color: var(--fg);
+background: var(--bg);
+max-width: 52rem;
+margin: 0 auto;
+padding: 2.5rem 1.25rem 5rem;
+line-height: 1.65;
+font-size: 1.02rem;
+}
+
+header#title-block-header { border-bottom: 2px solid var(--rule); margin-bottom: 2rem; }
+h1.title { margin-bottom: .2rem; font-size: 2rem; line-height: 1.2; }
+p.subtitle { margin-top: 0; color: var(--muted); font-size: 1.1rem; }
+p.author, p.date { margin: .2rem 0; color: var(--muted); font-size: .92rem; }
+h1, h2, h3, h4 { line-height: 1.25; margin-top: 2.2rem; }
+h1 { font-size: 1.7rem; padding-bottom: .3rem; border-bottom: 1px solid var(--rule); }
+h2 { font-size: 1.3rem; }
+h3 { font-size: 1.1rem; }
+a { color: var(--accent); }
+
+nav#TOC {
+background: var(--note-bg);
+border: 1px solid var(--rule);
+border-radius: .5rem;
+padding: 1rem 1.25rem;
+margin-bottom: 2.5rem;
+}
+nav#TOC > ul { margin: 0; padding-left: 1.1rem; }
+nav#TOC ul { list-style: none; padding-left: 1.1rem; }
+nav#TOC li { margin: .18rem 0; }
+nav#TOC a { text-decoration: none; }
+nav#TOC a:hover { text-decoration: underline; }
+
+table {
+border-collapse: collapse;
+width: 100%;
+margin: 1.25rem 0;
+font-size: .94rem;
+display: block;
+overflow-x: auto; 
+}
+th, td {
+border-bottom: 1px solid var(--rule);
+padding: .5rem .6rem;
+text-align: left;
+vertical-align: top;
+}
+thead th { border-bottom: 2px solid var(--rule); white-space: nowrap; }
+tbody tr:hover { background: var(--note-bg); }
+code, pre {
+font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
+font-size: .9em;
+}
+code { background: var(--code-bg); padding: .12em .35em; border-radius: .25rem; }
+pre {
+background: var(--code-bg);
+padding: .9rem 1rem;
+border-radius: .4rem;
+overflow-x: auto;
+}
+pre code { background: none; padding: 0; }
+
+blockquote {
+margin: 1.25rem 0;
+padding: .75rem 1.1rem;
+background: var(--note-bg);
+border-left: 4px solid var(--accent);
+border-radius: 0 .35rem .35rem 0;
+}
+blockquote p { margin: .35rem 0; }
+
+img {
+max-width: 100%;
+height: auto;
+display: block;
+margin: 1.25rem auto;
+border: 1px solid var(--rule);
+border-radius: .35rem;
+}
+figcaption {
+text-align: center;
+color: var(--muted);
+font-size: .9rem;
+margin-top: -.6rem;
+}
+@media print {
+body { max-width: none; font-size: 11pt; }
+nav#TOC { break-after: page; }
+h1 { break-before: page; }
+h1:first-of-type { break-before: avoid; }
+a { color: inherit; }
+}
+</style>
+</head>
+<body>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#shrinking-the-image-tables-patientsignatures-patinsurances" id="toc-shrinking-the-image-tables-patientsignatures-patinsurances">Shrinking
+the Image Tables (patientsignatures / patinsurances)</a>
+<ul>
+<li><a href="#why-this-exists" id="toc-why-this-exists">Why this
+exists</a></li>
+<li><a href="#per-customer-procedure" id="toc-per-customer-procedure">Per-customer procedure</a></li>
+<li><a href="#v11-vs-v12-expectations" id="toc-v11-vs-v12-expectations">v11 vs v12 expectations</a></li>
+<li><a href="#capture-path-changes-deploy-with-the-shrink" id="toc-capture-path-changes-deploy-with-the-shrink">Capture-path
+changes (deploy with the shrink)</a></li>
+<li><a href="#per-site-findings-fill-in-as-sites-are-visited" id="toc-per-site-findings-fill-in-as-sites-are-visited">Per-site
+findings (fill in as sites are visited)</a></li>
+<li><a href="#safety-notes" id="toc-safety-notes">Safety notes</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="shrinking-the-image-tables-patientsignatures-patinsurances">Shrinking
+the Image Tables (patientsignatures / patinsurances)</h1>
+<p>Rollout guide for the Admin “Shrink Image Tables” option and the
+related capture-path changes. Implementation plan and research:
+<code>Docs\superpowers\plans\2026-08-04-shrink-image-tables.md</code>.</p>
+<h2 id="why-this-exists">Why this exists</h2>
+<p>The <code>.adm</code> memo files of <code>patientsignatures</code>
+and <code>patinsurances</code> grow into the multi-GB range, and
+measurement showed the growth is <strong>not</strong> waste. A full scan
+of a production parity snapshot (2026-08-04, walking every in-record
+9-byte memo reference) found:</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>patientsignatures</th>
+<th>patinsurances</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>records</td>
+<td>114,891</td>
+<td>259,130</td>
+</tr>
+<tr class="even">
+<td>blobs present</td>
+<td>114,731 (<code>image</code>)</td>
+<td>57,450 (<code>cardimage</code>)</td>
+</tr>
+<tr class="odd">
+<td>avg / max blob</td>
+<td>65.5 KB / 197 KB</td>
+<td>69.6 KB / 485 KB</td>
+</tr>
+<tr class="even">
+<td><code>.adm</code> size</td>
+<td>7,344 MB</td>
+<td>3,907 MB</td>
+</tr>
+<tr class="odd">
+<td>orphaned + slack</td>
+<td>~0.0%</td>
+<td>~0.0%</td>
+</tr>
+<tr class="even">
+<td>memo block size</td>
+<td>8 bytes</td>
+<td>8 bytes</td>
+</tr>
+<tr class="odd">
+<td>used of the 2³²-block cap (32 GB at block 8)</td>
+<td>22.4%</td>
+<td>11.9%</td>
+</tr>
+</tbody>
+</table>
+<p>Every sampled blob is a JPEG. The files are ~100% live image data, so
+packing or re-blocking alone recovers nothing — the size problem is that
+signatures (monochrome line art) were stored as JPEG <strong>quality
+100</strong> (~65 KB each) and insurance cards as raw uncapped scanner
+output. The shrink is therefore image <strong>re-encoding</strong>
+(Admin walks every blob, re-encodes, updates in place), followed by
+<code>sp_PackTable</code> to reclaim the replaced memo chains. After the
+shrink, even the 32 GB cap at block size 8 is only a few percent used,
+which is why ADS v11 sites need no block-size change at all.</p>
+<p>The measurement tool is in the repo:
+<code>tools\adm_bloat_scan.ps1</code>
+(<code>powershell -File tools\adm_bloat_scan.ps1 -Tables &lt;path&gt;\patientsignatures.adt,...</code>)
+— run it against copies, never against files the server holds
+exclusively.</p>
+<h2 id="per-customer-procedure">Per-customer procedure</h2>
+<p>Everything below runs from the Admin module logged in as
+<strong>ADSSYS</strong> (File → Shrink Image Tables). Record the numbers
+at each step in the findings table at the end of this guide.</p>
+<ol type="1">
+<li><strong>Backup.</strong> A verified backup
+(<code>sp_BackupDatabase</code> or file copy) must exist before anything
+writes. The Restore DB From Backup option (below) is the recovery
+path.</li>
+<li><strong>Deploy the updated Patients module</strong> first, so new
+signatures/cards/scans are captured small from that moment on (see
+“Capture-path changes”).</li>
+<li><strong>Diagnostics</strong> button: record BlockSize, Memo MB and
+cap % for patientsignatures, patinsurances and every imagesNN
+table.</li>
+<li><strong>Probe SQL default block size</strong> button: record the
+number — this is the server’s real <code>CREATE TABLE</code> default
+(curiosity answer (a) below).</li>
+<li><strong>Dry runs</strong> (signatures, then cards): nothing is
+written; record the projected bytes-before/bytes-after from each
+summary.</li>
+<li><strong>Off-hours: live shrink</strong> both tables. The operation
+is resumable — it can be cancelled and re-run; already-shrunk blobs fall
+into “Kept (no gain)” / “Already converted” on the next pass.</li>
+<li><strong>All users out</strong>, then <strong>Pack</strong> each
+table. <code>sp_PackTable</code> needs exclusive access — every
+connection with the table open blocks it, including Admin’s own cursors
+(the option closes its own before packing).</li>
+<li><strong>Diagnostics again</strong>: Memo MB should have collapsed to
+roughly the dry-run “bytes after” figure. Record the after-numbers.</li>
+<li>Spot-check in Patients: signatures display and print (HIPAA/consent,
+transcription reports), cards display, zoom and OCR, and the Mp10Web
+insurance endpoint still serves them.</li>
+</ol>
+<p>What the shrink writes: signatures are re-encoded to JPEG quality 60,
+cards to JPEG quality 75, and a blob is only replaced when the re-encode
+gains at least 10% — that gate is also what makes repeat runs safe (a
+second q75→q75 pass gains nothing and writes nothing).</p>
+<h2 id="v11-vs-v12-expectations">v11 vs v12 expectations</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>ADS v11</th>
+<th>ADS v12+</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Pack call issued</td>
+<td><code>sp_PackTable( name )</code></td>
+<td><code>sp_PackTable( name, 256 )</code></td>
+</tr>
+<tr class="even">
+<td>Reclaims replaced memo chains</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr class="odd">
+<td>Memo block size after pack</td>
+<td>unchanged (stays 8)</td>
+<td>changed to 256 bytes</td>
+</tr>
+<tr class="even">
+<td>Blob-count cap after pack</td>
+<td>32 GB <code>.adm</code> (block 8)</td>
+<td>1 TB <code>.adm</code> (block 256)</td>
+</tr>
+<tr class="odd">
+<td>Is that enough?</td>
+<td>yes — post-shrink usage is ~3% of the 32 GB cap</td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<p>Revisit a v11 site only if Diagnostics ever shows the cap % climbing
+past 50 — the documented escape is upgrading to v12 and packing with the
+second argument (or the copy-and-swap via <code>dbCreate()</code> +
+<code>INSERT…SELECT</code> + <code>sp_RenameDDObject</code>,
+deliberately not built).</p>
+<p>New imagesNN tables no longer inherit the problem:
+<code>CreateNewImagesTable()</code> now creates them with 256-byte memo
+blocks on both versions (SQL <code>MEMOBLOCKSIZE</code> on v12+,
+<code>dbCreate()</code> with <code>_SET_MBLOCKSIZE</code> on v11).</p>
+<h2 id="capture-path-changes-deploy-with-the-shrink">Capture-path
+changes (deploy with the shrink)</h2>
+<p><strong>Signatures</strong> are stored as JPEG quality 60 instead of
+quality 100 (~15–20 KB → a few KB per signature). Repository settings,
+section <code>ImageShrink</code>: <code>SignatureFormat</code> (2=JPEG,
+the shipped default; 13=PNG) and <code>SignatureQuality</code> (60). PNG
+is smaller still for line art and lossless, but switch a site to 13 only
+after verifying all three PNG consumers there: the encounter grid, the
+HIPAA/consent print, and a transcription report embedding
+<code>Signatures-&gt;image</code>.</p>
+<p><strong>Insurance cards</strong> are re-encoded to JPEG on save
+(<code>CardImageQuality</code>, default 75), keeping the original
+whenever the re-encode gains less than 10%. Cards must <strong>stay
+JPEG</strong> — the Mp10Web endpoints and OCR consume them as JPEG.</p>
+<p><strong>Scanned documents</strong> headed for an imagesXX table are
+capped at a 150-DPI-equivalent resolution before storage: longest side
+1650 px (<code>ScanMaxPixels</code>), JPEG quality 75
+(<code>ScanQuality</code>). A 600-DPI scanner setting therefore no
+longer produces multi-MB blobs. PDFs and anything non-JPEG pass through
+untouched, and existing stored scans are not modified — the cap applies
+to new scans only.</p>
+<p><strong>Restore DB From Backup</strong> (Admin, ADSSYS menu) is the
+safety net for all of this: it runs <code>sp_RestoreDatabase</code>
+against an existing <code>sp_BackupDatabase</code> image and restores to
+a destination directory the operator chooses. Both paths are resolved
+<strong>by the server</strong> — UNC or server-local drive letters;
+drives mapped on the workstation are meaningless to it — and the
+destination should never be the live data directory unless a full
+rollback is intended.</p>
+<h2 id="per-site-findings-fill-in-as-sites-are-visited">Per-site
+findings (fill in as sites are visited)</h2>
+<p>The Diagnostics screen and probe answer three questions we could not
+settle from documentation:</p>
+<ul>
+<li><strong>(a)</strong> What block size does SQL
+<code>CREATE TABLE</code> really default to? (ACE
+<code>AdsCreateTable</code> documents 256; production tables measured
+8.) → the Probe button’s number.</li>
+<li><strong>(b)</strong> Did
+<code>sp_ModifyTableProperty(…&#39;Table_Memo_Block_Size&#39;…)</code> ever
+affect the existing imagesNN files? Expected no (docs say auto-create
+only) → the imagesNN BlockSize column; 8 (or the probe default) confirms
+the property is inert for existing files.</li>
+<li><strong>(c)</strong> On v12, is
+<code>CREATE TABLE … MEMOBLOCKSIZE 256</code> taken literally for ADT
+(no ×512 folding)? → BlockSize of the first imagesNN created there after
+this release.</li>
+</ul>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Site / server</th>
+<th>ADS ver</th>
+<th>(a) probe default</th>
+<th>(b) imagesNN block sizes</th>
+<th>(c) MEMOBLOCKSIZE literal?</th>
+<th>Date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="safety-notes">Safety notes</h2>
+<ul>
+<li>Never run a live shrink without a verified backup.</li>
+<li>Packing requires exclusive access to the table; get every user out
+first. If a site truly cannot get exclusive access,
+<code>sp_PackTableOnline</code> exists on both v11 and v12 (without the
+block-size argument), but the offline pack is the default
+recommendation.</li>
+<li>The shrink itself is re-runnable and cancel-safe by design: the ≥10%
+gain gate skips everything already small, so an interrupted run is
+simply run again.</li>
+<li>The <code>.adm</code> file does <strong>not</strong> shrink until
+the table is packed — a large “orphaned” percentage in
+<code>adm_bloat_scan.ps1</code> between shrink and pack is expected, not
+a fault.</li>
+</ul>
+</body>
+</html>

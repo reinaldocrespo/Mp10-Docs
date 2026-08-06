@@ -292,6 +292,10 @@ reads every byte, so on a large archive it takes a while — that is why the
 nightly run uses a faster structural check instead, and why this thorough one is
 available to run by hand whenever you want reassurance.
 
+Extracting files is only half of a recovery: what comes out of the zip is a
+backup *image*, not a database anyone can log into. Turning it back into one is
+covered in *Restoring the database* at the end of this chapter.
+
 ### What must be installed for backups to work
 
 | What | Why | Where |
@@ -447,6 +451,81 @@ before you ever need it:
 ```
 python backup_zip.py restore --zip "D:\Backups\Zips\Mp10Data-2026-07-31.zip" --target "D:\RestoreTest"
 ```
+
+That command brings the files back out of the zip. Making a working database
+out of them is the next section.
+
+## Restoring the database
+
+Unzipping an archive is not a restore. The files the nightly backup writes
+look like a database — tables, memo files, a data dictionary — but Advantage's
+own documentation is blunt about them: they exist solely to be restored from,
+and reading them directly produces unpredictable results. Indexes are not in
+the backup at all. What turns a backup image back into a database people can
+log into is the **restore**, and it is done from the Admin program.
+
+There are two steps. The first is only needed when the copy you want is inside
+a zip.
+
+### Step 1 — get the backup image onto a disk the server can reach
+
+Last night's backup is already sitting in `BACKUP_PATH`, unzipped. If that is
+the copy you want, skip straight to step 2.
+
+For an older or off-site copy, extract the archive first, exactly as shown in
+*Restoring from an archive*:
+
+```
+python backup_zip.py restore --zip "D:\Backups\Zips\Mp10Data-2026-07-31.zip" --target "D:\RestoreTest"
+```
+
+Where you extract it matters. The restore in step 2 is carried out by the
+Advantage service **on the server**, so the same rule as `BACKUP_PATH`
+applies: the extracted folder must be on the server itself, or on a share the
+server machine can read. A drive letter that exists only on your workstation
+means nothing to the server.
+
+### Step 2 — restore with Admin10
+
+Start Admin10 and log in with user code `adssys`. ADSSYS is Advantage's own
+administrator account, not an ordinary Mp10 user — its password is the
+database administrator password, and the restore option does not appear on
+the menu for anyone else.
+
+> **If your ADSSYS password is still whatever it was on installation day,
+> change it.** Anyone holding it can do everything described here, including
+> overwriting a database.
+
+Then pick **File → Restore DB From Backup**. It asks for three things:
+
+| Field | What to enter |
+|---|---|
+| Backup image `.add` path | The dictionary file inside the backup image — e.g. `D:\RestoreTest\mp10.add`, or the `.add` directly under `BACKUP_PATH` |
+| Backup dictionary password | The ADSSYS password **as it was when that backup was taken**. If the password has changed since, an old image still wants the old password |
+| Destination `.add` path | Where the restored database should be created — e.g. `D:\RestoredDb\mp10.add` |
+
+Both paths are read by the server, so the workstation-drive-letter rule above
+applies to them too. Both must end in `.add`.
+
+> **The destination must never be the live data directory.** A restore
+> overwrites whatever is at the destination. Restore to a new or scratch
+> directory, look at the result, and only then decide what to do with it —
+> pointing the practice at a restored copy is a deliberate step, best taken
+> with support on the line.
+
+A restore can take a long time on a large database — every table is copied
+and every index is rebuilt from scratch, which is work the nightly backup
+skipped. A progress window shows that the restore is alive, how long it has
+been running and, once the server starts reporting it, how far along it is.
+Once the server starts reporting progress the restore can be cancelled from
+that window; a cancelled restore leaves an incomplete copy at the
+destination, which should be deleted before trying again.
+
+When it finishes you have a complete, working copy of the practice's
+database at the destination — dictionary, tables and freshly built indexes —
+completely separate from the live one. That is also the cheapest reassurance
+there is: restore into a scratch folder once in a while, log into the copy,
+and you know the night the archive is actually needed, it will work.
 
 # Electronic remittances: the two kinds
 

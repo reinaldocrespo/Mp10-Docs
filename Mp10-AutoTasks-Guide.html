@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-08-04" />
+  <meta name="dcterms.date" content="2026-08-06" />
   <title>Mp10 AutoTasks — Administrator’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -148,7 +148,7 @@ a { color: inherit; }
 <p class="subtitle">Backups, electronic remittances, and automated
 reports</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">04 August 2026</p>
+<p class="date">06 August 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -197,6 +197,13 @@ first</a></li>
 <li><a href="#a-working-example-backups" id="toc-a-working-example-backups">A working example — backups</a></li>
 <li><a href="#backups-are-not-a-disaster-recovery-plan-on-their-own" id="toc-backups-are-not-a-disaster-recovery-plan-on-their-own">Backups
 are not a disaster recovery plan on their own</a></li>
+<li><a href="#restoring-the-database" id="toc-restoring-the-database">Restoring the database</a>
+<ul>
+<li><a href="#step-1-get-the-backup-image-onto-a-disk-the-server-can-reach" id="toc-step-1-get-the-backup-image-onto-a-disk-the-server-can-reach">Step
+1 — get the backup image onto a disk the server can reach</a></li>
+<li><a href="#step-2-restore-with-admin10" id="toc-step-2-restore-with-admin10">Step 2 — restore with
+Admin10</a></li>
+</ul></li>
 </ul></li>
 <li><a href="#electronic-remittances-the-two-kinds" id="toc-electronic-remittances-the-two-kinds">Electronic remittances:
 the two kinds</a></li>
@@ -739,6 +746,10 @@ check reads every byte, so on a large archive it takes a while — that is
 why the nightly run uses a faster structural check instead, and why this
 thorough one is available to run by hand whenever you want
 reassurance.</p>
+<p>Extracting files is only half of a recovery: what comes out of the
+zip is a backup <em>image</em>, not a database anyone can log into.
+Turning it back into one is covered in <em>Restoring the database</em>
+at the end of this chapter.</p>
 <h3 id="what-must-be-installed-for-backups-to-work">What must be
 installed for backups to work</h3>
 <table>
@@ -980,6 +991,96 @@ ransomware event is a decision only the practice can make.</p>
 <p>Restoring is a single command, and it is worth running once so you
 know it works before you ever need it:</p>
 <pre><code>python backup_zip.py restore --zip &quot;D:\Backups\Zips\Mp10Data-2026-07-31.zip&quot; --target &quot;D:\RestoreTest&quot;</code></pre>
+<p>That command brings the files back out of the zip. Making a working
+database out of them is the next section.</p>
+<h2 id="restoring-the-database">Restoring the database</h2>
+<p>Unzipping an archive is not a restore. The files the nightly backup
+writes look like a database — tables, memo files, a data dictionary —
+but Advantage’s own documentation is blunt about them: they exist solely
+to be restored from, and reading them directly produces unpredictable
+results. Indexes are not in the backup at all. What turns a backup image
+back into a database people can log into is the
+<strong>restore</strong>, and it is done from the Admin program.</p>
+<p>There are two steps. The first is only needed when the copy you want
+is inside a zip.</p>
+<h3 id="step-1-get-the-backup-image-onto-a-disk-the-server-can-reach">Step 1
+— get the backup image onto a disk the server can reach</h3>
+<p>Last night’s backup is already sitting in <code>BACKUP_PATH</code>,
+unzipped. If that is the copy you want, skip straight to step 2.</p>
+<p>For an older or off-site copy, extract the archive first, exactly as
+shown in <em>Restoring from an archive</em>:</p>
+<pre><code>python backup_zip.py restore --zip &quot;D:\Backups\Zips\Mp10Data-2026-07-31.zip&quot; --target &quot;D:\RestoreTest&quot;</code></pre>
+<p>Where you extract it matters. The restore in step 2 is carried out by
+the Advantage service <strong>on the server</strong>, so the same rule
+as <code>BACKUP_PATH</code> applies: the extracted folder must be on the
+server itself, or on a share the server machine can read. A drive letter
+that exists only on your workstation means nothing to the server.</p>
+<h3 id="step-2-restore-with-admin10">Step 2 — restore with Admin10</h3>
+<p>Start Admin10 and log in with user code <code>adssys</code>. ADSSYS
+is Advantage’s own administrator account, not an ordinary Mp10 user —
+its password is the database administrator password, and the restore
+option does not appear on the menu for anyone else.</p>
+<blockquote>
+<p><strong>If your ADSSYS password is still whatever it was on
+installation day, change it.</strong> Anyone holding it can do
+everything described here, including overwriting a database.</p>
+</blockquote>
+<p>Then pick <strong>File → Restore DB From Backup</strong>. It asks for
+three things:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>What to enter</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Backup image <code>.add</code> path</td>
+<td>The dictionary file inside the backup image —
+e.g. <code>D:\RestoreTest\mp10.add</code>, or the <code>.add</code>
+directly under <code>BACKUP_PATH</code></td>
+</tr>
+<tr class="even">
+<td>Backup dictionary password</td>
+<td>The ADSSYS password <strong>as it was when that backup was
+taken</strong>. If the password has changed since, an old image still
+wants the old password</td>
+</tr>
+<tr class="odd">
+<td>Destination <code>.add</code> path</td>
+<td>Where the restored database should be created —
+e.g. <code>D:\RestoredDb\mp10.add</code></td>
+</tr>
+</tbody>
+</table>
+<p>Both paths are read by the server, so the workstation-drive-letter
+rule above applies to them too. Both must end in <code>.add</code>.</p>
+<blockquote>
+<p><strong>The destination must never be the live data
+directory.</strong> A restore overwrites whatever is at the destination.
+Restore to a new or scratch directory, look at the result, and only then
+decide what to do with it — pointing the practice at a restored copy is
+a deliberate step, best taken with support on the line.</p>
+</blockquote>
+<p>A restore can take a long time on a large database — every table is
+copied and every index is rebuilt from scratch, which is work the
+nightly backup skipped. A progress window shows that the restore is
+alive, how long it has been running and, once the server starts
+reporting it, how far along it is. Once the server starts reporting
+progress the restore can be cancelled from that window; a cancelled
+restore leaves an incomplete copy at the destination, which should be
+deleted before trying again.</p>
+<p>When it finishes you have a complete, working copy of the practice’s
+database at the destination — dictionary, tables and freshly built
+indexes — completely separate from the live one. That is also the
+cheapest reassurance there is: restore into a scratch folder once in a
+while, log into the copy, and you know the night the archive is actually
+needed, it will work.</p>
 <h1 id="electronic-remittances-the-two-kinds">Electronic remittances:
 the two kinds</h1>
 <p>Payment advices reach a practice in two different shapes, and
