@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-08-06" />
+  <meta name="dcterms.date" content="2026-08-07" />
   <title>Mp10 AutoTasks — Administrator’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -145,10 +145,10 @@ a { color: inherit; }
 <body>
 <header id="title-block-header">
 <h1 class="title">Mp10 AutoTasks — Administrator’s Guide</h1>
-<p class="subtitle">Backups, electronic remittances, and automated
-reports</p>
+<p class="subtitle">Backups, electronic remittances, modality worklist,
+and automated reports</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">06 August 2026</p>
+<p class="date">07 August 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -203,7 +203,27 @@ are not a disaster recovery plan on their own</a></li>
 1 — get the backup image onto a disk the server can reach</a></li>
 <li><a href="#step-2-restore-with-admin10" id="toc-step-2-restore-with-admin10">Step 2 — restore with
 Admin10</a></li>
+<li><a href="#when-there-is-no-working-database-to-log-into" id="toc-when-there-is-no-working-database-to-log-into">When there is no
+working database to log into</a></li>
+<li><a href="#the-restore-utility-mprestore10" id="toc-the-restore-utility-mprestore10">The restore utility:
+MpRestore10</a></li>
 </ul></li>
+</ul></li>
+<li><a href="#automatic-error-report-e-mails" id="toc-automatic-error-report-e-mails">Automatic error report
+e-mails</a>
+<ul>
+<li><a href="#errors-are-grouped-not-listed-one-by-one" id="toc-errors-are-grouped-not-listed-one-by-one">Errors are grouped,
+not listed one by one</a></li>
+<li><a href="#turning-it-on" id="toc-turning-it-on">Turning it
+on</a></li>
+<li><a href="#a-worked-example" id="toc-a-worked-example">A worked
+example</a></li>
+<li><a href="#if-sending-fails" id="toc-if-sending-fails">If sending
+fails</a></li>
+<li><a href="#what-gets-deleted-and-what-never-does" id="toc-what-gets-deleted-and-what-never-does">What gets deleted, and
+what never does</a></li>
+<li><a href="#where-to-look-when-nothing-arrives" id="toc-where-to-look-when-nothing-arrives">Where to look when nothing
+arrives</a></li>
 </ul></li>
 <li><a href="#electronic-remittances-the-two-kinds" id="toc-electronic-remittances-the-two-kinds">Electronic remittances:
 the two kinds</a></li>
@@ -296,6 +316,36 @@ report</a></li>
 actually goes out</a></li>
 <li><a href="#keeping-a-copy-on-disk" id="toc-keeping-a-copy-on-disk">Keeping a copy on disk</a></li>
 </ul></li>
+<li><a href="#modality-worklist-imaging" id="toc-modality-worklist-imaging">Modality worklist (imaging)</a>
+<ul>
+<li><a href="#turning-it-on-two-separate-switches" id="toc-turning-it-on-two-separate-switches">Turning it on — two
+separate switches</a>
+<ul>
+<li><a href="#why-the-settings-are-already-there-set-to-no" id="toc-why-the-settings-are-already-there-set-to-no">Why the settings
+are already there, set to <code>NO</code></a></li>
+<li><a href="#step-1-create-the-table" id="toc-step-1-create-the-table">Step 1 — create the table</a></li>
+<li><a href="#step-2-turn-the-reconcile-on" id="toc-step-2-turn-the-reconcile-on">Step 2 — turn the reconcile
+on</a></li>
+</ul></li>
+<li><a href="#the-settings-1" id="toc-the-settings-1">The settings</a>
+<ul>
+<li><a href="#modality-worklist-whether-the-table-exists" id="toc-modality-worklist-whether-the-table-exists"><code>MODALITY-WORKLIST</code>
+— whether the table exists</a></li>
+<li><a href="#export_mwl-whether-the-table-is-kept-current" id="toc-export_mwl-whether-the-table-is-kept-current"><code>EXPORT_MWL</code>
+— whether the table is kept current</a></li>
+<li><a href="#mwl_window_days-how-wide-the-window-is" id="toc-mwl_window_days-how-wide-the-window-is"><code>MWL_WINDOW_DAYS</code>
+— how wide the window is</a></li>
+<li><a href="#mwl_uid_root-how-studies-are-identified-it-task" id="toc-mwl_uid_root-how-studies-are-identified-it-task"><code>MWL_UID_ROOT</code>
+— how studies are identified <em>(IT task)</em></a></li>
+</ul></li>
+<li><a href="#which-orders-appear-on-the-worklist" id="toc-which-orders-appear-on-the-worklist">Which orders appear on the
+worklist</a></li>
+<li><a href="#what-happens-on-each-cycle" id="toc-what-happens-on-each-cycle">What happens on each cycle</a></li>
+<li><a href="#cancelling-is-not-deleting" id="toc-cancelling-is-not-deleting">Cancelling is not deleting</a></li>
+<li><a href="#telling-the-machine-what-kind-of-study-it-is" id="toc-telling-the-machine-what-kind-of-study-it-is">Telling the
+machine what kind of study it is</a></li>
+<li><a href="#what-the-log-tells-you" id="toc-what-the-log-tells-you">What the log tells you</a></li>
+</ul></li>
 <li><a href="#troubleshooting" id="toc-troubleshooting">Troubleshooting</a>
 <ul>
 <li><a href="#nothing-at-all-is-happening" id="toc-nothing-at-all-is-happening">Nothing at all is
@@ -313,6 +363,8 @@ being downloaded from the clearinghouse</a></li>
 statuses or acknowledgements are not appearing</a></li>
 <li><a href="#eligibility-is-not-being-checked" id="toc-eligibility-is-not-being-checked">Eligibility is not being
 checked</a></li>
+<li><a href="#the-modality-worklist-is-empty-or-wrong" id="toc-the-modality-worklist-is-empty-or-wrong">The modality worklist
+is empty or wrong</a></li>
 <li><a href="#appointment-reminders-are-not-going-out" id="toc-appointment-reminders-are-not-going-out">Appointment reminders
 are not going out</a></li>
 <li><a href="#a-scheduled-report-did-not-arrive" id="toc-a-scheduled-report-did-not-arrive">A scheduled report did not
@@ -336,7 +388,10 @@ portals,</li>
 <li>asking insurers whether a patient’s <strong>coverage is
 active</strong>,</li>
 <li>texting patients an <strong>appointment reminder</strong> they can
-reply to, and</li>
+reply to,</li>
+<li>keeping a <strong>modality worklist</strong> in step with the
+schedule, so imaging equipment can be told who its next patient is,
+and</li>
 <li>running <strong>reports</strong> on a schedule and e-mailing them to
 whoever needs them.</li>
 </ul>
@@ -1081,6 +1136,242 @@ indexes — completely separate from the live one. That is also the
 cheapest reassurance there is: restore into a scratch folder once in a
 while, log into the copy, and you know the night the archive is actually
 needed, it will work.</p>
+<h3 id="when-there-is-no-working-database-to-log-into">When there is no
+working database to log into</h3>
+<p>The instructions above assume you can start Admin10 normally. On the
+day you most need a restore that may not be true: Admin10 connects to a
+data dictionary at start-up, and the reason you are restoring may be
+that there is no longer a dictionary to connect to.</p>
+<p>There is a way in, and it is worth knowing <em>before</em> the bad
+day.</p>
+<p><strong>Point Admin10 at the backup image itself.</strong> A backup
+image contains its own <code>mp.add</code>, so it is a data dictionary
+in its own right and Admin10 can log into it like any other. Start it
+with the backup folder as the path:</p>
+<pre><code>PrAdmin10.exe PATH:e:\adsdata\sfi-2026\backup\</code></pre>
+<p>Give the path of the <em>folder</em> holding the backup’s
+<code>mp.add</code>, with a trailing backslash — Admin10 adds the
+dictionary name itself. (The same thing can be done by changing the
+<code>PATH</code> entry in <code>mp10.ini</code>, but the command line
+leaves the file alone, which is one less thing to put back
+afterwards.)</p>
+<p>Log in as <code>adssys</code> using <strong>the ADSSYS password as it
+was when that backup was taken</strong>, then use <strong>File → Restore
+DB From Backup</strong> exactly as described above. You are now
+connected to the backup, but you still restore <em>from</em> it, naming
+its <code>.add</code> as the source and a fresh folder as the
+destination.</p>
+<blockquote>
+<p><strong>Use that session for the restore and nothing else.</strong>
+Advantage is explicit that backup files exist to be restored from and
+that reading them directly “can produce unpredictable results” — indexes
+are not even included in a backup. Admin10 may also tell you the data
+dictionary version is older than the program expects; that notice is
+informational and you should ignore it here. Never run a structure
+update against a backup image — that is your only copy of the data, and
+it is not the thing to be experimenting on.</p>
+</blockquote>
+<p><strong>If Admin10 cannot open the dictionary at all</strong>, it now
+offers the restore by itself. When the connection fails for any reason
+other than a rejected password, it asks:</p>
+<pre><code>The data dictionary could not be opened:
+   \\server\share\data\mp.add
+   ADS error 7077
+
+Restore a database from a backup image now?</code></pre>
+<p>Answer yes and you get the restore dialog directly, without logging
+in — Advantage allows a restore to run on a bare connection to a
+directory, with no dictionary involved. Answer no and you get the
+familiar offer to create a new dictionary instead.</p>
+<p>Two things about that prompt are deliberate. It does
+<strong>not</strong> appear when the password was simply wrong, so it is
+not a way around the login. And once the restore is done Admin10 closes,
+because it still has no dictionary — start it again pointing at the
+restored folder, and you are back to a normal session.</p>
+<h3 id="the-restore-utility-mprestore10">The restore utility:
+MpRestore10</h3>
+<p>Both routes above still go through Admin10, a program built around
+having a database. There is also a small separate one that is not:</p>
+<pre><code>MpRestore10.exe</code></pre>
+<p>It sits beside the other Mp10 programs and does exactly one thing.
+There is no login, because there is no dictionary to log into. It asks
+only for a folder on the server to connect through, and then shows the
+same restore dialog described earlier, with the same three fields.</p>
+<p>The folder it asks for is <strong>not</strong> the database — it is
+any folder the Advantage service itself can read, used purely to reach
+the server. Your data folder is the obvious choice and is offered as a
+starting point (taken from <code>mp10.ini</code>), but if that is the
+part that has gone missing, any other folder on the server does just as
+well. The usual rule applies: it must be a path the <em>server</em> can
+resolve, so UNC paths and drive letters local to the server work, while
+a drive mapped on your own PC does not.</p>
+<blockquote>
+<p><strong>The Advantage service has to be running.</strong> A restore
+is carried out by the Advantage Database Server itself, not by the
+program in front of you. Advantage’s own documentation is flat about it:
+<em>“Online backup and restore functionality is only supported with the
+Advantage Database Server.”</em> Advantage Local Server — the mode where
+there is no service, just files on disk — cannot restore a backup at
+all, and no Mp10 program can work around that. If the machine holding
+your data has no Advantage service running, the service is the first
+thing to fix.</p>
+</blockquote>
+<p>The path can also be given on the command line, handy for a recovery
+shortcut prepared in advance:</p>
+<pre><code>MpRestore10.exe PATH:\\server\share\mp10data\</code></pre>
+<blockquote>
+<p><strong>Prepare this before you need it.</strong> Check once, on a
+calm afternoon, that MpRestore10 starts and connects — and while you are
+there, run a restore into a scratch folder with it. A recovery tool
+nobody has ever opened is the same kind of promise as a backup nobody
+has ever restored.</p>
+</blockquote>
+<h1 id="automatic-error-report-e-mails">Automatic error report
+e-mails</h1>
+<p>When something goes wrong in a desktop program — PrBill10,
+Patients10, any of them — Mp10 already asks the person at the keyboard
+whether to send a report to Structured Systems. What this adds is what
+happens to that report <strong>whether or not they say yes</strong>:
+every error a desktop program hits is recorded regardless, and AutoTasks
+e-mails anything that has not already been sent on its next wake-up
+(every two minutes by default — see <em>How AutoTasks works</em>,
+above). A user declining to send no longer means the report is lost; it
+just waits for AutoTasks to pick it up.</p>
+<h2 id="errors-are-grouped-not-listed-one-by-one">Errors are grouped,
+not listed one by one</h2>
+<p>The same error often happens more than once — on the same
+workstation, or on several. AutoTasks does not send one e-mail per
+occurrence. It sends <strong>one message per distinct error</strong>,
+however many times it happened, and the message says how many times and
+where.</p>
+<p>Each message tells you:</p>
+<ul>
+<li>which program and which build,</li>
+<li>which workstations and users hit it, and when it was first and last
+seen, and</li>
+<li>the list of program locations the error passed through — the stack —
+so Structured Systems can see where it happened.</li>
+</ul>
+<p>It deliberately leaves out the detailed diagnostic dump — the full
+parameter and variable listing stays in the database, not in your inbox.
+<strong>It also leaves out machine details:</strong> CPU, memory and the
+free-resources figures are recorded with the error but never e-mailed.
+If Structured Systems needs those to chase a resource-exhaustion
+problem, they come from the database, not from this message.</p>
+<h2 id="turning-it-on">Turning it on</h2>
+<p><strong>It ships switched off.</strong> There is no default address —
+until an administrator sets one, nothing is sent, ever.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Entry</th>
+<th>Example</th>
+<th>Default</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>NOTIFY_EMAIL</code></td>
+<td><code>support@structuredsystems.com</code></td>
+<td><em>(none — blank)</em></td>
+<td>Who to notify. Blank = do not send. <strong>This is what switches
+the feature on</strong></td>
+</tr>
+<tr class="even">
+<td><code>MAX_ROWS_TO_KEEP</code></td>
+<td><code>1000</code></td>
+<td><code>1000</code></td>
+<td>How many error reports to keep before the oldest already-sent ones
+are deleted. Pruning is part of the error-report pass, so <strong>while
+<code>NOTIFY_EMAIL</code> is blank, or while e-mail itself is not set
+up, this setting does nothing at all</strong>. Once both are in place it
+is applied on every wake-up, whether or not there is anything to send —
+so lowering it takes effect within a couple of minutes on a quiet site,
+not only after the next error</td>
+</tr>
+<tr class="odd">
+<td><code>MAX_GROUPS_PER_RUN</code></td>
+<td><code>10</code></td>
+<td><code>10</code></td>
+<td>Most distinct errors e-mailed on any one wake-up; anything left over
+waits for the next one</td>
+</tr>
+</tbody>
+</table>
+<p>All three live in section
+<strong><code>ERRORREPORTS</code></strong>.</p>
+<p>Delivery uses the same mail settings as backups and automated reports
+— see <em>E-mail has to be set up first</em>, above. If those are not
+configured, AutoTasks does not attempt to send an error report either,
+and the log records that it could not be sent.</p>
+<h2 id="a-worked-example">A worked example</h2>
+<p>This is reproduced exactly as AutoTasks composes it — labels, spacing
+and all — because that is what will actually land in your inbox:</p>
+<pre><code>Subject: [PrBill10.exe] BASE/1005|POSTPAYMENT|2214 - 4x on 2 station(s)
+
+Signature : BASE/1005|POSTPAYMENT|2214
+Program   : PrBill10.exe  build 931
+Occurred  : 4 time(s)
+First seen: 2026-07-30 09:14:02
+Last seen : 2026-08-01 11:47:55
+
+Stations and users (oldest to newest)
+   FRONTDESK-2         jsmith              2026-07-30 09:14:02   ErrorNum 8841
+   FRONTDESK-2         jsmith              2026-07-30 15:02:11   ErrorNum 8852
+   BILLING-1           mrivera             2026-08-01 08:30:47   ErrorNum 8901
+   BILLING-1           mrivera             2026-08-01 11:47:55   ErrorNum 8919
+
+Stack (most recent report)
+------------------------------------------------------------
+Called from:POSTPAYMENT(2214)
+Called from:APPLYBALANCE(861)
+Called from:_BEND(0)
+------------------------------------------------------------
+Full detail -- including the variables dump and machine/resource stats omitted from this e-mail -- is in SystemErrors.</code></pre>
+<p>The program name in both the subject and the <code>Program</code>
+line is the file name of the running executable, spelled exactly as it
+sits on disk — <code>PrBill10.exe</code>, not <code>PRBILL10.EXE</code>.
+The <code>build</code> figure is the internal build number the program
+was compiled with (a plain counter such as <code>931</code>), not the
+dictionary version.</p>
+<p>The signature — <code>BASE/1005|POSTPAYMENT|2214</code> above — is an
+internal fingerprint, not a sentence. It is the part that decides which
+occurrences belong together: the error subsystem and code
+(<code>BASE/1005</code>), then the routine and the line number inside
+it. Two occurrences with the same signature are treated as the same
+error and arrive in one message.</p>
+<p>The first line of the message and its closing sentence use internal
+labels rather than plain English. They are quoted here exactly because
+that is what will arrive in your inbox — the rest of this guide talks
+about “the error report” and “the record kept in the database,” not
+those names.</p>
+<h2 id="if-sending-fails">If sending fails</h2>
+<p>If the mail server is unreachable or rejects the message, AutoTasks
+retries on later wake-ups. After three failed attempts it gives up on
+that report and records the fact in the log — see <em>The log file</em>,
+above.</p>
+<h2 id="what-gets-deleted-and-what-never-does">What gets deleted, and
+what never does</h2>
+<p>Once the number of error reports on file goes over
+<code>MAX_ROWS_TO_KEEP</code>, AutoTasks deletes the oldest ones to
+bring it back down — but only reports that have already been sent.
+<strong>A report that has never been sent is never deleted to make room
+for a new one.</strong> If your site is generating errors faster than
+they can be e-mailed, the table grows past the keep-limit rather than
+losing a report nobody has seen yet.</p>
+<h2 id="where-to-look-when-nothing-arrives">Where to look when nothing
+arrives</h2>
+<p>Everything this feature does — including whether each message
+actually got out — is written to <code>AutoTasks.out</code>, the same
+log backup notices use. If an error happened and no e-mail followed,
+that is the first place to look.</p>
 <h1 id="electronic-remittances-the-two-kinds">Electronic remittances:
 the two kinds</h1>
 <p>Payment advices reach a practice in two different shapes, and
@@ -2268,6 +2559,290 @@ an audit trail, or to feed a shared drive:</p>
 </tbody>
 </table>
 <p>Leave it blank to skip.</p>
+<h1 id="modality-worklist-imaging">Modality worklist (imaging)</h1>
+<p>If your practice has imaging equipment — a CT, an ultrasound, an
+X-ray room — the <strong>modality worklist</strong> is how each machine
+finds out who its next patient is. Instead of a technologist typing the
+name, date of birth and accession number at the console, the machine
+asks Mp10 and fills its own screen in.</p>
+<p>That matters for more than convenience. A study labelled by hand is a
+study that can be labelled wrongly, and a mistyped accession number is
+what makes an image arrive in the wrong patient’s file.</p>
+<blockquote>
+<p><strong>Read this before switching anything on.</strong> AutoTasks
+keeps a table called <code>ModalityWL</code> in step with the orders on
+your schedule, and that part works today. The part that hands those
+entries to the machines — writing the worklist files a DICOM worklist
+server reads — <strong>is not built yet.</strong> Turning this on now
+keeps a correct, current table; <strong>no scanner can query it
+yet.</strong> Switching it on early is useful for exactly one thing:
+proving the worklist matches your schedule before anything depends on
+it.</p>
+</blockquote>
+<h2 id="turning-it-on-two-separate-switches">Turning it on — two
+separate switches</h2>
+<p>There are two, in this order, and the order matters:</p>
+<pre><code>   Admin10 -&gt; Global System Registry
+        |
+        |  (1) GENERAL / MODALITY-WORKLIST = YES
+        v
+   run a file check in Admin10
+        |                     -&gt; the modalitywl table is created
+        v
+        |  (2) AUTOTASKS / EXPORT_MWL = YES
+        v
+   restart AutoTasks
+                              -&gt; the table is filled, and kept current
+                                 on every cycle from then on</code></pre>
+<h3 id="why-the-settings-are-already-there-set-to-no">Why the settings
+are already there, set to <code>NO</code></h3>
+<p>The first time Mp10 looks for a setting and does not find it,
+<strong>it creates the entry itself</strong>, set to its default, with a
+description of what it does. So the first time you go looking for
+<code>MODALITY-WORKLIST</code> you will probably find it already present
+and set to <code>NO</code>.</p>
+<p>That is not a fault and not somebody else’s change — it is Mp10
+writing down a question it just asked. Once the entry exists,
+<strong>your value always wins</strong>; Mp10 never overwrites a value
+you have set.</p>
+<h3 id="step-1-create-the-table">Step 1 — create the table</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Section</th>
+<th>Entry</th>
+<th>Set to</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>GENERAL</code></td>
+<td><code>MODALITY-WORKLIST</code></td>
+<td><code>YES</code></td>
+</tr>
+</tbody>
+</table>
+<p>Then <strong>run a file check in Admin10</strong>. The table is
+created during that check and at no other time.</p>
+<blockquote>
+<p><strong>Order matters.</strong> The file check reads this setting as
+it runs. Setting it to <code>YES</code> <em>after</em> a check has
+finished does nothing until the <strong>next</strong> check. If you have
+just changed it, run the check again.</p>
+</blockquote>
+<h3 id="step-2-turn-the-reconcile-on">Step 2 — turn the reconcile
+on</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Section</th>
+<th>Entry</th>
+<th>Set to</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>AUTOTASKS</code></td>
+<td><code>EXPORT_MWL</code></td>
+<td><code>YES</code></td>
+</tr>
+</tbody>
+</table>
+<p>Then <strong>restart the AutoTasks service</strong> <em>(IT
+task)</em>. Settings are read when the service starts.</p>
+<h2 id="the-settings-1">The settings</h2>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Section</th>
+<th>Entry</th>
+<th>Example</th>
+<th>Default</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>GENERAL</code></td>
+<td><code>MODALITY-WORKLIST</code></td>
+<td><code>YES</code></td>
+<td><code>NO</code></td>
+<td>Whether the <code>modalitywl</code> table exists at all. Read during
+a file check, not by AutoTasks</td>
+</tr>
+<tr class="even">
+<td><code>AUTOTASKS</code></td>
+<td><code>EXPORT_MWL</code></td>
+<td><code>YES</code></td>
+<td><code>NO</code></td>
+<td>The on/off switch for keeping the table current</td>
+</tr>
+<tr class="odd">
+<td><code>AUTOTASKS</code></td>
+<td><code>MWL_WINDOW_DAYS</code></td>
+<td><code>1</code></td>
+<td><code>1</code></td>
+<td>How far either side of today to look, in days</td>
+</tr>
+<tr class="even">
+<td><code>AUTOTASKS</code></td>
+<td><code>MWL_UID_ROOT</code></td>
+<td><em>(blank)</em></td>
+<td><em>(blank)</em></td>
+<td><strong>IT task.</strong> Leave blank unless your organisation owns
+a registered DICOM root</td>
+</tr>
+</tbody>
+</table>
+<h3 id="modality-worklist-whether-the-table-exists"><code>MODALITY-WORKLIST</code>
+— whether the table exists</h3>
+<p>Leave this <code>NO</code> and the table is never created, nothing
+else in this chapter applies, and no harm is done. Practices with no
+imaging equipment should leave it alone.</p>
+<p>Setting it back to <code>NO</code> later does <strong>not</strong>
+delete the table or its contents. It only stops future file checks from
+maintaining it.</p>
+<h3 id="export_mwl-whether-the-table-is-kept-current"><code>EXPORT_MWL</code>
+— whether the table is kept current</h3>
+<p>With this <code>NO</code>, the table sits exactly as it was last
+left. With it <code>YES</code>, AutoTasks re-checks the whole worklist
+against your schedule on every cycle — by default every two minutes.</p>
+<h3 id="mwl_window_days-how-wide-the-window-is"><code>MWL_WINDOW_DAYS</code>
+— how wide the window is</h3>
+<p><code>1</code> means yesterday, today and tomorrow. <code>0</code>
+means today only. <code>7</code> means a fortnight centred on today.</p>
+<blockquote>
+<p><strong>Widen this with care.</strong> Everything inside the window
+is a live worklist entry that a technologist has to look past to find
+today’s patient. A window of <code>30</code> is not a longer list so
+much as a worse one. Change it only if orders are genuinely being
+scheduled that far ahead.</p>
+</blockquote>
+<p>Narrowing it does not lose anything permanently — see <em>Cancelling
+is not deleting</em> below.</p>
+<h3 id="mwl_uid_root-how-studies-are-identified-it-task"><code>MWL_UID_ROOT</code>
+— how studies are identified <em>(IT task)</em></h3>
+<p>Every study needs an identifier that is unique
+<strong>worldwide</strong>, not just within your practice, because
+images may end up in systems shared with other organisations.</p>
+<p>Left blank — the default, and the right answer for almost everyone —
+Mp10 mints one from a scheme designed for exactly this and requiring no
+registration.</p>
+<p>Fill it in <strong>only</strong> if your organisation genuinely owns
+a registered DICOM root. Digits and dots only.</p>
+<blockquote>
+<p><strong>Do not invent a value here.</strong> An invented root is not
+merely untidy: it can collide with identifiers issued by whoever really
+owns it, and two different studies sharing an identifier is a problem
+that surfaces years later, in somebody else’s archive.</p>
+</blockquote>
+<p>Changing this later is safe. Identifiers already issued are
+<strong>never rewritten</strong> — only newly-scheduled studies use the
+new root — so an existing study is never split in two.</p>
+<h2 id="which-orders-appear-on-the-worklist">Which orders appear on the
+worklist</h2>
+<p>An order is on the worklist when <strong>all</strong> of these are
+true:</p>
+<ul>
+<li>its encounter is <strong>not</strong> inactive,</li>
+<li>its encounter is <strong>not</strong> closed, and</li>
+<li>its start date falls within <code>MWL_WINDOW_DAYS</code> days either
+side of today.</li>
+</ul>
+<p>Where an order has no start date of its own, the encounter’s
+admission date is used instead.</p>
+<p>There is nothing to switch on per order and nothing to tick. An order
+that meets those three tests is on the worklist; one that stops meeting
+them comes off it.</p>
+<h2 id="what-happens-on-each-cycle">What happens on each cycle</h2>
+<p>AutoTasks works out the list from scratch every time, rather than
+trying to remember what changed. That is deliberate: it means a missed
+cycle, a service restart or a crash cannot leave the worklist
+permanently out of step. The next cycle simply puts it right.</p>
+<p>Each pass does three things:</p>
+<ol type="1">
+<li><strong>Works out which orders belong</strong> on the worklist right
+now.</li>
+<li><strong>Adds</strong> the ones that are not there yet, and
+<strong>puts back</strong> any that had been cancelled but now qualify
+again.</li>
+<li><strong>Cancels</strong> anything on the worklist that no longer
+qualifies.</li>
+</ol>
+<h2 id="cancelling-is-not-deleting">Cancelling is not deleting</h2>
+<p>When an order falls off the worklist — the encounter is closed, or
+the date moves out of the window — its entry is <strong>marked
+cancelled, not removed</strong>.</p>
+<p>This matters if it comes back. Re-open the encounter, or move the
+date back into the window, and the <em>same</em> entry is reinstated
+with the <em>same</em> study identifier. The study is never split into
+two half-studies in your image archive.</p>
+<p>The one case that does remove an entry outright is deleting the order
+itself, which is as it should be — an order that no longer exists cannot
+be scanned.</p>
+<h2 id="telling-the-machine-what-kind-of-study-it-is">Telling the
+machine what kind of study it is</h2>
+<p>A worklist entry has to say whether the study is a CT, an ultrasound,
+an X-ray and so on. Mp10 works that out from the <strong>revenue
+code</strong> on the order: each revenue code carries the kind of
+imaging it represents.</p>
+<p>Until those are filled in, entries are still created correctly in
+every other respect — they simply do not say what kind of study they
+are, which is not enough for a machine to act on. <strong>This is a
+one-off data job</strong>, done once per practice, and AutoTasks tells
+you how much of it is left (below).</p>
+<h2 id="what-the-log-tells-you">What the log tells you</h2>
+<p>Every cycle writes a handful of lines to <code>AutoTasks.out</code>.
+Search it for <code>WriteWorklistFiles</code>:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Line</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>active set size</code></td>
+<td>How many orders qualify for the worklist right now</td>
+</tr>
+<tr class="even">
+<td><code>inserted</code> / <code>re-activated</code> /
+<code>unchanged</code></td>
+<td>What this cycle changed. On a quiet cycle all three are
+<code>0</code> and that is correct</td>
+</tr>
+<tr class="odd">
+<td><code>cancelled</code></td>
+<td>How many entries came off the worklist this cycle</td>
+</tr>
+<tr class="even">
+<td><code>rows with a rev_code but no revcodes.Modality mapped</code></td>
+<td>How many entries cannot say what kind of study they are — with
+example revenue codes, so you know which ones to fill in. <strong>This
+number should fall to zero</strong> as the mapping is completed</td>
+</tr>
+<tr class="odd">
+<td><code>rows with no items/RevCode match at all</code></td>
+<td>Orders whose item does not resolve to a revenue code at all. Usually
+a catalogue problem rather than a worklist one</td>
+</tr>
+</tbody>
+</table>
+<p>A healthy log on a normal day shows a steady
+<code>active set size</code>, small or zero change counts, and a zero
+mapping count.</p>
 <h1 id="troubleshooting">Troubleshooting</h1>
 <p>Start with <code>AutoTasks.out</code>. Search it for the date you
 expected something to happen. Almost every question below is answered by
@@ -2647,6 +3222,62 @@ it to bring it back into the window</td>
 </tr>
 </tbody>
 </table>
+<h2 id="the-modality-worklist-is-empty-or-wrong">The modality worklist
+is empty or wrong</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Symptom</th>
+<th>Likely cause</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>The <code>modalitywl</code> table was never created</td>
+<td><code>GENERAL</code> / <code>MODALITY-WORKLIST</code> was set to
+<code>YES</code> <em>after</em> the last file check, not before. Run the
+file check again</td>
+</tr>
+<tr class="even">
+<td>The table exists but stays empty</td>
+<td><code>AUTOTASKS</code> / <code>EXPORT_MWL</code> is not
+<code>YES</code>, or the service was not restarted after it was set</td>
+</tr>
+<tr class="odd">
+<td><code>active set size</code> is <code>0</code> but there are orders
+today</td>
+<td>Their encounters are closed or inactive — both are excluded — or the
+order dates fall outside <code>MWL_WINDOW_DAYS</code></td>
+</tr>
+<tr class="even">
+<td>Everything is suddenly cancelled</td>
+<td><code>MWL_WINDOW_DAYS</code> was narrowed, or a batch of encounters
+was closed. Nothing is lost; widen it or re-open them and the same
+entries come back</td>
+</tr>
+<tr class="odd">
+<td>Entries exist but say nothing about the kind of study</td>
+<td>The revenue-code mapping is not filled in. The log line counting
+these names example revenue codes to start with</td>
+</tr>
+<tr class="even">
+<td>No worklist files anywhere on disk</td>
+<td><strong>Working as designed — that part is not built yet.</strong>
+See the note at the start of the modality worklist chapter</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>The file check does not complain when a table cannot be
+created.</strong> If the <code>modalitywl</code> table is missing after
+a check that appeared to finish normally, do not assume the setting is
+wrong — the check can fail silently on a structure problem. Report it
+rather than re-running it repeatedly. <em>(IT task.)</em></p>
+</blockquote>
 <h2 id="appointment-reminders-are-not-going-out">Appointment reminders
 are not going out</h2>
 <table>

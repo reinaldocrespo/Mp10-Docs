@@ -173,6 +173,54 @@ is no "forgot password" flow — only a reset. If it scrolls past before you
 copy it, the account is not lost, but recovering access means resetting it,
 not retrieving it.
 
+The installer writes no log, deliberately — a credential sitting in a
+plaintext install log is worse than one you have to write down. So the
+terminal really is the only place it appears.
+
+## If the admin password was missed *(IT task)*
+
+Re-running the installer does **not** help: the migration is idempotent, so
+once the `admin` account exists it reports `already present` and never prints
+a password again.
+
+Delete the account and let the migration recreate it. Two statements against
+the dictionary — Advantage Data Architect, or any SQL tool connected to
+`mp.add`:
+
+```sql
+DELETE FROM web_group_members
+ WHERE user_id IN ( SELECT user_id FROM web_users WHERE username = 'admin' );
+
+DELETE FROM web_users WHERE username = 'admin';
+```
+
+> **Both statements, in that order.** `web_users.user_id` is an AUTOINC
+> column, so the recreated account gets a *new* id — deleting only the
+> `web_users` row leaves its group membership behind, pointing at a user that
+> no longer exists.
+
+Then re-run the migration on the server:
+
+```
+C:\php\php.exe C:\Mp10Web\tools\migrate.php
+```
+
+It recreates the account and prints a fresh password the same way the
+installer did:
+
+```
+Create the admin group and user......created admin / <generated> — record this
+now, it will never be shown again. Change it on first login.
+```
+
+Nothing else is disturbed. The `Administrators` group and its permissions are
+left exactly as they were, and **any other web users, and their group
+memberships, are untouched** — only the `admin` account is recreated. No
+service restart is needed.
+
+This procedure works for any web account, not just `admin` — but the migration
+only ever recreates `admin`. Deleting anyone else simply removes them.
+
 ## When it finishes
 
 A successful run ends with a summary:
@@ -423,6 +471,8 @@ message to catch — nothing was skipped.
 | Message | What it means | What to do |
 |---|---|---|
 | The database step failed - see above. | `tools\migrate.php` exited with an error, or printed a real (uppercase) `FAILED` line. | Read the migration output printed above — it names the specific step that failed. |
+| WARNING: sequence=`<n>`, but the next number (`<recno>`) is already taken… | `sequences.recno` has fallen behind the patient record numbers actually in use. Patient creation still works — it probes for a free number — but it is retrying past taken ones, and enough of them in a row will exhaust its 50 attempts. | Investigate in Admin10 before creating patients. **Do not "fix" it by raising the counter blind:** that row is shared with the desktop applications, which mint patient numbers from it too, and `MAX(recno)` is not a reliable target — one mistyped record number sitting above the real block would burn every number in between, irreversibly. |
+| The admin password scrolled past / was never seen | The account exists; the password does not exist anywhere. | See **If the admin password was missed**, above. |
 
 ## Smoke test
 

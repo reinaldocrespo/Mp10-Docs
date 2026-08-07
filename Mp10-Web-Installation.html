@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-08-06" />
+  <meta name="dcterms.date" content="2026-08-07" />
   <title>Mp10 Web — Installation</title>
   <style>
 code{white-space: pre-wrap;}
@@ -211,7 +211,7 @@ a { color: inherit; }
 <h1 class="title">Mp10 Web — Installation</h1>
 <p class="subtitle">Installing and updating the browser application</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">06 August 2026</p>
+<p class="date">07 August 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -226,6 +226,8 @@ verify the download</a></li>
 questions</a></li>
 <li><a href="#the-admin-password" id="toc-the-admin-password">The admin
 password</a></li>
+<li><a href="#if-the-admin-password-was-missed-it-task" id="toc-if-the-admin-password-was-missed-it-task">If the admin password
+was missed <em>(IT task)</em></a></li>
 <li><a href="#when-it-finishes" id="toc-when-it-finishes">When it
 finishes</a></li>
 </ul></li>
@@ -462,6 +464,43 @@ the terminal — once:</p>
 plain text anywhere, and there is no “forgot password” flow — only a
 reset. If it scrolls past before you copy it, the account is not lost,
 but recovering access means resetting it, not retrieving it.</p>
+<p>The installer writes no log, deliberately — a credential sitting in a
+plaintext install log is worse than one you have to write down. So the
+terminal really is the only place it appears.</p>
+<h2 id="if-the-admin-password-was-missed-it-task">If the admin password
+was missed <em>(IT task)</em></h2>
+<p>Re-running the installer does <strong>not</strong> help: the
+migration is idempotent, so once the <code>admin</code> account exists
+it reports <code>already present</code> and never prints a password
+again.</p>
+<p>Delete the account and let the migration recreate it. Two statements
+against the dictionary — Advantage Data Architect, or any SQL tool
+connected to <code>mp.add</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">DELETE</span> <span class="kw">FROM</span> web_group_members</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a> <span class="kw">WHERE</span> user_id <span class="kw">IN</span> ( <span class="kw">SELECT</span> user_id <span class="kw">FROM</span> web_users <span class="kw">WHERE</span> username <span class="op">=</span> <span class="st">&#39;admin&#39;</span> );</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">DELETE</span> <span class="kw">FROM</span> web_users <span class="kw">WHERE</span> username <span class="op">=</span> <span class="st">&#39;admin&#39;</span>;</span></code></pre></div>
+<blockquote>
+<p><strong>Both statements, in that order.</strong>
+<code>web_users.user_id</code> is an AUTOINC column, so the recreated
+account gets a <em>new</em> id — deleting only the
+<code>web_users</code> row leaves its group membership behind, pointing
+at a user that no longer exists.</p>
+</blockquote>
+<p>Then re-run the migration on the server:</p>
+<pre><code>C:\php\php.exe C:\Mp10Web\tools\migrate.php</code></pre>
+<p>It recreates the account and prints a fresh password the same way the
+installer did:</p>
+<pre><code>Create the admin group and user......created admin / &lt;generated&gt; — record this
+now, it will never be shown again. Change it on first login.</code></pre>
+<p>Nothing else is disturbed. The <code>Administrators</code> group and
+its permissions are left exactly as they were, and <strong>any other web
+users, and their group memberships, are untouched</strong> — only the
+<code>admin</code> account is recreated. No service restart is
+needed.</p>
+<p>This procedure works for any web account, not just <code>admin</code>
+— but the migration only ever recreates <code>admin</code>. Deleting
+anyone else simply removes them.</p>
 <h2 id="when-it-finishes">When it finishes</h2>
 <p>A successful run ends with a summary:</p>
 <pre><code>Mp10 Web is installed.
@@ -558,7 +597,7 @@ later update — the same rule that protects
 <code>database.local.php</code>’s secrets applies here.</p>
 <h1 id="updating">Updating</h1>
 <p>Run the same command against the same install root:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="op">.</span>\install<span class="op">.</span><span class="fu">ps1</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="op">.</span>\install<span class="op">.</span><span class="fu">ps1</span></span></code></pre></div>
 <p>(<code>-InstallRoot</code> only needs to be given again if you did
 not install to the default <code>C:\Mp10Web</code> in the first
 place.)</p>
@@ -596,8 +635,8 @@ looked different” is exactly how that gap gets missed.</p>
 <h1 id="removing-it">Removing it</h1>
 <p>There is no <code>httpd.conf</code> <code>Include</code> line to
 un-edit — the dedicated instance is self-contained, so removal is:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>path to existing Apache<span class="op">&gt;</span>\bin\httpd<span class="op">.</span><span class="fu">exe</span> <span class="op">-</span>k stop <span class="op">-</span>n Mp10Web</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>path to existing Apache<span class="op">&gt;</span>\bin\httpd<span class="op">.</span><span class="fu">exe</span> <span class="op">-</span>k uninstall <span class="op">-</span>n Mp10Web</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>path to existing Apache<span class="op">&gt;</span>\bin\httpd<span class="op">.</span><span class="fu">exe</span> <span class="op">-</span>k stop <span class="op">-</span>n Mp10Web</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>path to existing Apache<span class="op">&gt;</span>\bin\httpd<span class="op">.</span><span class="fu">exe</span> <span class="op">-</span>k uninstall <span class="op">-</span>n Mp10Web</span></code></pre></div>
 <p>then drop the three tables (<code>web_users</code>,
 <code>web_groups</code>, <code>web_group_members</code>) from the
 dictionary, and delete the install root. The system Apache was never
@@ -1018,6 +1057,25 @@ this message — read them.</td>
 real (uppercase) <code>FAILED</code> line.</td>
 <td>Read the migration output printed above — it names the specific step
 that failed.</td>
+</tr>
+<tr class="even">
+<td>WARNING: sequence=<code>&lt;n&gt;</code>, but the next number
+(<code>&lt;recno&gt;</code>) is already taken…</td>
+<td><code>sequences.recno</code> has fallen behind the patient record
+numbers actually in use. Patient creation still works — it probes for a
+free number — but it is retrying past taken ones, and enough of them in
+a row will exhaust its 50 attempts.</td>
+<td>Investigate in Admin10 before creating patients. <strong>Do not
+“fix” it by raising the counter blind:</strong> that row is shared with
+the desktop applications, which mint patient numbers from it too, and
+<code>MAX(recno)</code> is not a reliable target — one mistyped record
+number sitting above the real block would burn every number in between,
+irreversibly.</td>
+</tr>
+<tr class="odd">
+<td>The admin password scrolled past / was never seen</td>
+<td>The account exists; the password does not exist anywhere.</td>
+<td>See <strong>If the admin password was missed</strong>, above.</td>
 </tr>
 </tbody>
 </table>

@@ -1,6 +1,6 @@
 ---
 title: "Mp10 AutoTasks — Administrator's Guide"
-subtitle: "Backups, electronic remittances, and automated reports"
+subtitle: "Backups, electronic remittances, modality worklist, and automated reports"
 author: "Structured Systems · www.structuredsystems.com"
 lang: en
 toc: true
@@ -30,7 +30,9 @@ every day:
   responses and acknowledgements — and posting them into Mp10,
 - reading **remittance PDFs** downloaded from insurer portals,
 - asking insurers whether a patient's **coverage is active**,
-- texting patients an **appointment reminder** they can reply to, and
+- texting patients an **appointment reminder** they can reply to,
+- keeping a **modality worklist** in step with the schedule, so imaging
+  equipment can be told who its next patient is, and
 - running **reports** on a schedule and e-mailing them to whoever needs them.
 
 Each of those is turned on separately. Nothing in this list happens until you
@@ -526,6 +528,223 @@ database at the destination — dictionary, tables and freshly built indexes —
 completely separate from the live one. That is also the cheapest reassurance
 there is: restore into a scratch folder once in a while, log into the copy,
 and you know the night the archive is actually needed, it will work.
+
+### When there is no working database to log into
+
+The instructions above assume you can start Admin10 normally. On the day you
+most need a restore that may not be true: Admin10 connects to a data
+dictionary at start-up, and the reason you are restoring may be that there is
+no longer a dictionary to connect to.
+
+There is a way in, and it is worth knowing *before* the bad day.
+
+**Point Admin10 at the backup image itself.** A backup image contains its own
+`mp.add`, so it is a data dictionary in its own right and Admin10 can log
+into it like any other. Start it with the backup folder as the path:
+
+```
+PrAdmin10.exe PATH:e:\adsdata\sfi-2026\backup\
+```
+
+Give the path of the *folder* holding the backup's `mp.add`, with a trailing
+backslash — Admin10 adds the dictionary name itself. (The same thing can be
+done by changing the `PATH` entry in `mp10.ini`, but the command line leaves
+the file alone, which is one less thing to put back afterwards.)
+
+Log in as `adssys` using **the ADSSYS password as it was when that backup was
+taken**, then use **File → Restore DB From Backup** exactly as described
+above. You are now connected to the backup, but you still restore *from* it,
+naming its `.add` as the source and a fresh folder as the destination.
+
+> **Use that session for the restore and nothing else.** Advantage is explicit
+> that backup files exist to be restored from and that reading them directly
+> "can produce unpredictable results" — indexes are not even included in a
+> backup. Admin10 may also tell you the data dictionary version is older than
+> the program expects; that notice is informational and you should ignore it
+> here. Never run a structure update against a backup image — that is your
+> only copy of the data, and it is not the thing to be experimenting on.
+
+**If Admin10 cannot open the dictionary at all**, it now offers the restore
+by itself. When the connection fails for any reason other than a rejected
+password, it asks:
+
+```
+The data dictionary could not be opened:
+   \\server\share\data\mp.add
+   ADS error 7077
+
+Restore a database from a backup image now?
+```
+
+Answer yes and you get the restore dialog directly, without logging in —
+Advantage allows a restore to run on a bare connection to a directory, with
+no dictionary involved. Answer no and you get the familiar offer to create a
+new dictionary instead.
+
+Two things about that prompt are deliberate. It does **not** appear when the
+password was simply wrong, so it is not a way around the login. And once the
+restore is done Admin10 closes, because it still has no dictionary — start it
+again pointing at the restored folder, and you are back to a normal session.
+
+### The restore utility: MpRestore10
+
+Both routes above still go through Admin10, a program built around having a
+database. There is also a small separate one that is not:
+
+```
+MpRestore10.exe
+```
+
+It sits beside the other Mp10 programs and does exactly one thing. There is
+no login, because there is no dictionary to log into. It asks only for a
+folder on the server to connect through, and then shows the same restore
+dialog described earlier, with the same three fields.
+
+The folder it asks for is **not** the database — it is any folder the
+Advantage service itself can read, used purely to reach the server. Your data
+folder is the obvious choice and is offered as a starting point (taken from
+`mp10.ini`), but if that is the part that has gone missing, any other folder
+on the server does just as well. The usual rule applies: it must be a path
+the *server* can resolve, so UNC paths and drive letters local to the server
+work, while a drive mapped on your own PC does not.
+
+> **The Advantage service has to be running.** A restore is carried out by
+> the Advantage Database Server itself, not by the program in front of you.
+> Advantage's own documentation is flat about it: *"Online backup and restore
+> functionality is only supported with the Advantage Database Server."*
+> Advantage Local Server — the mode where there is no service, just files on
+> disk — cannot restore a backup at all, and no Mp10 program can work around
+> that. If the machine holding your data has no Advantage service running,
+> the service is the first thing to fix.
+
+The path can also be given on the command line, handy for a recovery shortcut
+prepared in advance:
+
+```
+MpRestore10.exe PATH:\\server\share\mp10data\
+```
+
+> **Prepare this before you need it.** Check once, on a calm afternoon, that
+> MpRestore10 starts and connects — and while you are there, run a restore
+> into a scratch folder with it. A recovery tool nobody has ever opened is
+> the same kind of promise as a backup nobody has ever restored.
+
+# Automatic error report e-mails
+
+When something goes wrong in a desktop program — PrBill10, Patients10, any of
+them — Mp10 already asks the person at the keyboard whether to send a report
+to Structured Systems. What this adds is what happens to that report
+**whether or not they say yes**: every error a desktop program hits is
+recorded regardless, and AutoTasks e-mails anything that has not already been
+sent on its next wake-up (every two minutes by default — see *How AutoTasks
+works*, above). A user declining to send no longer means the report is lost;
+it just waits for AutoTasks to pick it up.
+
+## Errors are grouped, not listed one by one
+
+The same error often happens more than once — on the same workstation, or on
+several. AutoTasks does not send one e-mail per occurrence. It sends **one
+message per distinct error**, however many times it happened, and the message
+says how many times and where.
+
+Each message tells you:
+
+- which program and which build,
+- which workstations and users hit it, and when it was first and last seen,
+  and
+- the list of program locations the error passed through — the stack — so
+  Structured Systems can see where it happened.
+
+It deliberately leaves out the detailed diagnostic dump — the full parameter
+and variable listing stays in the database, not in your inbox. **It also
+leaves out machine details:** CPU, memory and the free-resources figures are
+recorded with the error but never e-mailed. If Structured Systems needs those
+to chase a resource-exhaustion problem, they come from the database, not from
+this message.
+
+## Turning it on
+
+**It ships switched off.** There is no default address — until an
+administrator sets one, nothing is sent, ever.
+
+| Entry | Example | Default | What it means |
+|---|---|---|---|
+| `NOTIFY_EMAIL` | `support@structuredsystems.com` | *(none — blank)* | Who to notify. Blank = do not send. **This is what switches the feature on** |
+| `MAX_ROWS_TO_KEEP` | `1000` | `1000` | How many error reports to keep before the oldest already-sent ones are deleted. Pruning is part of the error-report pass, so **while `NOTIFY_EMAIL` is blank, or while e-mail itself is not set up, this setting does nothing at all**. Once both are in place it is applied on every wake-up, whether or not there is anything to send — so lowering it takes effect within a couple of minutes on a quiet site, not only after the next error |
+| `MAX_GROUPS_PER_RUN` | `10` | `10` | Most distinct errors e-mailed on any one wake-up; anything left over waits for the next one |
+
+All three live in section **`ERRORREPORTS`**.
+
+Delivery uses the same mail settings as backups and automated reports — see
+*E-mail has to be set up first*, above. If those are not configured,
+AutoTasks does not attempt to send an error report either, and the log
+records that it could not be sent.
+
+## A worked example
+
+This is reproduced exactly as AutoTasks composes it — labels, spacing and all
+— because that is what will actually land in your inbox:
+
+```
+Subject: [PrBill10.exe] BASE/1005|POSTPAYMENT|2214 - 4x on 2 station(s)
+
+Signature : BASE/1005|POSTPAYMENT|2214
+Program   : PrBill10.exe  build 931
+Occurred  : 4 time(s)
+First seen: 2026-07-30 09:14:02
+Last seen : 2026-08-01 11:47:55
+
+Stations and users (oldest to newest)
+   FRONTDESK-2         jsmith              2026-07-30 09:14:02   ErrorNum 8841
+   FRONTDESK-2         jsmith              2026-07-30 15:02:11   ErrorNum 8852
+   BILLING-1           mrivera             2026-08-01 08:30:47   ErrorNum 8901
+   BILLING-1           mrivera             2026-08-01 11:47:55   ErrorNum 8919
+
+Stack (most recent report)
+------------------------------------------------------------
+Called from:POSTPAYMENT(2214)
+Called from:APPLYBALANCE(861)
+Called from:_BEND(0)
+------------------------------------------------------------
+Full detail -- including the variables dump and machine/resource stats omitted from this e-mail -- is in SystemErrors.
+```
+
+The program name in both the subject and the `Program` line is the file name
+of the running executable, spelled exactly as it sits on disk — `PrBill10.exe`,
+not `PRBILL10.EXE`. The `build` figure is the internal build number the program
+was compiled with (a plain counter such as `931`), not the dictionary version.
+
+The signature — `BASE/1005|POSTPAYMENT|2214` above — is an internal
+fingerprint, not a sentence. It is the part that decides which occurrences
+belong together: the error subsystem and code (`BASE/1005`), then the routine
+and the line number inside it. Two occurrences with the same signature are
+treated as the same error and arrive in one message.
+
+The first line of the message and its closing sentence use internal labels
+rather than plain English. They are quoted here exactly because that is what
+will arrive in your inbox — the rest of this guide talks about "the error
+report" and "the record kept in the database," not those names.
+
+## If sending fails
+
+If the mail server is unreachable or rejects the message, AutoTasks retries
+on later wake-ups. After three failed attempts it gives up on that report and
+records the fact in the log — see *The log file*, above.
+
+## What gets deleted, and what never does
+
+Once the number of error reports on file goes over `MAX_ROWS_TO_KEEP`,
+AutoTasks deletes the oldest ones to bring it back down — but only reports
+that have already been sent. **A report that has never been sent is never
+deleted to make room for a new one.** If your site is generating errors
+faster than they can be e-mailed, the table grows past the keep-limit rather
+than losing a report nobody has seen yet.
+
+## Where to look when nothing arrives
+
+Everything this feature does — including whether each message actually got
+out — is written to `AutoTasks.out`, the same log backup notices use. If an
+error happened and no e-mail followed, that is the first place to look.
 
 # Electronic remittances: the two kinds
 
@@ -1186,6 +1405,204 @@ trail, or to feed a shared drive:
 
 Leave it blank to skip.
 
+# Modality worklist (imaging)
+
+If your practice has imaging equipment — a CT, an ultrasound, an X-ray room —
+the **modality worklist** is how each machine finds out who its next patient
+is. Instead of a technologist typing the name, date of birth and accession
+number at the console, the machine asks Mp10 and fills its own screen in.
+
+That matters for more than convenience. A study labelled by hand is a study
+that can be labelled wrongly, and a mistyped accession number is what makes an
+image arrive in the wrong patient's file.
+
+> **Read this before switching anything on.** AutoTasks keeps a table called
+> `ModalityWL` in step with the orders on your schedule, and that part works
+> today. The part that hands those entries to the machines — writing the
+> worklist files a DICOM worklist server reads — **is not built yet.** Turning
+> this on now keeps a correct, current table; **no scanner can query it yet.**
+> Switching it on early is useful for exactly one thing: proving the worklist
+> matches your schedule before anything depends on it.
+
+## Turning it on — two separate switches
+
+There are two, in this order, and the order matters:
+
+```
+   Admin10 -> Global System Registry
+        |
+        |  (1) GENERAL / MODALITY-WORKLIST = YES
+        v
+   run a file check in Admin10
+        |                     -> the modalitywl table is created
+        v
+        |  (2) AUTOTASKS / EXPORT_MWL = YES
+        v
+   restart AutoTasks
+                              -> the table is filled, and kept current
+                                 on every cycle from then on
+```
+
+### Why the settings are already there, set to `NO`
+
+The first time Mp10 looks for a setting and does not find it, **it creates the
+entry itself**, set to its default, with a description of what it does. So the
+first time you go looking for `MODALITY-WORKLIST` you will probably find it
+already present and set to `NO`.
+
+That is not a fault and not somebody else's change — it is Mp10 writing down a
+question it just asked. Once the entry exists, **your value always wins**;
+Mp10 never overwrites a value you have set.
+
+### Step 1 — create the table
+
+| Section | Entry | Set to |
+|---|---|---|
+| `GENERAL` | `MODALITY-WORKLIST` | `YES` |
+
+Then **run a file check in Admin10**. The table is created during that check
+and at no other time.
+
+> **Order matters.** The file check reads this setting as it runs. Setting it
+> to `YES` *after* a check has finished does nothing until the **next** check.
+> If you have just changed it, run the check again.
+
+### Step 2 — turn the reconcile on
+
+| Section | Entry | Set to |
+|---|---|---|
+| `AUTOTASKS` | `EXPORT_MWL` | `YES` |
+
+Then **restart the AutoTasks service** *(IT task)*. Settings are read when the
+service starts.
+
+## The settings
+
+| Section | Entry | Example | Default | What it means |
+|---|---|---|---|---|
+| `GENERAL` | `MODALITY-WORKLIST` | `YES` | `NO` | Whether the `modalitywl` table exists at all. Read during a file check, not by AutoTasks |
+| `AUTOTASKS` | `EXPORT_MWL` | `YES` | `NO` | The on/off switch for keeping the table current |
+| `AUTOTASKS` | `MWL_WINDOW_DAYS` | `1` | `1` | How far either side of today to look, in days |
+| `AUTOTASKS` | `MWL_UID_ROOT` | *(blank)* | *(blank)* | **IT task.** Leave blank unless your organisation owns a registered DICOM root |
+
+### `MODALITY-WORKLIST` — whether the table exists
+
+Leave this `NO` and the table is never created, nothing else in this chapter
+applies, and no harm is done. Practices with no imaging equipment should leave
+it alone.
+
+Setting it back to `NO` later does **not** delete the table or its contents. It
+only stops future file checks from maintaining it.
+
+### `EXPORT_MWL` — whether the table is kept current
+
+With this `NO`, the table sits exactly as it was last left. With it `YES`,
+AutoTasks re-checks the whole worklist against your schedule on every cycle —
+by default every two minutes.
+
+### `MWL_WINDOW_DAYS` — how wide the window is
+
+`1` means yesterday, today and tomorrow. `0` means today only. `7` means a
+fortnight centred on today.
+
+> **Widen this with care.** Everything inside the window is a live worklist
+> entry that a technologist has to look past to find today's patient. A window
+> of `30` is not a longer list so much as a worse one. Change it only if orders
+> are genuinely being scheduled that far ahead.
+
+Narrowing it does not lose anything permanently — see *Cancelling is not
+deleting* below.
+
+### `MWL_UID_ROOT` — how studies are identified *(IT task)*
+
+Every study needs an identifier that is unique **worldwide**, not just within
+your practice, because images may end up in systems shared with other
+organisations.
+
+Left blank — the default, and the right answer for almost everyone — Mp10 mints
+one from a scheme designed for exactly this and requiring no registration.
+
+Fill it in **only** if your organisation genuinely owns a registered DICOM
+root. Digits and dots only.
+
+> **Do not invent a value here.** An invented root is not merely untidy: it can
+> collide with identifiers issued by whoever really owns it, and two different
+> studies sharing an identifier is a problem that surfaces years later, in
+> somebody else's archive.
+
+Changing this later is safe. Identifiers already issued are **never rewritten**
+— only newly-scheduled studies use the new root — so an existing study is never
+split in two.
+
+## Which orders appear on the worklist
+
+An order is on the worklist when **all** of these are true:
+
+- its encounter is **not** inactive,
+- its encounter is **not** closed, and
+- its start date falls within `MWL_WINDOW_DAYS` days either side of today.
+
+Where an order has no start date of its own, the encounter's admission date is
+used instead.
+
+There is nothing to switch on per order and nothing to tick. An order that
+meets those three tests is on the worklist; one that stops meeting them comes
+off it.
+
+## What happens on each cycle
+
+AutoTasks works out the list from scratch every time, rather than trying to
+remember what changed. That is deliberate: it means a missed cycle, a service
+restart or a crash cannot leave the worklist permanently out of step. The next
+cycle simply puts it right.
+
+Each pass does three things:
+
+1. **Works out which orders belong** on the worklist right now.
+2. **Adds** the ones that are not there yet, and **puts back** any that had been
+   cancelled but now qualify again.
+3. **Cancels** anything on the worklist that no longer qualifies.
+
+## Cancelling is not deleting
+
+When an order falls off the worklist — the encounter is closed, or the date
+moves out of the window — its entry is **marked cancelled, not removed**.
+
+This matters if it comes back. Re-open the encounter, or move the date back
+into the window, and the *same* entry is reinstated with the *same* study
+identifier. The study is never split into two half-studies in your image
+archive.
+
+The one case that does remove an entry outright is deleting the order itself,
+which is as it should be — an order that no longer exists cannot be scanned.
+
+## Telling the machine what kind of study it is
+
+A worklist entry has to say whether the study is a CT, an ultrasound, an X-ray
+and so on. Mp10 works that out from the **revenue code** on the order: each
+revenue code carries the kind of imaging it represents.
+
+Until those are filled in, entries are still created correctly in every other
+respect — they simply do not say what kind of study they are, which is not
+enough for a machine to act on. **This is a one-off data job**, done once per
+practice, and AutoTasks tells you how much of it is left (below).
+
+## What the log tells you
+
+Every cycle writes a handful of lines to `AutoTasks.out`. Search it for
+`WriteWorklistFiles`:
+
+| Line | What it means |
+|---|---|
+| `active set size` | How many orders qualify for the worklist right now |
+| `inserted` / `re-activated` / `unchanged` | What this cycle changed. On a quiet cycle all three are `0` and that is correct |
+| `cancelled` | How many entries came off the worklist this cycle |
+| `rows with a rev_code but no revcodes.Modality mapped` | How many entries cannot say what kind of study they are — with example revenue codes, so you know which ones to fill in. **This number should fall to zero** as the mapping is completed |
+| `rows with no items/RevCode match at all` | Orders whose item does not resolve to a revenue code at all. Usually a catalogue problem rather than a worklist one |
+
+A healthy log on a normal day shows a steady `active set size`, small or zero
+change counts, and a zero mapping count.
+
 # Troubleshooting
 
 Start with `AutoTasks.out`. Search it for the date you expected something to
@@ -1285,6 +1702,23 @@ Once processed, the PDF is in the `history` sub-folder — it has not been lost.
 | One insurer works, another does not | The failing insurer's plan record: `isFetch271` not ticked, or Submitter / Receiver / GS03 blank |
 | An established patient is never checked | Their insurance record has not changed in the last 7 days. Re-save it to bring it back into the window |
 | A secondary insurance is ignored | Only the primary is checked |
+
+## The modality worklist is empty or wrong
+
+| Symptom | Likely cause |
+|---|---|
+| The `modalitywl` table was never created | `GENERAL` / `MODALITY-WORKLIST` was set to `YES` *after* the last file check, not before. Run the file check again |
+| The table exists but stays empty | `AUTOTASKS` / `EXPORT_MWL` is not `YES`, or the service was not restarted after it was set |
+| `active set size` is `0` but there are orders today | Their encounters are closed or inactive — both are excluded — or the order dates fall outside `MWL_WINDOW_DAYS` |
+| Everything is suddenly cancelled | `MWL_WINDOW_DAYS` was narrowed, or a batch of encounters was closed. Nothing is lost; widen it or re-open them and the same entries come back |
+| Entries exist but say nothing about the kind of study | The revenue-code mapping is not filled in. The log line counting these names example revenue codes to start with |
+| No worklist files anywhere on disk | **Working as designed — that part is not built yet.** See the note at the start of the modality worklist chapter |
+
+> **The file check does not complain when a table cannot be created.** If the
+> `modalitywl` table is missing after a check that appeared to finish normally,
+> do not assume the setting is wrong — the check can fail silently on a
+> structure problem. Report it rather than re-running it repeatedly. *(IT
+> task.)*
 
 ## Appointment reminders are not going out
 
