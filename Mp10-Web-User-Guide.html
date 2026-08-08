@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Structured Systems · www.structuredsystems.com" />
+  <meta name="dcterms.date" content="2026-08-08" />
+  <title>Mp10 Web — User Guide</title>
+  <style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+  <style type="text/css">
+:root {
+color-scheme: light dark;
+--fg: #1a1a1a;
+--bg: #ffffff;
+--muted: #5a5a5a;
+--rule: #d8d8d8;
+--accent: #0b5cad;
+--code-bg: #f4f4f6;
+--note-bg: #f7f7f9;
+}
+@media (prefers-color-scheme: dark) {
+:root {
+--fg: #e6e6e6;
+--bg: #16181d;
+--muted: #a2a2a8;
+--rule: #33363d;
+--accent: #6cb0f5;
+--code-bg: #22252c;
+--note-bg: #1d2027;
+}
+}
+html { -webkit-text-size-adjust: 100%; }
+body {
+font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+color: var(--fg);
+background: var(--bg);
+max-width: 52rem;
+margin: 0 auto;
+padding: 2.5rem 1.25rem 5rem;
+line-height: 1.65;
+font-size: 1.02rem;
+}
+
+header#title-block-header { border-bottom: 2px solid var(--rule); margin-bottom: 2rem; }
+h1.title { margin-bottom: .2rem; font-size: 2rem; line-height: 1.2; }
+p.subtitle { margin-top: 0; color: var(--muted); font-size: 1.1rem; }
+p.author, p.date { margin: .2rem 0; color: var(--muted); font-size: .92rem; }
+h1, h2, h3, h4 { line-height: 1.25; margin-top: 2.2rem; }
+h1 { font-size: 1.7rem; padding-bottom: .3rem; border-bottom: 1px solid var(--rule); }
+h2 { font-size: 1.3rem; }
+h3 { font-size: 1.1rem; }
+a { color: var(--accent); }
+
+nav#TOC {
+background: var(--note-bg);
+border: 1px solid var(--rule);
+border-radius: .5rem;
+padding: 1rem 1.25rem;
+margin-bottom: 2.5rem;
+}
+nav#TOC > ul { margin: 0; padding-left: 1.1rem; }
+nav#TOC ul { list-style: none; padding-left: 1.1rem; }
+nav#TOC li { margin: .18rem 0; }
+nav#TOC a { text-decoration: none; }
+nav#TOC a:hover { text-decoration: underline; }
+
+table {
+border-collapse: collapse;
+width: 100%;
+margin: 1.25rem 0;
+font-size: .94rem;
+display: block;
+overflow-x: auto; 
+}
+th, td {
+border-bottom: 1px solid var(--rule);
+padding: .5rem .6rem;
+text-align: left;
+vertical-align: top;
+}
+thead th { border-bottom: 2px solid var(--rule); white-space: nowrap; }
+tbody tr:hover { background: var(--note-bg); }
+code, pre {
+font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
+font-size: .9em;
+}
+code { background: var(--code-bg); padding: .12em .35em; border-radius: .25rem; }
+pre {
+background: var(--code-bg);
+padding: .9rem 1rem;
+border-radius: .4rem;
+overflow-x: auto;
+}
+pre code { background: none; padding: 0; }
+
+blockquote {
+margin: 1.25rem 0;
+padding: .75rem 1.1rem;
+background: var(--note-bg);
+border-left: 4px solid var(--accent);
+border-radius: 0 .35rem .35rem 0;
+}
+blockquote p { margin: .35rem 0; }
+
+img {
+max-width: 100%;
+height: auto;
+display: block;
+margin: 1.25rem auto;
+border: 1px solid var(--rule);
+border-radius: .35rem;
+}
+figcaption {
+text-align: center;
+color: var(--muted);
+font-size: .9rem;
+margin-top: -.6rem;
+}
+@media print {
+body { max-width: none; font-size: 11pt; }
+nav#TOC { break-after: page; }
+h1 { break-before: page; }
+h1:first-of-type { break-before: avoid; }
+a { color: inherit; }
+}
+</style>
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Mp10 Web — User Guide</h1>
+<p class="subtitle">Finding patients, working encounters, and everything
+the browser can do</p>
+<p class="author">Structured Systems · www.structuredsystems.com</p>
+<p class="date">08 August 2026</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#mp10-web-user-guide" id="toc-mp10-web-user-guide">Mp10 Web
+— User Guide</a>
+<ul>
+<li><a href="#signing-in" id="toc-signing-in">Signing in</a></li>
+<li><a href="#getting-around" id="toc-getting-around">Getting around</a>
+<ul>
+<li><a href="#what-the-grids-remember" id="toc-what-the-grids-remember">What the grids remember</a></li>
+</ul></li>
+<li><a href="#the-dashboard" id="toc-the-dashboard">The
+Dashboard</a></li>
+<li><a href="#finding-a-patient" id="toc-finding-a-patient">Finding a
+patient</a>
+<ul>
+<li><a href="#the-created-column" id="toc-the-created-column">The
+Created column</a></li>
+</ul></li>
+<li><a href="#the-patient-record" id="toc-the-patient-record">The
+patient record</a>
+<ul>
+<li><a href="#demographics" id="toc-demographics">Demographics</a></li>
+<li><a href="#the-hipaa-signature" id="toc-the-hipaa-signature">The
+HIPAA signature</a></li>
+<li><a href="#insurance" id="toc-insurance">Insurance</a></li>
+<li><a href="#encounters" id="toc-encounters">Encounters</a></li>
+</ul></li>
+<li><a href="#the-grid-action-bar" id="toc-the-grid-action-bar">The grid
+action bar</a>
+<ul>
+<li><a href="#working-an-encounter" id="toc-working-an-encounter">Working an encounter</a></li>
+</ul></li>
+<li><a href="#orders-what-the-patient-is-in-for" id="toc-orders-what-the-patient-is-in-for">Orders — what the patient is
+in for</a></li>
+<li><a href="#the-modality-worklist" id="toc-the-modality-worklist">The
+Modality worklist</a>
+<ul>
+<li><a href="#when-the-list-is-empty" id="toc-when-the-list-is-empty">When the list is empty</a></li>
+</ul></li>
+<li><a href="#capturing-images" id="toc-capturing-images">Capturing
+images</a></li>
+<li><a href="#patient-signatures-from-a-signature-pad" id="toc-patient-signatures-from-a-signature-pad">Patient signatures from
+a signature pad</a></li>
+<li><a href="#printing-encounter-forms-and-labels" id="toc-printing-encounter-forms-and-labels">Printing encounter forms
+and labels</a>
+<ul>
+<li><a href="#when-printing-does-not-work" id="toc-when-printing-does-not-work">When printing does not
+work</a></li>
+</ul></li>
+<li><a href="#who-made-a-change" id="toc-who-made-a-change">Who made a
+change</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="mp10-web-user-guide">Mp10 Web — User Guide</h1>
+<p>This guide is for clinic staff using Mp10 Web in a browser. It does
+not cover how the system is installed or built — that is the
+<strong>Mp10 Web — Installation</strong> guide.</p>
+<p>Two companion guides cover things this one only points at:
+<strong>Mp10 Web — Printing</strong> for the print helper, and
+<strong>Mp10 Signature Pads</strong> for the Topaz pad.</p>
+<h2 id="signing-in">Signing in</h2>
+<p>Go to the Mp10 Web address your office gives you. Enter your username
+and password and select <strong>Sign In</strong>.</p>
+<p>What you can see and do depends on your account. If a screen or
+button described below is missing, your account doesn’t have permission
+for it — ask your administrator.</p>
+<p><strong>Changing your own password.</strong> At the bottom of the
+menu, beside the sign-out button, is a <strong>key</strong> (🔑). It
+asks for your current password and the new one twice. The new password
+must be at least 8 characters.</p>
+<p>Changing it <strong>signs you out of Mp10 Web everywhere</strong>,
+including the window you are in — that is deliberate, so a password you
+have just replaced cannot still be in use somewhere you have forgotten
+about. You are taken back to the sign-in page to sign in with the new
+one.</p>
+<p>Your Mp10 Web password is separate from your Mp10 desktop password.
+Changing it here does not change the one you use in the desktop
+applications.</p>
+<h2 id="getting-around">Getting around</h2>
+<p>After signing in you’ll see a menu down the left. It only lists the
+areas you have permission to use, so two people may see different menus
+on the same system. The main areas are <strong>Dashboard</strong>,
+<strong>Patients</strong>, <strong>Encounters</strong> and
+<strong>Modality worklist</strong>.</p>
+<p>The menu can be collapsed to icons with the control at its top, to
+give the grids more room. Mp10 Web remembers whether you left it
+collapsed.</p>
+<h3 id="what-the-grids-remember">What the grids remember</h3>
+<p>The three big screens — Patients, Encounters and Modality worklist —
+all behave the same way, and both kinds of memory below are per person,
+so two people sharing a computer keep their own.</p>
+<p><strong>Column widths and order are remembered for good.</strong>
+Drag a column edge to resize it, or drag a heading to move it, and it
+stays that way the next time you sign in — on that computer. If you get
+into a mess, <strong>Reset layout</strong> in the button bar puts the
+columns back to how they ship. It only affects columns; it does not
+clear your search or filters.</p>
+<p><strong>Filters are remembered until you close your browser.</strong>
+Search a name on Patients, go to Encounters, come back — your search and
+filters are still there, and the grid is showing what it was showing.
+Close the browser and they are gone; this is meant to save you retyping
+during a shift, not to follow you into next week.</p>
+<p>One screen is deliberately different: the <strong>Modality
+worklist</strong> does not remember its date range. That window is set
+to today (give or take a day) every time you open it, because a worklist
+showing yesterday would be actively misleading.</p>
+<h2 id="the-dashboard">The Dashboard</h2>
+<p>After signing in, the Dashboard is what you land on first. It has
+three cards:</p>
+<ul>
+<li><strong>Today</strong> — a quick count of today’s encounters, split
+out by site. If today shows nothing yet — first thing in the morning, or
+on a weekend or holiday when the office is closed — that’s normal, not a
+fault: the card names the day it’s showing and also tells you the last
+day that actually had encounters, so you can tell “quiet today” from
+“something’s wrong” at a glance.</li>
+<li><strong>Needs attention</strong> — encounters from the last several
+days that still need a signature. Use it to catch anything that was
+missed before it gets old.</li>
+<li><strong>System health</strong> — three quick status rows:
+<ul>
+<li><strong>Print helper (this workstation)</strong> — whether the print
+helper program is answering on <strong>the computer you’re sitting at
+right now</strong>, not on the server. It only knows about itself, so if
+you check this at the front desk and a colleague checks it at their own
+desk, you can each see a different answer — that’s expected, not a bug.
+If it shows a job stuck (“stopped responding”), see <strong>When
+printing does not work</strong>.</li>
+<li><strong>HL7 interface</strong> — when the last message came in from
+the lab/imaging interface, and how many are still waiting to be
+processed. This only turns red when messages have gone quiet for longer
+than expected — a large “unprocessed” count on its own is normal for a
+busy practice and does not turn the row red by itself.</li>
+<li><strong>Modality worklist</strong> — how many imaging orders are
+queued. Seeing “nothing scheduled” here is a normal, everyday answer,
+not an error — it just means nothing is queued right now.</li>
+</ul></li>
+</ul>
+<h2 id="finding-a-patient">Finding a patient</h2>
+<p>The patient list shows every patient in a scrollable grid, with
+search, filtering, sorting, and paging so you can find one quickly among
+the full list.</p>
+<ul>
+<li><strong>Search</strong> — type a last name, first name, Social
+Security number, or record number, and press Enter. Partial names
+work.</li>
+<li><strong>Filter</strong> — narrow the list by sex using the box above
+the grid, and by city or date of birth using the small funnel in those
+column headings. The City funnel takes more than one city at once, and
+has its own <strong>Find…</strong> box because the city list is
+long.</li>
+<li><strong>Sort</strong> — select a column heading to sort by it;
+select again to reverse the order. Not every heading sorts —
+<strong>Sex</strong>, <strong>Phone</strong>, <strong>Mobile</strong>
+and <strong>St</strong> have no arrow, because sorting a list this size
+on those columns would be slow enough to be worse than useless.</li>
+<li><strong>Paging</strong> — use the controls at the bottom to move
+through pages of results. The count beside them is the number of
+patients your search matched, not the number on screen.</li>
+</ul>
+<p><strong>Single-click selects a row; double-click opens it.</strong>
+Selecting is what turns on the buttons in the bar at the bottom — most
+of them act on the row you have chosen. The patient then opens
+<strong>in a window on top of the list</strong>, so closing it puts you
+back exactly where you were: same search, same page, same row
+highlighted.</p>
+<p><strong>On patients who share a surname.</strong> The list is ordered
+by last name, and within one surname the order is not alphabetical by
+first name — with over two thousand patients called RODRIGUEZ, sorting
+them all every time you opened the screen cost more than it was worth.
+Use the search box, which looks at first names too, rather than paging
+through a common surname.</p>
+<h3 id="the-created-column">The Created column</h3>
+<p>The last column, <strong>Created</strong>, is the date the patient
+record was first made. It sorts, so it is the quickest way to see who
+was registered recently.</p>
+<h2 id="the-patient-record">The patient record</h2>
+<p>A patient’s record has four tabs across the top:</p>
+<ul>
+<li><strong>Demographics</strong> — name, address, contact details, and
+the HIPAA signature.</li>
+<li><strong>Additional</strong> — the further identifying details that
+do not fit on Demographics.</li>
+<li><strong>Insurance</strong> — the patient’s insurance plans.</li>
+<li><strong>Encounters</strong> — the patient’s visits.</li>
+</ul>
+<p>Select a tab to switch to it.</p>
+<p>The record normally opens <strong>as a window on top of the patients
+list</strong>, and <strong>Close</strong> returns you to the list
+untouched. It can also be opened as a full page of its own — a bookmark
+or a link someone sent you does that — and in that case there is a
+<strong>Back to list</strong> button instead, and the tab you are on is
+part of the address, so refreshing or sharing the link reopens on the
+same tab.</p>
+<h3 id="demographics">Demographics</h3>
+<p>This tab shows the patient’s personal information: name, address,
+phone, date of birth, and similar details.</p>
+<ul>
+<li>Select <strong>Edit</strong> to make changes, then
+<strong>Save</strong>.</li>
+<li><strong>Name and identity</strong>: last name and first name are on
+one line, with date of birth (“DOB”) and Social Security number on the
+next, and sex and marital status below that. The patient ID card photo
+sits beside these fields (see “Capturing images” below).</li>
+<li><strong>Language is no longer editable</strong> on this screen. It
+is not shown or changed here.</li>
+<li><strong>Zip code</strong>: if you enter a zip code, the city and
+state fill in automatically — but only if those boxes were empty. If you
+already typed a city or state, autofill will not overwrite what you
+entered.</li>
+<li><strong>ID card photo</strong>: you can attach a photo of the
+patient’s ID (see “Capturing images” below).</li>
+<li><strong>Mailing address</strong> sits beside the <strong>HIPAA
+signature</strong>, with the two address lines stacked and the zip, city
+and state on the row underneath.</li>
+</ul>
+<h3 id="the-hipaa-signature">The HIPAA signature</h3>
+<p>The card to the right of the address shows the signature certifying
+that this <strong>person</strong> received the HIPAA notices. It is not
+the same thing as the per-visit signature on an encounter — that one is
+a receipt for a particular visit, this one is about the patient.</p>
+<p>Underneath the signature it tells you <strong>when it was
+given</strong>. That is the point of the card: a signature on file is
+not much use if nobody can say when it was signed.</p>
+<p>Three things you may see:</p>
+<ul>
+<li>a signature and a date — the normal case;</li>
+<li><strong>“No HIPAA signature on file for this patient”</strong> —
+nothing has been captured;</li>
+<li>a signature and <strong>“Signed on an unrecorded date”</strong> —
+the signature is real, but it predates the system recording signing
+times. It is not an error and there is nothing to fix.</li>
+</ul>
+<p><strong>Capture signature</strong> (or <strong>Re-capture
+signature</strong>) takes a new one from a signature pad. It is pad-only
+by design — a consent cannot be uploaded from a file, it has to be
+signed. See <strong>Patient signatures from a signature
+pad</strong>.</p>
+<h3 id="insurance">Insurance</h3>
+<p>This tab shows a list of the patient’s insurance plans, plus a form
+below the list with details for whichever plan you select.</p>
+<ul>
+<li>Select <strong>New</strong> to add a plan, fill in the form, and
+select <strong>Save</strong>.</li>
+<li>Select an existing plan in the list to view or edit it.</li>
+<li>Select <strong>Delete</strong> to remove a plan.</li>
+<li>Select <strong>Cancel</strong> to discard unsaved changes in the
+form.</li>
+<li>Each plan can have a photo of the insurance card attached (see
+“Capturing images” below).</li>
+</ul>
+<p><strong>Primary, Secondary, and Historical</strong> — every plan is
+marked as one of these three. Primary and Secondary are the patient’s
+active coverage; Historical means the plan is on file but no longer
+active. There is no separate “active” checkbox — this
+Primary/Secondary/Historical setting is what determines whether a plan
+counts as active.</p>
+<p><strong>If you see “This record changed since you loaded it. Reload
+and try again.”</strong> — this means someone else (on the web or on a
+desktop screen) saved a change to this same insurance record while you
+had it open. This is expected behavior, not an error in the system.
+<strong>Do not simply try to save again.</strong> Reload the patient’s
+insurance tab first, so you’re looking at the current version, then make
+your change again. Saving blindly on top of someone else’s change can
+create a duplicate record instead of updating the one you meant to.</p>
+<h3 id="encounters">Encounters</h3>
+<p>This tab lists the patient’s visits (encounters), newest first.</p>
+<ul>
+<li>Filter by date range, insurance, or whether the encounter is still
+open.</li>
+<li>Select <strong>New</strong> to add an encounter, or select an
+existing one to edit it. Either one opens in a dialog on top of the
+patient record, so you never leave the patient’s page just to work on an
+encounter.</li>
+<li>The action bar at the bottom of the grid (see “The grid action bar”
+below) has an <strong>Inactivate / Reactivate</strong> button.
+Inactivating an encounter does not delete or hide it — it stays in the
+list, shown in grey, and you can select it again later and reactivate
+it.</li>
+</ul>
+<p><strong>Why “newest” means highest encounter number.</strong>
+Encounter lists are ordered by encounter number rather than by admission
+date. A small number of encounters brought in from older systems years
+ago carry admission dates that are plainly wrong — a year like 9201 or
+4208 — and ordering by date put those at the very top, so the first
+thing you saw was a screen of bad data. Encounter numbers are issued in
+order, so they give the same “newest first” without that. The odd dates
+are still in those old records; they are simply no longer what greets
+you.</p>
+<p>You can still sort by <strong>Admitted</strong> by selecting that
+heading, which is occasionally what you want — just expect the strange
+ones at the end.</p>
+<h2 id="the-grid-action-bar">The grid action bar</h2>
+<p>The patients list and both encounters grids (the standalone
+Encounters list and the patient’s own Encounters tab) each have a row of
+buttons in the bottom-left of the grid, next to the paging controls.
+Most buttons only work once you’ve selected a row — select a row first,
+then choose the action.</p>
+<p><strong>On the Patients list</strong>, the buttons are:</p>
+<ul>
+<li><strong>New</strong> — start a new patient record. Works without
+selecting a row.</li>
+<li><strong>Edit</strong> — open the selected patient’s record.</li>
+<li><strong>Encounters</strong> — jump straight to the selected
+patient’s Encounters tab.</li>
+<li><strong>Claims</strong> — open a read-only list of the patient’s
+claims.</li>
+<li><strong>Notes</strong> — open the patient’s notes. Unlike Claims,
+Audit log, and Appointments, you can add a new note here (type it in the
+box and select <strong>Add note</strong>) — you cannot edit or delete an
+existing note.</li>
+<li><strong>Audit log</strong> — a read-only history of changes made to
+this patient’s record, on the web or on the desktop.</li>
+<li><strong>Appointments</strong> — a read-only list of the patient’s
+appointments.</li>
+</ul>
+<p>Each of these opens in its own dialog on top of the patients list, so
+searching or paging the list underneath is undisturbed.</p>
+<p><strong>On an Encounters grid</strong> (the standalone list and the
+patient’s Encounters tab), the buttons are:</p>
+<ul>
+<li><strong>New</strong> — start a new encounter. Works without
+selecting a row.</li>
+<li><strong>Edit</strong> — open the selected encounter.</li>
+<li><strong>Orders</strong> — record what the patient is in for. See
+<strong>Orders</strong>.</li>
+<li><strong>Inactivate / Reactivate</strong> — flips the selected
+encounter’s status. You’ll be asked to confirm. An inactivated encounter
+is greyed out in the list, not removed, and can be reactivated the same
+way.</li>
+<li><strong>Capture signature</strong> — see <strong>Patient signatures
+from a signature pad</strong>.</li>
+<li><strong>Print encounter</strong>, <strong>Print label</strong> and
+<strong>Preview</strong> — see <strong>Printing encounter forms and
+labels</strong>.</li>
+</ul>
+<p>Every one of these opens <strong>in a window on top of the
+grid</strong>, and the grid is untouched behind it — same filters, same
+page, same selected row when you close. That applies to patients and
+encounters alike, from either grid.</p>
+<p>If you reach an encounter as a full page instead — a bookmark, or a
+link somebody sent you — the <strong>Back to list</strong> button
+returns you to wherever you came from rather than always to the same
+place.</p>
+<p><strong>Reset layout</strong>, in the same bar, restores the grid’s
+columns to their original widths and order. It leaves your search and
+filters alone.</p>
+<h3 id="working-an-encounter">Working an encounter</h3>
+<p>Two fields on the encounter form check what you type against the
+practice’s own lists rather than accepting anything.</p>
+<p><strong>Doctor.</strong> Type an id, or a surname, or a first name,
+and a short list of matches drops down — choose one with the mouse, or
+the arrow keys and Enter. The field beside it then shows <strong>who
+that doctor is</strong>, read-only. With nearly ten thousand doctors on
+file, an id on its own tells you very little, and this is how you
+confirm you picked the right one. Upper or lower case makes no
+difference to the search.</p>
+<p>If you type an id that does not exist, the box turns red. Nothing
+stops you saving — it is a warning, not a barrier.</p>
+<p><strong>Admitting code.</strong> The same control, against the
+ICD-10-CM list. Type a code like <code>E11</code> to see the codes under
+it, or type words like <code>diabetes</code> to search the descriptions.
+The <strong>Admitting description</strong> beside it is filled in from
+whichever code you choose and cannot be typed into — a description that
+disagreed with its own code would be worse than none.</p>
+<p><strong>Leaving it blank is perfectly valid</strong>, and normal:
+this field has not been used before, so almost every existing encounter
+has it empty. It is checked only if you put something in it.</p>
+<p>Only codes that can actually be billed are offered. The ICD-10 list
+contains group headings and parent codes as well — <code>E11</code> is a
+heading, <code>E11.00</code> is a real code — and offering the headings
+would invite choosing something that cannot be billed.</p>
+<h2 id="orders-what-the-patient-is-in-for">Orders — what the patient is
+in for</h2>
+<p>An encounter can carry one or more <strong>orders</strong>: the items
+from your practice’s catalogue that the patient is being seen for. You
+can open Orders from three places, and all three lead to the same
+screen:</p>
+<ul>
+<li>the <strong>Orders</strong> button on the patient’s Encounters
+tab,</li>
+<li>the <strong>Orders</strong> button on the standalone Encounters
+list,</li>
+<li>the <strong>Manage orders</strong> button on the encounter
+itself.</li>
+</ul>
+<p>Orders are only available once an encounter has been saved. On a
+brand-new encounter, save it first and the Orders card appears.</p>
+<p>The screen has two lists side by side. On the <strong>left</strong>
+is your catalogue — every item you can order. On the
+<strong>right</strong> is what this encounter has already been ordered.
+The arrows between them move items across:</p>
+<ul>
+<li>select an item on the left and choose <strong>→</strong> to add
+it,</li>
+<li>select an order on the right and choose <strong>←</strong> to take
+it off again.</li>
+</ul>
+<p>Nothing is saved until you choose <strong>Save orders</strong>. Until
+then you are only building up the list, and <strong>Close</strong>
+discards the lot. After saving you’ll see a short summary of what
+happened — for example “Saved: 2 added, 1 removed”.</p>
+<p>To find something in a long catalogue, type part of the description
+or the CPT code in the search box above the left-hand list and select
+<strong>Search</strong>. Clearing the box and searching again brings the
+whole catalogue back.</p>
+<p><strong>An order that has been transcribed cannot be
+removed.</strong> Once a transcription has been written against an
+order, that order is part of the patient’s clinical record, and the
+system will not let you take it off the encounter. These orders are
+shown greyed out and in italics in the right-hand list, and choosing
+<strong>←</strong> on one tells you why instead of removing it. If such
+an order really is wrong, the transcription has to be dealt with first —
+the order can then be removed normally. You can still add and remove
+other orders on the same encounter as usual.</p>
+<p>If you ever see an order described as <strong>“(catalogue entry
+missing)”</strong>, the item it was ordered from has since been deleted
+from the catalogue. The order is still real and still on the encounter —
+it is shown this way deliberately, rather than hidden, so nothing
+disappears from the record without you knowing.</p>
+<h2 id="the-modality-worklist">The Modality worklist</h2>
+<p><strong>Modality worklist</strong> in the menu shows the imaging
+orders queued for the scanners — the same queue the imaging equipment
+itself reads when it asks “what am I scanning today”. It is a read-only
+view: nothing here is edited from the browser.</p>
+<p>Each row is one scheduled procedure, with the patient’s name, the
+accession number, the modality (CR, CT, US and so on), the procedure,
+and when it is scheduled for.</p>
+<ul>
+<li><strong>Search</strong> by patient name or accession number. Case
+does not matter — type <code>rivera</code> or <code>RIVERA</code>,
+whichever is quicker.</li>
+<li><strong>Status</strong> is <strong>Scheduled</strong> by default.
+<strong>Cancelled</strong> shows what has been called off, and
+<strong>All</strong> shows both.</li>
+<li><strong>Modality</strong> is a funnel in that column heading, and
+takes more than one at once — CT and MR together, say.</li>
+<li><strong>Dates</strong> default to today, plus and minus a day, so a
+procedure scheduled late last night or early tomorrow is still in view.
+Unlike the other screens, this window is <strong>not</strong> remembered
+between visits: it is reset to today every time, because a worklist
+quietly showing last Tuesday would be worse than no worklist.</li>
+<li><strong>Auto-refresh</strong> keeps the list current without you
+doing anything. It is on by default; the tick box turns it off.</li>
+</ul>
+<p>Auto-refresh deliberately holds back in two situations, so it cannot
+pull the screen out from under you: while you have a row selected, and
+while the browser tab is in the background. Select nothing and it
+resumes.</p>
+<h3 id="when-the-list-is-empty">When the list is empty</h3>
+<p>An empty worklist is usually an ordinary answer, and the message says
+which kind it is rather than making you guess:</p>
+<ul>
+<li><strong>nothing scheduled in this window</strong> — the normal quiet
+case;</li>
+<li><strong>nothing matches your filters</strong> — you have narrowed it
+to nothing, so widen the dates or clear the search;</li>
+<li><strong>nothing in the table at all</strong> — this one is worth
+reporting, because it can mean the process that fills the worklist has
+stopped rather than that there is genuinely no work.</li>
+</ul>
+<p>The <strong>Mp10 AutoTasks</strong> guide covers what fills this
+table and how it is turned on, which is an administrator’s job rather
+than a desk one.</p>
+<h2 id="capturing-images">Capturing images</h2>
+<p>Both the patient ID card (Demographics tab) and insurance cards
+(Insurance tab) let you attach a photo.</p>
+<ul>
+<li><strong>On a desktop computer</strong>: selecting “Capture / Upload”
+opens a file picker. Choose an image you’ve already scanned into a
+folder (the same scan-to-folder process your office already uses).</li>
+<li><strong>On a phone or tablet</strong>: the same button can open your
+camera directly, so you can photograph the card on the spot.</li>
+<li>Accepted formats are JPEG and PNG, up to 4 MB. Large photos are
+automatically shrunk before they’re uploaded, so a full-size phone photo
+is fine — you don’t need to resize it yourself.</li>
+<li>Select <strong>Replace</strong> to swap out an existing image, or
+<strong>Delete</strong> to remove it.</li>
+</ul>
+<h2 id="patient-signatures-from-a-signature-pad">Patient signatures from
+a signature pad</h2>
+<p>If a <strong>Topaz signature pad</strong> is attached to your
+computer, you can take the patient’s signature straight from it.</p>
+<p>Select the encounter on either Encounters list and choose
+<strong>Capture signature</strong>.</p>
+<p>If your practice has set up a consent text, the window shows it
+first, one page at a time — <strong>Continue</strong> stays greyed out
+until the patient has reached the last page. If a choice was set up,
+they pick one of the options offered; it is one choice, not a tick-list.
+Then the signing area appears: the patient signs on the pad and their
+signature appears on screen as they write. <strong>Clear</strong> starts
+them over, <strong>Save signature</strong> stores it.</p>
+<p><strong>If the patient changes their choice after signing, the
+signature is cleared</strong> and they are asked to sign again — the
+signature has to belong to the choice they actually made. The window
+says so when it happens.</p>
+<p>With no consent text set up, the window goes straight to the signing
+area.</p>
+<p><strong>The button only works for an encounter that has no signature
+yet.</strong> When it is greyed out, hover over it and it will say
+<em>“This encounter already has a signature”</em>. To replace one that
+is already there, open the encounter and use the
+<strong>Signature</strong> panel on the encounter form.</p>
+<p>Two things it deliberately refuses:</p>
+<ul>
+<li><strong>Saving before anyone has signed.</strong> It says so instead
+of storing a blank image — an encounter that looks signed but is not
+would be worse than one that is plainly unsigned.</li>
+<li><strong>Working on a Mac, tablet or phone.</strong> The pad software
+is Windows-only, and the window says so rather than appearing to work.
+Use the <strong>Signature</strong> panel on the encounter form instead —
+that works everywhere.</li>
+</ul>
+<p>If it reports that something is missing
+(<code>SigWebTablet.js</code>, or SigWeb not running), that is a setup
+task for whoever looks after the computers, not something you can fix at
+the desk. Nothing is saved when it happens, so the encounter simply
+stays unsigned. The full details are in the <strong>Mp10 Signature
+Pads</strong> guide.</p>
+<h2 id="printing-encounter-forms-and-labels">Printing encounter forms
+and labels</h2>
+<p>Printing happens on <strong>the printer attached to the computer you
+are sitting at</strong>, using the same templates as the desktop
+application — so a label printed here and a label printed from Mp10 come
+out identical.</p>
+<p>Select the encounter on either Encounters grid, then:</p>
+<ul>
+<li><strong>Print encounter</strong> — the encounter form, to this
+computer’s <code>FORMS</code> printer.</li>
+<li><strong>Print label</strong> — the encounter label, to this
+computer’s <code>LABELS</code> printer.</li>
+<li><strong>Preview</strong> — exactly what would have been printed,
+opened as a PDF in a new browser tab, with nothing sent to a
+printer.</li>
+</ul>
+<p>The printer is chosen automatically; nothing asks you which one.</p>
+<p><strong>Preview is worth knowing about.</strong> Use it to check a
+form looks right before committing a sheet, or when a label came out
+wrong and you want to see whether the problem is the data or the
+printer. It is the same template and the same data as printing, not an
+approximation. If nothing opens, your browser has blocked the new tab —
+allow pop-ups for this site; the app tells you when that has happened
+rather than appearing to do nothing.</p>
+<p><strong>The Print button on the Claims dialog is not
+finished.</strong> It reports that claim printing is still to be built.
+Print claims from the desktop application in the meantime.</p>
+<p><strong>Designing and editing the report templates stays in the
+desktop application</strong>, deliberately: a template is shared by
+everyone in the practice, and editing one is a deskbound job.</p>
+<h3 id="when-printing-does-not-work">When printing does not work</h3>
+<p>Nothing is ever half-printed: when it fails, nothing was sent, and
+the message on screen names the cause. Most of them come down to the
+printer not being found by name, or the print helper not running on that
+computer — both setup tasks rather than something to fix at the
+desk.</p>
+<p>If a print job stops responding, Mp10 Web refuses further printing
+from that computer until the helper is restarted, which is better than
+queueing work that is never going to come out. Somebody with
+administrator access can do that from <strong>Admin → Print
+helper</strong> in the menu, without leaving the browser; that page also
+lists which printers the helper can actually see, which is what solves
+most problems.</p>
+<p><strong>The full account — what each message means, how the helper is
+installed and configured, and how to work through a fault — is in the
+Mp10 Web — Printing guide.</strong> It is not repeated here, so that
+there is only ever one version of it to keep up to date.</p>
+<h2 id="who-made-a-change">Who made a change</h2>
+<p>Every change made through Mp10 Web is recorded under the web user’s
+own operator code, the same way desktop changes are recorded under a
+desktop operator code. This means a colleague using the desktop
+application can see that a change came from you, from the web app, just
+like they would for any other change.</p>
+</body>
+</html>
