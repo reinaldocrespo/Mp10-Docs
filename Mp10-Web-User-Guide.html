@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-08-08" />
+  <meta name="dcterms.date" content="2026-08-09" />
   <title>Mp10 Web — User Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -148,7 +148,7 @@ a { color: inherit; }
 <p class="subtitle">Finding patients, working encounters, and everything
 the browser can do</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">08 August 2026</p>
+<p class="date">09 August 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -253,10 +253,13 @@ Search a name on Patients, go to Encounters, come back — your search and
 filters are still there, and the grid is showing what it was showing.
 Close the browser and they are gone; this is meant to save you retyping
 during a shift, not to follow you into next week.</p>
-<p>One screen is deliberately different: the <strong>Modality
-worklist</strong> does not remember its date range. That window is set
-to today (give or take a day) every time you open it, because a worklist
-showing yesterday would be actively misleading.</p>
+<p>The <strong>Modality worklist</strong>’s date range follows a rule of
+its own, because that box is filled in for you rather than starting
+empty. <strong>A date range you set yourself is remembered</strong> like
+any other filter. One you never touched is not — it is reset to today
+each time, so a browser left open overnight opens on today’s work rather
+than yesterday’s. <strong>Clear</strong> puts it back to following the
+calendar.</p>
 <h2 id="the-dashboard">The Dashboard</h2>
 <p>After signing in, the Dashboard is what you land on first. It has
 three cards:</p>
@@ -590,9 +593,11 @@ whichever is quicker.</li>
 takes more than one at once — CT and MR together, say.</li>
 <li><strong>Dates</strong> default to today, plus and minus a day, so a
 procedure scheduled late last night or early tomorrow is still in view.
-Unlike the other screens, this window is <strong>not</strong> remembered
-between visits: it is reset to today every time, because a worklist
-quietly showing last Tuesday would be worse than no worklist.</li>
+<strong>Change them and your window is remembered</strong>, like every
+other filter, until you close the browser. Leave them alone and they
+follow the calendar instead of freezing — a browser left open overnight
+opens on today, not on yesterday. <strong>Clear</strong> returns them to
+following the calendar.</li>
 <li><strong>Auto-refresh</strong> keeps the list current without you
 doing anything. It is on by default; the tick box turns it off.</li>
 </ul>

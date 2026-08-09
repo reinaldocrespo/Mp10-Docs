@@ -78,10 +78,12 @@ there, and the grid is showing what it was showing. Close the browser and
 they are gone; this is meant to save you retyping during a shift, not to
 follow you into next week.
 
-One screen is deliberately different: the **Modality worklist** does not
-remember its date range. That window is set to today (give or take a day)
-every time you open it, because a worklist showing yesterday would be
-actively misleading.
+The **Modality worklist**'s date range follows a rule of its own, because that
+box is filled in for you rather than starting empty. **A date range you set
+yourself is remembered** like any other filter. One you never touched is not —
+it is reset to today each time, so a browser left open overnight opens on
+today's work rather than yesterday's. **Clear** puts it back to following the
+calendar.
 
 ## The Dashboard
 
@@ -400,10 +402,11 @@ scheduled for.
 - **Modality** is a funnel in that column heading, and takes more than one at
   once — CT and MR together, say.
 - **Dates** default to today, plus and minus a day, so a procedure scheduled
-  late last night or early tomorrow is still in view. Unlike the other
-  screens, this window is **not** remembered between visits: it is reset to
-  today every time, because a worklist quietly showing last Tuesday would be
-  worse than no worklist.
+  late last night or early tomorrow is still in view. **Change them and your
+  window is remembered**, like every other filter, until you close the
+  browser. Leave them alone and they follow the calendar instead of freezing
+  — a browser left open overnight opens on today, not on yesterday. **Clear**
+  returns them to following the calendar.
 - **Auto-refresh** keeps the list current without you doing anything. It is
   on by default; the tick box turns it off.
 
