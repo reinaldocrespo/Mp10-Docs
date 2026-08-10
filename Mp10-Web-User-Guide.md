@@ -293,6 +293,10 @@ searching or paging the list underneath is undisturbed.
 tab), the buttons are:
 
 - **New** — start a new encounter. Works without selecting a row.
+  **Only on the patient's Encounters tab**, not on the standalone Encounters
+  list. An encounter belongs to a patient, and the standalone list has no
+  patient in hand — so it is created from the patient's own record, where you
+  can see whose visit you are creating. The desktop works the same way.
 - **Edit** — open the selected encounter.
 - **Orders** — record what the patient is in for. See **Orders**.
 - **Inactivate / Reactivate** — flips the selected encounter's status. You'll
