@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Structured Systems · www.structuredsystems.com" />
+  <meta name="dcterms.date" content="2026-08-13" />
+  <title>Mp10 — Signature Helper</title>
+  <style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+  <style type="text/css">
+:root {
+color-scheme: light dark;
+--fg: #1a1a1a;
+--bg: #ffffff;
+--muted: #5a5a5a;
+--rule: #d8d8d8;
+--accent: #0b5cad;
+--code-bg: #f4f4f6;
+--note-bg: #f7f7f9;
+}
+@media (prefers-color-scheme: dark) {
+:root {
+--fg: #e6e6e6;
+--bg: #16181d;
+--muted: #a2a2a8;
+--rule: #33363d;
+--accent: #6cb0f5;
+--code-bg: #22252c;
+--note-bg: #1d2027;
+}
+}
+html { -webkit-text-size-adjust: 100%; }
+body {
+font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+color: var(--fg);
+background: var(--bg);
+max-width: 52rem;
+margin: 0 auto;
+padding: 2.5rem 1.25rem 5rem;
+line-height: 1.65;
+font-size: 1.02rem;
+}
+
+header#title-block-header { border-bottom: 2px solid var(--rule); margin-bottom: 2rem; }
+h1.title { margin-bottom: .2rem; font-size: 2rem; line-height: 1.2; }
+p.subtitle { margin-top: 0; color: var(--muted); font-size: 1.1rem; }
+p.author, p.date { margin: .2rem 0; color: var(--muted); font-size: .92rem; }
+h1, h2, h3, h4 { line-height: 1.25; margin-top: 2.2rem; }
+h1 { font-size: 1.7rem; padding-bottom: .3rem; border-bottom: 1px solid var(--rule); }
+h2 { font-size: 1.3rem; }
+h3 { font-size: 1.1rem; }
+a { color: var(--accent); }
+
+nav#TOC {
+background: var(--note-bg);
+border: 1px solid var(--rule);
+border-radius: .5rem;
+padding: 1rem 1.25rem;
+margin-bottom: 2.5rem;
+}
+nav#TOC > ul { margin: 0; padding-left: 1.1rem; }
+nav#TOC ul { list-style: none; padding-left: 1.1rem; }
+nav#TOC li { margin: .18rem 0; }
+nav#TOC a { text-decoration: none; }
+nav#TOC a:hover { text-decoration: underline; }
+
+table {
+border-collapse: collapse;
+width: 100%;
+margin: 1.25rem 0;
+font-size: .94rem;
+display: block;
+overflow-x: auto; 
+}
+th, td {
+border-bottom: 1px solid var(--rule);
+padding: .5rem .6rem;
+text-align: left;
+vertical-align: top;
+}
+thead th { border-bottom: 2px solid var(--rule); white-space: nowrap; }
+tbody tr:hover { background: var(--note-bg); }
+code, pre {
+font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
+font-size: .9em;
+}
+code { background: var(--code-bg); padding: .12em .35em; border-radius: .25rem; }
+pre {
+background: var(--code-bg);
+padding: .9rem 1rem;
+border-radius: .4rem;
+overflow-x: auto;
+}
+pre code { background: none; padding: 0; }
+
+blockquote {
+margin: 1.25rem 0;
+padding: .75rem 1.1rem;
+background: var(--note-bg);
+border-left: 4px solid var(--accent);
+border-radius: 0 .35rem .35rem 0;
+}
+blockquote p { margin: .35rem 0; }
+
+img {
+max-width: 100%;
+height: auto;
+display: block;
+margin: 1.25rem auto;
+border: 1px solid var(--rule);
+border-radius: .35rem;
+}
+figcaption {
+text-align: center;
+color: var(--muted);
+font-size: .9rem;
+margin-top: -.6rem;
+}
+@media print {
+body { max-width: none; font-size: 11pt; }
+nav#TOC { break-after: page; }
+h1 { break-before: page; }
+h1:first-of-type { break-before: avoid; }
+a { color: inherit; }
+}
+</style>
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Mp10 — Signature Helper</h1>
+<p class="subtitle">Capturing patient signatures on a Topaz pad from
+Mp10 Web</p>
+<p class="author">Structured Systems · www.structuredsystems.com</p>
+<p class="date">13 August 2026</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#about-this-guide" id="toc-about-this-guide">About this
+guide</a>
+<ul>
+<li><a href="#the-short-version" id="toc-the-short-version">The short
+version</a></li>
+<li><a href="#why-there-is-a-separate-program-at-all" id="toc-why-there-is-a-separate-program-at-all">Why there is a separate
+program at all</a></li>
+</ul></li>
+<li><a href="#using-it-front-desk" id="toc-using-it-front-desk">Using it
+— front desk</a>
+<ul>
+<li><a href="#what-it-does-not-do" id="toc-what-it-does-not-do">What it
+does not do</a></li>
+</ul></li>
+<li><a href="#when-something-is-wrong" id="toc-when-something-is-wrong">When something is wrong</a></li>
+<li><a href="#installing-it-it-task" id="toc-installing-it-it-task">Installing it — IT task</a>
+<ul>
+<li><a href="#it-is-not-a-service" id="toc-it-is-not-a-service">It is
+not a service</a></li>
+<li><a href="#what-to-copy" id="toc-what-to-copy">What to copy</a></li>
+<li><a href="#settings" id="toc-settings">Settings</a></li>
+<li><a href="#telling-mpsigsrv-which-pad" id="toc-telling-mpsigsrv-which-pad">Telling MpSigSrv which pad</a></li>
+<li><a href="#the-consent-text" id="toc-the-consent-text">The consent
+text</a></li>
+<li><a href="#check-it" id="toc-check-it">Check it</a></li>
+<li><a href="#updating-a-workstation-later" id="toc-updating-a-workstation-later">Updating a workstation
+later</a></li>
+</ul></li>
+<li><a href="#notes-for-the-curious" id="toc-notes-for-the-curious">Notes for the curious</a>
+<ul>
+<li><a href="#is-it-safe-to-have-a-program-listening-on-the-workstation" id="toc-is-it-safe-to-have-a-program-listening-on-the-workstation">Is it
+safe to have a program listening on the workstation?</a></li>
+<li><a href="#why-does-the-operator-code-travel-with-each-capture" id="toc-why-does-the-operator-code-travel-with-each-capture">Why does
+the operator code travel with each capture?</a></li>
+<li><a href="#what-happens-if-a-capture-hangs" id="toc-what-happens-if-a-capture-hangs">What happens if a capture
+hangs</a></li>
+<li><a href="#does-an-https-site-really-reach-a-http127.0.0.1-helper" id="toc-does-an-https-site-really-reach-a-http127.0.0.1-helper">Does an
+https site really reach a http://127.0.0.1 helper?</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="about-this-guide">About this guide</h1>
+<p>Mp10 Web takes patient signatures on a <strong>Topaz signature
+pad</strong>, and it does that through a small companion program called
+<strong>MpSigSrv</strong> that runs on the workstation the pad is
+plugged into.</p>
+<p>There are two audiences here. <strong>Using it</strong> is for the
+person at the front desk and is two pages. Everything from
+<em>Installing it</em> onward is an <strong>IT task</strong> and is
+where the setup actually lives.</p>
+<p>If you have used <strong>MpPrintSrv</strong>, the print helper, this
+will look familiar — same idea, same loopback design. <strong>One thing
+is different and it matters: MpPrintSrv is a Windows service; MpSigSrv
+is not and cannot be.</strong> See <a href="#it-is-not-a-service">It is
+not a service</a>.</p>
+<blockquote>
+<p><strong>A note on paths.</strong> This guide says <em>the Mp10
+folder</em> for wherever the Mp10 programs are installed on that
+workstation. It is <code>C:\Mp10</code> on a typical installation, but
+it is a per-site choice — check where <code>Patients10.exe</code> lives
+on the machine in front of you and use that.</p>
+</blockquote>
+<h2 id="the-short-version">The short version</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td>Program</td>
+<td><code>MpSigSrv.exe</code>, in the Mp10 program folder
+(<code>C:\Mp10</code> on a typical install)</td>
+</tr>
+<tr class="even">
+<td>Runs on</td>
+<td>the workstation with the pad, in the signed-in user’s session</td>
+</tr>
+<tr class="odd">
+<td>Started by</td>
+<td><code>MpSigSrv.exe -listen</code>, at logon</td>
+</tr>
+<tr class="even">
+<td>Port</td>
+<td><strong>6266</strong> (MpPrintSrv is 6265; they coexist)</td>
+</tr>
+<tr class="odd">
+<td>Is it running?</td>
+<td>open <a href="http://127.0.0.1:6266/ping" class="uri">http://127.0.0.1:6266/ping</a> in the browser on that
+PC</td>
+</tr>
+<tr class="even">
+<td>Settings</td>
+<td><code>[RDD]</code> and <code>[SIGN]</code> in <code>Mp10.ini</code>,
+beside the exe</td>
+</tr>
+<tr class="odd">
+<td>Logs</td>
+<td><code>MpSigSrv.log</code> and <code>Topaz.log</code>, beside the
+exe</td>
+</tr>
+</tbody>
+</table>
+<h2 id="why-there-is-a-separate-program-at-all">Why there is a separate
+program at all</h2>
+<p>The pad faces the <strong>patient</strong>. The consent text, the
+choice they make and the Next control all belong on the pad’s own small
+screen, exactly as the Mp10 desktop puts them there — the browser is the
+<em>operator’s</em> screen, and the patient never looks at it.</p>
+<p>A browser cannot drive that screen. Beyond that, the consent text is
+allowed to contain expressions the Mp10 desktop evaluates at the moment
+of signing (<code>^email</code> is the one this practice uses, and
+<code>~…~</code> can hold any Harbour expression). Reproducing that in
+JavaScript is not merely awkward, it is not possible. So MpSigSrv runs
+<strong>the desktop’s own signing code</strong>, and a patient signing
+from the web sees exactly what a patient signing from the desktop
+sees.</p>
+<p>MpSigSrv also <strong>stores the signature itself</strong>, through
+the same statement the desktop uses. Nothing about the signature travels
+back through the browser.</p>
+<hr />
+<h1 id="using-it-front-desk">Using it — front desk</h1>
+<ol type="1">
+<li>Open the encounter in Mp10 Web and press <strong>Capture
+signature</strong>.</li>
+<li>The browser shows you the consent the patient is being shown — this
+is your copy to follow, not theirs.</li>
+<li>Press <strong>Capture on pad</strong>.</li>
+<li><strong>Hand the pad to the patient.</strong> They read the text,
+page through it with the arrow, tap their choice if the consent offers
+one, and sign.</li>
+<li>A window appears on your screen showing the signature they gave.
+Press the pen button to keep it, or Cancel to discard it and start
+again.</li>
+<li>The browser says <em>“Signature captured on the pad and
+saved.”</em></li>
+</ol>
+<p>The options shown in the browser are greyed out on purpose.
+<strong>The patient chooses on the pad</strong>; a choice made on your
+screen would be a consent they never gave.</p>
+<h2 id="what-it-does-not-do">What it does not do</h2>
+<ul>
+<li><strong>Patient-record (HIPAA) signatures</strong> are not on the
+pad from the web yet. Only encounter signatures are. The desktop still
+does the patient record.</li>
+<li><strong>It is Windows-only</strong>, because the pad is. A Mac or a
+tablet cannot capture from a pad at all — attach the signature from the
+record instead.</li>
+</ul>
+<hr />
+<h1 id="when-something-is-wrong">When something is wrong</h1>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>What you see</th>
+<th>What it means</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><em>The signature helper is not answering on this
+workstation</em></td>
+<td>Either MpSigSrv is not running here, <strong>or</strong> its
+<code>[SIGN] ORIGIN</code> does not list this site. A browser cannot
+tell those apart.</td>
+<td>IT task — see <a href="#check-it">Check it</a>. Check
+<code>ORIGIN</code> <strong>first</strong>; it is the more common of the
+two.</td>
+</tr>
+<tr class="even">
+<td><em>No operator code for the signed-in user</em></td>
+<td>This Mp10 Web account has no Operator set. The signature would not
+record who witnessed it, so it is refused.</td>
+<td>Set an Operator on that account in the desktop <strong>Admin →
+Users</strong>.</td>
+</tr>
+<tr class="odd">
+<td><em>The consent text for this signature cannot be read</em></td>
+<td><code>sys_registry</code> points at a consent file the server cannot
+open.</td>
+<td>IT task — see <a href="#the-consent-text">The consent text</a>.</td>
+</tr>
+<tr class="even">
+<td><em>The signature pad could not be activated</em></td>
+<td>MpSigSrv could not talk to the pad.</td>
+<td>Check the pad is plugged in and <code>[Tablet] TabletComPort</code>
+in <code>C:\Windows\SigPlus.ini</code> matches its COM port.</td>
+</tr>
+<tr class="odd">
+<td>The pad shows nothing, or the wrong size text</td>
+<td>The pad geometry is wrong.</td>
+<td>See <a href="#telling-mpsigsrv-which-pad">Telling MpSigSrv which
+pad</a>.</td>
+</tr>
+<tr class="even">
+<td><em>The capture did not finish within 300 seconds</em></td>
+<td>Nobody completed the signature and the helper gave up.</td>
+<td>Press <strong>Capture on pad</strong> again. If it keeps happening,
+restart MpSigSrv.</td>
+</tr>
+</tbody>
+</table>
+<p>Two log files sit beside the exe and between them they answer most of
+this:</p>
+<ul>
+<li><strong><code>MpSigSrv.log</code></strong> — what the helper did:
+what it connected to, whether it is listening, each capture requested,
+the option picked, and every refusal.</li>
+<li><strong><code>Topaz.log</code></strong> — what the <em>pad</em>
+reported: its model number and its screen size. This is the file to read
+when the layout looks wrong.</li>
+</ul>
+<hr />
+<h1 id="installing-it-it-task">Installing it — IT task</h1>
+<h2 id="it-is-not-a-service">It is not a service</h2>
+<p><strong>MpSigSrv cannot be installed as a Windows service, and there
+is no <code>-i</code> switch.</strong> It hosts the Topaz ActiveX
+control and opens a window; a service runs in session 0, which has no
+interactive desktop, so neither would work.</p>
+<p>It runs <strong>in the signed-in operator’s own session</strong>,
+started at logon. That is a real difference from MpPrintSrv, which is a
+service — if you set MpSigSrv up the way you set that up, it will not
+work.</p>
+<p>Practically, that means one of:</p>
+<ul>
+<li>a shortcut to <code>MpSigSrv.exe -listen</code> in the user’s
+<strong>Startup</strong> folder (<code>shell:startup</code>), or</li>
+<li><strong>Task Scheduler</strong>, trigger <em>At log on</em>, action
+<code>&lt;Mp10 folder&gt;\MpSigSrv.exe</code>, arguments
+<code>-listen</code>, and <strong>“Run only when user is logged
+on”</strong> — not the “whether or not” option, which puts it back in
+session 0.</li>
+</ul>
+<p>It shows no window while it waits. To stop it, end
+<code>MpSigSrv.exe</code> in Task Manager.</p>
+<h2 id="what-to-copy">What to copy</h2>
+<p>Onto each workstation that has a pad:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>File</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>MpSigSrv.exe</code></td>
+<td>the helper</td>
+</tr>
+<tr class="even">
+<td><code>Mp10.ini</code></td>
+<td>settings — copy <code>Mp10.ini.example</code> and edit</td>
+</tr>
+<tr class="odd">
+<td><code>ace32.dll</code>, <code>axcws32.dll</code></td>
+<td>the <strong>32-bit</strong> Advantage client, already present on any
+PC running the Mp10 desktop apps</td>
+</tr>
+<tr class="even">
+<td><code>SigPlus.ocx</code></td>
+<td>Topaz’s control — installed and <strong>registered</strong> by
+Topaz’s own SigPlus installer, not copied by hand</td>
+</tr>
+</tbody>
+</table>
+<p>MpSigSrv is a 32-bit program and uses the <strong>same 32-bit ACE
+client the desktop applications use</strong>. This is the opposite of
+Mp10 Web’s server, which needs the 64-bit client — do not confuse the
+two.</p>
+<p><code>SigPlus.ocx</code> comes from Topaz. Install
+<strong>SigPlus</strong> (not SigWeb — that is the browser component and
+is not used here) from <a href="https://www.topazsystems.com" class="uri">https://www.topazsystems.com</a>, which registers the
+control and writes <code>C:\Windows\SigPlus.ini</code>.</p>
+<h2 id="settings">Settings</h2>
+<p><code>Mp10.ini</code>, beside the exe. Two sections matter.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[RDD]</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">RDD-VERSION</span><span class="ot">=</span><span class="st">REMOTE</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">PATH</span><span class="ot">=</span><span class="st">\\adsserver\adsdata\sfi\</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="dt">user</span><span class="ot">=</span><span class="st">AutoTasks</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="dt">password</span><span class="ot">=</span><span class="st">mp10</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">[SIGN]</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="dt">PORT</span><span class="ot">=</span><span class="dv">6266</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="dt">ORIGIN</span><span class="ot">=</span><span class="st">https://mp10web.example.org</span></span></code></pre></div>
+<p><strong><code>PORT</code></strong> — 6266 unless something else on
+the workstation wants it. It is also compiled into Mp10 Web as the
+default, so changing it here means changing it there too
+(<code>VITE_SIGN_URL</code>). MpPrintSrv’s 6265 is a different program
+on a different port; both can run at once.</p>
+<p><strong><code>ORIGIN</code></strong> — the address staff open Mp10
+Web at, exactly as the browser sends it: scheme and host, no trailing
+slash, and the port when it is not 80 or 443. Several may be listed,
+comma separated.</p>
+<blockquote>
+<p><strong>This is the whole of the access control, and it is the thing
+most likely to be wrong.</strong> With nothing here, every browser
+request is refused — and a browser cannot tell a refused origin from a
+helper that is not running. Both arrive as the same failure. If Mp10 Web
+says the helper is not answering, check this line before anything else.
+<code>MpSigSrv.log</code> records the refusal by name, which is how you
+tell the two apart.</p>
+</blockquote>
+<p><strong><code>[RDD] user</code></strong> is the account MpSigSrv
+connects to the dictionary as. <strong>It is not the person who
+witnesses the signature</strong> — that is the operator code Mp10 Web
+sends with each capture. Do not put an operator code here: an operator
+code is not an ADS login and the server answers <code>7078</code>.</p>
+<h2 id="telling-mpsigsrv-which-pad">Telling MpSigSrv which pad</h2>
+<p>Two files decide this and they do different jobs.</p>
+<p><strong><code>C:\Windows\SigPlus.ini</code></strong>, written by
+Topaz’s installer, says how to reach the pad:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[Tablet]</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">TabletComPort</span><span class="ot">=</span><span class="dv">9</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="dt">TabletModel</span><span class="ot">=</span><span class="st">LCD4X5SE</span></span></code></pre></div>
+<p>The pads at this practice are <strong>serial</strong> devices reached
+through a USB-to- serial adapter, so they appear as a COM port rather
+than as a USB device. Find the number in Device Manager under
+<strong>Ports (COM &amp; LPT)</strong> — the entry whose name or serial
+number contains <code>TOPAZ</code>.</p>
+<p><strong>The consent JSON</strong> (see below) says how big the screen
+is, through its <code>TabletModel</code> key:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span> <span class="dt">&quot;TabletModel&quot;</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span> <span class="er">...</span> <span class="fu">}</span></span></code></pre></div>
+<p><code>1</code> means the 320×240 screen; anything else means
+240×64.</p>
+<blockquote>
+<p><strong>This is not optional and it is not guesswork.</strong>
+Measured on this practice’s pad: <code>TabletModelNumber()</code> — the
+call that asks the device what it is — returned <code>0</code> from one
+program and <code>58</code> from another, and <code>GetLCDSize()</code>
+only reports whatever layout was last set, not the physical panel.
+<strong>The pad does not reliably identify itself.</strong> The value in
+the JSON is what actually sets the geometry. Get it wrong and the
+consent is laid out for the wrong screen.</p>
+</blockquote>
+<p>To see what your pad reported, take one signature and read
+<code>Topaz.log</code>:</p>
+<pre><code>TabletModelNumber()  58   xMax      yMax
+TTOPAZSIGNATURE:INITPAD   nTabletModel 1   xMax 240  yMax 64
+nTabletModel 1   xMax 320  yMax 240</code></pre>
+<p>The last line is the geometry in force.</p>
+<h2 id="the-consent-text">The consent text</h2>
+<p>The text, the options and the font all come from
+<code>sys_registry</code>, from the <strong>same row the desktop
+reads</strong> — so editing it in Admin changes both the desktop and the
+web at once. For encounters that row is
+<code>TOPAZ / ENCOUNTER-SIGNATURE-DISPLAYMESSAGE</code>.</p>
+<p>Its value is either the text itself, or <strong>the path to a file
+holding it</strong>. This practice uses the file form:</p>
+<pre><code>\server\share\EncounterSignature-Text.txt</code></pre>
+<p>and that file holds JSON:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;TabletModel&quot;</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;NewPageForOptions&quot;</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;NewPageForSignature&quot;</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;FontSize&quot;</span><span class="fu">:</span> <span class="dv">15</span><span class="fu">,</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;FontName&quot;</span><span class="fu">:</span> <span class="st">&quot;Arial&quot;</span><span class="fu">,</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;Options&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span> <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span> <span class="dt">&quot;Option&quot;</span><span class="fu">:</span> <span class="st">&quot;Acepto mis resultados por email…&quot;</span> <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span> <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="dv">2</span><span class="fu">,</span> <span class="dt">&quot;Option&quot;</span><span class="fu">:</span> <span class="st">&quot;No acepto el envío…&quot;</span> <span class="fu">}</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;ShowTextOnPad&quot;</span><span class="fu">:</span> <span class="st">&quot;Autorizo a … Mi email es: ^email &quot;</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><code>^email</code> is replaced with the patient’s address at the
+moment of signing.</p>
+<blockquote>
+<p><strong>If the path is a UNC share, the account running MpSigSrv must
+be able to read it.</strong> A path that works when you are logged in
+can still fail for a different account. When the file cannot be read,
+Mp10 Web refuses the capture and names the path — it does not show the
+patient a file path as though it were a consent, which is what it used
+to do.</p>
+</blockquote>
+<h2 id="check-it">Check it</h2>
+<p>Three checks, in this order. Do them on the workstation with the
+pad.</p>
+<p><strong>1. Is it running and listening?</strong> Open this in the
+browser:</p>
+<pre><code>http://127.0.0.1:6266/ping</code></pre>
+<p>You should get:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span><span class="dt">&quot;ok&quot;</span><span class="fu">:</span><span class="kw">true</span><span class="fu">,</span><span class="dt">&quot;app&quot;</span><span class="fu">:</span><span class="st">&quot;MpSigSrv&quot;</span><span class="fu">,</span><span class="dt">&quot;build&quot;</span><span class="fu">:</span><span class="st">&quot;2026-08-11 20:11:26&quot;</span><span class="fu">}</span></span></code></pre></div>
+<p>Nothing at all means it is not running — start
+<code>MpSigSrv.exe -listen</code> and look at
+<code>MpSigSrv.log</code>.</p>
+<p><strong>2. Is it configured the way you think?</strong></p>
+<pre><code>http://127.0.0.1:6266/status</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span><span class="dt">&quot;ok&quot;</span><span class="fu">:</span><span class="kw">true</span><span class="fu">,</span><span class="dt">&quot;app&quot;</span><span class="fu">:</span><span class="st">&quot;MpSigSrv&quot;</span><span class="fu">,</span><span class="dt">&quot;port&quot;</span><span class="fu">:</span><span class="dv">6266</span><span class="fu">,</span><span class="dt">&quot;origins&quot;</span><span class="fu">:</span><span class="ot">[</span><span class="st">&quot;https://mp10web.example.org&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a> <span class="dt">&quot;service&quot;</span><span class="fu">:</span><span class="st">&quot;not a service - runs in the operator&#39;s session&quot;</span><span class="fu">,</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a> <span class="dt">&quot;captured&quot;</span><span class="fu">:</span><span class="dv">0</span><span class="fu">,</span><span class="dt">&quot;failed&quot;</span><span class="fu">:</span><span class="dv">0</span><span class="fu">,</span><span class="dt">&quot;wedged&quot;</span><span class="fu">:</span><span class="kw">false</span><span class="fu">}</span></span></code></pre></div>
+<p><strong><code>&quot;origins&quot;:[]</code> is the failure to look
+for.</strong> It means no <code>[SIGN] ORIGIN</code>, and every request
+from a browser will be refused however healthy the rest looks.</p>
+<p><strong>3. Does the pad actually work?</strong> Without a browser in
+the way, from a command prompt in the Mp10 program folder:</p>
+<pre><code>MpSigSrv.exe -enc=EN26-00000123 -operator=RCB</code></pre>
+<p>Use a real encounter number and a real operator code. The pad should
+show the consent; sign it and press the pen button. This is the check to
+run when the browser says something vague, because it takes the browser,
+the origin allowlist and the network out of the picture and leaves only
+the pad and the dictionary.</p>
+<p><code>-operator=</code> is <strong>required</strong>. It is stored on
+the signature as the record of who witnessed it, and there is no safe
+default — the helper refuses without one rather than inventing a
+value.</p>
+<p>MpSigSrv is a windowless program, so it prints nothing to the command
+prompt. Read <code>MpSigSrv.log</code>.</p>
+<p>Finally, in Mp10 Web: open an encounter and press <strong>Capture
+signature</strong>.</p>
+<h2 id="updating-a-workstation-later">Updating a workstation later</h2>
+<p>Stop it first — a running copy holds the exe open and cannot be
+overwritten:</p>
+<ol type="1">
+<li>End <code>MpSigSrv.exe</code> in Task Manager.</li>
+<li>Copy the new <code>MpSigSrv.exe</code> over the old one.</li>
+<li>Start it again, or log off and back on if it is started at
+logon.</li>
+</ol>
+<p>The build a workstation is running is reported by <code>/ping</code>
+and <code>/status</code>, which is how you confirm the copy actually
+took.</p>
+<hr />
+<h1 id="notes-for-the-curious">Notes for the curious</h1>
+<h2 id="is-it-safe-to-have-a-program-listening-on-the-workstation">Is it
+safe to have a program listening on the workstation?</h2>
+<p>It binds <strong>127.0.0.1</strong> only — nothing off that machine
+can reach it, and no firewall rule is needed. On top of that it refuses
+any browser request whose origin is not in <code>[SIGN] ORIGIN</code>.
+Because a JSON POST is a <em>preflighted</em> cross-origin request, a
+page from any other site is stopped by the browser before its request is
+ever sent.</p>
+<p>It does not check the Mp10 Web login token, and Mp10 Web deliberately
+does not send one — the helper has no use for it, and putting a session
+credential on that wire would only widen what a mistake could leak.</p>
+<p>This does not defend against other software already running as that
+user on that PC. Neither does Topaz’s own SigWeb, and that is the same
+trade the practice already accepted for signature capture.</p>
+<h2 id="why-does-the-operator-code-travel-with-each-capture">Why does
+the operator code travel with each capture?</h2>
+<p><code>patientsignatures.operator</code> records <strong>who witnessed
+the signature</strong>. The desktop gets that free, because the person
+signing in to the desktop <em>is</em> the dictionary user. MpSigSrv
+connects as a service account, so if it used the connection’s identity
+every signature would be attributed to <code>AutoTasks</code>. That
+happened once, in testing, which is why the operator is now sent
+explicitly and a capture without one is refused.</p>
+<h2 id="what-happens-if-a-capture-hangs">What happens if a capture
+hangs</h2>
+<p>The helper answers <code>/ping</code> and <code>/status</code>
+throughout, because HTTP is handled on a separate thread from the pad. A
+capture that nobody finishes is abandoned after 300 seconds — long,
+deliberately, because that clock is measuring a patient reading a
+consent, not a computer doing work.</p>
+<h2 id="does-an-https-site-really-reach-a-http127.0.0.1-helper">Does an
+https site really reach a http://127.0.0.1 helper?</h2>
+<p>Yes. Browsers treat loopback as a trustworthy origin and exempt it
+from mixed-content blocking. This is the same thing MpPrintSrv relies
+on.</p>
+</body>
+</html>

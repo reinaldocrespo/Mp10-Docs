@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-08-10" />
+  <meta name="dcterms.date" content="2026-08-13" />
   <title>Mp10 Web — Printing</title>
   <style>
 code{white-space: pre-wrap;}
@@ -212,7 +212,7 @@ a { color: inherit; }
 <p class="subtitle">Encounter forms and labels from the browser, and the
 helper behind them</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">10 August 2026</p>
+<p class="date">13 August 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -245,9 +245,13 @@ use Restart</a></li>
 <li><a href="#installing-it-it-task" id="toc-installing-it-it-task">Installing it — IT task</a>
 <ul>
 <li><a href="#what-to-copy" id="toc-what-to-copy">What to copy</a></li>
-<li><a href="#settings" id="toc-settings">1. Settings</a></li>
-<li><a href="#name-the-printers" id="toc-name-the-printers">2. Name the
-printers</a></li>
+<li><a href="#settings" id="toc-settings">1. Settings</a>
+<ul>
+<li><a href="#if-this-workstation-also-captures-signatures" id="toc-if-this-workstation-also-captures-signatures">If this
+workstation also captures signatures</a></li>
+</ul></li>
+<li><a href="#name-the-printers-or-let-the-operator-pick" id="toc-name-the-printers-or-let-the-operator-pick">2. Name the printers
+— or let the operator pick</a></li>
 <li><a href="#install-the-service" id="toc-install-the-service">3.
 Install the service</a></li>
 <li><a href="#the-session-0-trap" id="toc-the-session-0-trap">4. The
@@ -360,9 +364,11 @@ cause. Nothing is ever printed silently or half-printed.</p>
 <tr class="odd">
 <td>No printer whose name contains <strong>LABELS</strong> <em>(or
 FORMS)</em> is installed on this workstation</td>
-<td>The printer is missing, misnamed — or the helper is a service that
-cannot see it. See <em>The session 0 trap</em></td>
-<td><strong>IT task</strong></td>
+<td>Mp10 Web now offers the printer list instead of stopping here — pick
+one. If the printer you want is <strong>not in that list</strong>, it is
+missing, or the helper is a service that cannot see it: see <em>The
+session 0 trap</em></td>
+<td>Operator, then <strong>IT</strong> if the printer is absent</td>
 </tr>
 <tr class="even">
 <td>The print helper is not answering on this workstation</td>
@@ -424,9 +430,9 @@ service, which account it runs as, and when it started.</li>
 <li><strong>Jobs</strong> — how many have printed, how many failed, and
 the last error.</li>
 <li><strong>Printers this helper can see</strong> — which printer it
-would pick for <code>FORMS</code> and for <code>LABELS</code>, and the
-full list. <strong>This is the page that solves most printing
-problems.</strong></li>
+would pick for <code>FORMS</code> and for <code>LABELS</code>,
+<strong>which rule chose it</strong>, and the full list. <strong>This is
+the page that solves most printing problems.</strong></li>
 <li><strong>Allowed origins</strong> — the addresses it will accept
 requests from.</li>
 </ul>
@@ -496,6 +502,12 @@ program:</p>
 staff open Mp10 Web at</strong>, exactly as the browser sends it: scheme
 and host, no trailing slash, and the port too when it is not 80 or
 443.</li>
+<li><strong><code>[PRINT] FORMS</code> /
+<code>[PRINT] LABELS</code></strong> — optional, and normally absent. A
+printer name that overrides the naming convention, written here by the
+helper itself when an operator picks a printer and asks to be
+remembered. See <em>Name the printers — or let the operator
+pick</em>.</li>
 </ul>
 <p><code>ORIGIN</code> is not a formality. It is the whole of the access
 control: a page served from any other address is stopped by the browser
@@ -507,7 +519,27 @@ needs.</p>
 <p><code>PORT</code> is 6265 on both sides. Changing it here means
 changing it in Mp10 Web’s build as well, so leave it alone unless
 something else on the workstation already wants that port.</p>
-<h2 id="name-the-printers">2. Name the printers</h2>
+<h3 id="if-this-workstation-also-captures-signatures">If this
+workstation also captures signatures</h3>
+<p>A desk with a signature pad runs a <strong>second</strong> helper,
+<strong>MpSigSrv</strong>, and the two share this same
+<code>Mp10.ini</code>. They coexist and do not interact, but three
+things are worth knowing before you edit that file:</p>
+<ul>
+<li><strong>Different sections.</strong> Printing reads
+<code>[PRINT]</code>, signatures read <code>[SIGN]</code>. Both read the
+same <code>[RDD]</code>. Adding one must not replace the other.</li>
+<li><strong>Different ports.</strong> 6265 for printing, 6266 for
+signatures.</li>
+<li><strong>MpSigSrv is NOT a Windows service and cannot be
+one.</strong> It drives an ActiveX control and opens a window, and a
+service in session 0 has neither. It runs in the signed-in operator’s
+own session, started at logon. Installing it the way you install this
+one will not work.</li>
+</ul>
+<p>See the <em>Mp10 Signature Helper</em> guide for that half.</p>
+<h2 id="name-the-printers-or-let-the-operator-pick">2. Name the printers
+— or let the operator pick</h2>
 <p>The printer is found <strong>by name</strong>. This is the same
 convention the desktop application already uses:</p>
 <ul>
@@ -518,6 +550,41 @@ convention the desktop application already uses:</p>
 </ul>
 <p>Case does not matter. <code>Zebra ZD410 LABELS</code> and
 <code>labels-front-desk</code> both work.</p>
+<p><strong>Where the printers cannot be renamed, nothing has to be set
+up here.</strong> The first time somebody prints, the helper answers
+that it found no matching printer, and Mp10 Web shows the list of
+printers this workstation has and asks which to use. The job then goes
+to that printer. If the operator ticks <em>always use this printer</em>,
+the choice is written to <code>[PRINT]</code> in this workstation’s
+<code>Mp10.ini</code> and nobody is asked again:</p>
+<pre><code>[PRINT]
+FORMS=HP LaserJet 4200 (Front Desk)
+LABELS=Zebra ZD410</code></pre>
+<p>Full resolution order, for both <code>FORMS</code> and
+<code>LABELS</code>:</p>
+<ol type="1">
+<li>a printer chosen for that one job, from the picker</li>
+<li><code>[PRINT] FORMS=</code> / <code>[PRINT] LABELS=</code> in
+<code>Mp10.ini</code></li>
+<li>a printer whose name contains <code>FORMS</code> /
+<code>LABELS</code></li>
+<li>nothing — and the operator is offered the list</li>
+</ol>
+<p>A name in <code>Mp10.ini</code> that is <strong>not
+installed</strong> is skipped rather than used, and the next rule
+applies. That matters when a printer is later renamed or removed: the
+job falls back to the convention instead of failing, and the skip is
+recorded in <code>MpPrintSrv.log</code>.</p>
+<p><strong>To undo a remembered choice</strong>, delete the
+<code>FORMS=</code> or <code>LABELS=</code> line from
+<code>[PRINT]</code>. The next print picks the change up — the helper
+re-reads <code>Mp10.ini</code> for every job, so it does not need
+restarting. There is deliberately no button for this in the browser: it
+is a setting for the whole workstation, not for the session that made
+it.</p>
+<p><em>Admin → Print helper</em> shows which printer would be used
+<strong>and which of these rules chose it</strong>, so a remembered
+choice and a name match are told apart.</p>
 <h2 id="install-the-service">3. Install the service</h2>
 <p>From an <strong>elevated</strong> command prompt, in the folder
 holding <code>MpPrintSrv.exe</code>:</p>
@@ -639,9 +706,10 @@ nothing else on the network can reach it, only software already running
 on that PC. On top of that it accepts requests only from the web
 addresses listed in <code>[PRINT] ORIGIN</code>; your browser enforces
 that before a request is ever sent.</p>
-<p>This is the same arrangement the practice already relies on for
-signature pads, where Topaz’s SigWeb runs the same way on each
-workstation.</p>
+<p>The signature helper, <strong>MpSigSrv</strong>, works the same way
+on the same workstations — loopback plus an allowed-origins list. It is
+a different program on a different port, not Topaz’s SigWeb, which this
+practice does not use. See the <em>Mp10 Signature Helper</em> guide.</p>
 <h2 id="what-happens-if-a-print-job-hangs">What happens if a print job
 hangs</h2>
 <p>The helper is built so that a stuck job cannot take the rest of it
@@ -656,7 +724,7 @@ out.</p>
 <h2 id="does-an-https-site-really-reach-a-http127.0.0.1-helper">Does an
 https site really reach a http://127.0.0.1 helper?</h2>
 <p>Yes. Browsers treat the loopback address as trustworthy and exempt it
-from the usual rule against mixed content. SigWeb depends on the same
-behaviour.</p>
+from the usual rule against mixed content. The signature helper depends
+on the same behaviour.</p>
 </body>
 </html>

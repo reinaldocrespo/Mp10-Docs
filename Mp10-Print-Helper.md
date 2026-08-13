@@ -98,7 +98,7 @@ Nothing is ever printed silently or half-printed.
 
 | What it says | What it means | Who fixes it |
 |---|---|---|
-| No printer whose name contains **LABELS** *(or FORMS)* is installed on this workstation | The printer is missing, misnamed — or the helper is a service that cannot see it. See *The session 0 trap* | **IT task** |
+| No printer whose name contains **LABELS** *(or FORMS)* is installed on this workstation | Mp10 Web now offers the printer list instead of stopping here — pick one. If the printer you want is **not in that list**, it is missing, or the helper is a service that cannot see it: see *The session 0 trap* | Operator, then **IT** if the printer is absent |
 | The print helper is not answering on this workstation | MpPrintSrv is not running here, **or** its allowed-origins setting does not list this site | **IT task** |
 | Encounter not found | The encounter number did not match a record | Check the encounter |
 | A print job stopped responding at *(time)* … needs restarting | A job hung; the helper has stopped accepting new ones on purpose | **Admin → Print helper**, then **Restart** |
@@ -126,7 +126,7 @@ It shows:
   started.
 - **Jobs** — how many have printed, how many failed, and the last error.
 - **Printers this helper can see** — which printer it would pick for `FORMS`
-  and for `LABELS`, and the full list. **This is the page that solves most
+  and for `LABELS`, **which rule chose it**, and the full list. **This is the page that solves most
   printing problems.**
 - **Allowed origins** — the addresses it will accept requests from.
 
@@ -184,6 +184,10 @@ ORIGIN=https://mp10web.example.org
 - **`[PRINT] ORIGIN`** — **the address staff open Mp10 Web at**, exactly as the
   browser sends it: scheme and host, no trailing slash, and the port too when
   it is not 80 or 443.
+- **`[PRINT] FORMS` / `[PRINT] LABELS`** — optional, and normally absent. A
+  printer name that overrides the naming convention, written here by the helper
+  itself when an operator picks a printer and asks to be remembered. See
+  *Name the printers — or let the operator pick*.
 
 `ORIGIN` is not a formality. It is the whole of the access control: a page
 served from any other address is stopped by the browser before its request is
@@ -195,7 +199,23 @@ what a site reachable over both `http` and `https` needs.
 build as well, so leave it alone unless something else on the workstation
 already wants that port.
 
-## 2. Name the printers
+### If this workstation also captures signatures
+
+A desk with a signature pad runs a **second** helper, **MpSigSrv**, and the two
+share this same `Mp10.ini`. They coexist and do not interact, but three things
+are worth knowing before you edit that file:
+
+- **Different sections.** Printing reads `[PRINT]`, signatures read `[SIGN]`.
+  Both read the same `[RDD]`. Adding one must not replace the other.
+- **Different ports.** 6265 for printing, 6266 for signatures.
+- **MpSigSrv is NOT a Windows service and cannot be one.** It drives an ActiveX
+  control and opens a window, and a service in session 0 has neither. It runs
+  in the signed-in operator's own session, started at logon. Installing it the
+  way you install this one will not work.
+
+See the *Mp10 Signature Helper* guide for that half.
+
+## 2. Name the printers — or let the operator pick
 
 The printer is found **by name**. This is the same convention the desktop
 application already uses:
@@ -204,6 +224,40 @@ application already uses:
 - the form printer's Windows name must contain **`FORMS`**
 
 Case does not matter. `Zebra ZD410 LABELS` and `labels-front-desk` both work.
+
+**Where the printers cannot be renamed, nothing has to be set up here.** The
+first time somebody prints, the helper answers that it found no matching
+printer, and Mp10 Web shows the list of printers this workstation has and asks
+which to use. The job then goes to that printer. If the operator ticks *always
+use this printer*, the choice is written to `[PRINT]` in this workstation's
+`Mp10.ini` and nobody is asked again:
+
+```
+[PRINT]
+FORMS=HP LaserJet 4200 (Front Desk)
+LABELS=Zebra ZD410
+```
+
+Full resolution order, for both `FORMS` and `LABELS`:
+
+1. a printer chosen for that one job, from the picker
+2. `[PRINT] FORMS=` / `[PRINT] LABELS=` in `Mp10.ini`
+3. a printer whose name contains `FORMS` / `LABELS`
+4. nothing — and the operator is offered the list
+
+A name in `Mp10.ini` that is **not installed** is skipped rather than used, and
+the next rule applies. That matters when a printer is later renamed or removed:
+the job falls back to the convention instead of failing, and the skip is
+recorded in `MpPrintSrv.log`.
+
+**To undo a remembered choice**, delete the `FORMS=` or `LABELS=` line from
+`[PRINT]`. The next print picks the change up — the helper re-reads `Mp10.ini`
+for every job, so it does not need restarting. There is deliberately no button
+for this in the browser: it is a setting for the whole workstation, not for the
+session that made it.
+
+*Admin → Print helper* shows which printer would be used **and which of these
+rules chose it**, so a remembered choice and a name match are told apart.
 
 ## 3. Install the service
 
@@ -310,8 +364,10 @@ network can reach it, only software already running on that PC. On top of that
 it accepts requests only from the web addresses listed in `[PRINT] ORIGIN`;
 your browser enforces that before a request is ever sent.
 
-This is the same arrangement the practice already relies on for signature pads,
-where Topaz's SigWeb runs the same way on each workstation.
+The signature helper, **MpSigSrv**, works the same way on the same
+workstations — loopback plus an allowed-origins list. It is a different
+program on a different port, not Topaz's SigWeb, which this practice does not
+use. See the *Mp10 Signature Helper* guide.
 
 ## What happens if a print job hangs
 
@@ -327,4 +383,5 @@ than silently queueing work that will never come out.
 ## Does an https site really reach a http://127.0.0.1 helper?
 
 Yes. Browsers treat the loopback address as trustworthy and exempt it from the
-usual rule against mixed content. SigWeb depends on the same behaviour.
+usual rule against mixed content. The signature helper depends on the same
+behaviour.

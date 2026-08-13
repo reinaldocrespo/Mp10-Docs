@@ -26,8 +26,9 @@ This guide is for clinic staff using Mp10 Web in a browser. It does not cover
 how the system is installed or built — that is the **Mp10 Web — Installation**
 guide.
 
-Two companion guides cover things this one only points at: **Mp10 Web —
-Printing** for the print helper, and **Mp10 Signature Pads** for the Topaz pad.
+Three companion guides cover things this one only points at: **Mp10 Web —
+Printing** for the print helper, **Mp10 — Signature Helper** for the program
+that drives the pad, and **Mp10 Web — Signature Pads** for the pad itself.
 
 ## Signing in
 
@@ -87,7 +88,9 @@ calendar.
 
 ## The Dashboard
 
-After signing in, the Dashboard is what you land on first. It has three cards:
+After signing in, the Dashboard is what you land on first. What you see depends
+on what you are allowed to see, so a colleague's may have fewer cards than
+yours:
 
 - **Today** — a quick count of today's encounters, split out by site. If
   today shows nothing yet — first thing in the morning, or on a weekend or
@@ -98,13 +101,17 @@ After signing in, the Dashboard is what you land on first. It has three cards:
 - **Needs attention** — encounters from the last several days that still
   need a signature. Use it to catch anything that was missed before it gets
   old.
-- **System health** — three quick status rows:
+- **System health** — four quick status rows:
   - **Print helper (this workstation)** — whether the print helper program
     is answering on **the computer you're sitting at right now**, not on the
     server. It only knows about itself, so if you check this at the front
     desk and a colleague checks it at their own desk, you can each see a
     different answer — that's expected, not a bug. If it shows a job stuck
     ("stopped responding"), see **When printing does not work**.
+  - **Signature helper (this workstation)** — the same thing for the program
+    that drives the signature pad at your desk. Also workstation-local, and
+    also normal to differ from desk to desk: a computer with no pad attached
+    has no reason to be running it.
   - **HL7 interface** — when the last message came in from the lab/imaging
     interface, and how many are still waiting to be processed. This only
     turns red when messages have gone quiet for longer than expected — a
@@ -113,6 +120,12 @@ After signing in, the Dashboard is what you land on first. It has three cards:
   - **Modality worklist** — how many imaging orders are queued. Seeing
     "nothing scheduled" here is a normal, everyday answer, not an error —
     it just means nothing is queued right now.
+- **Print helper** and **Signature helper** — one card each, when you have
+  permission to see them, giving the fuller version of those two health rows:
+  whether the program is answering at this desk, how many jobs it has done and
+  how many failed. Both link through to their own page. Like the rows above,
+  they describe **this computer** — sitting at another desk shows that desk's
+  answer.
 
 ## Finding a patient
 
@@ -452,42 +465,59 @@ tab) let you attach a photo.
 ## Patient signatures from a signature pad
 
 If a **Topaz signature pad** is attached to your computer, you can take the
-patient's signature straight from it.
+patient's signature straight from it, for an encounter or for the patient's
+record.
 
-Select the encounter on either Encounters list and choose **Capture signature**.
+**The patient does everything on the pad.** They never look at the browser.
+The consent text, the options and the buttons all appear on the pad's own
+screen, exactly as they do in the desktop application — so a signature taken
+here and one taken from Mp10 are the same thing, recorded the same way.
 
-If your practice has set up a consent text, the window shows it first, one page
-at a time — **Continue** stays greyed out until the patient has reached the last
-page. If a choice was set up, they pick one of the options offered; it is one
-choice, not a tick-list. Then the signing area appears: the patient signs on the
-pad and their signature appears on screen as they write. **Clear** starts them
-over, **Save signature** stores it.
+Where to start it:
 
-**If the patient changes their choice after signing, the signature is cleared**
-and they are asked to sign again — the signature has to belong to the choice
-they actually made. The window says so when it happens.
+- **An encounter** — select it on either Encounters grid and choose **Capture
+  signature**; or open the encounter and use **Capture on pad** in the
+  **Signature** panel.
+- **The patient's record** — open the patient, and on **Demographics** use
+  **Capture signature** (or **Re-capture signature** where one is already on
+  file).
 
-With no consent text set up, the window goes straight to the signing area.
+What happens then is the same either way. A small window belonging to the
+signature helper comes to the front on your computer, and the pad wakes up.
+The patient reads the notice on the pad, pages through it if it is long, taps
+the option they agree to if options were set up, signs, and presses **OK** on
+the pad. It is stored at that point. **There is nothing for you to press in the
+browser while this is going on** — it waits, and tells you when it is done.
 
-**The button only works for an encounter that has no signature yet.** When it is
-greyed out, hover over it and it will say *"This encounter already has a
-signature"*. To replace one that is already there, open the encounter and use
-the **Signature** panel on the encounter form.
+If the patient presses **Cancel** on the pad instead, nothing is stored and the
+encounter or record simply stays unsigned.
 
-Two things it deliberately refuses:
+**Re-capturing replaces what was there.** On a patient record that already has
+a signature, the button says *Re-capture signature*, and the new one takes the
+place of the old, along with the notice and the option that went with it.
 
-- **Saving before anyone has signed.** It says so instead of storing a blank
-  image — an encounter that looks signed but is not would be worse than one
-  that is plainly unsigned.
-- **Working on a Mac, tablet or phone.** The pad software is Windows-only, and
-  the window says so rather than appearing to work. Use the **Signature** panel
-  on the encounter form instead — that works everywhere.
+### If it does not start
 
-If it reports that something is missing (`SigWebTablet.js`, or SigWeb not
-running), that is a setup task for whoever looks after the computers, not
-something you can fix at the desk. Nothing is saved when it happens, so the
-encounter simply stays unsigned. The full details are in the **Mp10 Signature
-Pads** guide.
+The signature helper is a small program that runs on **your own computer** —
+it has to, because the pad is plugged into your desk, not into the server. It
+is **not** a Windows service and does not start with Windows; it starts when
+you sign in. If it is not running, or the pad is not attached, Mp10 Web says
+so and nothing is stored.
+
+Two things worth knowing:
+
+- **It is Windows-only.** From a Mac, tablet or phone there is no pad and no
+  helper, and pad capture is not available. The encounter's **Signature** panel
+  still lets you attach a signature that arrived some other way, by upload or
+  from the camera, and that works everywhere.
+- **Check the Dashboard.** The **Signature helper** card says whether the
+  program is answering at the desk you are sitting at. If it is not, that is
+  the thing to fix first, and it is usually a matter of starting it.
+
+Anything beyond that — installing it, the pad drivers, or a capture that
+stopped responding — is in the **Mp10 Signature Helper** guide, and is a job
+for whoever looks after the computers rather than something to sort out at the
+desk.
 
 ## Printing encounter forms and labels
 
@@ -503,7 +533,30 @@ Select the encounter on either Encounters grid, then:
 - **Preview** — exactly what would have been printed, opened as a PDF in a new
   browser tab, with nothing sent to a printer.
 
-The printer is chosen automatically; nothing asks you which one.
+The printer is normally chosen automatically and nothing asks you which one:
+the form printer is the one whose Windows name contains `FORMS`, and the label
+printer the one whose name contains `LABELS`.
+
+### If it asks you to choose a printer
+
+Where the printers at a desk are not named that way, printing cannot guess, so
+it shows you the printers this computer has and asks which to use. Pick one and
+it prints. This is the normal way to work at such a desk — it is not an error,
+and nothing has to be set up first.
+
+Two things worth knowing when that window appears:
+
+- **"Always use this printer for forms/labels on this workstation"** stops the
+  question coming back. It is a setting for **the computer**, not for you: the
+  next person who sits here gets the same printer. Leave it unticked for a
+  one-off print at somebody else's desk.
+- **If the printer you want is not in the list**, choosing another one will not
+  help — the list is every printer this computer can reach. That one needs
+  installing, which is a job for whoever looks after the computers. Ticking the
+  box is also not how you undo a wrong choice later; ask them to clear it.
+
+Once a printer has been remembered, **Admin → Print helper** shows which one is
+being used and says that it was chosen here rather than found by name.
 
 **Preview is worth knowing about.** Use it to check a form looks right before
 committing a sheet, or when a label came out wrong and you want to see whether
@@ -523,9 +576,10 @@ and editing one is a deskbound job.
 ### When printing does not work
 
 Nothing is ever half-printed: when it fails, nothing was sent, and the message
-on screen names the cause. Most of them come down to the printer not being
-found by name, or the print helper not running on that computer — both setup
-tasks rather than something to fix at the desk.
+on screen names the cause. The commonest one — no printer named for `FORMS` or
+`LABELS` — is no longer a dead end: you are offered the list instead, as above.
+What is left is usually the print helper not running on that computer, which is
+a setup task rather than something to fix at the desk.
 
 If a print job stops responding, Mp10 Web refuses further printing from that
 computer until the helper is restarted, which is better than queueing work
