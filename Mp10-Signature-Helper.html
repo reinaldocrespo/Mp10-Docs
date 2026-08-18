@@ -241,6 +241,8 @@ signature pad</a></li>
 <ul>
 <li><a href="#it-is-not-a-service" id="toc-it-is-not-a-service">It is
 not a service</a></li>
+<li><a href="#the-quick-way-the-workstation-bundle" id="toc-the-quick-way-the-workstation-bundle">The quick way: the
+workstation bundle</a></li>
 <li><a href="#what-to-copy" id="toc-what-to-copy">What to copy</a></li>
 <li><a href="#settings" id="toc-settings">Settings</a></li>
 <li><a href="#telling-mpsigsrv-which-pad" id="toc-telling-mpsigsrv-which-pad">Telling MpSigSrv which pad</a></li>
@@ -635,6 +637,28 @@ session 0.</li>
 </ul>
 <p>It shows no window while it waits. To stop it, end
 <code>MpSigSrv.exe</code> in Task Manager.</p>
+<h2 id="the-quick-way-the-workstation-bundle">The quick way: the
+workstation bundle</h2>
+<p>The same installer that sets up the print helper installs this one
+too — it copies <code>MpSigSrv.exe</code> and <code>EZTW32.DLL</code>,
+and writes <code>[SIGN] PORT</code> and <code>[SIGN] ORIGIN</code> into
+<code>Mp10.ini</code> without disturbing anything else in that file. See
+<em>The quick way</em> in <strong>Mp10 Web — Printing</strong>.</p>
+<p>Two parts of this helper it cannot do for you, and says so rather
+than pretending otherwise:</p>
+<ul>
+<li><strong>Starting it at logon.</strong> MpSigSrv runs in the
+operator’s own session, and a Startup shortcut created by a technician
+lands in the <em>technician’s</em> profile — where it silently never
+runs for the person who needs it. The installer prints the exact
+shortcut and Task Scheduler settings instead; the exact shortcut and
+Task Scheduler settings are under <a href="#it-is-not-a-service">It is
+not a service</a> above.</li>
+<li><strong>Installing SigPlus.</strong> Topaz’s control is
+COM-registered by Topaz’s own installer. The workstation installer
+checks the registration and reports whether signature capture will work;
+scanning is unaffected either way.</li>
+</ul>
 <h2 id="what-to-copy">What to copy</h2>
 <p>Onto each workstation that has a pad:</p>
 <table>

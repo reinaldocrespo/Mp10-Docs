@@ -244,6 +244,8 @@ use Restart</a></li>
 </ul></li>
 <li><a href="#installing-it-it-task" id="toc-installing-it-it-task">Installing it — IT task</a>
 <ul>
+<li><a href="#the-quick-way-the-workstation-bundle" id="toc-the-quick-way-the-workstation-bundle">The quick way: the
+workstation bundle</a></li>
 <li><a href="#what-to-copy" id="toc-what-to-copy">What to copy</a></li>
 <li><a href="#settings" id="toc-settings">1. Settings</a>
 <ul>
@@ -451,6 +453,75 @@ instance before it tells you it worked — not merely for something to
 answer, because the old copy keeps replying for a moment after being
 asked to stop.</p>
 <h1 id="installing-it-it-task">Installing it — IT task</h1>
+<h2 id="the-quick-way-the-workstation-bundle">The quick way: the
+workstation bundle</h2>
+<p>There is an installer for this. It puts <strong>both</strong> desk
+helpers in place — MpPrintSrv for printing and MpSigSrv for the
+signature pad and scanning — so the manual steps below are the fallback,
+and the explanation of what the installer is doing.</p>
+<p>At each desk, from an <strong>elevated</strong> PowerShell:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Expand<span class="op">-</span>Archive mp10<span class="op">-</span>workstation<span class="op">-&lt;</span>version<span class="op">&gt;.</span><span class="fu">zip</span> <span class="op">-</span>DestinationPath C<span class="op">:</span>\Mp10Helpers</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>C<span class="op">:</span>\Mp10Helpers\Install<span class="op">-</span>Workstation<span class="op">.</span><span class="fu">ps1</span></span></code></pre></div>
+<p>It asks for the Mp10 program folder and the <strong>origin</strong> —
+the address staff open Mp10 Web at — and then:</p>
+<ul>
+<li>copies <code>MpPrintSrv.exe</code>, <code>MpSigSrv.exe</code>,
+<code>FrSystH.dll</code> and <code>EZTW32.DLL</code> into that
+folder;</li>
+<li>writes <code>PORT</code> and <code>ORIGIN</code> under
+<code>[PRINT]</code> and <code>[SIGN]</code> in <code>Mp10.ini</code>,
+<strong>editing only those lines</strong> — comments, ordering,
+<code>[RDD]</code> and every other section are left byte for byte as
+they were;</li>
+<li>registers MpPrintSrv as a service (<code>-SkipService</code> if you
+would rather not);</li>
+<li><strong>prints</strong> the MpSigSrv startup instructions rather
+than doing it — see <em>The session 0 trap</em> below for why it cannot
+be a service, and the signature-helper guide for whose profile a Startup
+shortcut would land in;</li>
+<li>checks both helpers over loopback and reports the origins each
+accepts.</li>
+</ul>
+<p><strong>Every answer defaults to what the desk already says.</strong>
+The installer reads the existing <code>Mp10.ini</code> first, so a
+re-run — or an update after the site changes address — is a matter of
+pressing Enter, and on a desk that already has an origin on file an
+unattended run needs no arguments at all. That matters across twenty
+desks: re-typing an origin nineteen times is how one of them ends up
+subtly different, and a wrong origin fails in the one way that looks
+identical to <em>“the helper is not running”</em>.</p>
+<p>Two things it deliberately does <strong>not</strong> install, because
+it cannot:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Why</th>
+<th>What to do instead</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>ace32.dll</code>, <code>axcws32.dll</code></td>
+<td>SAP’s 32-bit ACE client. Redistribution is governed by your own ADS
+licence, and every PC running the Mp10 desktop already has it.</td>
+<td>Install the Mp10 desktop applications there. The installer checks
+for the files and names them if they are absent.</td>
+</tr>
+<tr class="even">
+<td><code>SigPlus.ocx</code></td>
+<td>Topaz’s control is <strong>COM-registered</strong> by Topaz’s own
+SigPlus installer — copying the file would not work.</td>
+<td>Run Topaz’s SigPlus installer. The installer checks the registration
+and reports it.</td>
+</tr>
+</tbody>
+</table>
 <h2 id="what-to-copy">What to copy</h2>
 <p>From the Mp10 installation folder, onto each workstation that prints
 — <strong>four files</strong>:</p>
@@ -488,13 +559,13 @@ not start at all.</p>
 <h2 id="settings">1. Settings</h2>
 <p>Two settings matter, both in <code>Mp10.ini</code> next to the
 program:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[RDD]</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">RDD-VERSION</span><span class="ot">=</span><span class="st">REMOTE</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">PATH</span><span class="ot">=</span><span class="st">\\adsserver\adsdata\sfi\</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">[PRINT]</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="dt">PORT</span><span class="ot">=</span><span class="dv">6265</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="dt">ORIGIN</span><span class="ot">=</span><span class="st">https://mp10web.example.org</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[RDD]</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">RDD-VERSION</span><span class="ot">=</span><span class="st">REMOTE</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="dt">PATH</span><span class="ot">=</span><span class="st">\\adsserver\adsdata\sfi\</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">[PRINT]</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="dt">PORT</span><span class="ot">=</span><span class="dv">6265</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="dt">ORIGIN</span><span class="ot">=</span><span class="st">https://mp10web.example.org</span></span></code></pre></div>
 <ul>
 <li><strong><code>[RDD] PATH</code></strong> — the folder holding
 <code>mp.add</code>, the same value the desktop applications use.</li>

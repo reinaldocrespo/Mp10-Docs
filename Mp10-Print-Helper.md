@@ -148,6 +148,49 @@ the old copy keeps replying for a moment after being asked to stop.
 
 # Installing it — IT task
 
+## The quick way: the workstation bundle
+
+There is an installer for this. It puts **both** desk helpers in place —
+MpPrintSrv for printing and MpSigSrv for the signature pad and scanning — so
+the manual steps below are the fallback, and the explanation of what the
+installer is doing.
+
+At each desk, from an **elevated** PowerShell:
+
+```powershell
+Expand-Archive mp10-workstation-<version>.zip -DestinationPath C:\Mp10Helpers
+C:\Mp10Helpers\Install-Workstation.ps1
+```
+
+It asks for the Mp10 program folder and the **origin** — the address staff
+open Mp10 Web at — and then:
+
+- copies `MpPrintSrv.exe`, `MpSigSrv.exe`, `FrSystH.dll` and `EZTW32.DLL`
+  into that folder;
+- writes `PORT` and `ORIGIN` under `[PRINT]` and `[SIGN]` in `Mp10.ini`,
+  **editing only those lines** — comments, ordering, `[RDD]` and every other
+  section are left byte for byte as they were;
+- registers MpPrintSrv as a service (`-SkipService` if you would rather not);
+- **prints** the MpSigSrv startup instructions rather than doing it — see
+  *The session 0 trap* below for why it cannot be a service, and the
+  signature-helper guide for whose profile a Startup shortcut would land in;
+- checks both helpers over loopback and reports the origins each accepts.
+
+**Every answer defaults to what the desk already says.** The installer reads
+the existing `Mp10.ini` first, so a re-run — or an update after the site
+changes address — is a matter of pressing Enter, and on a desk that already
+has an origin on file an unattended run needs no arguments at all. That
+matters across twenty desks: re-typing an origin nineteen times is how one of
+them ends up subtly different, and a wrong origin fails in the one way that
+looks identical to *"the helper is not running"*.
+
+Two things it deliberately does **not** install, because it cannot:
+
+| | Why | What to do instead |
+|---|---|---|
+| `ace32.dll`, `axcws32.dll` | SAP's 32-bit ACE client. Redistribution is governed by your own ADS licence, and every PC running the Mp10 desktop already has it. | Install the Mp10 desktop applications there. The installer checks for the files and names them if they are absent. |
+| `SigPlus.ocx` | Topaz's control is **COM-registered** by Topaz's own SigPlus installer — copying the file would not work. | Run Topaz's SigPlus installer. The installer checks the registration and reports it. |
+
 ## What to copy
 
 From the Mp10 installation folder, onto each workstation that prints — **four

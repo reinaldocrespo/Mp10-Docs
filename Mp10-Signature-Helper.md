@@ -205,6 +205,26 @@ Practically, that means one of:
 It shows no window while it waits. To stop it, end `MpSigSrv.exe` in Task
 Manager.
 
+## The quick way: the workstation bundle
+
+The same installer that sets up the print helper installs this one too — it
+copies `MpSigSrv.exe` and `EZTW32.DLL`, and writes `[SIGN] PORT` and
+`[SIGN] ORIGIN` into `Mp10.ini` without disturbing anything else in that
+file. See *The quick way* in **Mp10 Web — Printing**.
+
+Two parts of this helper it cannot do for you, and says so rather than
+pretending otherwise:
+
+- **Starting it at logon.** MpSigSrv runs in the operator's own session, and
+  a Startup shortcut created by a technician lands in the *technician's*
+  profile — where it silently never runs for the person who needs it. The
+  installer prints the exact shortcut and Task Scheduler settings instead;
+  the exact shortcut and Task Scheduler settings are under
+  [It is not a service](#it-is-not-a-service) above.
+- **Installing SigPlus.** Topaz's control is COM-registered by Topaz's own
+  installer. The workstation installer checks the registration and reports
+  whether signature capture will work; scanning is unaffected either way.
+
 ## What to copy
 
 Onto each workstation that has a pad:
