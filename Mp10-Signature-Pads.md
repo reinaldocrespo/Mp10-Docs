@@ -34,8 +34,8 @@ There is one hard limitation to know before you start, because it decides who
 can use this at all:
 
 > **Signature pads only work on Windows computers.** The software Topaz
-> supplies is Windows-only. On a Mac, an iPad, or a phone, the **Capture
-> signature** button will tell you so and point you at the other way of
+> supplies is Windows-only. On a Mac, an iPad, or a phone, the **Sign**
+> button will tell you so and point you at the other way of
 > attaching a signature (see *If there is no pad*). This is a limitation of the
 > pad's software, not of Mp10 Web, and there is no way around it.
 
@@ -43,7 +43,7 @@ can use this at all:
 
 ## Where the button is
 
-Select an encounter, then choose **Capture signature**. The button is on both
+Select an encounter, then choose **Sign**. The button is on both
 encounters screens:
 
 - the **Encounters** list on the left-hand menu, and
@@ -65,7 +65,7 @@ choice to make — is set up by your practice; see *Setting up the consent text*
 below. If nothing has been set up, the window goes straight to the signing area
 and steps 1 and 2 below simply do not appear.
 
-1. **The consent text.** Select the encounter and choose **Capture signature**.
+1. **The consent text.** Select the encounter and choose **Sign**.
    The window shows the text your practice configured, one page at a time, with
    **Next** and **Back**. Let the patient read it. **Continue** stays greyed out
    until the last page has been reached — nobody can skip past the text.
@@ -80,7 +80,7 @@ and steps 1 and 2 below simply do not appear.
 5. Choose **Save signature**.
 
 The window confirms *"Signature saved"* and closes itself. The encounter's
-**Signature** column now shows a tick, and **Capture signature** greys out for
+**Signature** column now shows a tick, and **Sign** greys out for
 that encounter.
 
 **If the patient changes their choice after signing, the signature is cleared**
@@ -178,7 +178,7 @@ Anything in `public/` is copied into `dist/` by `npm run build`, so putting it i
 ## 3. Check it
 
 On a workstation with a pad, sign in to Mp10 Web, select an encounter with no
-signature and choose **Capture signature**.
+signature and choose **Sign**.
 
 - Signing area appears, no error → **working**.
 - *"SigWebTablet.js was not found"* → step 2 was missed, or the file is in the

@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-08-13" />
+  <meta name="dcterms.date" content="2026-08-18" />
   <title>Mp10 Web — User Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -148,7 +148,7 @@ a { color: inherit; }
 <p class="subtitle">Finding patients, working encounters, and everything
 the browser can do</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">13 August 2026</p>
+<p class="date">18 August 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -176,6 +176,8 @@ patient record</a>
 HIPAA signature</a></li>
 <li><a href="#insurance" id="toc-insurance">Insurance</a></li>
 <li><a href="#encounters" id="toc-encounters">Encounters</a></li>
+<li><a href="#the-flags-column" id="toc-the-flags-column">The Flags
+column</a></li>
 </ul></li>
 <li><a href="#the-grid-action-bar" id="toc-the-grid-action-bar">The grid
 action bar</a>
@@ -184,13 +186,30 @@ action bar</a>
 </ul></li>
 <li><a href="#orders-what-the-patient-is-in-for" id="toc-orders-what-the-patient-is-in-for">Orders — what the patient is
 in for</a></li>
+<li><a href="#results-what-came-back" id="toc-results-what-came-back">Results — what came back</a>
+<ul>
+<li><a href="#transcribed-and-scanned-results-are-different-and-the-list-says-which" id="toc-transcribed-and-scanned-results-are-different-and-the-list-says-which">Transcribed
+and scanned results are different, and the list says which</a></li>
+<li><a href="#if-a-result-will-not-print" id="toc-if-a-result-will-not-print">If a result will not print</a></li>
+</ul></li>
 <li><a href="#the-modality-worklist" id="toc-the-modality-worklist">The
 Modality worklist</a>
 <ul>
 <li><a href="#when-the-list-is-empty" id="toc-when-the-list-is-empty">When the list is empty</a></li>
 </ul></li>
 <li><a href="#capturing-images" id="toc-capturing-images">Capturing
-images</a></li>
+images</a>
+<ul>
+<li><a href="#scanning-a-card" id="toc-scanning-a-card">Scanning a
+card</a></li>
+</ul></li>
+<li><a href="#attachments" id="toc-attachments">Attachments</a>
+<ul>
+<li><a href="#scanning-a-document" id="toc-scanning-a-document">Scanning
+a document</a></li>
+<li><a href="#when-scanning-does-not-work" id="toc-when-scanning-does-not-work">When scanning does not
+work</a></li>
+</ul></li>
 <li><a href="#patient-signatures-from-a-signature-pad" id="toc-patient-signatures-from-a-signature-pad">Patient signatures from
 a signature pad</a>
 <ul>
@@ -216,8 +235,9 @@ not cover how the system is installed or built — that is the
 <strong>Mp10 Web — Installation</strong> guide.</p>
 <p>Three companion guides cover things this one only points at:
 <strong>Mp10 Web — Printing</strong> for the print helper, <strong>Mp10
-— Signature Helper</strong> for the program that drives the pad, and
-<strong>Mp10 Web — Signature Pads</strong> for the pad itself.</p>
+— Signature Helper</strong> for the program that drives both the pad
+<strong>and the scanner</strong> at your desk, and <strong>Mp10 Web —
+Signature Pads</strong> for the pad itself.</p>
 <h2 id="signing-in">Signing in</h2>
 <p>Go to the Mp10 Web address your office gives you. Enter your username
 and password and select <strong>Sign In</strong>.</p>
@@ -448,10 +468,9 @@ existing one to edit it. Either one opens in a dialog on top of the
 patient record, so you never leave the patient’s page just to work on an
 encounter.</li>
 <li>The action bar at the bottom of the grid (see “The grid action bar”
-below) has an <strong>Inactivate / Reactivate</strong> button.
-Inactivating an encounter does not delete or hide it — it stays in the
-list, shown in grey, and you can select it again later and reactivate
-it.</li>
+below) has an <strong>Active on/off</strong> button. Inactivating an
+encounter does not delete or hide it — it stays in the list, shown in
+grey, and you can select it again later and reactivate it.</li>
 </ul>
 <p><strong>Why “newest” means highest encounter number.</strong>
 Encounter lists are ordered by encounter number rather than by admission
@@ -465,6 +484,38 @@ you.</p>
 <p>You can still sort by <strong>Admitted</strong> by selecting that
 heading, which is occasionally what you want — just expect the strange
 ones at the end.</p>
+<h3 id="the-flags-column">The Flags column</h3>
+<p>Both encounters grids carry a narrow <strong>Flags</strong> column.
+It shows small marks telling you, at a glance, what an encounter already
+has:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Mark</th>
+<th>Means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>a pen nib</td>
+<td>a <strong>signature</strong> is on file for this encounter</td>
+</tr>
+<tr class="even">
+<td>a lined document</td>
+<td>this encounter has <strong>results</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>An encounter with neither shows nothing at all.</strong> That
+is deliberate: with no placeholders to read past, the rows that do carry
+something are the ones your eye lands on when you run down the column.
+An encounter can show both marks, one, or none.</p>
+<p>Hover over a mark and it will tell you what it is, so you do not have
+to remember which shape is which.</p>
+<p>The column does not sort. Both marks are worked out after the page of
+encounters has already been fetched, so a sort arrow there could not do
+anything, and one that silently did nothing would be worse than
+none.</p>
 <h2 id="the-grid-action-bar">The grid action bar</h2>
 <p>The patients list and both encounters grids (the standalone
 Encounters list and the patient’s own Encounters tab) each have a row of
@@ -488,6 +539,9 @@ existing note.</li>
 this patient’s record, on the web or on the desktop.</li>
 <li><strong>Appointments</strong> — a read-only list of the patient’s
 appointments.</li>
+<li><strong>Attachments</strong> — documents held against the patient:
+consents, referrals, results. Upload one, or scan one on the spot. See
+<strong>Attachments</strong>.</li>
 </ul>
 <p>Each of these opens in its own dialog on top of the patients list, so
 searching or paging the list underneath is undisturbed.</p>
@@ -503,16 +557,21 @@ are creating. The desktop works the same way.</li>
 <li><strong>Edit</strong> — open the selected encounter.</li>
 <li><strong>Orders</strong> — record what the patient is in for. See
 <strong>Orders</strong>.</li>
-<li><strong>Inactivate / Reactivate</strong> — flips the selected
-encounter’s status. You’ll be asked to confirm. An inactivated encounter
-is greyed out in the list, not removed, and can be reactivated the same
-way.</li>
-<li><strong>Capture signature</strong> — see <strong>Patient signatures
-from a signature pad</strong>.</li>
-<li><strong>Print encounter</strong>, <strong>Print label</strong> and
-<strong>Preview</strong> — see <strong>Printing encounter forms and
-labels</strong>.</li>
+<li><strong>Results</strong> — the results that have come back for this
+encounter, and printing them. See <strong>Results</strong>.</li>
+<li><strong>Active on/off</strong> — flips the selected encounter’s
+status. You’ll be asked to confirm. An inactivated encounter is greyed
+out in the list, not removed, and can be reactivated the same way.</li>
+<li><strong>Sign</strong> — see <strong>Patient signatures from a
+signature pad</strong>.</li>
+<li><strong>Print Enc</strong>, <strong>Label</strong>, <strong>Preview
+Enc</strong> and <strong>Preview Lbl</strong> — see <strong>Printing
+encounter forms and labels</strong>.</li>
 </ul>
+<p>The button names are short because the bar is narrow:
+<strong>Enc</strong> is the encounter form, <strong>Lbl</strong> the
+label. <strong>Print</strong> sends it to the printer;
+<strong>Preview</strong> shows it on screen first.</p>
 <p>Every one of these opens <strong>in a window on top of the
 grid</strong>, and the grid is untouched behind it — same filters, same
 page, same selected row when you close. That applies to patients and
@@ -597,6 +656,61 @@ missing)”</strong>, the item it was ordered from has since been deleted
 from the catalogue. The order is still real and still on the encounter —
 it is shown this way deliberately, rather than hidden, so nothing
 disappears from the record without you knowing.</p>
+<h2 id="results-what-came-back">Results — what came back</h2>
+<p>Orders are what the patient came in for. <strong>Results</strong> are
+what came back: the reports, readings and studies recorded against that
+encounter.</p>
+<p>Select an encounter on either Encounters grid and choose
+<strong>Results</strong>. A window opens listing every result on that
+encounter, newest first, showing the case type, the version, the
+ordering and performing doctors, and when it was created.</p>
+<p>Select a result, then:</p>
+<ul>
+<li><strong>View</strong> — opens it on screen, in a new browser
+tab.</li>
+<li><strong>Print</strong> — sends it to the forms printer at the
+computer you are sitting at.</li>
+</ul>
+<p>Nothing here changes a result. This window shows and prints them;
+results are still produced and edited in the desktop application.</p>
+<p>There is also a <strong>Signed</strong> column. On this practice’s
+data it is blank on every result, because the signing step it reports
+has never been used here — it is shown rather than hidden so that it
+starts telling you something the day that changes. An empty Signed
+column does not mean a result is unfinished.</p>
+<h3 id="transcribed-and-scanned-results-are-different-and-the-list-says-which">Transcribed
+and scanned results are different, and the list says which</h3>
+<p>The <strong>Kind</strong> column tells you how a result was produced,
+and it changes what you get:</p>
+<ul>
+<li><strong>Transcribed</strong> — the report was typed.
+<strong>View</strong> and <strong>Print</strong> lay it out on the
+practice’s own report form, with the patient, the encounter and the
+doctors filled in.</li>
+<li><strong>Scanned</strong> — the report arrived as a scan or an
+imported file, so the result <em>is</em> that document.
+<strong>View</strong> shows you the file itself.</li>
+</ul>
+<p><strong>Most scanned results are TIFF files</strong>, which browsers
+cannot display in a tab. When that happens the tab tells you so and
+offers the file to download instead, named properly so it opens in your
+usual image viewer. That is not a fault — it is the format the document
+was filed in.</p>
+<h3 id="if-a-result-will-not-print">If a result will not print</h3>
+<ul>
+<li><strong>“No printer whose name contains FORMS…”</strong> — this
+computer has no printer set up for forms. You’ll be offered the list of
+printers to choose from; pick the one you want, and you can ask to be
+remembered so you are not asked again.</li>
+<li><strong>Nothing happens, or the helper is not answering</strong> —
+the small Mp10 helper program that does the printing is not running at
+your desk. Same program, and same fix, as for encounter forms and the
+signature pad. See <strong>When printing does not work</strong>.</li>
+<li><strong>A message naming your printer</strong> — that text came from
+the printer’s own driver. Fix what it names and try again.</li>
+</ul>
+<p>Whether an encounter has any results at all is visible without
+opening this window: see <strong>The Flags column</strong>.</p>
 <h2 id="the-modality-worklist">The Modality worklist</h2>
 <p><strong>Modality worklist</strong> in the menu shows the imaging
 orders queued for the scanners — the same queue the imaging equipment
@@ -645,19 +759,111 @@ table and how it is turned on, which is an administrator’s job rather
 than a desk one.</p>
 <h2 id="capturing-images">Capturing images</h2>
 <p>Both the patient ID card (Demographics tab) and insurance cards
-(Insurance tab) let you attach a photo.</p>
+(Insurance tab) let you attach a photo. There are three ways to get one
+in.</p>
 <ul>
-<li><strong>On a desktop computer</strong>: selecting “Capture / Upload”
-opens a file picker. Choose an image you’ve already scanned into a
-folder (the same scan-to-folder process your office already uses).</li>
-<li><strong>On a phone or tablet</strong>: the same button can open your
-camera directly, so you can photograph the card on the spot.</li>
-<li>Accepted formats are JPEG and PNG, up to 4 MB. Large photos are
-automatically shrunk before they’re uploaded, so a full-size phone photo
-is fine — you don’t need to resize it yourself.</li>
-<li>Select <strong>Replace</strong> to swap out an existing image, or
-<strong>Delete</strong> to remove it.</li>
+<li><strong>Scan</strong> — if a scanner is attached to the computer you
+are sitting at, put the card on the glass and select
+<strong>Scan</strong>. See below; this is the quickest of the three and
+the one to prefer for a card.</li>
+<li><strong>Capture / Upload</strong>, on a desktop computer, opens a
+file picker. Choose an image you’ve already scanned into a folder, the
+same scan-to-folder process your office already uses.</li>
+<li><strong>Capture / Upload</strong>, on a phone or tablet, can open
+your camera directly, so you can photograph the card on the spot.</li>
 </ul>
+<p>Accepted formats are JPEG and PNG, up to 4 MB. Large photos are
+automatically shrunk before they’re uploaded, so a full-size phone photo
+is fine — you don’t need to resize it yourself. Select
+<strong>Replace</strong> to swap out an existing image, or
+<strong>Delete</strong> to remove it.</p>
+<h3 id="scanning-a-card">Scanning a card</h3>
+<p>Select <strong>Scan</strong> and a <em>Scan a card</em> window opens.
+Put the card on the glass, press <strong>Scan</strong>, and it appears
+in the window. Press <strong>Attach</strong> to keep it or
+<strong>Cancel</strong> to throw it away.</p>
+<p>Two things happen to a scanned card that are worth knowing:</p>
+<ul>
+<li><strong>It is cropped to the card.</strong> You do not need to line
+it up in a corner or trim it afterwards — the whole page is scanned and
+the card is cut out of it, the same as the Mp10 desktop does.</li>
+<li><strong>It is one page, and it replaces what is there.</strong>
+These fields hold a single image, so scanning a card does the same thing
+as <em>Replace</em>. There is no second side.</li>
+</ul>
+<p>If the card comes back <strong>uncropped</strong> — the whole sheet
+of glass, card somewhere in the middle — the usual reason is the
+<strong>scanner lid</strong>, left open or too dark to tell apart from
+the card. Close it and scan again. It is still a usable image either
+way, which is why you get it rather than an error.</p>
+<p><strong>No Scan button, or a greyed-out one</strong>, means the small
+Mp10 helper program is not running on your computer, or there is no
+scanner attached to it. It is the same program the signature pad uses —
+see <em>If it does not start</em>, below.</p>
+<h2 id="attachments">Attachments</h2>
+<p>Beyond the ID and insurance cards, a patient can hold
+<strong>attachments</strong> — consent forms, referrals, results,
+anything scanned or received as a file. Select the patient on the
+Patients list and choose <strong>Attachments</strong> from the action
+bar.</p>
+<p>From there you can <strong>Upload</strong> a file you already have,
+or <strong>Scan…</strong> one on the spot from a scanner attached to
+your computer.</p>
+<h3 id="scanning-a-document">Scanning a document</h3>
+<p>Select <strong>Scan…</strong> and a window opens listing what your
+computer can scan with. Where the scanner offers a choice, you can
+set:</p>
+<ul>
+<li><strong>Scanner</strong>, if more than one is attached.</li>
+<li><strong>Source</strong> — the glass, or the feeder, on a device that
+has one.</li>
+<li><strong>Resolution</strong> and <strong>Colour</strong>.</li>
+</ul>
+<p>Some scanners insist on asking for those settings themselves. When
+yours does, those choices are missing here and the window says so — the
+scanner’s own window will appear when the scan starts, on your
+screen.</p>
+<p>Then:</p>
+<ol type="1">
+<li>Put the first page on the scanner and press <strong>Scan</strong>.
+It appears as a thumbnail after a few seconds.</li>
+<li>To add more pages, put the next one on and press <strong>Scan
+another page</strong>. Repeat for as many as you need.</li>
+<li>Press <strong>Attach</strong> when you have them all. With more than
+one page the button says so — <em>Attach 3 pages as a PDF</em>.</li>
+</ol>
+<p><strong>One page is attached as an image. Several pages become one
+PDF.</strong> You do not choose; it follows from how many you
+scanned.</p>
+<p>Underneath the last page is a line reporting what came off the
+scanner and what was stored — <em>“2550×3507 from the scanner (25.6 MB)
+stored as 1163×1600 JPEG quality 75 (351 KB)”</em>. That is not an
+error. Every scan is shrunk to a sensible size before it is stored,
+which is why a 300 DPI colour page does not produce a 25 MB attachment,
+and it is why choosing a very high resolution mostly costs you scanning
+time rather than buying you a bigger file.</p>
+<h3 id="when-scanning-does-not-work">When scanning does not work</h3>
+<ul>
+<li><strong>The Scan… button is greyed out</strong> — the helper program
+is not running on your computer. Same fix as the signature pad; see
+<em>If it does not start</em>.</li>
+<li><strong>“…can see no scanner”</strong> — the helper is running but
+nothing is attached, or the scanner is off or asleep. Switch it on,
+check the cable, and press <strong>look again</strong>.</li>
+<li><strong>A message naming your scanner</strong>, after a pause — that
+text came from the scanner’s own driver. Paper jam, lid, cable. Fix what
+it names and scan again.</li>
+<li><strong>“That scan is N MB, over the 4 MB limit”</strong> — too many
+pages in one document. Attach the ones you have and scan the rest as a
+second attachment, or choose a lower resolution and scan again.</li>
+<li><strong>It is slow</strong> — a page takes several seconds, and your
+computer’s helper does one thing at a time. During a scan the signature
+pad at that same desk will wait its turn.</li>
+</ul>
+<p>Anything that survives all that is a job for whoever looks after the
+computers, and it is covered in the <strong>Mp10 Signature
+Helper</strong> guide — which, despite the name, is the guide for
+scanning too. It is the same program.</p>
 <h2 id="patient-signatures-from-a-signature-pad">Patient signatures from
 a signature pad</h2>
 <p>If a <strong>Topaz signature pad</strong> is attached to your
@@ -671,8 +877,8 @@ same thing, recorded the same way.</p>
 <p>Where to start it:</p>
 <ul>
 <li><strong>An encounter</strong> — select it on either Encounters grid
-and choose <strong>Capture signature</strong>; or open the encounter and
-use <strong>Capture on pad</strong> in the <strong>Signature</strong>
+and choose <strong>Sign</strong>; or open the encounter and use
+<strong>Capture on pad</strong> in the <strong>Signature</strong>
 panel.</li>
 <li><strong>The patient’s record</strong> — open the patient, and on
 <strong>Demographics</strong> use <strong>Capture signature</strong> (or
@@ -699,6 +905,10 @@ desk, not into the server. It is <strong>not</strong> a Windows service
 and does not start with Windows; it starts when you sign in. If it is
 not running, or the pad is not attached, Mp10 Web says so and nothing is
 stored.</p>
+<p><strong>It is the same program that does the scanning</strong>,
+despite the name. So a desk where the pad will not wake up is usually a
+desk where the <em>Scan</em> buttons are greyed out too, and one fix
+covers both.</p>
 <p>Two things worth knowing:</p>
 <ul>
 <li><strong>It is Windows-only.</strong> From a Mac, tablet or phone
@@ -723,10 +933,10 @@ application — so a label printed here and a label printed from Mp10 come
 out identical.</p>
 <p>Select the encounter on either Encounters grid, then:</p>
 <ul>
-<li><strong>Print encounter</strong> — the encounter form, to this
-computer’s <code>FORMS</code> printer.</li>
-<li><strong>Print label</strong> — the encounter label, to this
-computer’s <code>LABELS</code> printer.</li>
+<li><strong>Print Enc</strong> — the encounter form, to this computer’s
+<code>FORMS</code> printer.</li>
+<li><strong>Label</strong> — the encounter label, to this computer’s
+<code>LABELS</code> printer.</li>
 <li><strong>Preview</strong> — exactly what would have been printed,
 opened as a PDF in a new browser tab, with nothing sent to a
 printer.</li>

@@ -56,9 +56,9 @@ decision in this guide:
 On either Encounters grid — the standalone **Encounters** list, or a patient's
 own **Encounters** tab — select the encounter, then choose:
 
-- **Print encounter** — the encounter form, to the workstation's `FORMS`
+- **Print Enc** — the encounter form, to the workstation's `FORMS`
   printer.
-- **Print label** — the encounter label, to the workstation's `LABELS`
+- **Label** — the encounter label, to the workstation's `LABELS`
   printer.
 
 The printer is chosen automatically. Nothing asks you which one.
@@ -326,7 +326,7 @@ working, and **only the printer is left to sort out**. That single command
 separates half the possible faults from the other half.
 
 Then, from a browser on that workstation, select an encounter and choose
-**Preview**, then **Print label**.
+**Preview**, then **Label**.
 
 ## 6. Updating a workstation later
 

@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-08-13" />
+  <meta name="dcterms.date" content="2026-08-18" />
   <title>Mp10 — Signature Helper</title>
   <style>
 code{white-space: pre-wrap;}
@@ -209,10 +209,10 @@ a { color: inherit; }
 <body>
 <header id="title-block-header">
 <h1 class="title">Mp10 — Signature Helper</h1>
-<p class="subtitle">Capturing patient signatures on a Topaz pad from
-Mp10 Web</p>
+<p class="subtitle">Signature capture and document scanning at the
+workstation, for Mp10 Web</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">13 August 2026</p>
+<p class="date">18 August 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -227,10 +227,16 @@ program at all</a></li>
 <li><a href="#using-it-front-desk" id="toc-using-it-front-desk">Using it
 — front desk</a>
 <ul>
+<li><a href="#scanning-at-the-same-desk" id="toc-scanning-at-the-same-desk">Scanning, at the same desk</a></li>
 <li><a href="#what-it-does-not-do" id="toc-what-it-does-not-do">What it
 does not do</a></li>
 </ul></li>
-<li><a href="#when-something-is-wrong" id="toc-when-something-is-wrong">When something is wrong</a></li>
+<li><a href="#when-something-is-wrong" id="toc-when-something-is-wrong">When something is wrong</a>
+<ul>
+<li><a href="#the-signature-pad" id="toc-the-signature-pad">The
+signature pad</a></li>
+<li><a href="#scanning" id="toc-scanning">Scanning</a></li>
+</ul></li>
 <li><a href="#installing-it-it-task" id="toc-installing-it-it-task">Installing it — IT task</a>
 <ul>
 <li><a href="#it-is-not-a-service" id="toc-it-is-not-a-service">It is
@@ -244,6 +250,25 @@ text</a></li>
 <li><a href="#updating-a-workstation-later" id="toc-updating-a-workstation-later">Updating a workstation
 later</a></li>
 </ul></li>
+<li><a href="#scanning-it-task" id="toc-scanning-it-task">Scanning — IT
+task</a>
+<ul>
+<li><a href="#what-a-scanner-needs-on-the-workstation" id="toc-what-a-scanner-needs-on-the-workstation">What a scanner needs on
+the workstation</a></li>
+<li><a href="#wia-and-twain-and-why-both" id="toc-wia-and-twain-and-why-both">WIA and TWAIN, and why both</a></li>
+<li><a href="#how-the-helper-decides-what-a-scanner-can-do" id="toc-how-the-helper-decides-what-a-scanner-can-do">How the helper
+decides what a scanner can do</a></li>
+<li><a href="#the-cache-and-re-detect" id="toc-the-cache-and-re-detect">The cache, and Re-detect</a></li>
+<li><a href="#a-scanner-that-owns-its-own-settings" id="toc-a-scanner-that-owns-its-own-settings">A scanner that owns its
+own settings</a></li>
+<li><a href="#what-a-scanned-page-becomes" id="toc-what-a-scanned-page-becomes">What a scanned page
+becomes</a></li>
+<li><a href="#cropping-a-card" id="toc-cropping-a-card">Cropping a
+card</a></li>
+<li><a href="#when-a-scanner-is-not-found" id="toc-when-a-scanner-is-not-found">When a scanner is not
+found</a></li>
+<li><a href="#what-has-never-been-tested" id="toc-what-has-never-been-tested">What has never been tested</a></li>
+</ul></li>
 <li><a href="#notes-for-the-curious" id="toc-notes-for-the-curious">Notes for the curious</a>
 <ul>
 <li><a href="#is-it-safe-to-have-a-program-listening-on-the-workstation" id="toc-is-it-safe-to-have-a-program-listening-on-the-workstation">Is it
@@ -252,16 +277,56 @@ safe to have a program listening on the workstation?</a></li>
 the operator code travel with each capture?</a></li>
 <li><a href="#what-happens-if-a-capture-hangs" id="toc-what-happens-if-a-capture-hangs">What happens if a capture
 hangs</a></li>
+<li><a href="#why-a-scan-makes-the-desk-feel-slow" id="toc-why-a-scan-makes-the-desk-feel-slow">Why a scan makes the desk
+feel slow</a></li>
+<li><a href="#where-the-pdf-comes-from" id="toc-where-the-pdf-comes-from">Where the PDF comes from</a></li>
+<li><a href="#where-scanned-pages-live-while-a-scan-is-in-progress" id="toc-where-scanned-pages-live-while-a-scan-is-in-progress">Where
+scanned pages live while a scan is in progress</a></li>
 <li><a href="#does-an-https-site-really-reach-a-http127.0.0.1-helper" id="toc-does-an-https-site-really-reach-a-http127.0.0.1-helper">Does an
 https site really reach a http://127.0.0.1 helper?</a></li>
 </ul></li>
 </ul>
 </nav>
 <h1 id="about-this-guide">About this guide</h1>
-<p>Mp10 Web takes patient signatures on a <strong>Topaz signature
-pad</strong>, and it does that through a small companion program called
-<strong>MpSigSrv</strong> that runs on the workstation the pad is
-plugged into.</p>
+<p>Some of what Mp10 Web does happens on <strong>the computer the
+operator is sitting at</strong>, not on the server: taking a signature
+on a pad, and scanning a document. Both need hardware plugged into that
+desk, and a browser cannot reach it. A small companion program called
+<strong>MpSigSrv</strong> does those jobs on the workstation’s
+behalf.</p>
+<p><strong>MpSigSrv does two things, and the name only mentions one of
+them.</strong> It was written for the Topaz signature pad and kept its
+name when scanning was added to it. If you are here because a
+<em>Scan</em> button does not work, you are in the right guide.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>It does</th>
+<th>Which is</th>
+<th>Covered in</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Patient signatures on a <strong>Topaz pad</strong></td>
+<td>the original job</td>
+<td><em>Installing it</em></td>
+</tr>
+<tr class="even">
+<td><strong>Scanning</strong> a document or a card</td>
+<td>added later, same program</td>
+<td><em>Scanning</em></td>
+</tr>
+</tbody>
+</table>
+<p>Neither half needs the other. A desk with a scanner and no pad is a
+perfectly normal installation, and so is the reverse — you install the
+one program and attach whatever that desk has.</p>
 <p>There are two audiences here. <strong>Using it</strong> is for the
 person at the front desk and is two pages. Everything from
 <em>Installing it</em> onward is an <strong>IT task</strong> and is
@@ -292,7 +357,8 @@ on the machine in front of you and use that.</p>
 </tr>
 <tr class="even">
 <td>Runs on</td>
-<td>the workstation with the pad, in the signed-in user’s session</td>
+<td>the workstation with the pad or the scanner, in the signed-in user’s
+session</td>
 </tr>
 <tr class="odd">
 <td>Started by</td>
@@ -308,9 +374,18 @@ on the machine in front of you and use that.</p>
 PC</td>
 </tr>
 <tr class="even">
+<td>What can it scan?</td>
+<td>open <a href="http://127.0.0.1:6266/scanners" class="uri">http://127.0.0.1:6266/scanners</a> on that PC</td>
+</tr>
+<tr class="odd">
 <td>Settings</td>
 <td><code>[RDD]</code> and <code>[SIGN]</code> in <code>Mp10.ini</code>,
 beside the exe</td>
+</tr>
+<tr class="even">
+<td>Written by it</td>
+<td><code>MpScanners.ini</code>, beside the exe — what this desk’s
+scanners can do</td>
 </tr>
 <tr class="odd">
 <td>Logs</td>
@@ -336,11 +411,18 @@ sees.</p>
 <p>MpSigSrv also <strong>stores the signature itself</strong>, through
 the same statement the desktop uses. Nothing about the signature travels
 back through the browser.</p>
+<p>Scanning is here for a simpler reason: <strong>the scanner is plugged
+into the desk, not into the server</strong>, and a web page cannot talk
+to a scanner at all. Windows offers two ways to drive one — WIA and
+TWAIN — and neither is reachable from JavaScript. So the same program
+that already runs at that desk, and is already trusted by that browser,
+does the scanning too. Adding it to MpSigSrv rather than shipping a
+third program means one install, one startup entry and one setting to
+get wrong instead of three.</p>
 <hr />
 <h1 id="using-it-front-desk">Using it — front desk</h1>
 <ol type="1">
-<li>Open the encounter in Mp10 Web and press <strong>Capture
-signature</strong>.</li>
+<li>Open the encounter in Mp10 Web and press <strong>Sign</strong>.</li>
 <li>The browser shows you the consent the patient is being shown — this
 is your copy to follow, not theirs.</li>
 <li>Press <strong>Capture on pad</strong>.</li>
@@ -356,17 +438,39 @@ saved.”</em></li>
 <p>The options shown in the browser are greyed out on purpose.
 <strong>The patient chooses on the pad</strong>; a choice made on your
 screen would be a consent they never gave.</p>
+<h2 id="scanning-at-the-same-desk">Scanning, at the same desk</h2>
+<p>The same program answers the <strong>Scan</strong> buttons in Mp10
+Web. There are two of them and they behave differently on purpose:</p>
+<ul>
+<li><strong>Scan…</strong> in the patient’s <em>Attachments</em> window
+scans a document, a page at a time. Several pages become one PDF; a
+single page stays an image.</li>
+<li><strong>Scan</strong> beside the patient ID card and the insurance
+card scans <strong>one page and crops it to the card</strong>, the way
+the Mp10 desktop already does.</li>
+</ul>
+<p>The step-by-step is in the <strong>Mp10 Web User Guide</strong> under
+<em>Capturing images</em> and <em>Attachments</em>, because it is a desk
+task rather than an IT one. What belongs here is the part that sends
+people looking for help: <strong>if the Scan button is greyed out, this
+program is not running at that desk</strong> — the same cause as a pad
+that will not wake up, and the same fix.</p>
 <h2 id="what-it-does-not-do">What it does not do</h2>
 <ul>
 <li><strong>Patient-record (HIPAA) signatures</strong> are not on the
 pad from the web yet. Only encounter signatures are. The desktop still
 does the patient record.</li>
-<li><strong>It is Windows-only</strong>, because the pad is. A Mac or a
-tablet cannot capture from a pad at all — attach the signature from the
-record instead.</li>
+<li><strong>It is Windows-only</strong>, because the pad and the scanner
+drivers are. A Mac or a tablet cannot capture from a pad or scan at all
+— attach the signature or the image from the record instead, or
+photograph the card with the device’s own camera.</li>
+<li><strong>It does not scan both sides of a card.</strong> These fields
+hold one image, and a scan replaces what is there, exactly as
+<em>Replace</em> does.</li>
 </ul>
 <hr />
 <h1 id="when-something-is-wrong">When something is wrong</h1>
+<h2 id="the-signature-pad">The signature pad</h2>
 <table>
 <colgroup>
 <col style="width: 33%" />
@@ -424,16 +528,90 @@ restart MpSigSrv.</td>
 </tr>
 </tbody>
 </table>
+<h2 id="scanning">Scanning</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>What you see</th>
+<th>What it means</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>The <strong>Scan</strong> button is greyed out</td>
+<td>MpSigSrv is not answering at this desk — not running, or its
+<code>ORIGIN</code> does not list this site.</td>
+<td>The same fix as a pad that will not start: <a href="#check-it">Check
+it</a>.</td>
+</tr>
+<tr class="even">
+<td><em>The signature helper is running on this workstation, but it can
+see no scanner</em></td>
+<td>The helper answered; Windows reports no scanner.</td>
+<td>Switch the scanner on, connect it, press <strong>look
+again</strong>. If it is on and connected, see <a href="#when-a-scanner-is-not-found">When a scanner is not
+found</a>.</td>
+</tr>
+<tr class="odd">
+<td>The admin page says <em>this build predates scanning</em></td>
+<td>The helper at this desk is an older build. It has no scanning in it
+at all.</td>
+<td>Copy the current <code>MpSigSrv.exe</code> to that desk — <a href="#updating-a-workstation-later">Updating a workstation later</a>.
+Nothing else is wrong.</td>
+</tr>
+<tr class="even">
+<td>A message naming the driver, after several seconds</td>
+<td>The scanner itself refused or failed — paper jam, lid, cable,
+driver.</td>
+<td>The text is the driver’s own. Fix what it names and scan again.</td>
+</tr>
+<tr class="odd">
+<td><em>That scan is N MB, over the 4 MB limit</em></td>
+<td>Too many pages in one document.</td>
+<td>Attach what you have and scan the rest as a second document, or
+choose a lower resolution.</td>
+</tr>
+<tr class="even">
+<td>The scan works but the <strong>card is not cropped</strong></td>
+<td>The crop found nothing darker than the background, so it kept the
+whole page rather than fail.</td>
+<td>Usually a <strong>dark or open scanner lid</strong>. Close the lid.
+An uncropped card is still a usable card.</td>
+</tr>
+<tr class="odd">
+<td>Scanning stops after one page from the feeder</td>
+<td>The device reported no more paper.</td>
+<td>See <a href="#what-has-never-been-tested">What has never been
+tested</a> — the feeder is the least-proven path here.</td>
+</tr>
+<tr class="even">
+<td>Everything is slow, and <code>/ping</code> does not answer during a
+scan</td>
+<td>Normal. A page takes several seconds and the helper does one thing
+at a time.</td>
+<td>Wait.</td>
+</tr>
+</tbody>
+</table>
 <p>Two log files sit beside the exe and between them they answer most of
 this:</p>
 <ul>
 <li><strong><code>MpSigSrv.log</code></strong> — what the helper did:
 what it connected to, whether it is listening, each capture requested,
-the option picked, and every refusal.</li>
+the option picked, each scanner probe and scan, and every refusal.</li>
 <li><strong><code>Topaz.log</code></strong> — what the <em>pad</em>
 reported: its model number and its screen size. This is the file to read
 when the layout looks wrong.</li>
 </ul>
+<p>A third file, <strong><code>MpScanners.ini</code></strong>, is not a
+log but is worth reading for the same reason: it is what the helper
+believes each scanner at this desk can do. See <a href="#the-cache-and-re-detect">The cache, and Re-detect</a>.</p>
 <hr />
 <h1 id="installing-it-it-task">Installing it — IT task</h1>
 <h2 id="it-is-not-a-service">It is not a service</h2>
@@ -461,33 +639,44 @@ session 0.</li>
 <p>Onto each workstation that has a pad:</p>
 <table>
 <colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
 </colgroup>
 <thead>
 <tr class="header">
 <th>File</th>
 <th>What it is</th>
+<th>Needed for</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td><code>MpSigSrv.exe</code></td>
 <td>the helper</td>
+<td>everything</td>
 </tr>
 <tr class="even">
 <td><code>Mp10.ini</code></td>
 <td>settings — copy <code>Mp10.ini.example</code> and edit</td>
+<td>everything</td>
 </tr>
 <tr class="odd">
 <td><code>ace32.dll</code>, <code>axcws32.dll</code></td>
 <td>the <strong>32-bit</strong> Advantage client, already present on any
 PC running the Mp10 desktop apps</td>
+<td>everything</td>
 </tr>
 <tr class="even">
 <td><code>SigPlus.ocx</code></td>
 <td>Topaz’s control — installed and <strong>registered</strong> by
 Topaz’s own SigPlus installer, not copied by hand</td>
+<td>the pad</td>
+</tr>
+<tr class="odd">
+<td><code>EZTW32.DLL</code></td>
+<td>the TWAIN layer, from the Mp10 desktop install set</td>
+<td>TWAIN scanners only</td>
 </tr>
 </tbody>
 </table>
@@ -495,6 +684,20 @@ Topaz’s own SigPlus installer, not copied by hand</td>
 client the desktop applications use</strong>. This is the opposite of
 Mp10 Web’s server, which needs the 64-bit client — do not confuse the
 two.</p>
+<p><strong>Nothing in that table can stop the helper from starting
+except the first three.</strong> <code>SigPlus.ocx</code> and
+<code>EZTW32.DLL</code> are both looked up when they are first needed
+rather than when the program loads, so a desk with no pad, or no TWAIN
+scanner, or neither, still starts and still does the half it can. This
+is deliberate and it was learned the hard way: an earlier build required
+<code>EZTW32.DLL</code> to <em>load</em>, and on any machine without
+that file the exe died at startup with <code>0xC0000135</code> — which
+meant a missing scanner DLL took the signature pad down with it.
+<strong>If a build ever behaves that way again, the answer is the file,
+not the program.</strong></p>
+<p><code>gdiplus.dll</code> is used for every scanned page and is a
+Windows component present since XP. There is nothing to install and
+nothing to copy.</p>
 <p><code>SigPlus.ocx</code> comes from Topaz. Install
 <strong>SigPlus</strong> (not SigWeb — that is the browser component and
 is not used here) from <a href="https://www.topazsystems.com" class="uri">https://www.topazsystems.com</a>, which registers the
@@ -527,6 +730,11 @@ helper that is not running. Both arrive as the same failure. If Mp10 Web
 says the helper is not answering, check this line before anything else.
 <code>MpSigSrv.log</code> records the refusal by name, which is how you
 tell the two apart.</p>
+<p><strong>One line gates both halves.</strong> Scanning goes through
+the same door as signing, so a wrong <code>ORIGIN</code> takes out the
+<em>Scan</em> buttons and the pad together. That is worth knowing in
+reverse too: if scanning and signing are both dead at one desk, suspect
+this line rather than the hardware.</p>
 </blockquote>
 <p><strong><code>[RDD] user</code></strong> is the account MpSigSrv
 connects to the dictionary as. <strong>It is not the person who
@@ -599,8 +807,8 @@ patient a file path as though it were a consent, which is what it used
 to do.</p>
 </blockquote>
 <h2 id="check-it">Check it</h2>
-<p>Three checks, in this order. Do them on the workstation with the
-pad.</p>
+<p>Four checks, in this order. Do them on the workstation with the
+hardware. The last one is only for a desk that scans.</p>
 <p><strong>1. Is it running and listening?</strong> Open this in the
 browser:</p>
 <pre><code>http://127.0.0.1:6266/ping</code></pre>
@@ -631,8 +839,49 @@ default — the helper refuses without one rather than inventing a
 value.</p>
 <p>MpSigSrv is a windowless program, so it prints nothing to the command
 prompt. Read <code>MpSigSrv.log</code>.</p>
-<p>Finally, in Mp10 Web: open an encounter and press <strong>Capture
-signature</strong>.</p>
+<p><strong>4. Can it see the scanner?</strong> Only if this desk is
+meant to scan:</p>
+<pre><code>http://127.0.0.1:6266/scanners</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span><span class="fu">{</span><span class="dt">&quot;id&quot;</span><span class="fu">:</span><span class="st">&quot;...&quot;</span><span class="fu">,</span><span class="dt">&quot;name&quot;</span><span class="fu">:</span><span class="st">&quot;HP CLJM277 Scan Driver&quot;</span><span class="fu">,</span><span class="dt">&quot;backend&quot;</span><span class="fu">:</span><span class="st">&quot;wia&quot;</span><span class="fu">,</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;dpis&quot;</span><span class="fu">:</span><span class="ot">[</span><span class="dv">75</span><span class="ot">,</span><span class="dv">100</span><span class="ot">,</span><span class="dv">200</span><span class="ot">,</span><span class="dv">300</span><span class="ot">,</span><span class="dv">600</span><span class="ot">,</span><span class="dv">1200</span><span class="ot">]</span><span class="fu">,</span><span class="dt">&quot;colours&quot;</span><span class="fu">:</span><span class="ot">[</span><span class="st">&quot;colour&quot;</span><span class="ot">,</span><span class="st">&quot;gray&quot;</span><span class="ot">,</span><span class="st">&quot;bw&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;feeder&quot;</span><span class="fu">:</span><span class="kw">true</span><span class="fu">,</span><span class="dt">&quot;duplex&quot;</span><span class="fu">:</span><span class="kw">false</span><span class="fu">,</span><span class="dt">&quot;headless&quot;</span><span class="fu">:</span><span class="kw">true</span><span class="fu">,</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;cached&quot;</span><span class="fu">:</span><span class="kw">true</span><span class="fu">,</span><span class="dt">&quot;probed&quot;</span><span class="fu">:</span><span class="st">&quot;2026-08-15 11:04:22&quot;</span><span class="fu">}</span><span class="ot">]</span></span></code></pre></div>
+<p>Three answers and they mean different things:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Answer</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A list with your scanner in it</td>
+<td>Working. What it reports is what the browser will offer.</td>
+</tr>
+<tr class="even">
+<td><code>[]</code> — an empty list</td>
+<td>The helper is fine; Windows sees no scanner. <a href="#when-a-scanner-is-not-found">When a scanner is not
+found</a>.</td>
+</tr>
+<tr class="odd">
+<td><code>No such endpoint: GET /scanners</code></td>
+<td>This desk’s <code>MpSigSrv.exe</code> predates scanning. Copy the
+current one over.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Take the first answer seriously — it is the device’s own
+answer, not a guess.</strong> A resolution missing from
+<code>dpis</code> is a resolution that scanner refuses, and the browser
+will not offer it.</p>
+<p>Finally, in Mp10 Web: open an encounter and press
+<strong>Sign</strong>, and — on a scanning desk — open a patient’s
+<strong>Attachments</strong> and press <strong>Scan…</strong>.</p>
 <h2 id="updating-a-workstation-later">Updating a workstation later</h2>
 <p>Stop it first — a running copy holds the exe open and cannot be
 overwritten:</p>
@@ -645,6 +894,210 @@ logon.</li>
 <p>The build a workstation is running is reported by <code>/ping</code>
 and <code>/status</code>, which is how you confirm the copy actually
 took.</p>
+<blockquote>
+<p><strong>A desk on an old build does not report an error, it reports
+its age.</strong> Mp10 Web’s admin page says <em>“this workstation’s
+helper predates scanning”</em> and turns the Scan button off, rather
+than showing a failure. That is the right behaviour for the operator and
+a trap for you: <strong>nothing tells anybody to update that
+desk.</strong> When you roll out a new <code>MpSigSrv.exe</code>, the
+desks you miss stay quietly signature-only.</p>
+</blockquote>
+<hr />
+<h1 id="scanning-it-task">Scanning — IT task</h1>
+<p>Everything in this section is about the scanner half. A desk that
+only takes signatures can skip it.</p>
+<h2 id="what-a-scanner-needs-on-the-workstation">What a scanner needs on
+the workstation</h2>
+<p>Nothing that is not already there, in the ordinary case:</p>
+<ol type="1">
+<li><strong>The scanner’s own Windows driver</strong>, installed by its
+vendor as usual. If Windows Fax and Scan can see the device, so can
+MpSigSrv.</li>
+<li><strong><code>EZTW32.DLL</code> beside
+<code>MpSigSrv.exe</code></strong>, and only if the device is reached
+over TWAIN. It ships with the Mp10 desktop applications.</li>
+</ol>
+<p>There is no separate scanning setting. The port, the origin allowlist
+and the startup entry are the ones already described under
+<em>Installing it</em> — scanning uses the same door.</p>
+<h2 id="wia-and-twain-and-why-both">WIA and TWAIN, and why both</h2>
+<p>Windows has two scanner interfaces and devices do not agree on which
+to offer. MpSigSrv speaks <strong>both</strong>, and neither is a
+fallback for the other:</p>
+<ul>
+<li><strong>WIA</strong> is what most modern multifunction devices
+present.</li>
+<li><strong>TWAIN</strong> is what a lot of dedicated flatbeds present,
+and on some hardware it is the <em>more</em> capable of the two — it can
+be told to suppress its own dialog, set resolution directly and report a
+loaded feeder.</li>
+</ul>
+<p>The helper enumerates both, and a device reachable over both is
+listed once, noting that the other route exists. You do not choose; it
+uses what the device actually offers.</p>
+<h2 id="how-the-helper-decides-what-a-scanner-can-do">How the helper
+decides what a scanner can do</h2>
+<p><strong>It asks the device, every time, and it assumes
+nothing.</strong> This matters more than it sounds:</p>
+<ul>
+<li>The <strong>resolutions</strong> offered in the browser are the
+exact list the device reports. A device offering
+<code>{75, 100, 200, 300, 600, 1200}</code> will <em>fail</em> on
+anything else, several seconds into a transfer, so the browser never
+offers anything else.</li>
+<li>The <strong>colour modes</strong> are the ones the device
+accepts.</li>
+<li><strong>Feeder and duplex</strong> are reported, not assumed. The
+<em>Source</em> choice only appears when the device says it has a
+feeder.</li>
+</ul>
+<p>Enumeration — “what is plugged in right now” — runs on
+<strong>every</strong> check, which is what notices a scanner unplugged
+this morning. The expensive part, connecting to each device and reading
+its full capability list, is cached. That is what
+<code>MpScanners.ini</code> holds.</p>
+<h2 id="the-cache-and-re-detect">The cache, and Re-detect</h2>
+<p><code>MpScanners.ini</code> sits beside <code>MpSigSrv.exe</code>,
+one section per device, written by the helper. It is
+<strong>deliberately not in the dictionary</strong>: what a scanner can
+do is a fact about <em>that desk</em>, and putting it in shared storage
+would let one desk’s scanner define another’s.</p>
+<p>A cached record is used only while all three of these still
+match:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Keyed on</th>
+<th>So it re-probes when</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>the device’s id</td>
+<td>a different scanner is attached</td>
+</tr>
+<tr class="even">
+<td>the driver version</td>
+<td>the vendor’s driver is updated</td>
+</tr>
+<tr class="odd">
+<td>the MpSigSrv build</td>
+<td>you deploy a new helper — a newer build may ask better
+questions</td>
+</tr>
+</tbody>
+</table>
+<p>That covers the ordinary cases with no intervention. For the ones it
+cannot catch — a device replaced by another with the <em>same</em>
+identity, a driver misbehaving, capabilities that simply look wrong —
+Mp10 Web’s admin page has a <strong>Scanners</strong> card with a
+<strong>Re-detect</strong> button. It forgets every cached record so the
+next check reads the hardware from scratch.</p>
+<p>The same card is where you can see, per device, what the helper
+thinks it can do and <strong>when it was probed</strong>. A capability
+record can be weeks old and still be current, which is only obvious when
+the date is shown.</p>
+<p>Deleting <code>MpScanners.ini</code> by hand does the same thing as
+<em>Re-detect</em>. It is written from scratch when needed, and nothing
+else reads it.</p>
+<h2 id="a-scanner-that-owns-its-own-settings">A scanner that owns its
+own settings</h2>
+<p>Some TWAIN devices will not let their own settings dialog be
+suppressed. For those, the browser <strong>hides the resolution and
+colour controls</strong> and says so:</p>
+<blockquote>
+<p><em>This scanner asks for its own settings when the scan starts, so
+resolution and colour are chosen there rather than here.</em></p>
+</blockquote>
+<p>That is correct behaviour, not a fault. Offering controls the driver
+is going to ignore would be worse than offering none. The scan still
+works; the dialog appears <strong>on that workstation’s screen</strong>,
+and somebody has to be sitting there.</p>
+<h2 id="what-a-scanned-page-becomes">What a scanned page becomes</h2>
+<p>No page reaches Mp10 Web the way the scanner produced it. Every one
+goes through the same funnel in the helper, whichever backend acquired
+it:</p>
+<pre><code>acquire  -&gt;  scale to 1600 px on the long edge  -&gt;  JPEG, quality 75
+         -&gt;  if still too large, step the quality down and shrink again</code></pre>
+<p><strong>This is not an optimisation; it is the only way a scan
+fits.</strong> One page at 300 DPI in colour — an entirely reasonable
+choice for a clinical document — came off a real scanner as a
+<strong>25.6 MB TIFF</strong>, against Mp10 Web’s 4 MB ceiling. The
+helper turned it into <strong>351 KB</strong> in under a fifth of a
+second.</p>
+<p>Two consequences worth knowing before somebody reports them as
+bugs:</p>
+<ul>
+<li><strong>A higher DPI does not give a bigger stored file.</strong> It
+gives a better-sampled one that is then scaled to the same long edge.
+Beyond a point you are paying scanning time for nothing.</li>
+<li><strong>The browser shows what was done</strong> — the size that
+came off the glass, the size stored, and the quality used — underneath
+the last page. That line is there precisely so an operator who chose
+1200 DPI can see why the result is 350 KB.</li>
+</ul>
+<p>Several pages become <strong>one PDF</strong>, written by the helper
+itself. A single page stays a JPEG. The limits, none of which a desk
+normally meets: <strong>50 pages</strong> per document, <strong>2
+MB</strong> per page, <strong>4 MB</strong> for the finished document,
+and an abandoned scan is discarded after <strong>10
+minutes</strong>.</p>
+<h2 id="cropping-a-card">Cropping a card</h2>
+<p>The <em>Scan</em> button beside the patient ID card and the insurance
+card scans one page and <strong>crops it to the card</strong>, matching
+what Patients10 has always done.</p>
+<p>The crop is done in the helper, before the page is scaled, which is
+the whole reason it is worth doing there: a card cropped first and
+scaled second keeps about <strong>46% more detail on a policy
+number</strong> than the reverse, for the same stored bytes.</p>
+<p>It finds the card by looking for what is darker than the background.
+<strong>Every way that can fail ends in the whole page being stored,
+never in an error</strong>: a blank sheet, a lid left open, a crop that
+comes out absurdly small, or a page it cannot read the pixels of. So the
+failure a site will actually report is <em>“the crop did nothing”</em> —
+and the usual cause is a <strong>dark scanner lid, or one left
+open</strong>, which makes the whole page look like content.</p>
+<p>Note also that it crops to whatever is on the glass. A card scanned
+with a sheet of paper beside it crops to both.</p>
+<h2 id="when-a-scanner-is-not-found">When a scanner is not found</h2>
+<p><code>http://127.0.0.1:6266/scanners</code> answering <code>[]</code>
+means the helper is healthy and Windows reports no device. In order:</p>
+<ol type="1">
+<li><strong>Is it on, connected, and awake?</strong> A device asleep on
+USB often enumerates as absent.</li>
+<li><strong>Can anything else see it?</strong> Windows Fax and Scan, or
+the vendor’s own utility. If they cannot, this is a driver problem and
+MpSigSrv is not involved.</li>
+<li><strong>Is it a TWAIN-only device with no <code>EZTW32.DLL</code>
+beside the exe?</strong> Then the TWAIN half is simply switched off and
+reports nothing. Copy the file in and restart the helper.</li>
+<li><strong>Press <em>Re-detect</em></strong> on the admin page, in case
+a stale cached record is in the way.</li>
+</ol>
+<p><code>MpSigSrv.log</code> records each probe and what it found.</p>
+<h2 id="what-has-never-been-tested">What has never been tested</h2>
+<p>Recorded because meeting one of these unexpectedly is worse than
+reading about it here. All of the scanning work was proven against
+<strong>one</strong> device — an HP Color LaserJet MFP M277 — and these
+paths went untested:</p>
+<ul>
+<li><strong>A native vendor TWAIN driver.</strong> Every TWAIN test went
+through Microsoft’s WIA-to-TWAIN shim. That proves the plumbing, not how
+a vendor’s own driver behaves.</li>
+<li><strong>A loaded document feeder.</strong> “Is there another page”
+comes from the device’s own status and has only ever been observed
+reporting <em>no</em>, because every test scan was off the glass.</li>
+<li><strong>Duplex.</strong> The test device reports none.</li>
+<li><strong>The quality step-down.</strong> Nothing that scanner
+produced was large enough to need it.</li>
+</ul>
+<p>If a site meets one of these, the log and the browser’s per-page line
+are what to send back.</p>
 <hr />
 <h1 id="notes-for-the-curious">Notes for the curious</h1>
 <h2 id="is-it-safe-to-have-a-program-listening-on-the-workstation">Is it
@@ -661,6 +1114,11 @@ credential on that wire would only widen what a mistake could leak.</p>
 <p>This does not defend against other software already running as that
 user on that PC. Neither does Topaz’s own SigWeb, and that is the same
 trade the practice already accepted for signature capture.</p>
+<p>Scanning was added behind the <strong>same</strong> door rather than
+a second one, on the same reasoning: the threat model did not change —
+software already running as that user can drive the scanner without
+going through us — and a second access control would only be a second
+thing to get wrong.</p>
 <h2 id="why-does-the-operator-code-travel-with-each-capture">Why does
 the operator code travel with each capture?</h2>
 <p><code>patientsignatures.operator</code> records <strong>who witnessed
@@ -677,6 +1135,34 @@ throughout, because HTTP is handled on a separate thread from the pad. A
 capture that nobody finishes is abandoned after 300 seconds — long,
 deliberately, because that clock is measuring a patient reading a
 consent, not a computer doing work.</p>
+<h2 id="why-a-scan-makes-the-desk-feel-slow">Why a scan makes the desk
+feel slow</h2>
+<p>The pad, the scanner and every other piece of hardware are driven
+from <strong>one thread</strong>, and only one job runs at a time. A
+page takes several seconds, so during a scan that desk’s helper answers
+nothing else. This is fine for one operator at one desk, which is the
+only thing it is ever asked to be, but it is worth knowing rather than
+discovering.</p>
+<h2 id="where-the-pdf-comes-from">Where the PDF comes from</h2>
+<p>Mp10 has a PDF library, and this program does not use it. Driven from
+a scan, it <strong>crashed the helper</strong> — an access violation
+inside the third-party DLL, before a single page had been added. That is
+the worst failure this design can have, because the same program is
+holding the signature pad, and a crash of that kind cannot be caught and
+recovered from.</p>
+<p>So MpSigSrv writes the PDF itself, in about ninety lines. A JPEG is
+already a legal PDF image stream, so each page goes in exactly as it
+came out of the scanner — nothing is decoded, re-encoded, or lost. The
+result was checked against an independent PDF reader rather than only
+against ours.</p>
+<h2 id="where-scanned-pages-live-while-a-scan-is-in-progress">Where
+scanned pages live while a scan is in progress</h2>
+<p>In the user’s temporary folder, named <code>mpscan…</code>, and
+deleted when the document is attached or cancelled. <strong>They are
+clinical documents</strong>, so there is a backstop: if the helper is
+ever killed mid-scan, the pages it was holding are orphaned, and the
+next start sweeps away any <code>mpscan</code> file more than an hour
+old.</p>
 <h2 id="does-an-https-site-really-reach-a-http127.0.0.1-helper">Does an
 https site really reach a http://127.0.0.1 helper?</h2>
 <p>Yes. Browsers treat loopback as a trustworthy origin and exempt it

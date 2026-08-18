@@ -239,6 +239,67 @@ Mp10 Web is installed.
 Open the URL. If the certificate is the self-signed placeholder (see below),
 the browser will warn — that is expected until it is replaced.
 
+**The site is now running, and three things in it still will not work.** That
+is expected, and it is not a fault in the install — see below.
+
+# The workstation side, which this installer does not do
+
+Everything above sets up the **server**. Three features do not live there,
+because the hardware they need is plugged into the operator's own desk and a
+browser cannot reach it:
+
+| Feature | Needs, on each workstation |
+|---|---|
+| Printing encounter forms, labels and results | **MpPrintSrv** |
+| Patient signatures on a Topaz pad | **MpSigSrv** |
+| Scanning documents and cards | **MpSigSrv** (same program) |
+
+Each is a small program that runs at the desk and is driven over loopback by
+the browser. Neither is in this bundle and neither is installed by
+`install.ps1`. Until they are set up, those buttons are greyed out or report
+that the helper is not answering — on a site that is otherwise perfectly
+healthy. **Do not read that as a failed install.**
+
+They have their own guides, and both are IT tasks:
+
+- **Mp10 Web — Printing** for MpPrintSrv.
+- **Mp10 — Signature Helper** for MpSigSrv, which despite its name covers
+  scanning as well as the signature pad.
+
+## The one thing that connects the two halves
+
+**Question 6's answer — the public origin — must be copied into every
+workstation.** Each helper reads an allowlist from `Mp10.ini` beside it:
+
+```ini
+[PRINT]
+ORIGIN=https://mp10web.example.org:8443
+
+[SIGN]
+ORIGIN=https://mp10web.example.org:8443
+```
+
+Exactly as the browser sends it: scheme and host, the port when it is not 80
+or 443, and no trailing slash. It must match what you answered at question 6.
+
+Get this wrong and **every request from the browser is refused** — and a
+browser cannot tell a refused origin from a helper that is not running. Both
+arrive as the same message. It is the single most common reason a correctly
+installed site cannot print or sign, so check it before anything else, and
+check it on the workstation rather than the server.
+
+Two practical notes that cost time when they are not known:
+
+- **Each helper reads its port and origin once, at startup.** After editing
+  `Mp10.ini`, restart it — `Restart-Service MpPrintSrv` for the print helper;
+  MpSigSrv is **not** a service and is ended and relaunched in the operator's
+  own session.
+- **Ask the helper what it believes**, rather than reading the ini and
+  assuming. On the workstation, open `http://127.0.0.1:6265/status` and
+  `http://127.0.0.1:6266/status`. Each reports the origins it will accept.
+  `"origins":[]` means none were configured and every browser request will be
+  refused.
+
 # What it touches
 
 Deliberately little, and every bit of it is listed here:
@@ -397,6 +458,13 @@ range — it is always written to a temporary file and validated with
 actually reads (step 7/8), so a rejected render never touches what is
 currently live. The table below is keyed to the exact message text; where a message
 embeds a value (a path, a count, a port), that part is shown as `<...>`.
+
+> **Before you use this table, check what is actually broken.** These messages
+> come from `install.ps1`. If the installer finished cleanly and the site loads,
+> but **printing, signing or scanning** does not work, nothing here applies —
+> that is the workstation side, which this installer does not touch. See
+> [The workstation side](#the-workstation-side-which-this-installer-does-not-do),
+> and check the origin allowlist first.
 
 ## Step 0/8 — Privileges
 

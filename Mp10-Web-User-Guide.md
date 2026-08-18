@@ -28,7 +28,8 @@ guide.
 
 Three companion guides cover things this one only points at: **Mp10 Web —
 Printing** for the print helper, **Mp10 — Signature Helper** for the program
-that drives the pad, and **Mp10 Web — Signature Pads** for the pad itself.
+that drives both the pad **and the scanner** at your desk, and **Mp10 Web —
+Signature Pads** for the pad itself.
 
 ## Signing in
 
@@ -263,7 +264,7 @@ This tab lists the patient's visits (encounters), newest first.
   Either one opens in a dialog on top of the patient record, so you never
   leave the patient's page just to work on an encounter.
 - The action bar at the bottom of the grid (see "The grid action bar" below)
-  has an **Inactivate / Reactivate** button. Inactivating an encounter does
+  has an **Active on/off** button. Inactivating an encounter does
   not delete or hide it — it stays in the list, shown in grey, and you can
   select it again later and reactivate it.
 
@@ -278,6 +279,28 @@ longer what greets you.
 
 You can still sort by **Admitted** by selecting that heading, which is
 occasionally what you want — just expect the strange ones at the end.
+
+### The Flags column
+
+Both encounters grids carry a narrow **Flags** column. It shows small marks
+telling you, at a glance, what an encounter already has:
+
+| Mark | Means |
+|---|---|
+| a pen nib | a **signature** is on file for this encounter |
+| a lined document | this encounter has **results** |
+
+**An encounter with neither shows nothing at all.** That is deliberate: with no
+placeholders to read past, the rows that do carry something are the ones your
+eye lands on when you run down the column. An encounter can show both marks,
+one, or none.
+
+Hover over a mark and it will tell you what it is, so you do not have to
+remember which shape is which.
+
+The column does not sort. Both marks are worked out after the page of
+encounters has already been fetched, so a sort arrow there could not do
+anything, and one that silently did nothing would be worse than none.
 
 ## The grid action bar
 
@@ -298,6 +321,8 @@ once you've selected a row — select a row first, then choose the action.
 - **Audit log** — a read-only history of changes made to this patient's
   record, on the web or on the desktop.
 - **Appointments** — a read-only list of the patient's appointments.
+- **Attachments** — documents held against the patient: consents, referrals,
+  results. Upload one, or scan one on the spot. See **Attachments**.
 
 Each of these opens in its own dialog on top of the patients list, so
 searching or paging the list underneath is undisturbed.
@@ -312,11 +337,18 @@ tab), the buttons are:
   can see whose visit you are creating. The desktop works the same way.
 - **Edit** — open the selected encounter.
 - **Orders** — record what the patient is in for. See **Orders**.
-- **Inactivate / Reactivate** — flips the selected encounter's status. You'll
+- **Results** — the results that have come back for this encounter, and
+  printing them. See **Results**.
+- **Active on/off** — flips the selected encounter's status. You'll
   be asked to confirm. An inactivated encounter is greyed out in the list,
   not removed, and can be reactivated the same way.
-- **Capture signature** — see **Patient signatures from a signature pad**.
-- **Print encounter**, **Print label** and **Preview** — see **Printing encounter forms and labels**.
+- **Sign** — see **Patient signatures from a signature pad**.
+- **Print Enc**, **Label**, **Preview Enc** and **Preview Lbl** — see
+  **Printing encounter forms and labels**.
+
+The button names are short because the bar is narrow: **Enc** is the encounter
+form, **Lbl** the label. **Print** sends it to the printer; **Preview** shows
+it on screen first.
 
 Every one of these opens **in a window on top of the grid**, and the grid is
 untouched behind it — same filters, same page, same selected row when you
@@ -401,6 +433,61 @@ it was ordered from has since been deleted from the catalogue. The order is
 still real and still on the encounter — it is shown this way deliberately,
 rather than hidden, so nothing disappears from the record without you knowing.
 
+## Results — what came back
+
+Orders are what the patient came in for. **Results** are what came back: the
+reports, readings and studies recorded against that encounter.
+
+Select an encounter on either Encounters grid and choose **Results**. A window
+opens listing every result on that encounter, newest first, showing the case
+type, the version, the ordering and performing doctors, and when it was
+created.
+
+Select a result, then:
+
+- **View** — opens it on screen, in a new browser tab.
+- **Print** — sends it to the forms printer at the computer you are sitting at.
+
+Nothing here changes a result. This window shows and prints them; results are
+still produced and edited in the desktop application.
+
+There is also a **Signed** column. On this practice's data it is blank on every
+result, because the signing step it reports has never been used here — it is
+shown rather than hidden so that it starts telling you something the day that
+changes. An empty Signed column does not mean a result is unfinished.
+
+### Transcribed and scanned results are different, and the list says which
+
+The **Kind** column tells you how a result was produced, and it changes what
+you get:
+
+- **Transcribed** — the report was typed. **View** and **Print** lay it out on
+  the practice's own report form, with the patient, the encounter and the
+  doctors filled in.
+- **Scanned** — the report arrived as a scan or an imported file, so the result
+  *is* that document. **View** shows you the file itself.
+
+**Most scanned results are TIFF files**, which browsers cannot display in a
+tab. When that happens the tab tells you so and offers the file to download
+instead, named properly so it opens in your usual image viewer. That is not a
+fault — it is the format the document was filed in.
+
+### If a result will not print
+
+- **"No printer whose name contains FORMS…"** — this computer has no printer
+  set up for forms. You'll be offered the list of printers to choose from; pick
+  the one you want, and you can ask to be remembered so you are not asked
+  again.
+- **Nothing happens, or the helper is not answering** — the small Mp10 helper
+  program that does the printing is not running at your desk. Same program, and
+  same fix, as for encounter forms and the signature pad. See **When printing
+  does not work**.
+- **A message naming your printer** — that text came from the printer's own
+  driver. Fix what it names and try again.
+
+Whether an encounter has any results at all is visible without opening this
+window: see **The Flags column**.
+
 ## The Modality worklist
 
 **Modality worklist** in the menu shows the imaging orders queued for the
@@ -449,18 +536,107 @@ turned on, which is an administrator's job rather than a desk one.
 ## Capturing images
 
 Both the patient ID card (Demographics tab) and insurance cards (Insurance
-tab) let you attach a photo.
+tab) let you attach a photo. There are three ways to get one in.
 
-- **On a desktop computer**: selecting "Capture / Upload" opens a file
-  picker. Choose an image you've already scanned into a folder (the same
-  scan-to-folder process your office already uses).
-- **On a phone or tablet**: the same button can open your camera directly, so
-  you can photograph the card on the spot.
-- Accepted formats are JPEG and PNG, up to 4 MB. Large photos are
-  automatically shrunk before they're uploaded, so a full-size phone photo is
-  fine — you don't need to resize it yourself.
-- Select **Replace** to swap out an existing image, or **Delete** to remove
-  it.
+- **Scan** — if a scanner is attached to the computer you are sitting at, put
+  the card on the glass and select **Scan**. See below; this is the quickest
+  of the three and the one to prefer for a card.
+- **Capture / Upload**, on a desktop computer, opens a file picker. Choose an
+  image you've already scanned into a folder, the same scan-to-folder process
+  your office already uses.
+- **Capture / Upload**, on a phone or tablet, can open your camera directly,
+  so you can photograph the card on the spot.
+
+Accepted formats are JPEG and PNG, up to 4 MB. Large photos are automatically
+shrunk before they're uploaded, so a full-size phone photo is fine — you don't
+need to resize it yourself. Select **Replace** to swap out an existing image,
+or **Delete** to remove it.
+
+### Scanning a card
+
+Select **Scan** and a *Scan a card* window opens. Put the card on the glass,
+press **Scan**, and it appears in the window. Press **Attach** to keep it or
+**Cancel** to throw it away.
+
+Two things happen to a scanned card that are worth knowing:
+
+- **It is cropped to the card.** You do not need to line it up in a corner or
+  trim it afterwards — the whole page is scanned and the card is cut out of it,
+  the same as the Mp10 desktop does.
+- **It is one page, and it replaces what is there.** These fields hold a single
+  image, so scanning a card does the same thing as *Replace*. There is no
+  second side.
+
+If the card comes back **uncropped** — the whole sheet of glass, card somewhere
+in the middle — the usual reason is the **scanner lid**, left open or too dark
+to tell apart from the card. Close it and scan again. It is still a usable
+image either way, which is why you get it rather than an error.
+
+**No Scan button, or a greyed-out one**, means the small Mp10 helper program is
+not running on your computer, or there is no scanner attached to it. It is the
+same program the signature pad uses — see *If it does not start*, below.
+
+## Attachments
+
+Beyond the ID and insurance cards, a patient can hold **attachments** — consent
+forms, referrals, results, anything scanned or received as a file. Select the
+patient on the Patients list and choose **Attachments** from the action bar.
+
+From there you can **Upload** a file you already have, or **Scan…** one on the
+spot from a scanner attached to your computer.
+
+### Scanning a document
+
+Select **Scan…** and a window opens listing what your computer can scan with.
+Where the scanner offers a choice, you can set:
+
+- **Scanner**, if more than one is attached.
+- **Source** — the glass, or the feeder, on a device that has one.
+- **Resolution** and **Colour**.
+
+Some scanners insist on asking for those settings themselves. When yours does,
+those choices are missing here and the window says so — the scanner's own
+window will appear when the scan starts, on your screen.
+
+Then:
+
+1. Put the first page on the scanner and press **Scan**. It appears as a
+   thumbnail after a few seconds.
+2. To add more pages, put the next one on and press **Scan another page**.
+   Repeat for as many as you need.
+3. Press **Attach** when you have them all. With more than one page the button
+   says so — *Attach 3 pages as a PDF*.
+
+**One page is attached as an image. Several pages become one PDF.** You do not
+choose; it follows from how many you scanned.
+
+Underneath the last page is a line reporting what came off the scanner and what
+was stored — *"2550×3507 from the scanner (25.6 MB) stored as 1163×1600 JPEG
+quality 75 (351 KB)"*. That is not an error. Every scan is shrunk to a sensible
+size before it is stored, which is why a 300 DPI colour page does not produce a
+25 MB attachment, and it is why choosing a very high resolution mostly costs
+you scanning time rather than buying you a bigger file.
+
+### When scanning does not work
+
+- **The Scan… button is greyed out** — the helper program is not running on
+  your computer. Same fix as the signature pad; see *If it does not start*.
+- **"…can see no scanner"** — the helper is running but nothing is attached, or
+  the scanner is off or asleep. Switch it on, check the cable, and press **look
+  again**.
+- **A message naming your scanner**, after a pause — that text came from the
+  scanner's own driver. Paper jam, lid, cable. Fix what it names and scan
+  again.
+- **"That scan is N MB, over the 4 MB limit"** — too many pages in one
+  document. Attach the ones you have and scan the rest as a second attachment,
+  or choose a lower resolution and scan again.
+- **It is slow** — a page takes several seconds, and your computer's helper does
+  one thing at a time. During a scan the signature pad at that same desk will
+  wait its turn.
+
+Anything that survives all that is a job for whoever looks after the computers,
+and it is covered in the **Mp10 Signature Helper** guide — which, despite the
+name, is the guide for scanning too. It is the same program.
 
 ## Patient signatures from a signature pad
 
@@ -475,8 +651,8 @@ here and one taken from Mp10 are the same thing, recorded the same way.
 
 Where to start it:
 
-- **An encounter** — select it on either Encounters grid and choose **Capture
-  signature**; or open the encounter and use **Capture on pad** in the
+- **An encounter** — select it on either Encounters grid and choose **Sign**;
+  or open the encounter and use **Capture on pad** in the
   **Signature** panel.
 - **The patient's record** — open the patient, and on **Demographics** use
   **Capture signature** (or **Re-capture signature** where one is already on
@@ -504,6 +680,10 @@ is **not** a Windows service and does not start with Windows; it starts when
 you sign in. If it is not running, or the pad is not attached, Mp10 Web says
 so and nothing is stored.
 
+**It is the same program that does the scanning**, despite the name. So a desk
+where the pad will not wake up is usually a desk where the *Scan* buttons are
+greyed out too, and one fix covers both.
+
 Two things worth knowing:
 
 - **It is Windows-only.** From a Mac, tablet or phone there is no pad and no
@@ -527,9 +707,9 @@ here and a label printed from Mp10 come out identical.
 
 Select the encounter on either Encounters grid, then:
 
-- **Print encounter** — the encounter form, to this computer's `FORMS`
+- **Print Enc** — the encounter form, to this computer's `FORMS`
   printer.
-- **Print label** — the encounter label, to this computer's `LABELS` printer.
+- **Label** — the encounter label, to this computer's `LABELS` printer.
 - **Preview** — exactly what would have been printed, opened as a PDF in a new
   browser tab, with nothing sent to a printer.
 
