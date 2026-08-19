@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-08-18" />
+  <meta name="dcterms.date" content="2026-08-19" />
   <title>Mp10 Web — Installation</title>
   <style>
 code{white-space: pre-wrap;}
@@ -211,7 +211,7 @@ a { color: inherit; }
 <h1 class="title">Mp10 Web — Installation</h1>
 <p class="subtitle">Installing and updating the browser application</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">18 August 2026</p>
+<p class="date">19 August 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -291,40 +291,65 @@ customer site, see <code>Web/INSTALL.md</code> in the repository — the
 manual, step-by-step path remains there. This guide is the
 server-install path: one script, a handful of questions, and a running
 site inside the Apache the server already has.</p>
-<p><strong>There are two installers, and a site needs both.</strong>
-This guide covers the server one. The second goes to each desk that
-prints, signs or scans, and is covered under <a href="#the-workstation-side-which-this-installer-does-not-do">The
-workstation side</a> below and in the two helper guides.</p>
+<p><strong>There are three installers.</strong> This guide covers the
+server one. A second provides PHP and Apache for a server that has
+neither; a third goes to each desk that prints, signs or scans.</p>
 <table>
 <colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
 </colgroup>
 <thead>
 <tr class="header">
 <th>Bundle</th>
 <th>Runs on</th>
 <th>Installs</th>
+<th>When</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
+<td><code>mp10-prereqs-&lt;version&gt;.zip</code></td>
+<td>the server</td>
+<td>PHP 8.x ZTS x64 with <code>php_ads</code>, the 64-bit ACE client,
+Apache + <code>mod_fcgid</code></td>
+<td>only if the server lacks them</td>
+</tr>
+<tr class="even">
 <td><code>mpweb-update-&lt;version&gt;.zip</code></td>
 <td>the server</td>
 <td>the web application, into that server’s Apache</td>
+<td>every install and update</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>mp10-workstation-&lt;version&gt;.zip</code></td>
 <td>each workstation</td>
-<td>MpPrintSrv and MpSigSrv, and points them at the site</td>
+<td>MpPrintSrv and MpSigSrv, pointed at the site</td>
+<td>each desk that prints, signs or scans</td>
 </tr>
 </tbody>
 </table>
+<p>Run them in that order. The prerequisites installer ends by printing
+the exact <code>-PhpPath</code> and <code>-ApacheService</code>
+arguments the next one wants, so its answers are already in hand.</p>
 <h1 id="prerequisites">Prerequisites</h1>
 <p>The bundle carries the application only. PHP, Apache and the ADS
-client belong to the server, and the installer can only diagnose a wrong
-one, not fix it — so get these right first:</p>
+client belong to the server, and this installer can only diagnose a
+wrong one, not fix it — so get these right first.</p>
+<blockquote>
+<p><strong>A server that has none of this has its own
+installer.</strong> Extract
+<code>mp10-prereqs-&lt;version&gt;.zip</code> and run
+<code>Install-Prerequisites.ps1</code> elevated: it surveys what is
+already there, installs only what is missing, and refuses rather than
+laying a second PHP beside an unsuitable one. It carries everything it
+needs, so the server requires no internet access. What it cannot provide
+is the Advantage Database Server itself — SAP’s licensed product, with
+no public download.</p>
+</blockquote>
+<p>The requirements themselves:</p>
 <ul>
 <li><strong>PHP 8.x, the ZTS (thread-safe) build, x64, with
 <code>php_ads</code> loaded.</strong> Windows PHP ships four builds

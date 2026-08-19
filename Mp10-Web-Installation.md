@@ -36,21 +36,35 @@ site, see `Web/INSTALL.md` in the repository — the manual, step-by-step path
 remains there. This guide is the server-install path: one script, a handful
 of questions, and a running site inside the Apache the server already has.
 
-**There are two installers, and a site needs both.** This guide covers the
-server one. The second goes to each desk that prints, signs or scans, and is
-covered under [The workstation side](#the-workstation-side-which-this-installer-does-not-do)
-below and in the two helper guides.
+**There are three installers.** This guide covers the server one. A second
+provides PHP and Apache for a server that has neither; a third goes to each
+desk that prints, signs or scans.
 
-| Bundle | Runs on | Installs |
-|---|---|---|
-| `mpweb-update-<version>.zip` | the server | the web application, into that server's Apache |
-| `mp10-workstation-<version>.zip` | each workstation | MpPrintSrv and MpSigSrv, and points them at the site |
+| Bundle | Runs on | Installs | When |
+|---|---|---|---|
+| `mp10-prereqs-<version>.zip` | the server | PHP 8.x ZTS x64 with `php_ads`, the 64-bit ACE client, Apache + `mod_fcgid` | only if the server lacks them |
+| `mpweb-update-<version>.zip` | the server | the web application, into that server's Apache | every install and update |
+| `mp10-workstation-<version>.zip` | each workstation | MpPrintSrv and MpSigSrv, pointed at the site | each desk that prints, signs or scans |
+
+Run them in that order. The prerequisites installer ends by printing the exact
+`-PhpPath` and `-ApacheService` arguments the next one wants, so its answers
+are already in hand.
 
 # Prerequisites
 
 The bundle carries the application only. PHP, Apache and the ADS client
-belong to the server, and the installer can only diagnose a wrong one, not
-fix it — so get these right first:
+belong to the server, and this installer can only diagnose a wrong one, not
+fix it — so get these right first.
+
+> **A server that has none of this has its own installer.** Extract
+> `mp10-prereqs-<version>.zip` and run `Install-Prerequisites.ps1` elevated:
+> it surveys what is already there, installs only what is missing, and
+> refuses rather than laying a second PHP beside an unsuitable one. It carries
+> everything it needs, so the server requires no internet access. What it
+> cannot provide is the Advantage Database Server itself — SAP's licensed
+> product, with no public download.
+
+The requirements themselves:
 
 - **PHP 8.x, the ZTS (thread-safe) build, x64, with `php_ads` loaded.**
   Windows PHP ships four builds (NTS/ZTS × x86/x64); this needs the *Thread
