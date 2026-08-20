@@ -228,6 +228,8 @@ program at all</a></li>
 form or a label</a></li>
 <li><a href="#preview-checking-before-you-spend-a-label" id="toc-preview-checking-before-you-spend-a-label">Preview — checking
 before you spend a label</a></li>
+<li><a href="#printing-a-result" id="toc-printing-a-result">Printing a
+result</a></li>
 <li><a href="#printing-claims" id="toc-printing-claims">Printing
 claims</a></li>
 <li><a href="#what-it-does-not-do" id="toc-what-it-does-not-do">What it
@@ -235,6 +237,8 @@ does not do</a></li>
 </ul></li>
 <li><a href="#when-something-is-wrong" id="toc-when-something-is-wrong">When something is wrong</a>
 <ul>
+<li><a href="#a-printer-the-helper-will-refuse" id="toc-a-printer-the-helper-will-refuse">A printer the helper will
+refuse</a></li>
 <li><a href="#admin-print-helper" id="toc-admin-print-helper">Admin →
 Print helper</a>
 <ul>
@@ -337,6 +341,27 @@ approximation.</p>
 for this site; Mp10 Web tells you when this has happened rather than
 appearing to do nothing.</p>
 </blockquote>
+<h2 id="printing-a-result">Printing a result</h2>
+<p>The helper prints results as well as forms and labels — the
+<strong>Results</strong> window on an encounter offers
+<strong>Print</strong> and <strong>View</strong>, and both come through
+here.</p>
+<p>Two things about results differ from forms and labels, and both
+surprise people:</p>
+<ul>
+<li><strong>A result always goes to the FORMS printer.</strong> There is
+no separate result printer, and no <code>RESULTS</code> name in
+<code>Mp10.ini</code>.</li>
+<li><strong>Roughly a third of results are stored scans rather than
+typed reports.</strong> Those are sent exactly as they were stored, so a
+scanned result printed here is the original file — and
+<strong>View</strong> on one opens whatever that file is, commonly a
+TIFF, which some browsers download instead of displaying. That is the
+file, not a fault.</li>
+</ul>
+<p>A typed result is rendered from a template chosen by the encounter’s
+type and revenue code; when no template matches, a general one is used
+rather than the job failing.</p>
 <h2 id="printing-claims">Printing claims</h2>
 <p>The <strong>Print</strong> button on the Claims dialog is wired up
 but not finished: it reports that claim printing is still to be built.
@@ -384,17 +409,22 @@ allowed-origins setting does not list this site</td>
 <td>Check the encounter</td>
 </tr>
 <tr class="even">
-<td>A print job stopped responding at <em>(time)</em> … needs
-restarting</td>
-<td>A job hung; the helper has stopped accepting new ones on
-purpose</td>
-<td><strong>Admin → Print helper</strong>, then
-<strong>Restart</strong></td>
+<td>The print helper is restarting itself to clear it, and should accept
+work again within a minute. Choose a different printer when it
+does.</td>
+<td>A job wedged the helper. <strong>Installed as a service, it now
+restarts itself</strong> — nobody has to press anything.</td>
+<td>Wait about a minute, then print again, choosing a different
+printer.</td>
 </tr>
 <tr class="odd">
-<td>The print job did not finish within 60 seconds</td>
-<td>Same as above, reported to whoever was waiting</td>
-<td>As above</td>
+<td>The print job did not finish within 60 seconds, and will not. End
+MpPrintSrv.exe on this workstation and start it again.</td>
+<td>The same wedge, on a copy that is <strong>not</strong> a service and
+so cannot restart itself.</td>
+<td>End <code>MpPrintSrv.exe</code> in Task Manager and start it again.
+<strong>Admin → Print helper</strong>’s Restart button cannot help this
+copy** — it only works for a service.</td>
 </tr>
 <tr class="even">
 <td>Claim printing is not built yet</td>
@@ -419,6 +449,19 @@ different problems on purpose: <strong>a browser cannot tell them
 apart.</strong> When a page is refused by the helper’s origin list, the
 browser blocks the reply before Mp10 Web can read the explanation, and
 it looks exactly like nothing listening. Check both.</p>
+<h2 id="a-printer-the-helper-will-refuse">A printer the helper will
+refuse</h2>
+<p>Some printers cannot be used by a <strong>service</strong> at all,
+and choosing one produces a refusal rather than a print:</p>
+<blockquote>
+<p>‘<code>&lt;name&gt;</code>’ cannot be used: it is not on a printer
+port — it writes to a file, and asks where to put it. Nothing can answer
+that question while the helper runs as a Windows service…</p>
+</blockquote>
+<p>That covers Microsoft Print to PDF, Foxit and anything else whose
+port is <code>FILE:</code> or <code>PORTPROMPT:</code>. It is not a
+fault to fix at the printer — pick a real printer, or run the helper
+under a user account (see <em>The session 0 trap</em>).</p>
 <h2 id="admin-print-helper">Admin → Print helper</h2>
 <p>Users with the <code>system.printhelper</code> permission get an
 <strong>Admin → Print helper</strong> page. It reports on the helper
@@ -448,10 +491,12 @@ finish, and a restart is what clears it.</p>
 service. A copy that somebody started by hand can only be stopped, and
 the page says so rather than leaving you waiting for a comeback that is
 not coming.</p>
-<p>A restart takes a few seconds. The page waits for a genuinely new
-instance before it tells you it worked — not merely for something to
-answer, because the old copy keeps replying for a moment after being
-asked to stop.</p>
+<p>A restart is usually quick, but if a print job is stuck it can take
+up to a minute — Windows has to give up on the stuck job first.
+<strong>Do not press it again in the meantime.</strong> The page waits
+for a genuinely new instance before it tells you it worked — not merely
+for something to answer, because the old copy keeps replying for a
+moment after being asked to stop.</p>
 <h1 id="installing-it-it-task">Installing it — IT task</h1>
 <h2 id="the-quick-way-the-workstation-bundle">The quick way: the
 workstation bundle</h2>
@@ -531,6 +576,10 @@ and reports it.</td>
 <p>From the Mp10 installation folder, onto each workstation that prints
 — <strong>four files</strong>:</p>
 <table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th>File</th>
@@ -547,8 +596,8 @@ and reports it.</td>
 <td>the report engine that renders the templates</td>
 </tr>
 <tr class="odd">
-<td><code>ace32.dll</code></td>
-<td>the Advantage database client</td>
+<td><code>ace32.dll</code> and <code>axcws32.dll</code></td>
+<td>the Advantage database client (both files)</td>
 </tr>
 <tr class="even">
 <td><code>Mp10.ini</code></td>
@@ -574,6 +623,10 @@ program:</p>
 <ul>
 <li><strong><code>[RDD] PATH</code></strong> — the folder holding
 <code>mp.add</code>, the same value the desktop applications use.</li>
+<li><strong><code>[RDD] user</code> /
+<code>[RDD] password</code></strong> — optional, and only needed where
+the dictionary requires a login other than the default the helpers
+use.</li>
 <li><strong><code>[PRINT] ORIGIN</code></strong> — <strong>the address
 staff open Mp10 Web at</strong>, exactly as the browser sends it: scheme
 and host, no trailing slash, and the port too when it is not 80 or
@@ -592,6 +645,12 @@ prints</strong>, with the message <em>“The print helper is not
 answering”</em>. Several may be listed, comma separated, which is what a
 site reachable over both <code>http</code> and <code>https</code>
 needs.</p>
+<p><strong><code>PORT</code> and <code>ORIGIN</code> are read once, when
+the helper starts.</strong> Editing either by hand changes nothing until
+it is restarted — which is the usual reason a corrected
+<code>ORIGIN</code> still refuses everything. (<code>FORMS</code> and
+<code>LABELS</code> are re-read for every job, so those take effect
+immediately.)</p>
 <p><code>PORT</code> is 6265 on both sides. Changing it here means
 changing it in Mp10 Web’s build as well, so leave it alone unless
 something else on the workstation already wants that port.</p>
@@ -649,8 +708,14 @@ LABELS=Zebra ZD410</code></pre>
 <p>A name in <code>Mp10.ini</code> that is <strong>not
 installed</strong> is skipped rather than used, and the next rule
 applies. That matters when a printer is later renamed or removed: the
-job falls back to the convention instead of failing, and the skip is
-recorded in <code>MpPrintSrv.log</code>.</p>
+job falls back to the convention instead of failing. <strong>Only some
+of that reaches the log:</strong> a configured name that <em>is</em>
+installed but cannot be used by a service is written to
+<code>MpPrintSrv.log</code>; one that is not installed at all is skipped
+silently. So a renamed or removed printer leaves no trace there — if a
+desk has quietly started printing somewhere unexpected, check the two
+names in <code>Mp10.ini</code> against the printers that actually
+exist.</p>
 <p><strong>To undo a remembered choice</strong>, delete the
 <code>FORMS=</code> or <code>LABELS=</code> line from
 <code>[PRINT]</code>. The next print picks the change up — the helper
@@ -680,7 +745,10 @@ holding <code>MpPrintSrv.exe</code>:</p>
 <tbody>
 <tr class="odd">
 <td><code>MpPrintSrv.exe -i</code></td>
-<td>Install and start</td>
+<td>Install and start. In <code>services.msc</code> it appears as
+<strong>Structured Systems MpWeb Print Helper</strong>, not as
+<code>MpPrintSrv</code> — that is the service <em>name</em>, which is
+what <code>sc</code> and <code>Get-Service</code> want.</td>
 </tr>
 <tr class="even">
 <td><code>MpPrintSrv.exe -u</code></td>

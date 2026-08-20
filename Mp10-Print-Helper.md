@@ -78,6 +78,25 @@ It is the same template and the same data as printing — not an approximation.
 > this site; Mp10 Web tells you when this has happened rather than appearing
 > to do nothing.
 
+## Printing a result
+
+The helper prints results as well as forms and labels — the **Results** window
+on an encounter offers **Print** and **View**, and both come through here.
+
+Two things about results differ from forms and labels, and both surprise people:
+
+- **A result always goes to the FORMS printer.** There is no separate result
+  printer, and no `RESULTS` name in `Mp10.ini`.
+- **Roughly a third of results are stored scans rather than typed reports.**
+  Those are sent exactly as they were stored, so a scanned result printed here
+  is the original file — and **View** on one opens whatever that file is,
+  commonly a TIFF, which some browsers download instead of displaying. That is
+  the file, not a fault.
+
+A typed result is rendered from a template chosen by the encounter's type and
+revenue code; when no template matches, a general one is used rather than the
+job failing.
+
 ## Printing claims
 
 The **Print** button on the Claims dialog is wired up but not finished: it
@@ -101,8 +120,8 @@ Nothing is ever printed silently or half-printed.
 | No printer whose name contains **LABELS** *(or FORMS)* is installed on this workstation | Mp10 Web now offers the printer list instead of stopping here — pick one. If the printer you want is **not in that list**, it is missing, or the helper is a service that cannot see it: see *The session 0 trap* | Operator, then **IT** if the printer is absent |
 | The print helper is not answering on this workstation | MpPrintSrv is not running here, **or** its allowed-origins setting does not list this site | **IT task** |
 | Encounter not found | The encounter number did not match a record | Check the encounter |
-| A print job stopped responding at *(time)* … needs restarting | A job hung; the helper has stopped accepting new ones on purpose | **Admin → Print helper**, then **Restart** |
-| The print job did not finish within 60 seconds | Same as above, reported to whoever was waiting | As above |
+| The print helper is restarting itself to clear it, and should accept work again within a minute. Choose a different printer when it does. | A job wedged the helper. **Installed as a service, it now restarts itself** — nobody has to press anything. | Wait about a minute, then print again, choosing a different printer. |
+| The print job did not finish within 60 seconds, and will not. End MpPrintSrv.exe on this workstation and start it again. | The same wedge, on a copy that is **not** a service and so cannot restart itself. | End `MpPrintSrv.exe` in Task Manager and start it again. **Admin → Print helper**'s Restart button cannot help this copy** — it only works for a service. |
 | Claim printing is not built yet | Expected — see above | — |
 | Report design is a desktop function | Expected — see above | — |
 | *An update was applied but nothing changed* | The service is still running the old program | **Restart** it, then check the **Build** line |
@@ -112,6 +131,19 @@ problems on purpose: **a browser cannot tell them apart.** When a page is
 refused by the helper's origin list, the browser blocks the reply before Mp10
 Web can read the explanation, and it looks exactly like nothing listening.
 Check both.
+
+## A printer the helper will refuse
+
+Some printers cannot be used by a **service** at all, and choosing one produces
+a refusal rather than a print:
+
+> '`<name>`' cannot be used: it is not on a printer port — it writes to a file,
+> and asks where to put it. Nothing can answer that question while the helper
+> runs as a Windows service…
+
+That covers Microsoft Print to PDF, Foxit and anything else whose port is
+`FILE:` or `PORTPROMPT:`. It is not a fault to fix at the printer — pick a real
+printer, or run the helper under a user account (see *The session 0 trap*).
 
 ## Admin → Print helper
 
@@ -142,7 +174,9 @@ The button only works when MpPrintSrv was installed as a Windows service. A
 copy that somebody started by hand can only be stopped, and the page says so
 rather than leaving you waiting for a comeback that is not coming.
 
-A restart takes a few seconds. The page waits for a genuinely new instance
+A restart is usually quick, but if a print job is stuck it can take up to a
+minute — Windows has to give up on the stuck job first. **Do not press it
+again in the meantime.** The page waits for a genuinely new instance
 before it tells you it worked — not merely for something to answer, because
 the old copy keeps replying for a moment after being asked to stop.
 
@@ -205,7 +239,7 @@ files**:
 |---|---|
 | `MpPrintSrv.exe` | the helper itself |
 | `FrSystH.dll` | the report engine that renders the templates |
-| `ace32.dll` | the Advantage database client |
+| `ace32.dll` and `axcws32.dll` | the Advantage database client (both files) |
 | `Mp10.ini` | settings — copy `Mp10.ini.example` and edit it |
 
 `ace32.dll` is the one that gets forgotten, because on a PC that already runs
@@ -229,6 +263,8 @@ ORIGIN=https://mp10web.example.org
 
 - **`[RDD] PATH`** — the folder holding `mp.add`, the same value the desktop
   applications use.
+- **`[RDD] user` / `[RDD] password`** — optional, and only needed where the
+  dictionary requires a login other than the default the helpers use.
 - **`[PRINT] ORIGIN`** — **the address staff open Mp10 Web at**, exactly as the
   browser sends it: scheme and host, no trailing slash, and the port too when
   it is not 80 or 443.
@@ -242,6 +278,11 @@ served from any other address is stopped by the browser before its request is
 ever sent. Get it wrong and **nothing prints**, with the message *"The print
 helper is not answering"*. Several may be listed, comma separated, which is
 what a site reachable over both `http` and `https` needs.
+
+**`PORT` and `ORIGIN` are read once, when the helper starts.** Editing either
+by hand changes nothing until it is restarted — which is the usual reason a
+corrected `ORIGIN` still refuses everything. (`FORMS` and `LABELS` are re-read
+for every job, so those take effect immediately.)
 
 `PORT` is 6265 on both sides. Changing it here means changing it in Mp10 Web's
 build as well, so leave it alone unless something else on the workstation
@@ -295,8 +336,12 @@ Full resolution order, for both `FORMS` and `LABELS`:
 
 A name in `Mp10.ini` that is **not installed** is skipped rather than used, and
 the next rule applies. That matters when a printer is later renamed or removed:
-the job falls back to the convention instead of failing, and the skip is
-recorded in `MpPrintSrv.log`.
+the job falls back to the convention instead of failing. **Only some of that
+reaches the log:** a configured name that *is* installed but cannot be used by
+a service is written to `MpPrintSrv.log`; one that is not installed at all is
+skipped silently. So a renamed or removed printer leaves no trace there — if a
+desk has quietly started printing somewhere unexpected, check the two names in
+`Mp10.ini` against the printers that actually exist.
 
 **To undo a remembered choice**, delete the `FORMS=` or `LABELS=` line from
 `[PRINT]`. The next print picks the change up — the helper re-reads `Mp10.ini`
@@ -319,7 +364,7 @@ It starts immediately, and again at every boot. The other verbs:
 
 | Command | What it does |
 |---|---|
-| `MpPrintSrv.exe -i` | Install and start |
+| `MpPrintSrv.exe -i` | Install and start. In `services.msc` it appears as **Structured Systems MpWeb Print Helper**, not as `MpPrintSrv` — that is the service *name*, which is what `sc` and `Get-Service` want. |
 | `MpPrintSrv.exe -u` | Stop and remove |
 | `MpPrintSrv.exe -start` | Start |
 | `MpPrintSrv.exe -stop` | Stop |

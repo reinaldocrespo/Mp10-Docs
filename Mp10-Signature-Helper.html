@@ -459,9 +459,14 @@ program is not running at that desk</strong> — the same cause as a pad
 that will not wake up, and the same fix.</p>
 <h2 id="what-it-does-not-do">What it does not do</h2>
 <ul>
-<li><strong>Patient-record (HIPAA) signatures</strong> are not on the
-pad from the web yet. Only encounter signatures are. The desktop still
-does the patient record.</li>
+<li><strong>Patient-record (HIPAA) signatures work from the web
+too</strong>, since 2026-08-12 — the <strong>Capture signature</strong>
+action on the patients list goes straight to the pad, using its own
+consent text. Two things differ from an encounter signature, and both
+are deliberate: no operator is recorded against it (the patient record’s
+operator column means who owns the record), and no chosen option is
+stored. A patient whose record cannot be found is refused before the pad
+lights up.</li>
 <li><strong>It is Windows-only</strong>, because the pad and the scanner
 drivers are. A Mac or a tablet cannot capture from a pad or scan at all
 — attach the signature or the image from the record instead, or
@@ -525,12 +530,21 @@ pad</a>.</td>
 <tr class="even">
 <td><em>The capture did not finish within 300 seconds</em></td>
 <td>Nobody completed the signature and the helper gave up.</td>
-<td>Press <strong>Capture on pad</strong> again. If it keeps happening,
-restart MpSigSrv.</td>
+<td><strong>Restart MpSigSrv.</strong> Pressing Capture again cannot
+work: the same timeout puts the helper into a state where it refuses
+every capture <em>and every scan</em> until it is restarted, and it says
+so.</td>
 </tr>
 </tbody>
 </table>
 <h2 id="scanning">Scanning</h2>
+<blockquote>
+<p><strong>A jammed scan takes the pad down with it.</strong> The
+helper’s “stopped responding” state is per-process, not per-job: a
+scanner that never answers will block signature capture as well, until
+MpSigSrv is restarted. If the pad stops working on a desk that was
+scanning, restart the helper before looking at the pad.</p>
+</blockquote>
 <table>
 <colgroup>
 <col style="width: 33%" />
@@ -593,11 +607,18 @@ An uncropped card is still a usable card.</td>
 tested</a> — the feeder is the least-proven path here.</td>
 </tr>
 <tr class="even">
-<td>Everything is slow, and <code>/ping</code> does not answer during a
-scan</td>
-<td>Normal. A page takes several seconds and the helper does one thing
-at a time.</td>
+<td>A scan is slow</td>
+<td>Normal. A page takes several seconds, and the helper does one
+pad-or-scanner job at a time.</td>
 <td>Wait.</td>
+</tr>
+<tr class="odd">
+<td><code>/ping</code> or <code>/status</code> does <strong>not</strong>
+answer while a scan runs</td>
+<td><strong>Not normal.</strong> Those are answered on a separate thread
+and should reply throughout.</td>
+<td>The helper is not merely busy — treat it as stopped, and restart
+it.</td>
 </tr>
 </tbody>
 </table>
@@ -605,8 +626,15 @@ at a time.</td>
 this:</p>
 <ul>
 <li><strong><code>MpSigSrv.log</code></strong> — what the helper did:
-what it connected to, whether it is listening, each capture requested,
-the option picked, each scanner probe and scan, and every refusal.</li>
+what it connected to, whether it is listening, the pad becoming ready,
+the consent it loaded, the option the patient picked, and any capture
+that timed out. <strong>It does not record refused origins, and it does
+not log scanner probes or individual scans</strong> — so an empty log is
+not evidence that a request never arrived. To tell a refused origin from
+a helper that is not running, use <strong>Admin → Signature
+helper</strong> or open <code>/status</code> in the browser; a request
+typed into the address bar carries no origin and is always
+answered.</li>
 <li><strong><code>Topaz.log</code></strong> — what the <em>pad</em>
 reported: its model number and its screen size. This is the file to read
 when the layout looks wrong.</li>
@@ -833,6 +861,18 @@ patient a file path as though it were a consent, which is what it used
 to do.</p>
 </blockquote>
 <h2 id="check-it">Check it</h2>
+<p><strong>Start with Admin → Signature helper</strong>, inside Mp10 Web
+itself — it is under the <strong>Admin</strong> heading in the menu,
+which starts collapsed. It answers nearly everything below without a
+browser address bar: whether the helper is answering, its build, whether
+it is a service, <strong>which account it runs as</strong> (the quickest
+way to catch a helper started in the technician’s profile rather than
+the operator’s), when it started, its port, the origins it will accept —
+shown in red when there are none — the capture counters and last error,
+and every scanner it can see with a <strong>Re-detect</strong>
+button.</p>
+<p>The steps below are the same checks from a command line, for a desk
+where the browser cannot reach the site at all.</p>
 <p>Four checks, in this order. Do them on the workstation with the
 hardware. The last one is only for a desk that scans.</p>
 <p><strong>1. Is it running and listening?</strong> Open this in the
@@ -864,7 +904,14 @@ the signature as the record of who witnessed it, and there is no safe
 default — the helper refuses without one rather than inventing a
 value.</p>
 <p>MpSigSrv is a windowless program, so it prints nothing to the command
-prompt. Read <code>MpSigSrv.log</code>.</p>
+prompt.</p>
+<p><strong>But it does raise message boxes.</strong> A missing or
+unreadable <code>Mp10.ini</code>, an empty <code>[RDD] PATH</code>, a
+dictionary it cannot open, or a port it cannot bind all produce a modal
+Windows box and then stop. Started at logon, that box sits on the
+desktop looking like nothing in particular while the desk is quietly
+without signatures — so if the helper “did not start”, look for a stray
+dialog before anything else. Read <code>MpSigSrv.log</code>.</p>
 <p><strong>4. Can it see the scanner?</strong> Only if this desk is
 meant to scan:</p>
 <pre><code>http://127.0.0.1:6266/scanners</code></pre>
@@ -1102,8 +1149,9 @@ MpSigSrv is not involved.</li>
 <li><strong>Is it a TWAIN-only device with no <code>EZTW32.DLL</code>
 beside the exe?</strong> Then the TWAIN half is simply switched off and
 reports nothing. Copy the file in and restart the helper.</li>
-<li><strong>Press <em>Re-detect</em></strong> on the admin page, in case
-a stale cached record is in the way.</li>
+<li><strong>Press <em>Re-detect</em></strong> on <strong>Admin →
+Signature helper</strong>, in case a stale cached record is in the
+way.</li>
 </ol>
 <p><code>MpSigSrv.log</code> records each probe and what it found.</p>
 <h2 id="what-has-never-been-tested">What has never been tested</h2>

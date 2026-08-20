@@ -131,8 +131,13 @@ pad that will not wake up, and the same fix.
 
 ## What it does not do
 
-- **Patient-record (HIPAA) signatures** are not on the pad from the web yet.
-  Only encounter signatures are. The desktop still does the patient record.
+- **Patient-record (HIPAA) signatures work from the web too**, since
+  2026-08-12 — the **Capture signature** action on the patients list goes
+  straight to the pad, using its own consent text. Two things differ from an
+  encounter signature, and both are deliberate: no operator is recorded
+  against it (the patient record's operator column means who owns the record),
+  and no chosen option is stored. A patient whose record cannot be found is
+  refused before the pad lights up.
 - **It is Windows-only**, because the pad and the scanner drivers are. A Mac or
   a tablet cannot capture from a pad or scan at all — attach the signature or
   the image from the record instead, or photograph the card with the device's
@@ -153,9 +158,16 @@ pad that will not wake up, and the same fix.
 | *The consent text for this signature cannot be read* | `sys_registry` points at a consent file the server cannot open. | IT task — see [The consent text](#the-consent-text). |
 | *The signature pad could not be activated* | MpSigSrv could not talk to the pad. | Check the pad is plugged in and `[Tablet] TabletComPort` in `C:\Windows\SigPlus.ini` matches its COM port. |
 | The pad shows nothing, or the wrong size text | The pad geometry is wrong. | See [Telling MpSigSrv which pad](#telling-mpsigsrv-which-pad). |
-| *The capture did not finish within 300 seconds* | Nobody completed the signature and the helper gave up. | Press **Capture on pad** again. If it keeps happening, restart MpSigSrv. |
+| *The capture did not finish within 300 seconds* | Nobody completed the signature and the helper gave up. | **Restart MpSigSrv.** Pressing Capture again cannot work: the same timeout puts the helper into a state where it refuses every capture *and every scan* until it is restarted, and it says so. |
 
 ## Scanning
+
+> **A jammed scan takes the pad down with it.** The helper's "stopped
+> responding" state is per-process, not per-job: a scanner that never answers
+> will block signature capture as well, until MpSigSrv is restarted. If the
+> pad stops working on a desk that was scanning, restart the helper before
+> looking at the pad.
+
 
 | What you see | What it means | What to do |
 |---|---|---|
@@ -166,13 +178,19 @@ pad that will not wake up, and the same fix.
 | *That scan is N MB, over the 4 MB limit* | Too many pages in one document. | Attach what you have and scan the rest as a second document, or choose a lower resolution. |
 | The scan works but the **card is not cropped** | The crop found nothing darker than the background, so it kept the whole page rather than fail. | Usually a **dark or open scanner lid**. Close the lid. An uncropped card is still a usable card. |
 | Scanning stops after one page from the feeder | The device reported no more paper. | See [What has never been tested](#what-has-never-been-tested) — the feeder is the least-proven path here. |
-| Everything is slow, and `/ping` does not answer during a scan | Normal. A page takes several seconds and the helper does one thing at a time. | Wait. |
+| A scan is slow | Normal. A page takes several seconds, and the helper does one pad-or-scanner job at a time. | Wait. |
+| `/ping` or `/status` does **not** answer while a scan runs | **Not normal.** Those are answered on a separate thread and should reply throughout. | The helper is not merely busy — treat it as stopped, and restart it. |
 
 Two log files sit beside the exe and between them they answer most of this:
 
-- **`MpSigSrv.log`** — what the helper did: what it connected to, whether it is
-  listening, each capture requested, the option picked, each scanner probe and
-  scan, and every refusal.
+- **`MpSigSrv.log`** — what the helper did: what it connected to, whether it
+  is listening, the pad becoming ready, the consent it loaded, the option the
+  patient picked, and any capture that timed out. **It does not record refused
+  origins, and it does not log scanner probes or individual scans** — so an
+  empty log is not evidence that a request never arrived. To tell a refused
+  origin from a helper that is not running, use **Admin → Signature helper**
+  or open `/status` in the browser; a request typed into the address bar
+  carries no origin and is always answered.
 - **`Topaz.log`** — what the *pad* reported: its model number and its screen
   size. This is the file to read when the layout looks wrong.
 
@@ -388,6 +406,19 @@ and that file holds JSON:
 
 ## Check it
 
+**Start with Admin → Signature helper**, inside Mp10 Web itself — it is under
+the **Admin** heading in the menu, which starts collapsed. It answers nearly
+everything below without a browser address bar: whether the helper is
+answering, its build, whether it is a service, **which account it runs as**
+(the quickest way to catch a helper started in the technician's profile rather
+than the operator's), when it started, its port, the origins it will accept
+— shown in red when there are none — the capture counters and last error, and
+every scanner it can see with a **Re-detect** button.
+
+The steps below are the same checks from a command line, for a desk where the
+browser cannot reach the site at all.
+
+
 Four checks, in this order. Do them on the workstation with the hardware. The
 last one is only for a desk that scans.
 
@@ -440,6 +471,13 @@ who witnessed it, and there is no safe default — the helper refuses without
 one rather than inventing a value.
 
 MpSigSrv is a windowless program, so it prints nothing to the command prompt.
+
+**But it does raise message boxes.** A missing or unreadable `Mp10.ini`, an
+empty `[RDD] PATH`, a dictionary it cannot open, or a port it cannot bind all
+produce a modal Windows box and then stop. Started at logon, that box sits on
+the desktop looking like nothing in particular while the desk is quietly
+without signatures — so if the helper "did not start", look for a stray dialog
+before anything else.
 Read `MpSigSrv.log`.
 
 **4. Can it see the scanner?** Only if this desk is meant to scan:
@@ -643,7 +681,7 @@ Windows reports no device. In order:
 3. **Is it a TWAIN-only device with no `EZTW32.DLL` beside the exe?** Then the
    TWAIN half is simply switched off and reports nothing. Copy the file in and
    restart the helper.
-4. **Press *Re-detect*** on the admin page, in case a stale cached record is in
+4. **Press *Re-detect*** on **Admin → Signature helper**, in case a stale cached record is in
    the way.
 
 `MpSigSrv.log` records each probe and what it found.
