@@ -34,7 +34,7 @@ Signature Pads** for the pad itself.
 ## Signing in
 
 Go to the Mp10 Web address your office gives you. Enter your username and
-password and select **Sign In**.
+password and select **Sign in**.
 
 What you can see and do depends on your account. If a screen or button
 described below is missing, your account doesn't have permission for it —
@@ -42,7 +42,9 @@ ask your administrator.
 
 **Changing your own password.** At the bottom of the menu, beside the sign-out
 button, is a **key** (🔑). It asks for your current password and the new one
-twice. The new password must be at least 8 characters.
+twice. The new password must be at least 8 characters, and your site may require
+more — the box tells you which. It also has to differ from the one you are
+replacing, and the two new entries have to match.
 
 Changing it **signs you out of Mp10 Web everywhere**, including the window you
 are in — that is deliberate, so a password you have just replaced cannot still
@@ -56,8 +58,20 @@ here does not change the one you use in the desktop applications.
 
 After signing in you'll see a menu down the left. It only lists the areas you
 have permission to use, so two people may see different menus on the same
-system. The main areas are **Dashboard**, **Patients**, **Encounters** and
-**Modality worklist**.
+system. The main areas are **Dashboard**, then **Patients**, **Encounters** and
+**Modality worklist** grouped under a **Records** heading. There is also an
+**Admin** heading, and **it starts collapsed** — select it to find **Print
+helper** and **Signature helper**, which are referred to later in this guide.
+
+**Two ways a button can be unavailable, and they mean different things.** A
+button your account may not use is not shown at all. A button you may use, but
+not on the row you have selected, is shown **greyed** — and hovering it says
+why, such as *"Select a row first"* or *"This patient already has a HIPAA
+signature"*. So a greyed button is worth hovering before asking anyone.
+
+Permissions are re-read every time the page loads, so if an administrator
+grants you something, reloading the page is enough — you do not have to sign
+out and back in.
 
 The menu can be collapsed to icons with the control at its top, to give the
 grids more room. Mp10 Web remembers whether you left it collapsed.
@@ -102,7 +116,8 @@ yours:
 - **Needs attention** — encounters from the last several days that still
   need a signature. Use it to catch anything that was missed before it gets
   old.
-- **System health** — four quick status rows:
+- **System health** — a few quick status rows (the Modality worklist row is
+  there only if your account may see the worklist):
   - **Print helper (this workstation)** — whether the print helper program
     is answering on **the computer you're sitting at right now**, not on the
     server. It only knows about itself, so if you check this at the front
@@ -134,16 +149,18 @@ The patient list shows every patient in a scrollable grid, with search,
 filtering, sorting, and paging so you can find one quickly among the full
 list.
 
-- **Search** — type a last name, first name, Social Security number, or
-  record number, and press Enter. Partial names work.
+- **Search** — type a last name, first name, Social Security number, record
+  number or e-mail address, and press Enter. Partial names work. There are
+  **Search** and **Clear** buttons beside the box if you prefer them.
 - **Filter** — narrow the list by sex using the box above the grid, and by
   city or date of birth using the small funnel in those column headings. The
-  City funnel takes more than one city at once, and has its own **Find…** box
-  because the city list is long.
+  City funnel takes more than one city at once. Every funnel has a **Find…**
+  box and **Apply** / **Clear** buttons; on a long list like City the Find box
+  is the quick way in.
 - **Sort** — select a column heading to sort by it; select again to reverse
   the order. Not every heading sorts — **Sex**, **Phone**, **Mobile** and
-  **St** have no arrow, because sorting a list this size on those columns
-  would be slow enough to be worse than useless.
+  **St** and **Signature** have no arrow, because sorting a list this size on
+  those columns would be slow enough to be worse than useless.
 - **Paging** — use the controls at the bottom to move through pages of
   results. The count beside them is the number of patients your search
   matched, not the number on screen.
@@ -189,7 +206,8 @@ same tab.
 This tab shows the patient's personal information: name, address, phone,
 date of birth, and similar details.
 
-- Select **Edit** to make changes, then **Save**.
+- The fields are ready to type in as soon as the record opens — there is no
+  Edit button to press first. Select **Save** when you are done.
 - **Name and identity**: last name and first name are on one line, with date
   of birth ("DOB") and Social Security number on the next, and sex and
   marital status below that. The patient ID card photo sits beside these
@@ -259,7 +277,6 @@ one you meant to.
 
 This tab lists the patient's visits (encounters), newest first.
 
-- Filter by date range, insurance, or whether the encounter is still open.
 - Select **New** to add an encounter, or select an existing one to edit it.
   Either one opens in a dialog on top of the patient record, so you never
   leave the patient's page just to work on an encounter.
@@ -313,7 +330,8 @@ once you've selected a row — select a row first, then choose the action.
 
 - **New** — start a new patient record. Works without selecting a row.
 - **Edit** — open the selected patient's record.
-- **Encounters** — jump straight to the selected patient's Encounters tab.
+- **Encounters** — open the selected patient's encounters in a window over the
+  list, without leaving it.
 - **Claims** — open a read-only list of the patient's claims.
 - **Notes** — open the patient's notes. Unlike Claims, Audit log, and
   Appointments, you can add a new note here (type it in the box and select
@@ -339,9 +357,12 @@ tab), the buttons are:
 - **Orders** — record what the patient is in for. See **Orders**.
 - **Results** — the results that have come back for this encounter, and
   printing them. See **Results**.
-- **Active on/off** — flips the selected encounter's status. You'll
-  be asked to confirm. An inactivated encounter is greyed out in the list,
-  not removed, and can be reactivated the same way.
+- **Active on/off** — **on the patient's Encounters tab only**, not on the
+  standalone encounters list. It flips the selected encounter's status, and
+  asks you to confirm. An inactivated encounter is greyed out in the list, not
+  removed, and can be reactivated the same way. (The encounter form also has
+  **Closed** and **Inactive** checkboxes, which change the same thing without
+  asking.)
 - **Sign** — see **Patient signatures from a signature pad**.
 - **Print Enc**, **Label**, **Preview Enc** and **Preview Lbl** — see
   **Printing encounter forms and labels**.
@@ -355,10 +376,11 @@ untouched behind it — same filters, same page, same selected row when you
 close. That applies to patients and encounters alike, from either grid.
 
 If you reach an encounter as a full page instead — a bookmark, or a link
-somebody sent you — the **Back to list** button returns you to wherever you
-came from rather than always to the same place.
+somebody sent you — the **Back to list** button takes you to the encounters
+list.
 
-**Reset layout**, in the same bar, restores the grid's columns to their
+**Reset layout**, on the patients list, the standalone encounters list and the
+worklist, restores the grid's columns to their
 original widths and order. It leaves your search and filters alone.
 
 ### Working an encounter
@@ -499,6 +521,11 @@ Each row is one scheduled procedure, with the patient's name, the accession
 number, the modality (CR, CT, US and so on), the procedure, and when it is
 scheduled for.
 
+> **Modality is blank on every row today.** The field it comes from is empty
+> in every dictionary so far, so the column shows `—` and its funnel opens on
+> *"Nothing to choose from yet."* That is a data question for your
+> administrator, not a fault in this screen.
+
 - **Search** by patient name or accession number. Case does not matter — type
   `rivera` or `RIVERA`, whichever is quicker.
 - **Status** is **Scheduled** by default. **Cancelled** shows what has been
@@ -528,7 +555,9 @@ kind it is rather than making you guess:
   widen the dates or clear the search;
 - **nothing in the table at all** — this one is worth reporting, because it
   can mean the process that fills the worklist has stopped rather than that
-  there is genuinely no work.
+  there is genuinely no work;
+- **the worklist is not enabled in this dictionary** — different from the one
+  above, and not something waiting will fix. It needs an administrator.
 
 The **Mp10 AutoTasks** guide covers what fills this table and how it is
 turned on, which is an administrator's job rather than a desk one.
@@ -582,7 +611,7 @@ Beyond the ID and insurance cards, a patient can hold **attachments** — consen
 forms, referrals, results, anything scanned or received as a file. Select the
 patient on the Patients list and choose **Attachments** from the action bar.
 
-From there you can **Upload** a file you already have, or **Scan…** one on the
+From there you can **Import file…** for a file you already have, or **Scan…** one on the
 spot from a scanner attached to your computer.
 
 ### Scanning a document
@@ -635,7 +664,9 @@ you scanning time rather than buying you a bigger file.
   wait its turn.
 
 Anything that survives all that is a job for whoever looks after the computers,
-and it is covered in the **Mp10 Signature Helper** guide — which, despite the
+and it is covered in the **Mp10 Signature Helper** guide — though **Admin →
+Signature helper** in this application answers most of it without leaving the
+browser, including which scanners this desk can see — which, despite the
 name, is the guide for scanning too. It is the same program.
 
 ## Patient signatures from a signature pad
@@ -662,8 +693,12 @@ What happens then is the same either way. A small window belonging to the
 signature helper comes to the front on your computer, and the pad wakes up.
 The patient reads the notice on the pad, pages through it if it is long, taps
 the option they agree to if options were set up, signs, and presses **OK** on
-the pad. It is stored at that point. **There is nothing for you to press in the
-browser while this is going on** — it waits, and tells you when it is done.
+the pad. **You then confirm it on the signature helper's own window at your
+desk** — that small window is where the signature is accepted, and the button
+in the browser says so while it waits: *"Signing on the pad — then confirm on
+this workstation"*. It is stored at that point. **There is nothing to press in
+the browser while this is going on** — it waits, and tells you when it is
+done.
 
 If the patient presses **Cancel** on the pad instead, nothing is stored and the
 encounter or record simply stays unsigned.
@@ -731,7 +766,9 @@ Two things worth knowing when that window appears:
   next person who sits here gets the same printer. Leave it unticked for a
   one-off print at somebody else's desk.
 - **If the printer you want is not in the list**, choosing another one will not
-  help — the list is every printer this computer can reach. That one needs
+  help — the list is every printer the **print helper's own account** can reach, which is
+not the same as the printers you see when you are signed in — a printer added
+for one user does not appear there. That one needs
   installing, which is a job for whoever looks after the computers. Ticking the
   box is also not how you undo a wrong choice later; ask them to clear it.
 
@@ -772,6 +809,33 @@ solves most problems.
 configured, and how to work through a fault — is in the Mp10 Web — Printing
 guide.** It is not repeated here, so that there is only ever one version of it
 to keep up to date.
+
+## Admin → Signature helper
+
+The companion to **Admin → Print helper**, for the program that drives the
+signature pad and the scanner. Both live under the **Admin** heading in the
+menu, which starts collapsed.
+
+It answers the two questions the greyed **Scan** and **Capture on pad**
+buttons raise, without anyone leaving the browser:
+
+- **Is the helper running at this desk?** The top of the page shows its state,
+  the build it is running, whether it is a service, which account it runs as,
+  when it started, and its port.
+- **Will it accept requests from this site?** *Allowed origins* lists the
+  addresses it has been told to trust. If the address you use is not in that
+  list, every request is refused — and a refused request looks exactly like a
+  helper that is not running. This is the first thing to check.
+- **What can this desk scan?** The **Scanners** card lists each scanner the
+  helper can see, with its resolutions, colour modes, and whether it has a
+  document feeder or can scan both sides. **Re-detect** looks again — use it
+  after plugging a scanner in, rather than restarting anything.
+
+If the Scanners card is empty, the helper genuinely cannot see a scanner; that
+is a driver or cabling question for IT, not something this screen can fix.
+
+Setting the helper up is an IT task, covered in the **Mp10 — Signature
+Helper** guide.
 
 ## Who made a change
 

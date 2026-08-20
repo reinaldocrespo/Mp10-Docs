@@ -224,6 +224,7 @@ printer</a></li>
 <li><a href="#when-printing-does-not-work" id="toc-when-printing-does-not-work">When printing does not
 work</a></li>
 </ul></li>
+<li><a href="#admin-signature-helper" id="toc-admin-signature-helper">Admin → Signature helper</a></li>
 <li><a href="#who-made-a-change" id="toc-who-made-a-change">Who made a
 change</a></li>
 </ul></li>
@@ -240,14 +241,16 @@ not cover how the system is installed or built — that is the
 Signature Pads</strong> for the pad itself.</p>
 <h2 id="signing-in">Signing in</h2>
 <p>Go to the Mp10 Web address your office gives you. Enter your username
-and password and select <strong>Sign In</strong>.</p>
+and password and select <strong>Sign in</strong>.</p>
 <p>What you can see and do depends on your account. If a screen or
 button described below is missing, your account doesn’t have permission
 for it — ask your administrator.</p>
 <p><strong>Changing your own password.</strong> At the bottom of the
 menu, beside the sign-out button, is a <strong>key</strong> (🔑). It
 asks for your current password and the new one twice. The new password
-must be at least 8 characters.</p>
+must be at least 8 characters, and your site may require more — the box
+tells you which. It also has to differ from the one you are replacing,
+and the two new entries have to match.</p>
 <p>Changing it <strong>signs you out of Mp10 Web everywhere</strong>,
 including the window you are in — that is deliberate, so a password you
 have just replaced cannot still be in use somewhere you have forgotten
@@ -259,9 +262,23 @@ applications.</p>
 <h2 id="getting-around">Getting around</h2>
 <p>After signing in you’ll see a menu down the left. It only lists the
 areas you have permission to use, so two people may see different menus
-on the same system. The main areas are <strong>Dashboard</strong>,
+on the same system. The main areas are <strong>Dashboard</strong>, then
 <strong>Patients</strong>, <strong>Encounters</strong> and
-<strong>Modality worklist</strong>.</p>
+<strong>Modality worklist</strong> grouped under a
+<strong>Records</strong> heading. There is also an
+<strong>Admin</strong> heading, and <strong>it starts collapsed</strong>
+— select it to find <strong>Print helper</strong> and <strong>Signature
+helper</strong>, which are referred to later in this guide.</p>
+<p><strong>Two ways a button can be unavailable, and they mean different
+things.</strong> A button your account may not use is not shown at all.
+A button you may use, but not on the row you have selected, is shown
+<strong>greyed</strong> — and hovering it says why, such as <em>“Select
+a row first”</em> or <em>“This patient already has a HIPAA
+signature”</em>. So a greyed button is worth hovering before asking
+anyone.</p>
+<p>Permissions are re-read every time the page loads, so if an
+administrator grants you something, reloading the page is enough — you
+do not have to sign out and back in.</p>
 <p>The menu can be collapsed to icons with the control at its top, to
 give the grids more room. Mp10 Web remembers whether you left it
 collapsed.</p>
@@ -301,7 +318,9 @@ day that actually had encounters, so you can tell “quiet today” from
 <li><strong>Needs attention</strong> — encounters from the last several
 days that still need a signature. Use it to catch anything that was
 missed before it gets old.</li>
-<li><strong>System health</strong> — four quick status rows:
+<li><strong>System health</strong> — a few quick status rows (the
+Modality worklist row is there only if your account may see the
+worklist):
 <ul>
 <li><strong>Print helper (this workstation)</strong> — whether the print
 helper program is answering on <strong>the computer you’re sitting at
@@ -337,18 +356,21 @@ search, filtering, sorting, and paging so you can find one quickly among
 the full list.</p>
 <ul>
 <li><strong>Search</strong> — type a last name, first name, Social
-Security number, or record number, and press Enter. Partial names
-work.</li>
+Security number, record number or e-mail address, and press Enter.
+Partial names work. There are <strong>Search</strong> and
+<strong>Clear</strong> buttons beside the box if you prefer them.</li>
 <li><strong>Filter</strong> — narrow the list by sex using the box above
 the grid, and by city or date of birth using the small funnel in those
-column headings. The City funnel takes more than one city at once, and
-has its own <strong>Find…</strong> box because the city list is
-long.</li>
+column headings. The City funnel takes more than one city at once. Every
+funnel has a <strong>Find…</strong> box and <strong>Apply</strong> /
+<strong>Clear</strong> buttons; on a long list like City the Find box is
+the quick way in.</li>
 <li><strong>Sort</strong> — select a column heading to sort by it;
 select again to reverse the order. Not every heading sorts —
 <strong>Sex</strong>, <strong>Phone</strong>, <strong>Mobile</strong>
-and <strong>St</strong> have no arrow, because sorting a list this size
-on those columns would be slow enough to be worse than useless.</li>
+and <strong>St</strong> and <strong>Signature</strong> have no arrow,
+because sorting a list this size on those columns would be slow enough
+to be worse than useless.</li>
 <li><strong>Paging</strong> — use the controls at the bottom to move
 through pages of results. The count beside them is the number of
 patients your search matched, not the number on screen.</li>
@@ -391,8 +413,9 @@ same tab.</p>
 <p>This tab shows the patient’s personal information: name, address,
 phone, date of birth, and similar details.</p>
 <ul>
-<li>Select <strong>Edit</strong> to make changes, then
-<strong>Save</strong>.</li>
+<li>The fields are ready to type in as soon as the record opens — there
+is no Edit button to press first. Select <strong>Save</strong> when you
+are done.</li>
 <li><strong>Name and identity</strong>: last name and first name are on
 one line, with date of birth (“DOB”) and Social Security number on the
 next, and sex and marital status below that. The patient ID card photo
@@ -461,8 +484,6 @@ create a duplicate record instead of updating the one you meant to.</p>
 <h3 id="encounters">Encounters</h3>
 <p>This tab lists the patient’s visits (encounters), newest first.</p>
 <ul>
-<li>Filter by date range, insurance, or whether the encounter is still
-open.</li>
 <li>Select <strong>New</strong> to add an encounter, or select an
 existing one to edit it. Either one opens in a dialog on top of the
 patient record, so you never leave the patient’s page just to work on an
@@ -527,8 +548,8 @@ then choose the action.</p>
 <li><strong>New</strong> — start a new patient record. Works without
 selecting a row.</li>
 <li><strong>Edit</strong> — open the selected patient’s record.</li>
-<li><strong>Encounters</strong> — jump straight to the selected
-patient’s Encounters tab.</li>
+<li><strong>Encounters</strong> — open the selected patient’s encounters
+in a window over the list, without leaving it.</li>
 <li><strong>Claims</strong> — open a read-only list of the patient’s
 claims.</li>
 <li><strong>Notes</strong> — open the patient’s notes. Unlike Claims,
@@ -559,9 +580,13 @@ are creating. The desktop works the same way.</li>
 <strong>Orders</strong>.</li>
 <li><strong>Results</strong> — the results that have come back for this
 encounter, and printing them. See <strong>Results</strong>.</li>
-<li><strong>Active on/off</strong> — flips the selected encounter’s
-status. You’ll be asked to confirm. An inactivated encounter is greyed
-out in the list, not removed, and can be reactivated the same way.</li>
+<li><strong>Active on/off</strong> — <strong>on the patient’s Encounters
+tab only</strong>, not on the standalone encounters list. It flips the
+selected encounter’s status, and asks you to confirm. An inactivated
+encounter is greyed out in the list, not removed, and can be reactivated
+the same way. (The encounter form also has <strong>Closed</strong> and
+<strong>Inactive</strong> checkboxes, which change the same thing
+without asking.)</li>
 <li><strong>Sign</strong> — see <strong>Patient signatures from a
 signature pad</strong>.</li>
 <li><strong>Print Enc</strong>, <strong>Label</strong>, <strong>Preview
@@ -577,12 +602,11 @@ grid</strong>, and the grid is untouched behind it — same filters, same
 page, same selected row when you close. That applies to patients and
 encounters alike, from either grid.</p>
 <p>If you reach an encounter as a full page instead — a bookmark, or a
-link somebody sent you — the <strong>Back to list</strong> button
-returns you to wherever you came from rather than always to the same
-place.</p>
-<p><strong>Reset layout</strong>, in the same bar, restores the grid’s
-columns to their original widths and order. It leaves your search and
-filters alone.</p>
+link somebody sent you — the <strong>Back to list</strong> button takes
+you to the encounters list.</p>
+<p><strong>Reset layout</strong>, on the patients list, the standalone
+encounters list and the worklist, restores the grid’s columns to their
+original widths and order. It leaves your search and filters alone.</p>
 <h3 id="working-an-encounter">Working an encounter</h3>
 <p>Two fields on the encounter form check what you type against the
 practice’s own lists rather than accepting anything.</p>
@@ -719,6 +743,13 @@ view: nothing here is edited from the browser.</p>
 <p>Each row is one scheduled procedure, with the patient’s name, the
 accession number, the modality (CR, CT, US and so on), the procedure,
 and when it is scheduled for.</p>
+<blockquote>
+<p><strong>Modality is blank on every row today.</strong> The field it
+comes from is empty in every dictionary so far, so the column shows
+<code>—</code> and its funnel opens on <em>“Nothing to choose from
+yet.”</em> That is a data question for your administrator, not a fault
+in this screen.</p>
+</blockquote>
 <ul>
 <li><strong>Search</strong> by patient name or accession number. Case
 does not matter — type <code>rivera</code> or <code>RIVERA</code>,
@@ -752,7 +783,10 @@ case;</li>
 to nothing, so widen the dates or clear the search;</li>
 <li><strong>nothing in the table at all</strong> — this one is worth
 reporting, because it can mean the process that fills the worklist has
-stopped rather than that there is genuinely no work.</li>
+stopped rather than that there is genuinely no work;</li>
+<li><strong>the worklist is not enabled in this dictionary</strong> —
+different from the one above, and not something waiting will fix. It
+needs an administrator.</li>
 </ul>
 <p>The <strong>Mp10 AutoTasks</strong> guide covers what fills this
 table and how it is turned on, which is an administrator’s job rather
@@ -806,9 +840,9 @@ see <em>If it does not start</em>, below.</p>
 anything scanned or received as a file. Select the patient on the
 Patients list and choose <strong>Attachments</strong> from the action
 bar.</p>
-<p>From there you can <strong>Upload</strong> a file you already have,
-or <strong>Scan…</strong> one on the spot from a scanner attached to
-your computer.</p>
+<p>From there you can <strong>Import file…</strong> for a file you
+already have, or <strong>Scan…</strong> one on the spot from a scanner
+attached to your computer.</p>
 <h3 id="scanning-a-document">Scanning a document</h3>
 <p>Select <strong>Scan…</strong> and a window opens listing what your
 computer can scan with. Where the scanner offers a choice, you can
@@ -862,8 +896,10 @@ pad at that same desk will wait its turn.</li>
 </ul>
 <p>Anything that survives all that is a job for whoever looks after the
 computers, and it is covered in the <strong>Mp10 Signature
-Helper</strong> guide — which, despite the name, is the guide for
-scanning too. It is the same program.</p>
+Helper</strong> guide — though <strong>Admin → Signature helper</strong>
+in this application answers most of it without leaving the browser,
+including which scanners this desk can see — which, despite the name, is
+the guide for scanning too. It is the same program.</p>
 <h2 id="patient-signatures-from-a-signature-pad">Patient signatures from
 a signature pad</h2>
 <p>If a <strong>Topaz signature pad</strong> is attached to your
@@ -889,9 +925,13 @@ file).</li>
 the signature helper comes to the front on your computer, and the pad
 wakes up. The patient reads the notice on the pad, pages through it if
 it is long, taps the option they agree to if options were set up, signs,
-and presses <strong>OK</strong> on the pad. It is stored at that point.
-<strong>There is nothing for you to press in the browser while this is
-going on</strong> — it waits, and tells you when it is done.</p>
+and presses <strong>OK</strong> on the pad. <strong>You then confirm it
+on the signature helper’s own window at your desk</strong> — that small
+window is where the signature is accepted, and the button in the browser
+says so while it waits: <em>“Signing on the pad — then confirm on this
+workstation”</em>. It is stored at that point. <strong>There is nothing
+to press in the browser while this is going on</strong> — it waits, and
+tells you when it is done.</p>
 <p>If the patient presses <strong>Cancel</strong> on the pad instead,
 nothing is stored and the encounter or record simply stays unsigned.</p>
 <p><strong>Re-capturing replaces what was there.</strong> On a patient
@@ -959,10 +999,12 @@ for <strong>the computer</strong>, not for you: the next person who sits
 here gets the same printer. Leave it unticked for a one-off print at
 somebody else’s desk.</li>
 <li><strong>If the printer you want is not in the list</strong>,
-choosing another one will not help — the list is every printer this
-computer can reach. That one needs installing, which is a job for
-whoever looks after the computers. Ticking the box is also not how you
-undo a wrong choice later; ask them to clear it.</li>
+choosing another one will not help — the list is every printer the
+<strong>print helper’s own account</strong> can reach, which is not the
+same as the printers you see when you are signed in — a printer added
+for one user does not appear there. That one needs installing, which is
+a job for whoever looks after the computers. Ticking the box is also not
+how you undo a wrong choice later; ask them to clear it.</li>
 </ul>
 <p>Once a printer has been remembered, <strong>Admin → Print
 helper</strong> shows which one is being used and says that it was
@@ -998,6 +1040,34 @@ most problems.</p>
 installed and configured, and how to work through a fault — is in the
 Mp10 Web — Printing guide.</strong> It is not repeated here, so that
 there is only ever one version of it to keep up to date.</p>
+<h2 id="admin-signature-helper">Admin → Signature helper</h2>
+<p>The companion to <strong>Admin → Print helper</strong>, for the
+program that drives the signature pad and the scanner. Both live under
+the <strong>Admin</strong> heading in the menu, which starts
+collapsed.</p>
+<p>It answers the two questions the greyed <strong>Scan</strong> and
+<strong>Capture on pad</strong> buttons raise, without anyone leaving
+the browser:</p>
+<ul>
+<li><strong>Is the helper running at this desk?</strong> The top of the
+page shows its state, the build it is running, whether it is a service,
+which account it runs as, when it started, and its port.</li>
+<li><strong>Will it accept requests from this site?</strong> <em>Allowed
+origins</em> lists the addresses it has been told to trust. If the
+address you use is not in that list, every request is refused — and a
+refused request looks exactly like a helper that is not running. This is
+the first thing to check.</li>
+<li><strong>What can this desk scan?</strong> The
+<strong>Scanners</strong> card lists each scanner the helper can see,
+with its resolutions, colour modes, and whether it has a document feeder
+or can scan both sides. <strong>Re-detect</strong> looks again — use it
+after plugging a scanner in, rather than restarting anything.</li>
+</ul>
+<p>If the Scanners card is empty, the helper genuinely cannot see a
+scanner; that is a driver or cabling question for IT, not something this
+screen can fix.</p>
+<p>Setting the helper up is an IT task, covered in the <strong>Mp10 —
+Signature Helper</strong> guide.</p>
 <h2 id="who-made-a-change">Who made a change</h2>
 <p>Every change made through Mp10 Web is recorded under the web user’s
 own operator code, the same way desktop changes are recorded under a
