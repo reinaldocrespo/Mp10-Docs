@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-08-19" />
+  <meta name="dcterms.date" content="2026-08-20" />
   <title>Mp10 Web — Printing</title>
   <style>
 code{white-space: pre-wrap;}
@@ -212,7 +212,7 @@ a { color: inherit; }
 <p class="subtitle">Encounter forms and labels from the browser, and the
 helper behind them</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">19 August 2026</p>
+<p class="date">20 August 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -470,9 +470,12 @@ the address staff open Mp10 Web at — and then:</p>
 folder;</li>
 <li>writes <code>PORT</code> and <code>ORIGIN</code> under
 <code>[PRINT]</code> and <code>[SIGN]</code> in <code>Mp10.ini</code>,
-<strong>editing only those lines</strong> — comments, ordering,
-<code>[RDD]</code> and every other section are left byte for byte as
-they were;</li>
+<strong>editing only those lines</strong> — comments, ordering and every
+other section are left byte for byte as they were. The one exception: a
+file with no <code>[RDD]</code> section at all gets one added,
+containing two <strong>commented-out</strong> template lines and no live
+keys, because this installer has no way to know a site’s dictionary path
+and must not guess it;</li>
 <li>registers MpPrintSrv as a service (<code>-SkipService</code> if you
 would rather not);</li>
 <li><strong>prints</strong> the MpSigSrv startup instructions rather
@@ -485,11 +488,13 @@ accepts.</li>
 <p><strong>Every answer defaults to what the desk already says.</strong>
 The installer reads the existing <code>Mp10.ini</code> first, so a
 re-run — or an update after the site changes address — is a matter of
-pressing Enter, and on a desk that already has an origin on file an
-unattended run needs no arguments at all. That matters across twenty
-desks: re-typing an origin nineteen times is how one of them ends up
-subtly different, and a wrong origin fails in the one way that looks
-identical to <em>“the helper is not running”</em>.</p>
+pressing Enter. An unattended run still needs <code>-ProgramDir</code>
+(the installer refuses to choose a folder to write into with nobody to
+confirm it), but a desk that already has an origin on file needs no
+<code>-Origin</code>. That matters across twenty desks: re-typing an
+origin nineteen times is how one of them ends up subtly different, and a
+wrong origin fails in the one way that looks identical to <em>“the
+helper is not running”</em>.</p>
 <p>Two things it deliberately does <strong>not</strong> install, because
 it cannot:</p>
 <table>

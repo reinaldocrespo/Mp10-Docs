@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-08-19" />
+  <meta name="dcterms.date" content="2026-08-20" />
   <title>Mp10 — Signature Helper</title>
   <style>
 code{white-space: pre-wrap;}
@@ -212,7 +212,7 @@ a { color: inherit; }
 <p class="subtitle">Signature capture and document scanning at the
 workstation, for Mp10 Web</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">19 August 2026</p>
+<p class="date">20 August 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -642,8 +642,10 @@ workstation bundle</h2>
 <p>The same installer that sets up the print helper installs this one
 too — it copies <code>MpSigSrv.exe</code> and <code>EZTW32.DLL</code>,
 and writes <code>[SIGN] PORT</code> and <code>[SIGN] ORIGIN</code> into
-<code>Mp10.ini</code> without disturbing anything else in that file. See
-<em>The quick way</em> in <strong>Mp10 Web — Printing</strong>.</p>
+<code>Mp10.ini</code>, editing only those lines. The one thing it may
+add is a commented-out <code>[RDD]</code> template, and only when that
+section is missing entirely. See <em>The quick way</em> in <strong>Mp10
+Web — Printing</strong>.</p>
 <p>Two parts of this helper it cannot do for you, and says so rather
 than pretending otherwise:</p>
 <ul>

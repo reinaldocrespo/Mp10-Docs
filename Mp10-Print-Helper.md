@@ -168,8 +168,11 @@ open Mp10 Web at — and then:
 - copies `MpPrintSrv.exe`, `MpSigSrv.exe`, `FrSystH.dll` and `EZTW32.DLL`
   into that folder;
 - writes `PORT` and `ORIGIN` under `[PRINT]` and `[SIGN]` in `Mp10.ini`,
-  **editing only those lines** — comments, ordering, `[RDD]` and every other
-  section are left byte for byte as they were;
+  **editing only those lines** — comments, ordering and every other section
+  are left byte for byte as they were. The one exception: a file with no
+  `[RDD]` section at all gets one added, containing two **commented-out**
+  template lines and no live keys, because this installer has no way to know
+  a site's dictionary path and must not guess it;
 - registers MpPrintSrv as a service (`-SkipService` if you would rather not);
 - **prints** the MpSigSrv startup instructions rather than doing it — see
   *The session 0 trap* below for why it cannot be a service, and the
@@ -178,8 +181,10 @@ open Mp10 Web at — and then:
 
 **Every answer defaults to what the desk already says.** The installer reads
 the existing `Mp10.ini` first, so a re-run — or an update after the site
-changes address — is a matter of pressing Enter, and on a desk that already
-has an origin on file an unattended run needs no arguments at all. That
+changes address — is a matter of pressing Enter. An unattended run still
+needs `-ProgramDir` (the installer refuses to choose a folder to write into
+with nobody to confirm it), but a desk that already has an origin on file
+needs no `-Origin`. That
 matters across twenty desks: re-typing an origin nineteen times is how one of
 them ends up subtly different, and a wrong origin fails in the one way that
 looks identical to *"the helper is not running"*.

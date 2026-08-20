@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-08-19" />
+  <meta name="dcterms.date" content="2026-08-20" />
   <title>Mp10 Web — Installation</title>
   <style>
 code{white-space: pre-wrap;}
@@ -211,7 +211,7 @@ a { color: inherit; }
 <h1 class="title">Mp10 Web — Installation</h1>
 <p class="subtitle">Installing and updating the browser application</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">19 August 2026</p>
+<p class="date">20 August 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -786,8 +786,10 @@ for the Mp10 program folder and the origin, copies
 <code>FrSystH.dll</code> and <code>EZTW32.DLL</code> into that folder,
 writes <code>PORT</code> and <code>ORIGIN</code> under
 <code>[PRINT]</code> and <code>[SIGN]</code> in <code>Mp10.ini</code> —
-editing only those lines — registers MpPrintSrv as a service, and checks
-both helpers over loopback.</p>
+editing only those lines, apart from adding a commented-out
+<code>[RDD]</code> template when that section is missing entirely —
+registers MpPrintSrv as a service, and checks both helpers over
+loopback.</p>
 <p><strong>It defaults every answer to what that desk already
 says</strong>, reading the existing <code>Mp10.ini</code> first, so a
 re-run or a change of address is a matter of pressing Enter.</p>
@@ -857,16 +859,14 @@ belong to the <strong>Win32 Admin module</strong> — this installer
 neither creates nor inspects them. If a dictionary is missing something
 Mp10 Web needs at that level, that is fixed by running Admin, not by
 this installer.</li>
-<li><strong>One row in the existing <code>sequences</code>
-table</strong>, <code>field = &#39;recno&#39;</code>. Every install and update
-reads the current highest <code>patients.recno</code> and raises
-<code>sequences</code>’s <code>recno</code> counter to match, if it is
-not already there — so a record number Mp10 Web mints can never collide
-with one that already exists. It only ever raises the value, never
-lowers it, and does nothing on a run where the counter is already caught
-up. This is a write to dictionary infrastructure the desktop apps also
-read, not a Mp10-Web-owned table — see “Removing it” below for why it
-must not be deleted.</li>
+<li><strong>Nothing in the <code>sequences</code> table.</strong> The
+migration <em>reads</em> that table’s <code>recno</code> counter and
+reports whether the next number is already taken — no more. It used to
+raise the counter to match the highest <code>patients.recno</code>; that
+write was removed on 2026-08-06, because on a measured production
+restore it would have burned 2.6 million record numbers, and it must not
+be restored. What keeps record numbers from colliding is the API
+retrying a taken one, not this counter.</li>
 <li><strong>One config file</strong>, <code>database.local.php</code>,
 under the install root.</li>
 <li><strong>One rendered Apache configuration</strong>,
@@ -948,9 +948,12 @@ runs, and a browser replays a redirected POST as a GET with no body —
 <li><strong><code>Require all denied</code></strong> on
 <code>config/</code>, <code>lib/</code> and <code>vendor/</code>.</li>
 </ul>
-<p>Two server-wide <code>mod_fcgid</code> settings
-(<code>FcgidInitialEnv PHPRC</code>, <code>FcgidMaxRequestLen</code>)
-are written <strong>only if the site does not already set them</strong>.
+<p>Three server-wide <code>mod_fcgid</code> settings
+(<code>FcgidInitialEnv PHPRC</code>, <code>FcgidMaxRequestLen</code>,
+<code>FcgidIOTimeout</code>) are written <strong>only if the site does
+not already set them</strong> — and only the first announces itself when
+it is skipped, so a site whose own <code>FcgidMaxRequestLen</code> is
+smaller than 40 MB will truncate uploads with no hint from this run.
 That check matters: a second <code>FcgidInitialEnv PHPRC</code> would
 silently repoint every other PHP application that Apache serves at Mp10
 Web’s <code>php.ini</code>. When the installer finds one, it says so and
@@ -1056,13 +1059,17 @@ root have already been replaced by the time a later step can fail — a
 failure past that point leaves a partially-updated tree, not a
 rolled-back one. Treat any such failure as <strong>incomplete, not
 safe</strong>: fix the problem and re-run to a clean completion before
-trusting the site again. Apache’s own rendered configuration is the one
-deliberate exception even within that range — it is always written to a
-temporary file and validated with <code>httpd -t</code> before it is
-ever moved into the path the running service actually reads (step 7/8),
-so a rejected render never touches what is currently live. The table
-below is keyed to the exact message text; where a message embeds a value
-(a path, a count, a port), that part is shown as
+trusting the site again. Apache’s own configuration is the one
+deliberate exception even within that range. It cannot be validated
+anywhere but its final path — <code>httpd -t</code> checks the site’s
+<code>httpd.conf</code>, which reaches <code>mp10web.conf</code> through
+an <code>Include</code>, so a copy staged elsewhere would only re-check
+content already in force. Instead the installer keeps the previous
+version in hand and <strong>puts it back</strong> if Apache rejects the
+new one, or if the service will not come back up — so the running site
+always keeps a configuration it will still start with. The table below
+is keyed to the exact message text; where a message embeds a value (a
+path, a count, a port), that part is shown as
 <code>&lt;...&gt;</code>.</p>
 <blockquote>
 <p><strong>Before you use this table, check what is actually
@@ -1089,7 +1096,7 @@ workstation side</a>, and check the origin allowlist first.</p>
 <tbody>
 <tr class="odd">
 <td>Run this from an elevated PowerShell. It writes to the Apache
-configuration and the install root.</td>
+configuration and restarts the Apache service.</td>
 <td>PowerShell was not run as Administrator.</td>
 <td>Re-open PowerShell with “Run as administrator” and re-run.</td>
 </tr>
@@ -1133,7 +1140,7 @@ bundle and extract it again.</td>
 <td>Re-download the zip (checksum it first) and re-extract.</td>
 </tr>
 <tr class="even">
-<td>This installer build handles the ‘update’ flavour; this bundle says
+<td>This installer handles the ‘update’ flavour; this bundle says
 ‘<code>&lt;flavour&gt;</code>’.</td>
 <td>The extracted bundle is not an <code>update</code>-flavour
 bundle.</td>
@@ -1159,7 +1166,8 @@ types.</td>
 <tbody>
 <tr class="odd">
 <td>PHP not found at ‘<code>&lt;path&gt;</code>’. Install PHP 8.x ZTS
-x64, or pass <code>-PhpPath &lt;path to php.exe&gt;</code>.</td>
+x64 with php_ads, or pass
+<code>-PhpPath &lt;path to php.exe&gt;</code>.</td>
 <td>No PHP at the default location or on <code>PATH</code>.</td>
 <td>Install PHP 8.x ZTS x64, or pass <code>-PhpPath</code>.</td>
 </tr>
@@ -1172,24 +1180,22 @@ not be a working PHP: <code>&lt;raw&gt;</code></td>
 <code>&lt;raw&gt;</code> text is whatever it actually printed.</td>
 </tr>
 <tr class="odd">
-<td>PHP <code>&lt;version&gt;</code> found; Mp10 Web needs PHP 8.x.
-Install an 8.x build and re-run.</td>
+<td>PHP <code>&lt;version&gt;</code> found; Mp10 Web needs PHP 8.x.</td>
 <td>PHP is the wrong major version.</td>
 <td>Install PHP 8.</td>
 </tr>
 <tr class="even">
 <td>PHP is <code>&lt;bits&gt;</code>-bit; Mp10 Web needs the x64 build.
-Note the Mp10 DESKTOP applications are 32-bit - this is a different PHP,
-not the same one.</td>
+(The Mp10 DESKTOP applications are 32-bit - this is a different
+PHP.)</td>
 <td><strong>The 32-bit trap.</strong> A 32-bit PHP was found — commonly
 because that is what happens to be on the machine already.</td>
 <td>Install a separate PHP 8 <strong>x64</strong> build for Mp10 Web; do
 not point it at whatever 32-bit PHP is already there.</td>
 </tr>
 <tr class="odd">
-<td>PHP is the NTS (non-thread-safe) build; Mp10 Web’s php_ads.dll needs
-the ZTS build. Download the ‘Thread Safe’ x64 zip from
-windows.php.net.</td>
+<td>PHP is the NTS (non-thread-safe) build; php_ads.dll needs the ZTS
+build. Download the ‘Thread Safe’ x64 zip from windows.php.net.</td>
 <td>Wrong PHP thread-safety variant.</td>
 <td>Install the <em>Thread Safe</em> x64 zip, not the <em>Non Thread
 Safe</em> one.</td>
@@ -1199,8 +1205,7 @@ Safe</em> one.</td>
 exist. Copy php_ads.dll into <code>&lt;ext_dir&gt;</code> and add
 extension=ads to <code>&lt;ini&gt;</code>. It also needs the 64-BIT ACE
 client (ace64.dll, adsloc64.dll, aicu64.dll, axcws64.dll) on PATH - the
-Mp10 desktop applications install the 32-bit client, which will NOT
-satisfy this.</td>
+32-bit client the desktop applications install will NOT do.</td>
 <td><code>php_ads</code> is missing, disabled, or the 64-bit ACE client
 isn’t on <code>PATH</code>.</td>
 <td>Enable <code>extension=ads</code> in the named <code>php.ini</code>
@@ -1514,11 +1519,6 @@ the desktop applications, which mint patient numbers from it too, and
 <code>MAX(recno)</code> is not a reliable target — one mistyped record
 number sitting above the real block would burn every number in between,
 irreversibly.</td>
-</tr>
-<tr class="odd">
-<td>The admin password scrolled past / was never seen</td>
-<td>The account exists; the password does not exist anywhere.</td>
-<td>See <strong>If the admin password was missed</strong>, above.</td>
 </tr>
 </tbody>
 </table>

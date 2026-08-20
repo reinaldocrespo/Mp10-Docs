@@ -209,8 +209,9 @@ Manager.
 
 The same installer that sets up the print helper installs this one too — it
 copies `MpSigSrv.exe` and `EZTW32.DLL`, and writes `[SIGN] PORT` and
-`[SIGN] ORIGIN` into `Mp10.ini` without disturbing anything else in that
-file. See *The quick way* in **Mp10 Web — Printing**.
+`[SIGN] ORIGIN` into `Mp10.ini`, editing only those lines. The one thing it
+may add is a commented-out `[RDD]` template, and only when that section is
+missing entirely. See *The quick way* in **Mp10 Web — Printing**.
 
 Two parts of this helper it cannot do for you, and says so rather than
 pretending otherwise:

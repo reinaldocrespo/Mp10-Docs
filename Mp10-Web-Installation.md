@@ -350,8 +350,10 @@ C:\Mp10Helpers\Install-Workstation.ps1
 Run it elevated, at each desk that prints, signs or scans. It asks for the
 Mp10 program folder and the origin, copies `MpPrintSrv.exe`, `MpSigSrv.exe`,
 `FrSystH.dll` and `EZTW32.DLL` into that folder, writes `PORT` and `ORIGIN`
-under `[PRINT]` and `[SIGN]` in `Mp10.ini` — editing only those lines —
-registers MpPrintSrv as a service, and checks both helpers over loopback.
+under `[PRINT]` and `[SIGN]` in `Mp10.ini` — editing only those lines, apart
+from adding a commented-out `[RDD]` template when that section is missing
+entirely — registers MpPrintSrv as a service, and checks both helpers over
+loopback.
 
 **It defaults every answer to what that desk already says**, reading the
 existing `Mp10.ini` first, so a re-run or a change of address is a matter of
@@ -424,14 +426,13 @@ Deliberately little, and every bit of it is listed here:
   this installer neither creates nor inspects them. If a dictionary is
   missing something Mp10 Web needs at that level, that is fixed by running
   Admin, not by this installer.
-- **One row in the existing `sequences` table**, `field = 'recno'`. Every
-  install and update reads the current highest `patients.recno` and raises
-  `sequences`'s `recno` counter to match, if it is not already there — so a
-  record number Mp10 Web mints can never collide with one that already
-  exists. It only ever raises the value, never lowers it, and does nothing
-  on a run where the counter is already caught up. This is a write to
-  dictionary infrastructure the desktop apps also read, not a Mp10-Web-owned
-  table — see "Removing it" below for why it must not be deleted.
+- **Nothing in the `sequences` table.** The migration *reads* that table's
+  `recno` counter and reports whether the next number is already taken — no
+  more. It used to raise the counter to match the highest `patients.recno`;
+  that write was removed on 2026-08-06, because on a measured production
+  restore it would have burned 2.6 million record numbers, and it must not be
+  restored. What keeps record numbers from colliding is the API retrying a
+  taken one, not this counter.
 - **One config file**, `database.local.php`, under the install root.
 - **One rendered Apache configuration**, `mp10web.conf`, under the install
   root — never inside the site's own configuration directory.
@@ -500,9 +501,11 @@ installer owns and re-renders on every run:
   GET with no body — "create patient" would silently become a no-op.
 - **`Require all denied`** on `config/`, `lib/` and `vendor/`.
 
-Two server-wide `mod_fcgid` settings (`FcgidInitialEnv PHPRC`,
-`FcgidMaxRequestLen`) are written **only if the site does not already set
-them**. That check matters: a second `FcgidInitialEnv PHPRC` would silently
+Three server-wide `mod_fcgid` settings (`FcgidInitialEnv PHPRC`,
+`FcgidMaxRequestLen`, `FcgidIOTimeout`) are written **only if the site does
+not already set them** — and only the first announces itself when it is
+skipped, so a site whose own `FcgidMaxRequestLen` is smaller than 40 MB will
+truncate uploads with no hint from this run. That check matters: a second `FcgidInitialEnv PHPRC` would silently
 repoint every other PHP application that Apache serves at Mp10 Web's
 `php.ini`. When the installer finds one, it says so and leaves it alone.
 
@@ -604,11 +607,14 @@ root have already been replaced by the time a later step can fail — a
 failure past that point leaves a partially-updated tree, not a rolled-back
 one. Treat any such failure as **incomplete, not safe**: fix the problem and
 re-run to a clean completion before trusting the site again. Apache's own
-rendered configuration is the one deliberate exception even within that
-range — it is always written to a temporary file and validated with
-`httpd -t` before it is ever moved into the path the running service
-actually reads (step 7/8), so a rejected render never touches what is
-currently live. The table below is keyed to the exact message text; where a message
+configuration is the one deliberate exception even within that range. It
+cannot be validated anywhere but its final path — `httpd -t` checks the
+site's `httpd.conf`, which reaches `mp10web.conf` through an `Include`, so a
+copy staged elsewhere would only re-check content already in force. Instead
+the installer keeps the previous version in hand and **puts it back** if
+Apache rejects the new one, or if the service will not come back up — so the
+running site always keeps a configuration it will still start with.
+The table below is keyed to the exact message text; where a message
 embeds a value (a path, a count, a port), that part is shown as `<...>`.
 
 > **Before you use this table, check what is actually broken.** These messages
@@ -622,7 +628,7 @@ embeds a value (a path, a count, a port), that part is shown as `<...>`.
 
 | Message | What it means | What to do |
 |---|---|---|
-| Run this from an elevated PowerShell. It writes to the Apache configuration and the install root. | PowerShell was not run as Administrator. | Re-open PowerShell with "Run as administrator" and re-run. |
+| Run this from an elevated PowerShell. It writes to the Apache configuration and restarts the Apache service. | PowerShell was not run as Administrator. | Re-open PowerShell with "Run as administrator" and re-run. |
 
 ## Step 1/8 — Verify the bundle
 
@@ -631,18 +637,18 @@ embeds a value (a path, a count, a port), that part is shown as `<...>`.
 | No manifest.json beside install.ps1 - is this an extracted Mp10 Web bundle? | `install.ps1` was run from somewhere other than the extracted bundle. | Run it from inside the extracted zip, next to `manifest.json`. |
 | `<n>` file(s) missing or corrupt. Re-copy the bundle and extract it again. | Extraction was incomplete, or a file changed after extracting. | Delete the extracted folder and re-extract from a zip you have already checked against its `.sha256` sidecar. |
 | manifest.json claims `<N>` files but lists `<M>` - the manifest itself looks corrupt. Re-copy the bundle and extract it again. | `manifest.json` itself is damaged. | Re-download the zip (checksum it first) and re-extract. |
-| This installer build handles the 'update' flavour; this bundle says '`<flavour>`'. | The extracted bundle is not an `update`-flavour bundle. | Use the bundle that matches this installer; do not mix bundle types. |
+| This installer handles the 'update' flavour; this bundle says '`<flavour>`'. | The extracted bundle is not an `update`-flavour bundle. | Use the bundle that matches this installer; do not mix bundle types. |
 
 ## Step 2/8 — Preflight
 
 | Message | What it means | What to do |
 |---|---|---|
-| PHP not found at '`<path>`'. Install PHP 8.x ZTS x64, or pass `-PhpPath <path to php.exe>`. | No PHP at the default location or on `PATH`. | Install PHP 8.x ZTS x64, or pass `-PhpPath`. |
+| PHP not found at '`<path>`'. Install PHP 8.x ZTS x64 with php_ads, or pass `-PhpPath <path to php.exe>`. | No PHP at the default location or on `PATH`. | Install PHP 8.x ZTS x64, or pass `-PhpPath`. |
 | The PHP probe produced no output. '`<path>`' may not be a working PHP: `<raw>` | The file at that path is not a functioning `php.exe`. | Confirm the path is really `php.exe`; the quoted `<raw>` text is whatever it actually printed. |
-| PHP `<version>` found; Mp10 Web needs PHP 8.x. Install an 8.x build and re-run. | PHP is the wrong major version. | Install PHP 8. |
-| PHP is `<bits>`-bit; Mp10 Web needs the x64 build. Note the Mp10 DESKTOP applications are 32-bit - this is a different PHP, not the same one. | **The 32-bit trap.** A 32-bit PHP was found — commonly because that is what happens to be on the machine already. | Install a separate PHP 8 **x64** build for Mp10 Web; do not point it at whatever 32-bit PHP is already there. |
-| PHP is the NTS (non-thread-safe) build; Mp10 Web's php_ads.dll needs the ZTS build. Download the 'Thread Safe' x64 zip from windows.php.net. | Wrong PHP thread-safety variant. | Install the *Thread Safe* x64 zip, not the *Non Thread Safe* one. |
-| The Advantage PHP extension is not loaded - AdsConnection does not exist. Copy php_ads.dll into `<ext_dir>` and add extension=ads to `<ini>`. It also needs the 64-BIT ACE client (ace64.dll, adsloc64.dll, aicu64.dll, axcws64.dll) on PATH - the Mp10 desktop applications install the 32-bit client, which will NOT satisfy this. | `php_ads` is missing, disabled, or the 64-bit ACE client isn't on `PATH`. | Enable `extension=ads` in the named `php.ini` with `php_ads.dll` in the named extension directory, and put the **64-bit** ACE DLLs on `PATH` — not the desktop's 32-bit ones. |
+| PHP `<version>` found; Mp10 Web needs PHP 8.x. | PHP is the wrong major version. | Install PHP 8. |
+| PHP is `<bits>`-bit; Mp10 Web needs the x64 build. (The Mp10 DESKTOP applications are 32-bit - this is a different PHP.) | **The 32-bit trap.** A 32-bit PHP was found — commonly because that is what happens to be on the machine already. | Install a separate PHP 8 **x64** build for Mp10 Web; do not point it at whatever 32-bit PHP is already there. |
+| PHP is the NTS (non-thread-safe) build; php_ads.dll needs the ZTS build. Download the 'Thread Safe' x64 zip from windows.php.net. | Wrong PHP thread-safety variant. | Install the *Thread Safe* x64 zip, not the *Non Thread Safe* one. |
+| The Advantage PHP extension is not loaded - AdsConnection does not exist. Copy php_ads.dll into `<ext_dir>` and add extension=ads to `<ini>`. It also needs the 64-BIT ACE client (ace64.dll, adsloc64.dll, aicu64.dll, axcws64.dll) on PATH - the 32-bit client the desktop applications install will NOT do. | `php_ads` is missing, disabled, or the 64-bit ACE client isn't on `PATH`. | Enable `extension=ads` in the named `php.ini` with `php_ads.dll` in the named extension directory, and put the **64-bit** ACE DLLs on `PATH` — not the desktop's 32-bit ones. |
 | php-cgi.exe not found beside '`<path>`'. Apache runs PHP through mod_fcgid, which needs the CGI build alongside the CLI one. | `php-cgi.exe` is missing from the folder holding `php.exe`. | Copy/install `php-cgi.exe` into the same folder — a PHP zip normally ships both. |
 | No Apache (httpd.exe) Windows service found on this machine. Mp10 Web mounts into the site's Apache; install Apache 2.4 as a service first (or, if it runs under another name, pass `-ApacheService <name>`). | No service on this machine runs `httpd.exe`. | Register Apache as a service (`httpd.exe -k install`), or name it with `-ApacheService` if it exists under an unexpected name. |
 | No Apache service named '`<name>`'. Services found: `<list>` | The name given does not match any Apache service. | Use one of the names listed in the message. |
@@ -697,7 +703,6 @@ message to catch — nothing was skipped.
 |---|---|---|
 | The database step failed - see above. | `tools\migrate.php` exited with an error, or printed a real (uppercase) `FAILED` line. | Read the migration output printed above — it names the specific step that failed. |
 | WARNING: sequence=`<n>`, but the next number (`<recno>`) is already taken… | `sequences.recno` has fallen behind the patient record numbers actually in use. Patient creation still works — it probes for a free number — but it is retrying past taken ones, and enough of them in a row will exhaust its 50 attempts. | Investigate in Admin10 before creating patients. **Do not "fix" it by raising the counter blind:** that row is shared with the desktop applications, which mint patient numbers from it too, and `MAX(recno)` is not a reliable target — one mistyped record number sitting above the real block would burn every number in between, irreversibly. |
-| The admin password scrolled past / was never seen | The account exists; the password does not exist anywhere. | See **If the admin password was missed**, above. |
 
 ## Smoke test
 
