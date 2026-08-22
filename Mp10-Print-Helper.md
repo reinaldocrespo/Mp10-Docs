@@ -192,7 +192,7 @@ installer is doing.
 At each desk, from an **elevated** PowerShell:
 
 ```powershell
-Expand-Archive mp10-workstation-<version>.zip -DestinationPath C:\Mp10Helpers
+Expand-Archive Mp10Web-Workstation-Install.zip -DestinationPath C:\Mp10Helpers
 C:\Mp10Helpers\Install-Workstation.ps1
 ```
 

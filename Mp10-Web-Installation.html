@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-08-20" />
+  <meta name="dcterms.date" content="2026-08-22" />
   <title>Mp10 Web — Installation</title>
   <style>
 code{white-space: pre-wrap;}
@@ -211,7 +211,7 @@ a { color: inherit; }
 <h1 class="title">Mp10 Web — Installation</h1>
 <p class="subtitle">Installing and updating the browser application</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">20 August 2026</p>
+<p class="date">22 August 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -324,7 +324,7 @@ Apache + <code>mod_fcgid</code></td>
 <td>every install and update</td>
 </tr>
 <tr class="odd">
-<td><code>mp10-workstation-&lt;version&gt;.zip</code></td>
+<td><code>Mp10Web-Workstation-Install.zip</code></td>
 <td>each workstation</td>
 <td>MpPrintSrv and MpSigSrv, pointed at the site</td>
 <td>each desk that prints, signs or scans</td>
@@ -778,7 +778,7 @@ failed install.</strong></p>
 installer for this</h2>
 <p>The desk half has its own bundle, built alongside this one, which
 installs <strong>both</strong> helpers at a workstation:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Expand<span class="op">-</span>Archive mp10<span class="op">-</span>workstation<span class="op">-&lt;</span>version<span class="op">&gt;.</span><span class="fu">zip</span> <span class="op">-</span>DestinationPath C<span class="op">:</span>\Mp10Helpers</span>
+<div class="sourceCode" id="cb7"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Expand<span class="op">-</span>Archive Mp10Web<span class="op">-</span>Workstation<span class="op">-</span>Install<span class="op">.</span><span class="fu">zip</span> <span class="op">-</span>DestinationPath C<span class="op">:</span>\Mp10Helpers</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>C<span class="op">:</span>\Mp10Helpers\Install<span class="op">-</span>Workstation<span class="op">.</span><span class="fu">ps1</span></span></code></pre></div>
 <p>Run it elevated, at each desk that prints, signs or scans. It asks
 for the Mp10 program folder and the origin, copies

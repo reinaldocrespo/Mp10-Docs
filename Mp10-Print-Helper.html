@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-08-20" />
+  <meta name="dcterms.date" content="2026-08-22" />
   <title>Mp10 Web — Printing</title>
   <style>
 code{white-space: pre-wrap;}
@@ -212,7 +212,7 @@ a { color: inherit; }
 <p class="subtitle">Encounter forms and labels from the browser, and the
 helper behind them</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">20 August 2026</p>
+<p class="date">22 August 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -505,7 +505,7 @@ helpers in place — MpPrintSrv for printing and MpSigSrv for the
 signature pad and scanning — so the manual steps below are the fallback,
 and the explanation of what the installer is doing.</p>
 <p>At each desk, from an <strong>elevated</strong> PowerShell:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Expand<span class="op">-</span>Archive mp10<span class="op">-</span>workstation<span class="op">-&lt;</span>version<span class="op">&gt;.</span><span class="fu">zip</span> <span class="op">-</span>DestinationPath C<span class="op">:</span>\Mp10Helpers</span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Expand<span class="op">-</span>Archive Mp10Web<span class="op">-</span>Workstation<span class="op">-</span>Install<span class="op">.</span><span class="fu">zip</span> <span class="op">-</span>DestinationPath C<span class="op">:</span>\Mp10Helpers</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>C<span class="op">:</span>\Mp10Helpers\Install<span class="op">-</span>Workstation<span class="op">.</span><span class="fu">ps1</span></span></code></pre></div>
 <p>It asks for the Mp10 program folder and the <strong>origin</strong> —
 the address staff open Mp10 Web at — and then:</p>

@@ -44,7 +44,7 @@ desk that prints, signs or scans.
 |---|---|---|---|
 | `mp10-prereqs-<version>.zip` | the server | PHP 8.x ZTS x64 with `php_ads`, the 64-bit ACE client, Apache + `mod_fcgid` | only if the server lacks them |
 | `mpweb-update-<version>.zip` | the server | the web application, into that server's Apache | every install and update |
-| `mp10-workstation-<version>.zip` | each workstation | MpPrintSrv and MpSigSrv, pointed at the site | each desk that prints, signs or scans |
+| `Mp10Web-Workstation-Install.zip` | each workstation | MpPrintSrv and MpSigSrv, pointed at the site | each desk that prints, signs or scans |
 
 Run them in that order. The prerequisites installer ends by printing the exact
 `-PhpPath` and `-ApacheService` arguments the next one wants, so its answers
@@ -343,7 +343,7 @@ The desk half has its own bundle, built alongside this one, which installs
 **both** helpers at a workstation:
 
 ```powershell
-Expand-Archive mp10-workstation-<version>.zip -DestinationPath C:\Mp10Helpers
+Expand-Archive Mp10Web-Workstation-Install.zip -DestinationPath C:\Mp10Helpers
 C:\Mp10Helpers\Install-Workstation.ps1
 ```
 
