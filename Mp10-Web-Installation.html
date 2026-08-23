@@ -318,7 +318,7 @@ Apache + <code>mod_fcgid</code></td>
 <td>only if the server lacks them</td>
 </tr>
 <tr class="even">
-<td><code>mpweb-update-&lt;version&gt;.zip</code></td>
+<td><code>Mp10Web-Server-Installer.zip</code></td>
 <td>the server</td>
 <td>the web application, into that server’s Apache</td>
 <td>every install and update</td>
@@ -387,18 +387,17 @@ serves Mp10 Web the same way.</li>
 <h1 id="before-you-install-verify-the-download">Before you install:
 verify the download</h1>
 <p>The bundle publishes as two files: a zip
-(<code>mpweb-update-&lt;version&gt;.zip</code>) and a
-<code>.sha256</code> sidecar beside it. <code>manifest.json</code>
-inside the zip verifies every file <em>once extracted</em>, but it
-cannot verify itself, or the zip that carries it — that is what the
-sidecar is for, and it has to be checked <strong>before</strong> you
-extract, not after:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Get<span class="op">-</span>FileHash <span class="op">.</span>\mpweb<span class="op">-</span>update<span class="op">-&lt;</span>version<span class="op">&gt;.</span><span class="fu">zip</span> <span class="op">-</span>Algorithm SHA256</span></code></pre></div>
+(<code>Mp10Web-Server-Installer.zip</code>) and a <code>.sha256</code>
+sidecar beside it. <code>manifest.json</code> inside the zip verifies
+every file <em>once extracted</em>, but it cannot verify itself, or the
+zip that carries it — that is what the sidecar is for, and it has to be
+checked <strong>before</strong> you extract, not after:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Get<span class="op">-</span>FileHash <span class="op">.</span>\Mp10Web<span class="op">-</span>Server<span class="op">-</span>Installer<span class="op">.</span><span class="fu">zip</span> <span class="op">-</span>Algorithm SHA256</span></code></pre></div>
 <p>Compare the <code>Hash</code> value against the contents of
-<code>mpweb-update-&lt;version&gt;.zip.sha256</code> (a plain text file:
-the hash, two spaces, the filename). If they do not match, download
-again — do not extract a zip whose checksum does not match its sidecar,
-even if it looks fine.</p>
+<code>Mp10Web-Server-Installer.zip.sha256</code> (a plain text file: the
+hash, two spaces, the filename). If they do not match, download again —
+do not extract a zip whose checksum does not match its sidecar, even if
+it looks fine.</p>
 <p>Once that checks out, extract the zip. <code>manifest.json</code> and
 <code>install.ps1</code> land beside each other at the top of the
 extracted folder — that is the “bundle” the rest of this guide refers

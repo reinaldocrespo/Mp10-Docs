@@ -43,7 +43,7 @@ desk that prints, signs or scans.
 | Bundle | Runs on | Installs | When |
 |---|---|---|---|
 | `mp10-prereqs-<version>.zip` | the server | PHP 8.x ZTS x64 with `php_ads`, the 64-bit ACE client, Apache + `mod_fcgid` | only if the server lacks them |
-| `mpweb-update-<version>.zip` | the server | the web application, into that server's Apache | every install and update |
+| `Mp10Web-Server-Installer.zip` | the server | the web application, into that server's Apache | every install and update |
 | `Mp10Web-Workstation-Install.zip` | each workstation | MpPrintSrv and MpSigSrv, pointed at the site | each desk that prints, signs or scans |
 
 Run them in that order. The prerequisites installer ends by printing the exact
@@ -93,18 +93,18 @@ The requirements themselves:
 
 # Before you install: verify the download
 
-The bundle publishes as two files: a zip (`mpweb-update-<version>.zip`) and a
+The bundle publishes as two files: a zip (`Mp10Web-Server-Installer.zip`) and a
 `.sha256` sidecar beside it. `manifest.json` inside the zip verifies every
 file *once extracted*, but it cannot verify itself, or the zip that carries
 it — that is what the sidecar is for, and it has to be checked **before**
 you extract, not after:
 
 ```powershell
-Get-FileHash .\mpweb-update-<version>.zip -Algorithm SHA256
+Get-FileHash .\Mp10Web-Server-Installer.zip -Algorithm SHA256
 ```
 
 Compare the `Hash` value against the contents of
-`mpweb-update-<version>.zip.sha256` (a plain text file: the hash, two spaces,
+`Mp10Web-Server-Installer.zip.sha256` (a plain text file: the hash, two spaces,
 the filename). If they do not match, download again — do not extract a zip
 whose checksum does not match its sidecar, even if it looks fine.
 
