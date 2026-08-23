@@ -132,6 +132,10 @@ refused by the helper's origin list, the browser blocks the reply before Mp10
 Web can read the explanation, and it looks exactly like nothing listening.
 Check both.
 
+**IT: work through *7. Where to look when it misbehaves*.** It is a step ladder
+that separates those two, and the four other causes that present the same way,
+starting from a single command run at the workstation.
+
 ## A printer the helper will refuse
 
 Some printers cannot be used by a **service** at all, and choosing one produces
@@ -418,7 +422,18 @@ A PDF means the database connection, the template and the data are all
 working, and **only the printer is left to sort out**. That single command
 separates half the possible faults from the other half.
 
-Then, from a browser on that workstation, select an encounter and choose
+**It does not test the listener.** That command is a one-shot job and never
+opens a port, so a workstation where it succeeds perfectly can still be unable
+to answer the browser. Prove the other half separately:
+
+```
+curl.exe http://127.0.0.1:6265/status
+```
+
+`origins` in the reply must contain the address staff type into the browser.
+See *7. Where to look when it misbehaves*.
+
+Then, from a browser **on that workstation**, select an encounter and choose
 **Preview**, then **Label**.
 
 ## 6. Updating a workstation later
@@ -447,6 +462,170 @@ update, and the only way to catch a workstation that was missed.
 `MpPrintSrv.log`, beside the program, records every job and every refusal with
 a timestamp — what was printed, which template, and what went wrong. It is the
 first thing to read and usually the last thing you need.
+
+When the browser says *"The print helper is not answering"*, the rest of this
+section is the order to work in. It is written as a ladder because each step
+eliminates a whole class of fault, and because the steps are not
+interchangeable — doing them out of order is how an afternoon disappears.
+
+### First, be at the right computer
+
+**MpPrintSrv must run on the PC that has the browser open**, because the page
+fetches `http://127.0.0.1:6265` — an address that means *this* computer and
+nothing else. It does not matter which machine serves Mp10 Web.
+
+A site with the web server on one machine and the operator on another is the
+normal case, and it is easy to end up testing the wrong one:
+
+| Machine | Needs MpPrintSrv? |
+|---|---|
+| The one serving Mp10 Web | **No** — unless somebody also uses a browser there |
+| The one with the browser and the printer | **Yes** |
+
+**Admin → Print helper** reports on whichever desk has the browser open, so
+opening that page from your own PC tells you about *your* PC. Sitting at a
+different desk shows you that desk's helper. If it says "not answering",
+confirm first that you are looking at the machine you think you are.
+
+### Step 1 — ask the helper what it believes
+
+From a command prompt **on the workstation with the browser**:
+
+```
+curl.exe http://127.0.0.1:6265/status
+```
+
+This one command answers most of the question, and it answers it better than
+`Mp10.ini` does. `Mp10.ini` says what the helper *will* read next time it
+starts. `/status` says what it is **actually running with right now**, and when
+those two disagree, the helper wins.
+
+A healthy reply, wrapped here for reading:
+
+```json
+{"ok":true,"app":"MpPrintSrv","build":"2026-08-20 12:05:08",
+ "started":"08/22/26 19:25:07","service":"running","account":"SYSTEM",
+ "port":6265,"origins":["http://server02:8081"],
+ "printers":{...},"printed":12,"failed":0,"wedged":false}
+```
+
+Read three things before anything else:
+
+- **`origins`** — must contain the address staff type into the browser. Step 3.
+- **`started`** — if `Mp10.ini` was edited after this time, the edit has not
+  taken effect. Step 3.
+- **`account`**, and `printers.forms` / `printers.labels`. Step 4.
+
+### Step 2 — if `/status` does not answer
+
+Nothing is listening. Find out which of four things it is:
+
+```
+sc qc MpPrintSrv
+Get-Service MpPrintSrv
+```
+
+| What you find | What it means | Fix |
+|---|---|---|
+| No such service | `-i` never ran, or ran without elevation | Elevated prompt, `MpPrintSrv.exe -i` |
+| Service exists, but `BINARY_PATH_NAME` names **a different folder** than the one you installed into | A service was already registered on this desk. `-i` refuses outright when a service by that name exists, and the workstation installer never re-points one — so it is still running the **old** exe, beside the **old** `Mp10.ini` | `-stop` then `-u` using the **old** exe, then `-i` from the new folder |
+| Service exists, state **Stopped** | It started and died, or was never started | Read the log, below |
+| Service **Running**, still nothing on the port | The bind failed — something else holds 6265 | The log names it |
+
+For a service that dies at startup the log is decisive. A healthy start writes
+three lines:
+
+```
+Service starting
+MpPrintSrv build 2026-08-20 12:05:09
+Listening on http://127.0.0.1:6265  for ["http://server02:8081"]
+```
+
+**If the third line is absent, it never served.** The commonest reason is the
+database: startup opens the dictionary *before* it binds the port, and a failed
+connection stops the service there. Check `[RDD] PATH`, and check that
+`ace32.dll` and `axcws32.dll` are beside the exe.
+
+> **A successful `-enc` test does not prove the listener works.** That command
+> is a one-shot job — it connects, renders, prints and exits, and never opens a
+> port at all. It proves the database, the template and the report engine, which
+> is exactly why it is worth running (see *5. Check it*). It says nothing
+> whatever about whether anything is listening on 6265, and a workstation where
+> it succeeds can still be completely unable to serve the browser.
+
+Note also that `-enc` runs as **you**, while the service runs as **LocalSystem**
+by default. Same computer, different account, different view of the network and
+of the printers.
+
+### Step 3 — if `/status` answers but the browser still says "not answering"
+
+Compare `origins` against the address in the browser's address bar.
+
+This is the most common fault at a new site, and it is disguised: **a browser
+cannot tell "nothing is listening" apart from "the listener refused me".** When
+the helper refuses an origin, the browser blocks the reply before Mp10 Web can
+read the explanation, so both arrive as the same failure. The message in the
+page covers both cases on purpose.
+
+Two ways `origins` goes wrong:
+
+**1. The ini was edited and the helper was not restarted.** `PORT` and `ORIGIN`
+are read **once, at startup**. Editing them changes nothing until the helper
+restarts — and `started` in `/status` tells you exactly when it last read them.
+This is the usual reason a *corrected* `ORIGIN` still refuses everything.
+
+```
+MpPrintSrv.exe -restart
+curl.exe http://127.0.0.1:6265/status
+```
+
+`origins` must now show the new value. If it does not, you edited a different
+file — go back to `sc qc MpPrintSrv` and check which folder the service
+actually runs from.
+
+**2. The value itself is wrong.** It must be exactly what the browser sends:
+scheme and host, **no trailing slash and no path**, and the port too when it is
+not 80 or 443. `http://server02:8081` is right. `http://server02:8081/mpweb/`
+is not, and neither is the helper's own `http://127.0.0.1:6265`.
+
+Capitalisation does **not** matter — the comparison lowercases both sides, so
+`http://Server02:8081` in the ini matches a browser sending
+`http://server02:8081`. Do not spend time there.
+
+List several, comma separated, for a site reachable more than one way:
+
+```ini
+ORIGIN=http://server02:8081,https://mp10.example.org
+```
+
+### Step 4 — it answers, the origin is right, and printing still fails
+
+The connection is now proven and only the printer is left. Look at the
+`printers` block in `/status`, or the same thing formatted in **Admin → Print
+helper**:
+
+```json
+"printers":{"account":"SYSTEM","session0":true,
+            "all":["Microsoft XPS Document Writer","Microsoft Print to PDF"],
+            "forms":"","labels":"","formsWhy":"none","labelsWhy":"none",
+            "unusable":[...]}
+```
+
+`forms` and `labels` empty with `session0: true` is *The session 0 trap* above —
+go back and read it. `unusable` names every printer that was rejected and why;
+a printer on a `FILE:` or `PORTPROMPT:` port (Print to PDF, XPS, and most
+"virtual" printers) cannot be used by a service at all.
+
+### The whole ladder, in one table
+
+| `/status` | Then | Cause |
+|---|---|---|
+| No answer | `sc qc` shows another folder | Old service still registered, running the old exe and old ini |
+| No answer | Service Stopped, log ends at `Service starting` | Dictionary unreachable, or ACE DLLs missing |
+| No answer | No such service | Never installed, or `-i` ran unelevated |
+| Answers, wrong `origins` | `started` is **older** than the ini | Ini edited, helper not restarted |
+| Answers, wrong `origins` | `started` is **newer** than the ini | Wrong file edited — check the service's folder |
+| Answers, right `origins` | `forms` / `labels` empty | Session 0 trap — printers, not networking |
 
 # Notes for the curious
 

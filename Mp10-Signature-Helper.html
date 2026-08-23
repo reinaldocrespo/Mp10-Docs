@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-08-22" />
+  <meta name="dcterms.date" content="2026-08-23" />
   <title>Mp10 — Signature Helper</title>
   <style>
 code{white-space: pre-wrap;}
@@ -212,7 +212,7 @@ a { color: inherit; }
 <p class="subtitle">Signature capture and document scanning at the
 workstation, for Mp10 Web</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">22 August 2026</p>
+<p class="date">23 August 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -236,6 +236,8 @@ does not do</a></li>
 <li><a href="#the-signature-pad" id="toc-the-signature-pad">The
 signature pad</a></li>
 <li><a href="#scanning" id="toc-scanning">Scanning</a></li>
+<li><a href="#restarting-it" id="toc-restarting-it">Restarting
+it</a></li>
 </ul></li>
 <li><a href="#installing-it-it-task" id="toc-installing-it-it-task">Installing it — IT task</a>
 <ul>
@@ -249,8 +251,11 @@ workstation bundle</a></li>
 <li><a href="#the-consent-text" id="toc-the-consent-text">The consent
 text</a></li>
 <li><a href="#check-it" id="toc-check-it">Check it</a></li>
-<li><a href="#updating-a-workstation-later" id="toc-updating-a-workstation-later">Updating a workstation
-later</a></li>
+<li><a href="#updating-a-workstation-later" id="toc-updating-a-workstation-later">Updating a workstation later</a>
+<ul>
+<li><a href="#moving-it-to-a-different-folder" id="toc-moving-it-to-a-different-folder">Moving it to a different
+folder</a></li>
+</ul></li>
 </ul></li>
 <li><a href="#scanning-it-task" id="toc-scanning-it-task">Scanning — IT
 task</a>
@@ -364,32 +369,38 @@ session</td>
 </tr>
 <tr class="odd">
 <td>Started by</td>
-<td><code>MpSigSrv.exe -listen</code>, at logon</td>
+<td>the workstation installer’s logon task, for whoever signs in — see
+<a href="#it-is-not-a-service">It is not a service</a></td>
 </tr>
 <tr class="even">
+<td>Restarted by</td>
+<td><strong>Restart Signature Pad</strong>, the shortcut on every
+desktop (<code>MpSigSrv.exe -restart</code>) — see <a href="#restarting-it">Restarting it</a></td>
+</tr>
+<tr class="odd">
 <td>Port</td>
 <td><strong>6266</strong> (MpPrintSrv is 6265; they coexist)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Is it running?</td>
 <td>open <a href="http://127.0.0.1:6266/ping" class="uri">http://127.0.0.1:6266/ping</a> in the browser on that
 PC</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>What can it scan?</td>
 <td>open <a href="http://127.0.0.1:6266/scanners" class="uri">http://127.0.0.1:6266/scanners</a> on that PC</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Settings</td>
 <td><code>[RDD]</code> and <code>[SIGN]</code> in <code>Mp10.ini</code>,
 beside the exe</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Written by it</td>
 <td><code>MpScanners.ini</code>, beside the exe — what this desk’s
 scanners can do</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Logs</td>
 <td><code>MpSigSrv.log</code> and <code>Topaz.log</code>, beside the
 exe</td>
@@ -530,10 +541,23 @@ pad</a>.</td>
 <tr class="even">
 <td><em>The capture did not finish within 300 seconds</em></td>
 <td>Nobody completed the signature and the helper gave up.</td>
-<td><strong>Restart MpSigSrv.</strong> Pressing Capture again cannot
-work: the same timeout puts the helper into a state where it refuses
-every capture <em>and every scan</em> until it is restarted, and it says
+<td><strong>Restart it</strong> — double-click <strong>Restart Signature
+Pad</strong> on the desktop, or use <strong>Admin → Signature
+helper</strong>’s Restart button. Pressing Capture again cannot work:
+the same timeout puts the helper into a state where it refuses every
+capture <em>and every scan</em> until it is restarted, and it says
 so.</td>
+</tr>
+<tr class="odd">
+<td><em>The signature helper is busy with … and will not restart while
+it is</em> (409, from a Restart attempt)</td>
+<td>Deliberate, not a fault. A capture or scan was actually in progress
+when Restart was pressed; restarting through it would discard a
+signature the patient has already given.</td>
+<td>Wait for the capture or scan to finish, then press Restart again.
+This does <strong>not</strong> cover a wedged helper — the row above —
+which restarts without any refusal; the 409 only fires while something
+is genuinely still running.</td>
 </tr>
 </tbody>
 </table>
@@ -642,6 +666,73 @@ when the layout looks wrong.</li>
 <p>A third file, <strong><code>MpScanners.ini</code></strong>, is not a
 log but is worth reading for the same reason: it is what the helper
 believes each scanner at this desk can do. See <a href="#the-cache-and-re-detect">The cache, and Re-detect</a>.</p>
+<h2 id="restarting-it">Restarting it</h2>
+<p>Two ways, for two different situations:</p>
+<ul>
+<li><strong>Restart Signature Pad</strong>, the shortcut the workstation
+installer puts on <code>C:\Users\Public\Desktop</code> — which
+composites onto <strong>every</strong> operator’s own desktop, not just
+whoever ran the install. It runs <code>MpSigSrv.exe -restart</code>, and
+<strong>one shortcut covers both faults an operator can hit</strong>: if
+MpSigSrv is not running, it starts it; if it is running, it replaces it.
+From a browser those two faults are indistinguishable, so the shortcut
+does not need to know which one this is — double-click it either
+way.</li>
+<li><strong>Admin → Signature helper</strong>’s <strong>Restart the
+helper</strong> button, inside Mp10 Web. It works only when the helper
+is <strong>already answering</strong> — the page reaches it over
+<code>127.0.0.1:6266</code>, and there is nothing at that address to ask
+when nothing is listening. When the page cannot reach the helper at all,
+it says so and points at the desktop shortcut instead of leaving the
+button there to fail.</li>
+</ul>
+<p><code>MpSigSrv.exe -restart</code> is also a real command line, for a
+desk with no browser handy — it is what both of the above actually
+run:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>MpSigSrv.exe -listen</code></td>
+<td>run normally — what the logon task uses</td>
+</tr>
+<tr class="even">
+<td><code>MpSigSrv.exe -restart</code></td>
+<td>replace a running helper, or start one if nothing answers</td>
+</tr>
+</tbody>
+</table>
+<p>A restart is what clears a <strong>wedged</strong> helper (the
+“capture did not finish” row above), and it is also what an edited
+<code>[SIGN] ORIGIN</code> needs before it takes effect — see the note
+under <a href="#settings">Settings</a>.</p>
+<p><strong>One thing it refuses on purpose.</strong> A restart request
+that arrives while a capture or scan is actually in progress comes back
+refused, and does nothing:</p>
+<blockquote>
+<p>The signature helper is busy with … and will not restart while it is.
+Restarting now would discard work somebody has already done. Wait for it
+to finish and try again.</p>
+</blockquote>
+<p>That is not a fault to work around. Restarting through a capture
+would throw away a signature the patient has already given, so the
+helper says no rather than comply. Wait for the capture or scan to
+finish, then try again.</p>
+<p>Pressing Restart a second time while the <em>first</em> request is
+already being acted on is harmless rather than refused — it comes back
+saying a restart is already under way, and does not spawn a second one
+racing the first for the port. Even so, do not press it again in the
+meantime; the old copy keeps answering for a few seconds after being
+asked to stop, and pressing again proves nothing.</p>
 <hr />
 <h1 id="installing-it-it-task">Installing it — IT task</h1>
 <h2 id="it-is-not-a-service">It is not a service</h2>
@@ -649,22 +740,38 @@ believes each scanner at this desk can do. See <a href="#the-cache-and-re-detect
 is no <code>-i</code> switch.</strong> It hosts the Topaz ActiveX
 control and opens a window; a service runs in session 0, which has no
 interactive desktop, so neither would work.</p>
-<p>It runs <strong>in the signed-in operator’s own session</strong>,
-started at logon. That is a real difference from MpPrintSrv, which is a
-service — if you set MpSigSrv up the way you set that up, it will not
-work.</p>
-<p>Practically, that means one of:</p>
-<ul>
-<li>a shortcut to <code>MpSigSrv.exe -listen</code> in the user’s
-<strong>Startup</strong> folder (<code>shell:startup</code>), or</li>
-<li><strong>Task Scheduler</strong>, trigger <em>At log on</em>, action
-<code>&lt;Mp10 folder&gt;\MpSigSrv.exe</code>, arguments
-<code>-listen</code>, and <strong>“Run only when user is logged
-on”</strong> — not the “whether or not” option, which puts it back in
-session 0.</li>
-</ul>
-<p>It shows no window while it waits. To stop it, end
-<code>MpSigSrv.exe</code> in Task Manager.</p>
+<p>It runs <strong>in the signed-in operator’s own session</strong>.
+That is a real difference from MpPrintSrv, which is a service — if you
+set MpSigSrv up the way you set that up, it will not work.</p>
+<p><strong>The workstation installer does this for you.</strong> It
+registers a machine-wide <strong>Scheduled Task</strong> named
+<code>MpSigSrv</code> — trigger <em>at log on</em>, any user; action
+<code>MpSigSrv.exe -listen</code>; an <strong>interactive</strong>
+principal at <strong>limited</strong> privilege, so the helper is never
+elevated and a future logon starts exactly what this one does;
+<strong>“Run only when user is logged on”</strong>, so it never lands in
+session 0; and set to restart itself, up to three times a minute apart,
+if it ever dies on its own. A logon trigger does not fire for a session
+that already exists, so the installer also starts the task immediately
+once it is registered — the desk is served without anyone logging off
+and back on.</p>
+<p>That is a change from earlier installers, which printed these
+settings and left registering the task to a technician. Printing
+instructions cost a real site a day: the install finished looking
+successful and MpSigSrv had never actually been started, because nothing
+was ever going to start it. It is no longer possible to finish this
+install without the task running.</p>
+<p>If you ever need to set this up by hand — a workstation added outside
+the installer, say — the equivalent in Task Scheduler is: trigger <em>At
+log on</em>, action <code>&lt;Mp10 folder&gt;\MpSigSrv.exe</code>,
+arguments <code>-listen</code>, principal <strong>Interactive
+user</strong>, not run with highest privileges, and <strong>“Run only
+when user is logged on”</strong> — not the “whether or not” option,
+which puts it back in session 0.</p>
+<p>It shows no window while it waits. To restart it, or to start it on a
+desk where it is not running at all, see <a href="#restarting-it">Restarting it</a> — you no longer need Task
+Manager for this, though ending <code>MpSigSrv.exe</code> there still
+works to stop it.</p>
 <h2 id="the-quick-way-the-workstation-bundle">The quick way: the
 workstation bundle</h2>
 <p>The same installer that sets up the print helper installs this one
@@ -674,21 +781,25 @@ and writes <code>[SIGN] PORT</code> and <code>[SIGN] ORIGIN</code> into
 add is a commented-out <code>[RDD]</code> template, and only when that
 section is missing entirely. See <em>The quick way</em> in <strong>Mp10
 Web — Printing</strong>.</p>
-<p>Two parts of this helper it cannot do for you, and says so rather
-than pretending otherwise:</p>
+<p>One part of this helper it still cannot do for you, and says so
+rather than pretending otherwise:</p>
 <ul>
-<li><strong>Starting it at logon.</strong> MpSigSrv runs in the
-operator’s own session, and a Startup shortcut created by a technician
-lands in the <em>technician’s</em> profile — where it silently never
-runs for the person who needs it. The installer prints the exact
-shortcut and Task Scheduler settings instead; the exact shortcut and
-Task Scheduler settings are under <a href="#it-is-not-a-service">It is
-not a service</a> above.</li>
 <li><strong>Installing SigPlus.</strong> Topaz’s control is
 COM-registered by Topaz’s own installer. The workstation installer
 checks the registration and reports whether signature capture will work;
 scanning is unaffected either way.</li>
 </ul>
+<p><strong>Starting it at logon is no longer on that list.</strong>
+MpSigSrv runs in the operator’s own session, and a Startup shortcut
+created by a technician used to land in the <em>technician’s</em>
+profile — where it silently never ran for the person who needed it. The
+installer no longer works around that by printing instructions: it
+registers a machine-wide logon Scheduled Task itself and starts it
+immediately, so the desk is served before the technician packs up. See
+<a href="#it-is-not-a-service">It is not a service</a> above for exactly
+what gets registered. It also writes <strong>Restart Signature
+Pad</strong> to every operator’s own desktop, for the day the pad or a
+scan stops answering after that — see <a href="#restarting-it">Restarting it</a>.</p>
 <h2 id="what-to-copy">What to copy</h2>
 <p>Onto each workstation that has a pad:</p>
 <table>
@@ -790,6 +901,22 @@ the same door as signing, so a wrong <code>ORIGIN</code> takes out the
 reverse too: if scanning and signing are both dead at one desk, suspect
 this line rather than the hardware.</p>
 </blockquote>
+<blockquote>
+<p><strong><code>PORT</code> and <code>ORIGIN</code> are read once, when
+the helper starts.</strong> Editing either by hand in
+<code>Mp10.ini</code> changes nothing until MpSigSrv is restarted — see
+<a href="#restarting-it">Restarting it</a>. This is not theoretical: the
+identical mistake, on MpPrintSrv’s side of the same design, cost a
+customer a day on 2026-08-22. An installer run rewrote
+<code>Mp10.ini</code> and the running helper was never restarted, so it
+went on serving the old value while the browser reported “not answering”
+— and a refused origin looks exactly like a helper that is not running,
+so nothing about the symptom pointed at a stale setting rather than a
+dead one. <code>Mp10.ini</code> says what MpSigSrv will read at its
+<em>next</em> start; <code>/status</code>’s <code>origins</code> array
+says what it is running with <em>right now</em> — see <a href="#check-it">Check it</a>. When the two disagree, the running
+helper, not the file, is telling the truth.</p>
+</blockquote>
 <p><strong><code>[RDD] user</code></strong> is the account MpSigSrv
 connects to the dictionary as. <strong>It is not the person who
 witnesses the signature</strong> — that is the operator code Mp10 Web
@@ -869,8 +996,9 @@ it is a service, <strong>which account it runs as</strong> (the quickest
 way to catch a helper started in the technician’s profile rather than
 the operator’s), when it started, its port, the origins it will accept —
 shown in red when there are none — the capture counters and last error,
-and every scanner it can see with a <strong>Re-detect</strong>
-button.</p>
+every scanner it can see with a <strong>Re-detect</strong> button, and a
+<strong>Restart</strong> button — see <a href="#restarting-it">Restarting it</a> for what it can and cannot
+do.</p>
 <p>The steps below are the same checks from a command line, for a desk
 where the browser cannot reach the site at all.</p>
 <p>Four checks, in this order. Do them on the workstation with the
@@ -880,17 +1008,25 @@ browser:</p>
 <pre><code>http://127.0.0.1:6266/ping</code></pre>
 <p>You should get:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span><span class="dt">&quot;ok&quot;</span><span class="fu">:</span><span class="kw">true</span><span class="fu">,</span><span class="dt">&quot;app&quot;</span><span class="fu">:</span><span class="st">&quot;MpSigSrv&quot;</span><span class="fu">,</span><span class="dt">&quot;build&quot;</span><span class="fu">:</span><span class="st">&quot;2026-08-11 20:11:26&quot;</span><span class="fu">}</span></span></code></pre></div>
-<p>Nothing at all means it is not running — start
-<code>MpSigSrv.exe -listen</code> and look at
+<p>Nothing at all means it is not running — double-click <strong>Restart
+Signature Pad</strong> on the desktop, or run
+<code>MpSigSrv.exe -listen</code> yourself, and look at
 <code>MpSigSrv.log</code>.</p>
 <p><strong>2. Is it configured the way you think?</strong></p>
 <pre><code>http://127.0.0.1:6266/status</code></pre>
-<div class="sourceCode" id="cb10"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span><span class="dt">&quot;ok&quot;</span><span class="fu">:</span><span class="kw">true</span><span class="fu">,</span><span class="dt">&quot;app&quot;</span><span class="fu">:</span><span class="st">&quot;MpSigSrv&quot;</span><span class="fu">,</span><span class="dt">&quot;port&quot;</span><span class="fu">:</span><span class="dv">6266</span><span class="fu">,</span><span class="dt">&quot;origins&quot;</span><span class="fu">:</span><span class="ot">[</span><span class="st">&quot;https://mp10web.example.org&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a> <span class="dt">&quot;service&quot;</span><span class="fu">:</span><span class="st">&quot;not a service - runs in the operator&#39;s session&quot;</span><span class="fu">,</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a> <span class="dt">&quot;captured&quot;</span><span class="fu">:</span><span class="dv">0</span><span class="fu">,</span><span class="dt">&quot;failed&quot;</span><span class="fu">:</span><span class="dv">0</span><span class="fu">,</span><span class="dt">&quot;wedged&quot;</span><span class="fu">:</span><span class="kw">false</span><span class="fu">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span><span class="dt">&quot;ok&quot;</span><span class="fu">:</span><span class="kw">true</span><span class="fu">,</span><span class="dt">&quot;app&quot;</span><span class="fu">:</span><span class="st">&quot;MpSigSrv&quot;</span><span class="fu">,</span><span class="dt">&quot;build&quot;</span><span class="fu">:</span><span class="st">&quot;2026-08-11 20:11:26&quot;</span><span class="fu">,</span><span class="dt">&quot;started&quot;</span><span class="fu">:</span><span class="st">&quot;08/23/26 09:12:03&quot;</span><span class="fu">,</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a> <span class="dt">&quot;service&quot;</span><span class="fu">:</span><span class="st">&quot;not a service - runs in the operator&#39;s session&quot;</span><span class="fu">,</span><span class="dt">&quot;account&quot;</span><span class="fu">:</span><span class="st">&quot;RCB&quot;</span><span class="fu">,</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a> <span class="dt">&quot;port&quot;</span><span class="fu">:</span><span class="dv">6266</span><span class="fu">,</span><span class="dt">&quot;origins&quot;</span><span class="fu">:</span><span class="ot">[</span><span class="st">&quot;https://mp10web.example.org&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a> <span class="dt">&quot;captured&quot;</span><span class="fu">:</span><span class="dv">0</span><span class="fu">,</span><span class="dt">&quot;failed&quot;</span><span class="fu">:</span><span class="dv">0</span><span class="fu">,</span><span class="dt">&quot;lastError&quot;</span><span class="fu">:</span><span class="st">&quot;&quot;</span><span class="fu">,</span><span class="dt">&quot;wedged&quot;</span><span class="fu">:</span><span class="kw">false</span><span class="fu">,</span><span class="dt">&quot;busy&quot;</span><span class="fu">:</span><span class="kw">false</span><span class="fu">}</span></span></code></pre></div>
 <p><strong><code>&quot;origins&quot;:[]</code> is the failure to look
 for.</strong> It means no <code>[SIGN] ORIGIN</code>, and every request
-from a browser will be refused however healthy the rest looks.</p>
+from a browser will be refused however healthy the rest looks.
+<strong>This line is the answer, not <code>Mp10.ini</code>.</strong>
+<code>Mp10.ini</code> says what MpSigSrv will read the next time it
+starts; <code>origins</code> here says what it is actually running with
+right now — if you have just edited <code>ORIGIN</code>, compare
+<code>started</code> against when you saved the file (see the note under
+<a href="#settings">Settings</a>).</p>
 <p><strong>3. Does the pad actually work?</strong> Without a browser in
 the way, from a command prompt in the Mp10 program folder:</p>
 <pre><code>MpSigSrv.exe -enc=EN26-00000123 -operator=RCB</code></pre>
@@ -905,13 +1041,19 @@ default — the helper refuses without one rather than inventing a
 value.</p>
 <p>MpSigSrv is a windowless program, so it prints nothing to the command
 prompt.</p>
-<p><strong>But it does raise message boxes.</strong> A missing or
-unreadable <code>Mp10.ini</code>, an empty <code>[RDD] PATH</code>, a
-dictionary it cannot open, or a port it cannot bind all produce a modal
-Windows box and then stop. Started at logon, that box sits on the
-desktop looking like nothing in particular while the desk is quietly
-without signatures — so if the helper “did not start”, look for a stray
-dialog before anything else. Read <code>MpSigSrv.log</code>.</p>
+<p><strong>But run this way, it does raise message boxes.</strong> A
+missing or unreadable <code>Mp10.ini</code>, an empty
+<code>[RDD] PATH</code>, or a dictionary it cannot open all produce a
+modal Windows box and then stop — there is an operator sitting at the
+prompt to dismiss it, so that is the right behaviour here.</p>
+<p><strong><code>-listen</code> — what the logon task and the desktop
+shortcut’s cold start both run — does not.</strong> A failed dictionary
+connection or a port it cannot bind there is written to
+<code>MpSigSrv.log</code> and the process exits; no dialog appears at
+all. A modal box would sit on the desktop with nobody there to click it,
+wedging the process behind it — nothing to look at, nothing being
+served. So if the helper “did not start” at logon, there is no stray
+dialog to hunt for. Read <code>MpSigSrv.log</code>.</p>
 <p><strong>4. Can it see the scanner?</strong> Only if this desk is
 meant to scan:</p>
 <pre><code>http://127.0.0.1:6266/scanners</code></pre>
@@ -961,12 +1103,54 @@ overwritten:</p>
 <ol type="1">
 <li>End <code>MpSigSrv.exe</code> in Task Manager.</li>
 <li>Copy the new <code>MpSigSrv.exe</code> over the old one.</li>
-<li>Start it again, or log off and back on if it is started at
-logon.</li>
+<li>Start it again — double-click <strong>Restart Signature Pad</strong>
+on the desktop (with nothing running, it starts a fresh copy exactly as
+it replaces a running one — see <a href="#restarting-it">Restarting
+it</a>), or log off and back on and let the logon task do it.</li>
 </ol>
 <p>The build a workstation is running is reported by <code>/ping</code>
 and <code>/status</code>, which is how you confirm the copy actually
 took.</p>
+<h3 id="moving-it-to-a-different-folder">Moving it to a different
+folder</h3>
+<p>Overwriting in place is the easy case. <strong>Moving the helper to a
+different folder is the one that catches people</strong>, because the
+logon task keeps pointing at the old one.</p>
+<p>Re-running the installer against the new folder does
+<strong>not</strong> re-point the task. It says so, naming both
+paths:</p>
+<blockquote>
+<p><strong>[WARN]</strong> A logon task named ‘MpSigSrv’ is already
+registered, but it points at a DIFFERENT exe:
+<code>&lt;old&gt;\MpSigSrv.exe</code>, not this install’s
+<code>&lt;new&gt;\MpSigSrv.exe</code>. This desk will keep starting THAT
+copy — and reading THAT copy’s own <code>Mp10.ini</code> — until the
+task is removed and this installer is re-run.</p>
+</blockquote>
+<p>That is deliberate. An existing registration is never silently
+re-pointed — the same rule the MpPrintSrv service follows. To actually
+move it:</p>
+<pre><code>schtasks /Delete /TN MpSigSrv /F</code></pre>
+<p>then re-run the workstation installer against the new folder.</p>
+<p><strong>Read “and reading THAT copy’s own <code>Mp10.ini</code>”
+carefully</strong> — it is the whole reason this matters. The old folder
+has its own settings file, so a desk in this state does not merely run
+an older binary: it runs against a <strong>different
+<code>[SIGN] ORIGIN</code> and a different
+<code>[RDD] PATH</code></strong>. The symptom is the one that is hardest
+to diagnose — the helper answers, but refuses every request from the
+browser, which looks exactly like nothing running. Check
+<code>/status</code>’s <code>origins</code> against the address staff
+actually use before assuming anything else.</p>
+<blockquote>
+<p><strong>The shortcut and the task can disagree.</strong> A re-install
+against a new folder <strong>does</strong> re-point <strong>Restart
+Signature Pad</strong> — a shortcut is cheap to overwrite — while the
+task deliberately stays put. Until you delete and re-register the task,
+a desk in that state starts the <em>old</em> copy at logon and the
+<em>new</em> one when an operator uses the shortcut. Finish the move; do
+not leave it half-done.</p>
+</blockquote>
 <blockquote>
 <p><strong>A desk on an old build does not report an error, it reports
 its age.</strong> Mp10 Web’s admin page says <em>“this workstation’s

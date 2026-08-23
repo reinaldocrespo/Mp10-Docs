@@ -61,7 +61,8 @@ MpPrintSrv is a Windows service; MpSigSrv is not and cannot be.** See
 |---|---|
 | Program | `MpSigSrv.exe`, in the Mp10 program folder (`C:\Mp10` on a typical install) |
 | Runs on | the workstation with the pad or the scanner, in the signed-in user's session |
-| Started by | `MpSigSrv.exe -listen`, at logon |
+| Started by | the workstation installer's logon task, for whoever signs in — see [It is not a service](#it-is-not-a-service) |
+| Restarted by | **Restart Signature Pad**, the shortcut on every desktop (`MpSigSrv.exe -restart`) — see [Restarting it](#restarting-it) |
 | Port | **6266** (MpPrintSrv is 6265; they coexist) |
 | Is it running? | open <http://127.0.0.1:6266/ping> in the browser on that PC |
 | What can it scan? | open <http://127.0.0.1:6266/scanners> on that PC |
@@ -158,7 +159,8 @@ pad that will not wake up, and the same fix.
 | *The consent text for this signature cannot be read* | `sys_registry` points at a consent file the server cannot open. | IT task — see [The consent text](#the-consent-text). |
 | *The signature pad could not be activated* | MpSigSrv could not talk to the pad. | Check the pad is plugged in and `[Tablet] TabletComPort` in `C:\Windows\SigPlus.ini` matches its COM port. |
 | The pad shows nothing, or the wrong size text | The pad geometry is wrong. | See [Telling MpSigSrv which pad](#telling-mpsigsrv-which-pad). |
-| *The capture did not finish within 300 seconds* | Nobody completed the signature and the helper gave up. | **Restart MpSigSrv.** Pressing Capture again cannot work: the same timeout puts the helper into a state where it refuses every capture *and every scan* until it is restarted, and it says so. |
+| *The capture did not finish within 300 seconds* | Nobody completed the signature and the helper gave up. | **Restart it** — double-click **Restart Signature Pad** on the desktop, or use **Admin → Signature helper**'s Restart button. Pressing Capture again cannot work: the same timeout puts the helper into a state where it refuses every capture *and every scan* until it is restarted, and it says so. |
+| *The signature helper is busy with … and will not restart while it is* (409, from a Restart attempt) | Deliberate, not a fault. A capture or scan was actually in progress when Restart was pressed; restarting through it would discard a signature the patient has already given. | Wait for the capture or scan to finish, then press Restart again. This does **not** cover a wedged helper — the row above — which restarts without any refusal; the 409 only fires while something is genuinely still running. |
 
 ## Scanning
 
@@ -198,6 +200,54 @@ A third file, **`MpScanners.ini`**, is not a log but is worth reading for the
 same reason: it is what the helper believes each scanner at this desk can do.
 See [The cache, and Re-detect](#the-cache-and-re-detect).
 
+## Restarting it
+
+Two ways, for two different situations:
+
+- **Restart Signature Pad**, the shortcut the workstation installer puts on
+  `C:\Users\Public\Desktop` — which composites onto **every** operator's own
+  desktop, not just whoever ran the install. It runs `MpSigSrv.exe -restart`,
+  and **one shortcut covers both faults an operator can hit**: if MpSigSrv is
+  not running, it starts it; if it is running, it replaces it. From a browser
+  those two faults are indistinguishable, so the shortcut does not need to
+  know which one this is — double-click it either way.
+- **Admin → Signature helper**'s **Restart the helper** button, inside Mp10
+  Web. It works only when the helper is **already answering** — the page
+  reaches it over `127.0.0.1:6266`, and there is nothing at that address to
+  ask when nothing is listening. When the page cannot reach the helper at
+  all, it says so and points at the desktop shortcut instead of leaving the
+  button there to fail.
+
+`MpSigSrv.exe -restart` is also a real command line, for a desk with no
+browser handy — it is what both of the above actually run:
+
+| Command | What it does |
+|---|---|
+| `MpSigSrv.exe -listen` | run normally — what the logon task uses |
+| `MpSigSrv.exe -restart` | replace a running helper, or start one if nothing answers |
+
+A restart is what clears a **wedged** helper (the "capture did not finish"
+row above), and it is also what an edited `[SIGN] ORIGIN` needs before it
+takes effect — see the note under [Settings](#settings).
+
+**One thing it refuses on purpose.** A restart request that arrives while a
+capture or scan is actually in progress comes back refused, and does nothing:
+
+> The signature helper is busy with … and will not restart while it is.
+> Restarting now would discard work somebody has already done. Wait for it to
+> finish and try again.
+
+That is not a fault to work around. Restarting through a capture would throw
+away a signature the patient has already given, so the helper says no rather
+than comply. Wait for the capture or scan to finish, then try again.
+
+Pressing Restart a second time while the *first* request is already being
+acted on is harmless rather than refused — it comes back saying a restart is
+already under way, and does not spawn a second one racing the first for the
+port. Even so, do not press it again in the meantime; the old copy keeps
+answering for a few seconds after being asked to stop, and pressing again
+proves nothing.
+
 ---
 
 # Installing it — IT task
@@ -208,20 +258,38 @@ See [The cache, and Re-detect](#the-cache-and-re-detect).
 switch.** It hosts the Topaz ActiveX control and opens a window; a service
 runs in session 0, which has no interactive desktop, so neither would work.
 
-It runs **in the signed-in operator's own session**, started at logon. That is
-a real difference from MpPrintSrv, which is a service — if you set MpSigSrv up
-the way you set that up, it will not work.
+It runs **in the signed-in operator's own session**. That is a real
+difference from MpPrintSrv, which is a service — if you set MpSigSrv up the
+way you set that up, it will not work.
 
-Practically, that means one of:
+**The workstation installer does this for you.** It registers a
+machine-wide **Scheduled Task** named `MpSigSrv` — trigger *at log on*, any
+user; action `MpSigSrv.exe -listen`; an **interactive** principal at
+**limited** privilege, so the helper is never elevated and a future logon
+starts exactly what this one does; **"Run only when user is logged on"**, so
+it never lands in session 0; and set to restart itself, up to three times a
+minute apart, if it ever dies on its own. A logon trigger does not fire for a
+session that already exists, so the installer also starts the task
+immediately once it is registered — the desk is served without anyone
+logging off and back on.
 
-- a shortcut to `MpSigSrv.exe -listen` in the user's **Startup** folder
-  (`shell:startup`), or
-- **Task Scheduler**, trigger *At log on*, action `<Mp10 folder>\MpSigSrv.exe`,
-  arguments `-listen`, and **"Run only when user is logged on"** — not the
-  "whether or not" option, which puts it back in session 0.
+That is a change from earlier installers, which printed these settings and
+left registering the task to a technician. Printing instructions cost a real
+site a day: the install finished looking successful and MpSigSrv had never
+actually been started, because nothing was ever going to start it. It is no
+longer possible to finish this install without the task running.
 
-It shows no window while it waits. To stop it, end `MpSigSrv.exe` in Task
-Manager.
+If you ever need to set this up by hand — a workstation added outside the
+installer, say — the equivalent in Task Scheduler is: trigger *At log on*,
+action `<Mp10 folder>\MpSigSrv.exe`, arguments `-listen`, principal
+**Interactive user**, not run with highest privileges, and **"Run only when
+user is logged on"** — not the "whether or not" option, which puts it back in
+session 0.
+
+It shows no window while it waits. To restart it, or to start it on a desk
+where it is not running at all, see [Restarting it](#restarting-it) — you no
+longer need Task Manager for this, though ending `MpSigSrv.exe` there still
+works to stop it.
 
 ## The quick way: the workstation bundle
 
@@ -231,18 +299,23 @@ copies `MpSigSrv.exe` and `EZTW32.DLL`, and writes `[SIGN] PORT` and
 may add is a commented-out `[RDD]` template, and only when that section is
 missing entirely. See *The quick way* in **Mp10 Web — Printing**.
 
-Two parts of this helper it cannot do for you, and says so rather than
+One part of this helper it still cannot do for you, and says so rather than
 pretending otherwise:
 
-- **Starting it at logon.** MpSigSrv runs in the operator's own session, and
-  a Startup shortcut created by a technician lands in the *technician's*
-  profile — where it silently never runs for the person who needs it. The
-  installer prints the exact shortcut and Task Scheduler settings instead;
-  the exact shortcut and Task Scheduler settings are under
-  [It is not a service](#it-is-not-a-service) above.
 - **Installing SigPlus.** Topaz's control is COM-registered by Topaz's own
   installer. The workstation installer checks the registration and reports
   whether signature capture will work; scanning is unaffected either way.
+
+**Starting it at logon is no longer on that list.** MpSigSrv runs in the
+operator's own session, and a Startup shortcut created by a technician used
+to land in the *technician's* profile — where it silently never ran for the
+person who needed it. The installer no longer works around that by printing
+instructions: it registers a machine-wide logon Scheduled Task itself and
+starts it immediately, so the desk is served before the technician packs up.
+See [It is not a service](#it-is-not-a-service) above for exactly what gets
+registered. It also writes **Restart Signature Pad** to every operator's own
+desktop, for the day the pad or a scan stops answering after that — see
+[Restarting it](#restarting-it).
 
 ## What to copy
 
@@ -314,6 +387,19 @@ or 443. Several may be listed, comma separated.
 > signing, so a wrong `ORIGIN` takes out the *Scan* buttons and the pad
 > together. That is worth knowing in reverse too: if scanning and signing are
 > both dead at one desk, suspect this line rather than the hardware.
+
+> **`PORT` and `ORIGIN` are read once, when the helper starts.** Editing
+> either by hand in `Mp10.ini` changes nothing until MpSigSrv is restarted —
+> see [Restarting it](#restarting-it). This is not theoretical: the identical
+> mistake, on MpPrintSrv's side of the same design, cost a customer a day on
+> 2026-08-22. An installer run rewrote `Mp10.ini` and the running helper was
+> never restarted, so it went on serving the old value while the browser
+> reported "not answering" — and a refused origin looks exactly like a
+> helper that is not running, so nothing about the symptom pointed at a
+> stale setting rather than a dead one. `Mp10.ini` says what MpSigSrv will
+> read at its *next* start; `/status`'s `origins` array says what it is
+> running with *right now* — see [Check it](#check-it). When the two
+> disagree, the running helper, not the file, is telling the truth.
 
 **`[RDD] user`** is the account MpSigSrv connects to the dictionary as. **It
 is not the person who witnesses the signature** — that is the operator code
@@ -412,8 +498,9 @@ everything below without a browser address bar: whether the helper is
 answering, its build, whether it is a service, **which account it runs as**
 (the quickest way to catch a helper started in the technician's profile rather
 than the operator's), when it started, its port, the origins it will accept
-— shown in red when there are none — the capture counters and last error, and
-every scanner it can see with a **Re-detect** button.
+— shown in red when there are none — the capture counters and last error,
+every scanner it can see with a **Re-detect** button, and a **Restart**
+button — see [Restarting it](#restarting-it) for what it can and cannot do.
 
 The steps below are the same checks from a command line, for a desk where the
 browser cannot reach the site at all.
@@ -434,8 +521,9 @@ You should get:
 {"ok":true,"app":"MpSigSrv","build":"2026-08-11 20:11:26"}
 ```
 
-Nothing at all means it is not running — start `MpSigSrv.exe -listen` and look
-at `MpSigSrv.log`.
+Nothing at all means it is not running — double-click **Restart Signature
+Pad** on the desktop, or run `MpSigSrv.exe -listen` yourself, and look at
+`MpSigSrv.log`.
 
 **2. Is it configured the way you think?**
 
@@ -444,14 +532,19 @@ http://127.0.0.1:6266/status
 ```
 
 ```json
-{"ok":true,"app":"MpSigSrv","port":6266,"origins":["https://mp10web.example.org"],
- "service":"not a service - runs in the operator's session",
- "captured":0,"failed":0,"wedged":false}
+{"ok":true,"app":"MpSigSrv","build":"2026-08-11 20:11:26","started":"08/23/26 09:12:03",
+ "service":"not a service - runs in the operator's session","account":"RCB",
+ "port":6266,"origins":["https://mp10web.example.org"],
+ "captured":0,"failed":0,"lastError":"","wedged":false,"busy":false}
 ```
 
 **`"origins":[]` is the failure to look for.** It means no `[SIGN] ORIGIN`,
 and every request from a browser will be refused however healthy the rest
-looks.
+looks. **This line is the answer, not `Mp10.ini`.** `Mp10.ini` says what
+MpSigSrv will read the next time it starts; `origins` here says what it is
+actually running with right now — if you have just edited `ORIGIN`, compare
+`started` against when you saved the file (see the note under
+[Settings](#settings)).
 
 **3. Does the pad actually work?** Without a browser in the way, from a
 command prompt in the Mp10 program folder:
@@ -472,12 +565,17 @@ one rather than inventing a value.
 
 MpSigSrv is a windowless program, so it prints nothing to the command prompt.
 
-**But it does raise message boxes.** A missing or unreadable `Mp10.ini`, an
-empty `[RDD] PATH`, a dictionary it cannot open, or a port it cannot bind all
-produce a modal Windows box and then stop. Started at logon, that box sits on
-the desktop looking like nothing in particular while the desk is quietly
-without signatures — so if the helper "did not start", look for a stray dialog
-before anything else.
+**But run this way, it does raise message boxes.** A missing or unreadable
+`Mp10.ini`, an empty `[RDD] PATH`, or a dictionary it cannot open all produce
+a modal Windows box and then stop — there is an operator sitting at the
+prompt to dismiss it, so that is the right behaviour here.
+
+**`-listen` — what the logon task and the desktop shortcut's cold start both
+run — does not.** A failed dictionary connection or a port it cannot bind
+there is written to `MpSigSrv.log` and the process exits; no dialog appears at
+all. A modal box would sit on the desktop with nobody there to click it,
+wedging the process behind it — nothing to look at, nothing being served. So
+if the helper "did not start" at logon, there is no stray dialog to hunt for.
 Read `MpSigSrv.log`.
 
 **4. Can it see the scanner?** Only if this desk is meant to scan:
@@ -514,10 +612,52 @@ Stop it first — a running copy holds the exe open and cannot be overwritten:
 
 1. End `MpSigSrv.exe` in Task Manager.
 2. Copy the new `MpSigSrv.exe` over the old one.
-3. Start it again, or log off and back on if it is started at logon.
+3. Start it again — double-click **Restart Signature Pad** on the desktop
+   (with nothing running, it starts a fresh copy exactly as it replaces a
+   running one — see [Restarting it](#restarting-it)), or log off and back on
+   and let the logon task do it.
 
 The build a workstation is running is reported by `/ping` and `/status`, which
 is how you confirm the copy actually took.
+
+### Moving it to a different folder
+
+Overwriting in place is the easy case. **Moving the helper to a different
+folder is the one that catches people**, because the logon task keeps pointing
+at the old one.
+
+Re-running the installer against the new folder does **not** re-point the task.
+It says so, naming both paths:
+
+> **[WARN]** A logon task named 'MpSigSrv' is already registered, but it points
+> at a DIFFERENT exe: `<old>\MpSigSrv.exe`, not this install's
+> `<new>\MpSigSrv.exe`. This desk will keep starting THAT copy — and reading
+> THAT copy's own `Mp10.ini` — until the task is removed and this installer is
+> re-run.
+
+That is deliberate. An existing registration is never silently re-pointed —
+the same rule the MpPrintSrv service follows. To actually move it:
+
+```
+schtasks /Delete /TN MpSigSrv /F
+```
+
+then re-run the workstation installer against the new folder.
+
+**Read "and reading THAT copy's own `Mp10.ini`" carefully** — it is the whole
+reason this matters. The old folder has its own settings file, so a desk in
+this state does not merely run an older binary: it runs against a **different
+`[SIGN] ORIGIN` and a different `[RDD] PATH`**. The symptom is the one that is
+hardest to diagnose — the helper answers, but refuses every request from the
+browser, which looks exactly like nothing running. Check `/status`'s `origins`
+against the address staff actually use before assuming anything else.
+
+> **The shortcut and the task can disagree.** A re-install against a new folder
+> **does** re-point **Restart Signature Pad** — a shortcut is cheap to
+> overwrite — while the task deliberately stays put. Until you delete and
+> re-register the task, a desk in that state starts the *old* copy at logon and
+> the *new* one when an operator uses the shortcut. Finish the move; do not
+> leave it half-done.
 
 > **A desk on an old build does not report an error, it reports its age.** Mp10
 > Web's admin page says *"this workstation's helper predates scanning"* and

@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-08-22" />
+  <meta name="dcterms.date" content="2026-08-23" />
   <title>Mp10 Web — Printing</title>
   <style>
 code{white-space: pre-wrap;}
@@ -212,7 +212,7 @@ a { color: inherit; }
 <p class="subtitle">Encounter forms and labels from the browser, and the
 helper behind them</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">22 August 2026</p>
+<p class="date">23 August 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -266,7 +266,22 @@ session 0 trap</a></li>
 <li><a href="#updating-a-workstation-later" id="toc-updating-a-workstation-later">6. Updating a workstation
 later</a></li>
 <li><a href="#where-to-look-when-it-misbehaves" id="toc-where-to-look-when-it-misbehaves">7. Where to look when it
-misbehaves</a></li>
+misbehaves</a>
+<ul>
+<li><a href="#first-be-at-the-right-computer" id="toc-first-be-at-the-right-computer">First, be at the right
+computer</a></li>
+<li><a href="#step-1-ask-the-helper-what-it-believes" id="toc-step-1-ask-the-helper-what-it-believes">Step 1 — ask the helper
+what it believes</a></li>
+<li><a href="#step-2-if-status-does-not-answer" id="toc-step-2-if-status-does-not-answer">Step 2 — if
+<code>/status</code> does not answer</a></li>
+<li><a href="#step-3-if-status-answers-but-the-browser-still-says-not-answering" id="toc-step-3-if-status-answers-but-the-browser-still-says-not-answering">Step
+3 — if <code>/status</code> answers but the browser still says “not
+answering”</a></li>
+<li><a href="#step-4-it-answers-the-origin-is-right-and-printing-still-fails" id="toc-step-4-it-answers-the-origin-is-right-and-printing-still-fails">Step
+4 — it answers, the origin is right, and printing still fails</a></li>
+<li><a href="#the-whole-ladder-in-one-table" id="toc-the-whole-ladder-in-one-table">The whole ladder, in one
+table</a></li>
+</ul></li>
 </ul></li>
 <li><a href="#notes-for-the-curious" id="toc-notes-for-the-curious">Notes for the curious</a>
 <ul>
@@ -449,6 +464,10 @@ different problems on purpose: <strong>a browser cannot tell them
 apart.</strong> When a page is refused by the helper’s origin list, the
 browser blocks the reply before Mp10 Web can read the explanation, and
 it looks exactly like nothing listening. Check both.</p>
+<p><strong>IT: work through <em>7. Where to look when it
+misbehaves</em>.</strong> It is a step ladder that separates those two,
+and the four other causes that present the same way, starting from a
+single command run at the workstation.</p>
 <h2 id="a-printer-the-helper-will-refuse">A printer the helper will
 refuse</h2>
 <p>Some printers cannot be used by a <strong>service</strong> at all,
@@ -816,8 +835,16 @@ your problem.</p>
 all working, and <strong>only the printer is left to sort out</strong>.
 That single command separates half the possible faults from the other
 half.</p>
-<p>Then, from a browser on that workstation, select an encounter and
-choose <strong>Preview</strong>, then <strong>Label</strong>.</p>
+<p><strong>It does not test the listener.</strong> That command is a
+one-shot job and never opens a port, so a workstation where it succeeds
+perfectly can still be unable to answer the browser. Prove the other
+half separately:</p>
+<pre><code>curl.exe http://127.0.0.1:6265/status</code></pre>
+<p><code>origins</code> in the reply must contain the address staff type
+into the browser. See <em>7. Where to look when it misbehaves</em>.</p>
+<p>Then, from a browser <strong>on that workstation</strong>, select an
+encounter and choose <strong>Preview</strong>, then
+<strong>Label</strong>.</p>
 <h2 id="updating-a-workstation-later">6. Updating a workstation
 later</h2>
 <p><strong>Stop the service before copying, and start it
@@ -842,6 +869,241 @@ misbehaves</h2>
 and every refusal with a timestamp — what was printed, which template,
 and what went wrong. It is the first thing to read and usually the last
 thing you need.</p>
+<p>When the browser says <em>“The print helper is not answering”</em>,
+the rest of this section is the order to work in. It is written as a
+ladder because each step eliminates a whole class of fault, and because
+the steps are not interchangeable — doing them out of order is how an
+afternoon disappears.</p>
+<h3 id="first-be-at-the-right-computer">First, be at the right
+computer</h3>
+<p><strong>MpPrintSrv must run on the PC that has the browser
+open</strong>, because the page fetches
+<code>http://127.0.0.1:6265</code> — an address that means <em>this</em>
+computer and nothing else. It does not matter which machine serves Mp10
+Web.</p>
+<p>A site with the web server on one machine and the operator on another
+is the normal case, and it is easy to end up testing the wrong one:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Machine</th>
+<th>Needs MpPrintSrv?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>The one serving Mp10 Web</td>
+<td><strong>No</strong> — unless somebody also uses a browser there</td>
+</tr>
+<tr class="even">
+<td>The one with the browser and the printer</td>
+<td><strong>Yes</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Admin → Print helper</strong> reports on whichever desk has
+the browser open, so opening that page from your own PC tells you about
+<em>your</em> PC. Sitting at a different desk shows you that desk’s
+helper. If it says “not answering”, confirm first that you are looking
+at the machine you think you are.</p>
+<h3 id="step-1-ask-the-helper-what-it-believes">Step 1 — ask the helper
+what it believes</h3>
+<p>From a command prompt <strong>on the workstation with the
+browser</strong>:</p>
+<pre><code>curl.exe http://127.0.0.1:6265/status</code></pre>
+<p>This one command answers most of the question, and it answers it
+better than <code>Mp10.ini</code> does. <code>Mp10.ini</code> says what
+the helper <em>will</em> read next time it starts. <code>/status</code>
+says what it is <strong>actually running with right now</strong>, and
+when those two disagree, the helper wins.</p>
+<p>A healthy reply, wrapped here for reading:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span><span class="dt">&quot;ok&quot;</span><span class="fu">:</span><span class="kw">true</span><span class="fu">,</span><span class="dt">&quot;app&quot;</span><span class="fu">:</span><span class="st">&quot;MpPrintSrv&quot;</span><span class="fu">,</span><span class="dt">&quot;build&quot;</span><span class="fu">:</span><span class="st">&quot;2026-08-20 12:05:08&quot;</span><span class="fu">,</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a> <span class="dt">&quot;started&quot;</span><span class="fu">:</span><span class="st">&quot;08/22/26 19:25:07&quot;</span><span class="fu">,</span><span class="dt">&quot;service&quot;</span><span class="fu">:</span><span class="st">&quot;running&quot;</span><span class="fu">,</span><span class="dt">&quot;account&quot;</span><span class="fu">:</span><span class="st">&quot;SYSTEM&quot;</span><span class="fu">,</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a> <span class="dt">&quot;port&quot;</span><span class="fu">:</span><span class="dv">6265</span><span class="fu">,</span><span class="dt">&quot;origins&quot;</span><span class="fu">:</span><span class="ot">[</span><span class="st">&quot;http://server02:8081&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a> <span class="dt">&quot;printers&quot;</span><span class="fu">:{</span><span class="er">...</span><span class="fu">},</span><span class="dt">&quot;printed&quot;</span><span class="fu">:</span><span class="dv">12</span><span class="fu">,</span><span class="dt">&quot;failed&quot;</span><span class="fu">:</span><span class="dv">0</span><span class="fu">,</span><span class="dt">&quot;wedged&quot;</span><span class="fu">:</span><span class="kw">false</span><span class="fu">}</span></span></code></pre></div>
+<p>Read three things before anything else:</p>
+<ul>
+<li><strong><code>origins</code></strong> — must contain the address
+staff type into the browser. Step 3.</li>
+<li><strong><code>started</code></strong> — if <code>Mp10.ini</code> was
+edited after this time, the edit has not taken effect. Step 3.</li>
+<li><strong><code>account</code></strong>, and
+<code>printers.forms</code> / <code>printers.labels</code>. Step 4.</li>
+</ul>
+<h3 id="step-2-if-status-does-not-answer">Step 2 — if
+<code>/status</code> does not answer</h3>
+<p>Nothing is listening. Find out which of four things it is:</p>
+<pre><code>sc qc MpPrintSrv
+Get-Service MpPrintSrv</code></pre>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>What you find</th>
+<th>What it means</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>No such service</td>
+<td><code>-i</code> never ran, or ran without elevation</td>
+<td>Elevated prompt, <code>MpPrintSrv.exe -i</code></td>
+</tr>
+<tr class="even">
+<td>Service exists, but <code>BINARY_PATH_NAME</code> names <strong>a
+different folder</strong> than the one you installed into</td>
+<td>A service was already registered on this desk. <code>-i</code>
+refuses outright when a service by that name exists, and the workstation
+installer never re-points one — so it is still running the
+<strong>old</strong> exe, beside the <strong>old</strong>
+<code>Mp10.ini</code></td>
+<td><code>-stop</code> then <code>-u</code> using the
+<strong>old</strong> exe, then <code>-i</code> from the new folder</td>
+</tr>
+<tr class="odd">
+<td>Service exists, state <strong>Stopped</strong></td>
+<td>It started and died, or was never started</td>
+<td>Read the log, below</td>
+</tr>
+<tr class="even">
+<td>Service <strong>Running</strong>, still nothing on the port</td>
+<td>The bind failed — something else holds 6265</td>
+<td>The log names it</td>
+</tr>
+</tbody>
+</table>
+<p>For a service that dies at startup the log is decisive. A healthy
+start writes three lines:</p>
+<pre><code>Service starting
+MpPrintSrv build 2026-08-20 12:05:09
+Listening on http://127.0.0.1:6265  for [&quot;http://server02:8081&quot;]</code></pre>
+<p><strong>If the third line is absent, it never served.</strong> The
+commonest reason is the database: startup opens the dictionary
+<em>before</em> it binds the port, and a failed connection stops the
+service there. Check <code>[RDD] PATH</code>, and check that
+<code>ace32.dll</code> and <code>axcws32.dll</code> are beside the
+exe.</p>
+<blockquote>
+<p><strong>A successful <code>-enc</code> test does not prove the
+listener works.</strong> That command is a one-shot job — it connects,
+renders, prints and exits, and never opens a port at all. It proves the
+database, the template and the report engine, which is exactly why it is
+worth running (see <em>5. Check it</em>). It says nothing whatever about
+whether anything is listening on 6265, and a workstation where it
+succeeds can still be completely unable to serve the browser.</p>
+</blockquote>
+<p>Note also that <code>-enc</code> runs as <strong>you</strong>, while
+the service runs as <strong>LocalSystem</strong> by default. Same
+computer, different account, different view of the network and of the
+printers.</p>
+<h3 id="step-3-if-status-answers-but-the-browser-still-says-not-answering">Step
+3 — if <code>/status</code> answers but the browser still says “not
+answering”</h3>
+<p>Compare <code>origins</code> against the address in the browser’s
+address bar.</p>
+<p>This is the most common fault at a new site, and it is disguised:
+<strong>a browser cannot tell “nothing is listening” apart from “the
+listener refused me”.</strong> When the helper refuses an origin, the
+browser blocks the reply before Mp10 Web can read the explanation, so
+both arrive as the same failure. The message in the page covers both
+cases on purpose.</p>
+<p>Two ways <code>origins</code> goes wrong:</p>
+<p><strong>1. The ini was edited and the helper was not
+restarted.</strong> <code>PORT</code> and <code>ORIGIN</code> are read
+<strong>once, at startup</strong>. Editing them changes nothing until
+the helper restarts — and <code>started</code> in <code>/status</code>
+tells you exactly when it last read them. This is the usual reason a
+<em>corrected</em> <code>ORIGIN</code> still refuses everything.</p>
+<pre><code>MpPrintSrv.exe -restart
+curl.exe http://127.0.0.1:6265/status</code></pre>
+<p><code>origins</code> must now show the new value. If it does not, you
+edited a different file — go back to <code>sc qc MpPrintSrv</code> and
+check which folder the service actually runs from.</p>
+<p><strong>2. The value itself is wrong.</strong> It must be exactly
+what the browser sends: scheme and host, <strong>no trailing slash and
+no path</strong>, and the port too when it is not 80 or 443.
+<code>http://server02:8081</code> is right.
+<code>http://server02:8081/mpweb/</code> is not, and neither is the
+helper’s own <code>http://127.0.0.1:6265</code>.</p>
+<p>Capitalisation does <strong>not</strong> matter — the comparison
+lowercases both sides, so <code>http://Server02:8081</code> in the ini
+matches a browser sending <code>http://server02:8081</code>. Do not
+spend time there.</p>
+<p>List several, comma separated, for a site reachable more than one
+way:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="dt">ORIGIN</span><span class="ot">=</span><span class="st">http://server02:8081,https://mp10.example.org</span></span></code></pre></div>
+<h3 id="step-4-it-answers-the-origin-is-right-and-printing-still-fails">Step
+4 — it answers, the origin is right, and printing still fails</h3>
+<p>The connection is now proven and only the printer is left. Look at
+the <code>printers</code> block in <code>/status</code>, or the same
+thing formatted in <strong>Admin → Print helper</strong>:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="er">&quot;printers&quot;:</span><span class="fu">{</span><span class="dt">&quot;account&quot;</span><span class="fu">:</span><span class="st">&quot;SYSTEM&quot;</span><span class="fu">,</span><span class="dt">&quot;session0&quot;</span><span class="fu">:</span><span class="kw">true</span><span class="fu">,</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;all&quot;</span><span class="fu">:</span><span class="ot">[</span><span class="st">&quot;Microsoft XPS Document Writer&quot;</span><span class="ot">,</span><span class="st">&quot;Microsoft Print to PDF&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;forms&quot;</span><span class="fu">:</span><span class="st">&quot;&quot;</span><span class="fu">,</span><span class="dt">&quot;labels&quot;</span><span class="fu">:</span><span class="st">&quot;&quot;</span><span class="fu">,</span><span class="dt">&quot;formsWhy&quot;</span><span class="fu">:</span><span class="st">&quot;none&quot;</span><span class="fu">,</span><span class="dt">&quot;labelsWhy&quot;</span><span class="fu">:</span><span class="st">&quot;none&quot;</span><span class="fu">,</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;unusable&quot;</span><span class="fu">:</span><span class="ot">[</span><span class="er">...</span><span class="ot">]</span><span class="fu">}</span></span></code></pre></div>
+<p><code>forms</code> and <code>labels</code> empty with
+<code>session0: true</code> is <em>The session 0 trap</em> above — go
+back and read it. <code>unusable</code> names every printer that was
+rejected and why; a printer on a <code>FILE:</code> or
+<code>PORTPROMPT:</code> port (Print to PDF, XPS, and most “virtual”
+printers) cannot be used by a service at all.</p>
+<h3 id="the-whole-ladder-in-one-table">The whole ladder, in one
+table</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><code>/status</code></th>
+<th>Then</th>
+<th>Cause</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>No answer</td>
+<td><code>sc qc</code> shows another folder</td>
+<td>Old service still registered, running the old exe and old ini</td>
+</tr>
+<tr class="even">
+<td>No answer</td>
+<td>Service Stopped, log ends at <code>Service starting</code></td>
+<td>Dictionary unreachable, or ACE DLLs missing</td>
+</tr>
+<tr class="odd">
+<td>No answer</td>
+<td>No such service</td>
+<td>Never installed, or <code>-i</code> ran unelevated</td>
+</tr>
+<tr class="even">
+<td>Answers, wrong <code>origins</code></td>
+<td><code>started</code> is <strong>older</strong> than the ini</td>
+<td>Ini edited, helper not restarted</td>
+</tr>
+<tr class="odd">
+<td>Answers, wrong <code>origins</code></td>
+<td><code>started</code> is <strong>newer</strong> than the ini</td>
+<td>Wrong file edited — check the service’s folder</td>
+</tr>
+<tr class="even">
+<td>Answers, right <code>origins</code></td>
+<td><code>forms</code> / <code>labels</code> empty</td>
+<td>Session 0 trap — printers, not networking</td>
+</tr>
+</tbody>
+</table>
 <h1 id="notes-for-the-curious">Notes for the curious</h1>
 <h2 id="is-it-safe-to-have-a-program-listening-on-the-workstation">Is it
 safe to have a program listening on the workstation?</h2>
