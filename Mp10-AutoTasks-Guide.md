@@ -1416,13 +1416,16 @@ That matters for more than convenience. A study labelled by hand is a study
 that can be labelled wrongly, and a mistyped accession number is what makes an
 image arrive in the wrong patient's file.
 
-> **Read this before switching anything on.** AutoTasks keeps a table called
-> `ModalityWL` in step with the orders on your schedule, and that part works
-> today. The part that hands those entries to the machines — writing the
-> worklist files a DICOM worklist server reads — **is not built yet.** Turning
-> this on now keeps a correct, current table; **no scanner can query it yet.**
-> Switching it on early is useful for exactly one thing: proving the worklist
-> matches your schedule before anything depends on it.
+> **This chapter covers the AutoTasks half only.** AutoTasks decides which
+> studies belong on the worklist and writes one small file per study. A
+> **DICOM worklist server** — a separate piece, installed once on your server —
+> is what the machines actually query, and it serves those files. Without it,
+> AutoTasks is writing files nothing reads.
+>
+> If you are setting this up for the first time, read the **Mp10 Modality
+> Worklist** guide instead: it covers both halves, installing the server,
+> pointing a scanner at it, and what to do when the worklist looks empty. This
+> chapter is the AutoTasks settings reference that guide refers back to.
 
 ## Turning it on — two separate switches
 
@@ -1482,6 +1485,7 @@ service starts.
 |---|---|---|---|---|
 | `GENERAL` | `MODALITY-WORKLIST` | `YES` | `NO` | Whether the `modalitywl` table exists at all. Read during a file check, not by AutoTasks |
 | `AUTOTASKS` | `EXPORT_MWL` | `YES` | `NO` | The on/off switch for keeping the table current |
+| `AUTOTASKS` | `MWL_SPOOL_PATH` | `C:\Mp10Mwl\worklists` | *(blank)* | Where the worklist files are written. **Must match the worklist server's own setting exactly.** Blank means no files are written |
 | `AUTOTASKS` | `MWL_WINDOW_DAYS` | `1` | `1` | How far either side of today to look, in days |
 | `AUTOTASKS` | `MWL_UID_ROOT` | *(blank)* | *(blank)* | **IT task.** Leave blank unless your organisation owns a registered DICOM root |
 
@@ -1499,6 +1503,26 @@ only stops future file checks from maintaining it.
 With this `NO`, the table sits exactly as it was last left. With it `YES`,
 AutoTasks re-checks the whole worklist against your schedule on every cycle —
 by default every two minutes.
+
+### `MWL_SPOOL_PATH` — where the worklist files go
+
+The worklist server watches one directory. This tells AutoTasks to write into
+that same directory, and the two settings must name **exactly the same place**.
+
+Leave it blank and the table is still kept current but no files are written —
+which is a reasonable way to run for a while before the imaging side exists,
+and is what the log line `no .wl written -- AUTOTASKS/MWL_SPOOL_PATH is empty`
+is telling you.
+
+> **Wrong path, empty worklist, no error.** If the two settings disagree, each
+> half does exactly what it was told: AutoTasks writes files, the server serves
+> the empty directory it was pointed at, and nothing anywhere reports a
+> problem. The scanner simply shows nothing. `Test-Mwl.ps1` on the server
+> compares the two in one line, and is the fastest way to rule this out.
+
+**AutoTasks owns that directory.** It writes what belongs there and deletes
+everything else in it — that is how a cancelled study disappears from the
+machines. Do not keep anything else in it.
 
 ### `MWL_WINDOW_DAYS` — how wide the window is
 
@@ -1556,12 +1580,19 @@ remember what changed. That is deliberate: it means a missed cycle, a service
 restart or a crash cannot leave the worklist permanently out of step. The next
 cycle simply puts it right.
 
-Each pass does three things:
+Each pass does four things:
 
 1. **Works out which orders belong** on the worklist right now.
 2. **Adds** the ones that are not there yet, and **puts back** any that had been
    cancelled but now qualify again.
 3. **Cancels** anything on the worklist that no longer qualifies.
+4. **Writes a file for every study a machine should see**, and **deletes every
+   other file** in the worklist directory. That last sweep is what actually
+   withdraws a cancelled study from the machines.
+
+Step 4 rewrites a file only when its content has changed — or when the file has
+gone missing, which is how a directory somebody has cleaned out repairs itself
+on the next cycle.
 
 ## Cancelling is not deleting
 
@@ -1600,8 +1631,35 @@ Every cycle writes a handful of lines to `AutoTasks.out`. Search it for
 | `rows with a rev_code but no revcodes.Modality mapped` | How many entries cannot say what kind of study they are — with example revenue codes, so you know which ones to fill in. **This number should fall to zero** as the mapping is completed |
 | `rows with no items/RevCode match at all` | Orders whose item does not resolve to a revenue code at all. Usually a catalogue problem rather than a worklist one |
 
+Then search it for `EmitWorklistFiles` — that is the part the machines see:
+
+| Line | What it means |
+|---|---|
+| `written` | Files written this cycle. High on the first run of the day, then usually `0` |
+| `unchanged` | Studies already published and unaltered. This is the number that should match what a scanner sees |
+| `purged` | Files removed — cancelled studies, studies past the window, and anything else that was in the directory |
+| `no modality (not emitted)` | Studies held back because their revenue code does not say what kind of study they are. **These are invisible to every machine.** Non-imaging orders — laboratory, office visits — are counted here too and belong here |
+| `write failures` | Should always be `0`. Anything else is a permissions or disk problem on the worklist directory |
+| `no .wl written -- AUTOTASKS/MWL_SPOOL_PATH is empty` | The path is not set, so nothing is published |
+| `ABORTED -- AUTOTASKS/MWL_SPOOL_PATH does not exist` | The path is set but wrong, or the directory was deleted |
+
 A healthy log on a normal day shows a steady `active set size`, small or zero
-change counts, and a zero mapping count.
+change counts, a zero mapping count, and `written 0 / unchanged <today's
+studies>` on most cycles.
+
+## Running one cycle by hand
+
+You do not have to wait two minutes and read around everything else the service
+does. On the server:
+
+```
+AutoTasks.exe --mwl-run
+```
+
+That runs **one worklist cycle and nothing else** — no backup, no remittances,
+no e-mail, no texts — and prints the same lines to the screen. It is safe to
+run in the middle of a working day, and it is the quickest answer to "is the
+worklist right *now*".
 
 # Troubleshooting
 
@@ -1712,7 +1770,9 @@ Once processed, the PDF is in the `history` sub-folder — it has not been lost.
 | `active set size` is `0` but there are orders today | Their encounters are closed or inactive — both are excluded — or the order dates fall outside `MWL_WINDOW_DAYS` |
 | Everything is suddenly cancelled | `MWL_WINDOW_DAYS` was narrowed, or a batch of encounters was closed. Nothing is lost; widen it or re-open them and the same entries come back |
 | Entries exist but say nothing about the kind of study | The revenue-code mapping is not filled in. The log line counting these names example revenue codes to start with |
-| No worklist files anywhere on disk | **Working as designed — that part is not built yet.** See the note at the start of the modality worklist chapter |
+| The table looks right but no files are written | `AUTOTASKS` / `MWL_SPOOL_PATH` is blank or names a directory that does not exist. The `EmitWorklistFiles` log line says which |
+| Files are written but a scanner sees nothing | The two halves are pointed at different directories, or the DICOM server is not running. Run `Test-Mwl.ps1` on the server; the **Mp10 Modality Worklist** guide covers this in full |
+| A study is on the table but has no file | It has no modality — see `no modality (not emitted)` in the log. A laboratory or office-visit order belongs in that count |
 
 > **The file check does not complain when a table cannot be created.** If the
 > `modalitywl` table is missing after a check that appeared to finish normally,

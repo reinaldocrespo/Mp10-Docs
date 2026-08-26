@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Structured Systems · www.structuredsystems.com" />
+  <meta name="dcterms.date" content="2026-08-26" />
+  <title>Mp10 Modality Worklist</title>
+  <style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+  <style type="text/css">
+:root {
+color-scheme: light dark;
+--fg: #1a1a1a;
+--bg: #ffffff;
+--muted: #5a5a5a;
+--rule: #d8d8d8;
+--accent: #0b5cad;
+--code-bg: #f4f4f6;
+--note-bg: #f7f7f9;
+}
+@media (prefers-color-scheme: dark) {
+:root {
+--fg: #e6e6e6;
+--bg: #16181d;
+--muted: #a2a2a8;
+--rule: #33363d;
+--accent: #6cb0f5;
+--code-bg: #22252c;
+--note-bg: #1d2027;
+}
+}
+html { -webkit-text-size-adjust: 100%; }
+body {
+font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+color: var(--fg);
+background: var(--bg);
+max-width: 52rem;
+margin: 0 auto;
+padding: 2.5rem 1.25rem 5rem;
+line-height: 1.65;
+font-size: 1.02rem;
+}
+
+header#title-block-header { border-bottom: 2px solid var(--rule); margin-bottom: 2rem; }
+h1.title { margin-bottom: .2rem; font-size: 2rem; line-height: 1.2; }
+p.subtitle { margin-top: 0; color: var(--muted); font-size: 1.1rem; }
+p.author, p.date { margin: .2rem 0; color: var(--muted); font-size: .92rem; }
+h1, h2, h3, h4 { line-height: 1.25; margin-top: 2.2rem; }
+h1 { font-size: 1.7rem; padding-bottom: .3rem; border-bottom: 1px solid var(--rule); }
+h2 { font-size: 1.3rem; }
+h3 { font-size: 1.1rem; }
+a { color: var(--accent); }
+
+nav#TOC {
+background: var(--note-bg);
+border: 1px solid var(--rule);
+border-radius: .5rem;
+padding: 1rem 1.25rem;
+margin-bottom: 2.5rem;
+}
+nav#TOC > ul { margin: 0; padding-left: 1.1rem; }
+nav#TOC ul { list-style: none; padding-left: 1.1rem; }
+nav#TOC li { margin: .18rem 0; }
+nav#TOC a { text-decoration: none; }
+nav#TOC a:hover { text-decoration: underline; }
+
+table {
+border-collapse: collapse;
+width: 100%;
+margin: 1.25rem 0;
+font-size: .94rem;
+display: block;
+overflow-x: auto; 
+}
+th, td {
+border-bottom: 1px solid var(--rule);
+padding: .5rem .6rem;
+text-align: left;
+vertical-align: top;
+}
+thead th { border-bottom: 2px solid var(--rule); white-space: nowrap; }
+tbody tr:hover { background: var(--note-bg); }
+code, pre {
+font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
+font-size: .9em;
+}
+code { background: var(--code-bg); padding: .12em .35em; border-radius: .25rem; }
+pre {
+background: var(--code-bg);
+padding: .9rem 1rem;
+border-radius: .4rem;
+overflow-x: auto;
+}
+pre code { background: none; padding: 0; }
+
+blockquote {
+margin: 1.25rem 0;
+padding: .75rem 1.1rem;
+background: var(--note-bg);
+border-left: 4px solid var(--accent);
+border-radius: 0 .35rem .35rem 0;
+}
+blockquote p { margin: .35rem 0; }
+
+img {
+max-width: 100%;
+height: auto;
+display: block;
+margin: 1.25rem auto;
+border: 1px solid var(--rule);
+border-radius: .35rem;
+}
+figcaption {
+text-align: center;
+color: var(--muted);
+font-size: .9rem;
+margin-top: -.6rem;
+}
+@media print {
+body { max-width: none; font-size: 11pt; }
+nav#TOC { break-after: page; }
+h1 { break-before: page; }
+h1:first-of-type { break-before: avoid; }
+a { color: inherit; }
+}
+</style>
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Mp10 Modality Worklist</h1>
+<p class="subtitle">Installing, running and troubleshooting the DICOM
+worklist server</p>
+<p class="author">Structured Systems · www.structuredsystems.com</p>
+<p class="date">26 August 2026</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#about-this-guide" id="toc-about-this-guide">About this
+guide</a></li>
+<li><a href="#how-it-fits-together" id="toc-how-it-fits-together">How it
+fits together</a>
+<ul>
+<li><a href="#what-is-not-here" id="toc-what-is-not-here">What is
+<em>not</em> here</a></li>
+</ul></li>
+<li><a href="#installing" id="toc-installing">Installing</a>
+<ul>
+<li><a href="#before-you-start" id="toc-before-you-start">Before you
+start</a></li>
+<li><a href="#install-the-dicom-server" id="toc-install-the-dicom-server">Install the DICOM server</a></li>
+<li><a href="#switch-on-the-mp10-half" id="toc-switch-on-the-mp10-half">Switch on the Mp10 half</a></li>
+<li><a href="#fill-in-the-modality-mapping" id="toc-fill-in-the-modality-mapping">Fill in the modality
+mapping</a></li>
+<li><a href="#prove-it-in-the-right-order" id="toc-prove-it-in-the-right-order">Prove it, in the right
+order</a></li>
+</ul></li>
+<li><a href="#day-to-day" id="toc-day-to-day">Day to day</a>
+<ul>
+<li><a href="#where-things-are" id="toc-where-things-are">Where things
+are</a></li>
+<li><a href="#which-studies-appear" id="toc-which-studies-appear">Which
+studies appear</a></li>
+<li><a href="#cancelling-is-not-deleting" id="toc-cancelling-is-not-deleting">Cancelling is not deleting</a></li>
+<li><a href="#what-a-healthy-log-looks-like" id="toc-what-a-healthy-log-looks-like">What a healthy log looks
+like</a></li>
+<li><a href="#adding-a-scanner" id="toc-adding-a-scanner">Adding a
+scanner</a></li>
+</ul></li>
+<li><a href="#troubleshooting" id="toc-troubleshooting">Troubleshooting</a>
+<ul>
+<li><a href="#the-scanners-worklist-is-empty" id="toc-the-scanners-worklist-is-empty">The scanner’s worklist is
+empty</a></li>
+<li><a href="#nothing-is-being-published" id="toc-nothing-is-being-published">Nothing is being published</a></li>
+<li><a href="#the-server-is-not-answering" id="toc-the-server-is-not-answering">The server is not
+answering</a></li>
+<li><a href="#the-scanner-cannot-connect" id="toc-the-scanner-cannot-connect">The scanner cannot connect</a></li>
+<li><a href="#the-scanner-filters-by-station" id="toc-the-scanner-filters-by-station">The scanner filters by
+station</a></li>
+<li><a href="#a-study-is-on-the-schedule-but-not-in-the-worklist" id="toc-a-study-is-on-the-schedule-but-not-in-the-worklist">A study is
+on the schedule but not in the worklist</a></li>
+<li><a href="#things-that-look-like-faults-and-are-not" id="toc-things-that-look-like-faults-and-are-not">Things that look like
+faults and are not</a></li>
+</ul></li>
+<li><a href="#reference" id="toc-reference">Reference</a>
+<ul>
+<li><a href="#mp10-settings" id="toc-mp10-settings">Mp10
+settings</a></li>
+<li><a href="#commands" id="toc-commands">Commands</a></li>
+<li><a href="#what-each-worklist-entry-carries" id="toc-what-each-worklist-entry-carries">What each worklist entry
+carries</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="about-this-guide">About this guide</h1>
+<p>This guide is for whoever looks after the server: installing the Mp10
+modality worklist, connecting imaging equipment to it, and working out
+what is wrong when a technologist says the worklist is empty.</p>
+<p>A <strong>modality worklist</strong> is how a scanner finds out who
+its next patient is. Instead of a technologist typing the patient’s
+name, date of birth and accession number at the console, the machine
+asks Mp10 and fills its own screen in. That is worth more than the
+keystrokes it saves: a study labelled by hand is a study that can be
+labelled wrongly, and a mistyped accession number is what puts an image
+in the wrong patient’s file.</p>
+<p>Two audiences, one document. The chapters on <em>what it is</em> and
+<em>day-to-day</em> are readable by anyone; the install and
+troubleshooting chapters assume you are administering the server.</p>
+<h1 id="how-it-fits-together">How it fits together</h1>
+<p>A scanner does not speak HTTP. It speaks <strong>DICOM</strong>, over
+a TCP port, and asks a question called <strong>C-FIND</strong>. So the
+worklist is two pieces that meet in a directory on disk:</p>
+<pre><code>   Mp10 orders (ADS)
+        |
+        |  AutoTasks service, every ~2 minutes
+        v
+   the worklist directory        e.g. C:\Mp10Mwl\worklists
+   one small file per study      OR26-00041471.wl
+        |
+        |  DICOM worklist server (Orthanc), reading that directory
+        v
+   C-FIND  &lt;--------------------  the CT / ultrasound / X-ray room</code></pre>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Piece</th>
+<th>What it is</th>
+<th>Where it comes from</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>The generator</strong></td>
+<td>Part of the <strong>AutoTasks</strong> service. Decides which
+studies belong on the worklist and writes one file each</td>
+<td>Installed with Mp10; switched on in the System Registry</td>
+</tr>
+<tr class="even">
+<td><strong>The worklist directory</strong></td>
+<td>An ordinary folder. AutoTasks owns it completely</td>
+<td>Created by the installer</td>
+</tr>
+<tr class="odd">
+<td><strong>The DICOM server</strong></td>
+<td><strong>Orthanc</strong> with its worklist plugin, running as a
+Windows service</td>
+<td>Installed once, from the Mp10 Modality Worklist bundle</td>
+</tr>
+<tr class="even">
+<td><strong>The console</strong></td>
+<td>The Worklist page in Mp10 Web — read-only, for looking at what is
+scheduled</td>
+<td>Part of Mp10 Web</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The directory is the entire interface between the two
+halves.</strong> AutoTasks writes into it; Orthanc reads out of it;
+neither knows the other exists. That is what makes the failure described
+on page one of the troubleshooting chapter so common and so quiet —
+point them at different directories and each half works perfectly while
+the scanner shows nothing.</p>
+<h2 id="what-is-not-here">What is <em>not</em> here</h2>
+<p>This worklist replaces the worklist only. Images, the diagnostic
+viewer, dictation and report distribution are unchanged, and the HL7
+orders Mp10 already sends to your imaging system keep flowing exactly as
+before.</p>
+<p>The worklist server stores no images. It is configured to refuse them
+outright — it must never quietly become a second archive.</p>
+<h1 id="installing">Installing</h1>
+<h2 id="before-you-start">Before you start</h2>
+<p>You need three answers. Get them from whoever configures the imaging
+equipment, because changing them afterwards means visiting every
+scanner:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Bench default</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>AE title</strong></td>
+<td><code>MP10MWL</code></td>
+<td>The name scanners call this server by. Up to 16 characters, no
+spaces</td>
+</tr>
+<tr class="even">
+<td><strong>DICOM port</strong></td>
+<td><code>4242</code></td>
+<td>The TCP port. Clinical sites usually want <code>104</code> or
+<code>11112</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Worklist directory</strong></td>
+<td><code>C:\Mp10Mwl\worklists</code></td>
+<td>Where the files live. Local disk, not a network share</td>
+</tr>
+</tbody>
+</table>
+<p>You also need, for each scanner: its <strong>AE title</strong>, its
+<strong>IP address</strong>, and — this one is easy to forget —
+<strong>which fields it filters its query by</strong>. Almost all filter
+by modality and date, which is what Mp10 publishes. A scanner that
+filters by <em>Scheduled Station AE Title</em> will match nothing,
+because Mp10 has no concept of a station to put there. Find that out
+during the first scanner test, not during a clinic.</p>
+<h2 id="install-the-dicom-server">Install the DICOM server</h2>
+<p>On the server that will host the worklist, as
+<strong>Administrator</strong>:</p>
+<pre><code>powershell -NoProfile -ExecutionPolicy Bypass -File .\Install-Mwl.ps1</code></pre>
+<p>or, for a clinical install with the port and the scanners known:</p>
+<pre><code>.\Install-Mwl.ps1 -DicomPort 11112 `
+                  -Modality &quot;CT01,192.168.1.50&quot; `
+                  -Modality &quot;MR01,192.168.1.51&quot;</code></pre>
+<p>The installer needs no internet access: the Orthanc installer travels
+inside the bundle. It installs Orthanc, creates the worklist tree,
+installs <strong>only</strong> the worklist plugin, writes a locked-down
+configuration, opens the firewall port, restarts the service and then
+proves the server is answering before it says it is done.</p>
+<p>With <code>-Modality</code> given, only those machines may query and
+their source address is checked. With none given, any host on the
+network may read the worklist — acceptable on a bench, worth tightening
+before go-live.</p>
+<blockquote>
+<p><strong>After any Orthanc upgrade, re-run
+<code>Install-Mwl.ps1</code>.</strong> An upgrade restores the vendor’s
+own configuration files, which turns worklist serving
+<strong>off</strong>. Nothing fails loudly when that happens: the
+service runs, the port answers, and every query returns nothing.
+<code>Test-Mwl.ps1</code> reports it in one line.</p>
+</blockquote>
+<h2 id="switch-on-the-mp10-half">Switch on the Mp10 half</h2>
+<p>In <strong>Admin10 → Global System Registry</strong>, in this
+order:</p>
+<p><strong>1. Create the table.</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Section</th>
+<th>Entry</th>
+<th>Set to</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>GENERAL</code></td>
+<td><code>MODALITY-WORKLIST</code></td>
+<td><code>YES</code></td>
+</tr>
+</tbody>
+</table>
+<p>Then run a <strong>file check</strong> in Admin10. The table is
+created during that check and at no other time — setting this
+<em>after</em> a check has run does nothing until the next one.</p>
+<p><strong>2. Turn the generator on.</strong></p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Section</th>
+<th>Entry</th>
+<th>Set to</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>AUTOTASKS</code></td>
+<td><code>EXPORT_MWL</code></td>
+<td><code>YES</code></td>
+</tr>
+<tr class="even">
+<td><code>AUTOTASKS</code></td>
+<td><code>MWL_SPOOL_PATH</code></td>
+<td>the worklist directory, e.g. <code>C:\Mp10Mwl\worklists</code></td>
+</tr>
+<tr class="odd">
+<td><code>AUTOTASKS</code></td>
+<td><code>MWL_WINDOW_DAYS</code></td>
+<td><code>1</code> unless you have a reason</td>
+</tr>
+</tbody>
+</table>
+<p>Then <strong>restart the AutoTasks service</strong> — settings are
+read at start-up.</p>
+<blockquote>
+<p>These entries usually exist already, set to <code>NO</code> or blank.
+That is Mp10 writing down a question it asked, not somebody else’s
+change. Your value always wins once you set it.</p>
+</blockquote>
+<p><code>MWL_SPOOL_PATH</code> must be <strong>the same
+directory</strong> the installer reported. Not a share pointing at it,
+not a different capitalisation of a different folder — the same
+directory.</p>
+<h2 id="fill-in-the-modality-mapping">Fill in the modality mapping</h2>
+<p>A worklist entry has to say whether the study is a CT, an ultrasound
+or an X-ray. Mp10 takes that from the <strong>revenue code</strong> on
+the order: each revenue code carries the kind of imaging it
+represents.</p>
+<p>Run the starter mapping once per practice:</p>
+<pre><code>Services\docs\seed-revcodes-modality.sql</code></pre>
+<p>It fills the standard revenue codes and deliberately leaves
+non-imaging ones blank. Then correct any local codes it did not
+cover.</p>
+<p><strong>Studies with no modality are not published at all.</strong>
+That is deliberate: DICOM has no way to say “kind of study unknown”, and
+a blank one would match no scanner’s query anyway. It is also the filter
+that keeps laboratory work and office visits off the imaging worklist.
+AutoTasks counts the unmapped ones every cycle, with examples — drive
+that number down to the point where what remains is genuinely
+non-imaging.</p>
+<h2 id="prove-it-in-the-right-order">Prove it, in the right order</h2>
+<p>Test the DICOM half <strong>before</strong> any patient data is
+involved. Each step tells you something the next one cannot.</p>
+<p><strong>1. Is the server healthy?</strong></p>
+<pre><code>powershell -File .\Test-Mwl.ps1 -ExpectedSpoolPath &quot;C:\Mp10Mwl\worklists&quot;</code></pre>
+<p>Everything green means the service is up, the configuration is
+Mp10’s, the two halves agree on the directory, the port is listening and
+the firewall is open.</p>
+<p><strong>2. Can a machine see a study we publish?</strong></p>
+<pre><code>AutoTasks.exe --mwl-selftest &quot;C:\Mp10Mwl\worklists&quot;</code></pre>
+<p>That writes one obviously-fake study — patient <strong>MP10 SELFTEST
+/ DO NOT SCAN</strong>, a CT, scheduled today — using exactly the same
+machinery a real study goes through, with no database involved. Query
+the worklist from a scanner. If it appears, the whole DICOM path works:
+file format, server, port, firewall, scanner configuration.</p>
+<p>The test file disappears on the next generator cycle, because
+AutoTasks owns that directory. Delete it by hand if you want it gone
+sooner.</p>
+<p><strong>3. Do real studies come through?</strong></p>
+<pre><code>AutoTasks.exe --mwl-run</code></pre>
+<p>One worklist cycle and nothing else — no backups, no remittances, no
+e-mail. Safe to run in the middle of a clinic. It prints what it found
+and what it wrote. Then query from the scanner again.</p>
+<p>If step 2 works and step 3 does not, the problem is in the
+<strong>data</strong>: nothing scheduled in the window, or revenue codes
+not mapped. If step 2 fails too, the problem is in the <strong>DICOM
+half</strong>, and step 1 says which part.</p>
+<h1 id="day-to-day">Day to day</h1>
+<h2 id="where-things-are">Where things are</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td>Worklist files</td>
+<td><code>C:\Mp10Mwl\worklists\&lt;order number&gt;.wl</code></td>
+</tr>
+<tr class="even">
+<td>AutoTasks log</td>
+<td><code>AutoTasks.out</code>, beside <code>AutoTasks.exe</code></td>
+</tr>
+<tr class="odd">
+<td>Orthanc logs</td>
+<td><code>C:\Program Files\Orthanc Server\Logs</code></td>
+</tr>
+<tr class="even">
+<td>Orthanc configuration</td>
+<td><code>C:\Program Files\Orthanc Server\Configuration\orthanc.json</code>
+and <code>worklists.json</code></td>
+</tr>
+<tr class="odd">
+<td>Health check</td>
+<td><code>http://127.0.0.1:8042/system</code> on the server itself</td>
+</tr>
+<tr class="even">
+<td>What is published right now</td>
+<td><code>http://127.0.0.1:8042/worklists</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="which-studies-appear">Which studies appear</h2>
+<p>An order is on the worklist when <strong>all</strong> of these are
+true:</p>
+<ul>
+<li>its encounter is <strong>not</strong> inactive,</li>
+<li>its encounter is <strong>not</strong> closed,</li>
+<li>its start date is within <code>MWL_WINDOW_DAYS</code> days either
+side of today (the encounter’s admission date is used when the order has
+no start date of its own), and</li>
+<li>its revenue code maps to a modality.</li>
+</ul>
+<p>Nothing is ticked per order. An order that meets those tests is on
+the worklist; one that stops meeting them comes off it, and its file is
+deleted within a couple of minutes.</p>
+<h2 id="cancelling-is-not-deleting">Cancelling is not deleting</h2>
+<p>When a study falls off the worklist its file is removed but its
+<strong>entry is kept and marked cancelled</strong>. Re-open the
+encounter, or move the date back into the window, and the <em>same</em>
+entry returns with the <em>same</em> study identifier — so a study is
+never split into two half-studies in your image archive.</p>
+<p>Deleting the order itself is the one thing that removes the entry
+outright, which is as it should be.</p>
+<h2 id="what-a-healthy-log-looks-like">What a healthy log looks
+like</h2>
+<p>In <code>AutoTasks.out</code>, every couple of minutes:</p>
+<pre><code>WriteWorklistFiles: active set size      488
+WriteWorklistFiles: inserted 0  re-activated 0  unchanged 488
+WriteWorklistFiles: rows with a rev_code but no revcodes.Modality mapped 56  example rev_codes 0320,0350
+WriteWorklistFiles: cancelled 0
+EmitWorklistFiles: written 0  unchanged 432  purged 0  no modality (not emitted) 56  write failures 0</code></pre>
+<p>Read it as: 488 orders qualify, nothing changed this cycle, 432
+studies are published to the machines, and 56 are held back for want of
+a modality — that last number is the one with work behind it.</p>
+<p><code>written</code> is high on the first cycle after a change and
+<code>0</code> the rest of the time. <code>write failures</code> should
+always be <code>0</code>.</p>
+<h2 id="adding-a-scanner">Adding a scanner</h2>
+<ol type="1">
+<li>On the scanner, configure the worklist source: <strong>called AE
+title</strong>, <strong>host</strong> and <strong>port</strong> exactly
+as <code>Test-Mwl.ps1</code> reports them. Its own AE title can be
+anything, but write it down.</li>
+<li>If the server was installed with <code>-Modality</code>, re-run
+<code>Install-Mwl.ps1</code> with the new scanner added to the list —
+otherwise it will be refused at association, which the scanner usually
+reports as “cannot connect”.</li>
+<li>Use <code>--mwl-selftest</code> (above) for the first query rather
+than a real patient.</li>
+</ol>
+<h1 id="troubleshooting">Troubleshooting</h1>
+<p>Almost every worklist problem is one of two questions, and telling
+them apart is most of the work:</p>
+<blockquote>
+<p><strong>Is nothing being published, or is nothing getting
+through?</strong></p>
+</blockquote>
+<p><code>Test-Mwl.ps1</code> answers the second.
+<code>AutoTasks.exe --mwl-run</code> answers the first. Run both before
+changing anything.</p>
+<h2 id="the-scanners-worklist-is-empty">The scanner’s worklist is
+empty</h2>
+<p>Work down this list; each step rules something out.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Check</th>
+<th>How</th>
+<th>If it fails</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Are files being written?</td>
+<td>Look in the worklist directory</td>
+<td>Go to <em>Nothing is being published</em></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Do the two halves agree on the directory?</td>
+<td><code>Test-Mwl.ps1 -ExpectedSpoolPath &lt;the Mp10 setting&gt;</code></td>
+<td>Fix <code>MWL_SPOOL_PATH</code>, or re-run
+<code>Install-Mwl.ps1</code> with <code>-SpoolPath</code></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Is Orthanc actually serving?</td>
+<td><code>Test-Mwl.ps1</code> — “Worklist plugin is serving <em>n</em>
+entries”</td>
+<td>Go to <em>The server is not answering</em></td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Does the scanner reach it?</td>
+<td><code>--mwl-selftest</code>, then query from the scanner</td>
+<td>Go to <em>The scanner cannot connect</em></td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Does the scanner filter by something we do not publish?</td>
+<td>Ask it to query with no filters, or by date only</td>
+<td>See <em>The scanner filters by station</em></td>
+</tr>
+</tbody>
+</table>
+<h2 id="nothing-is-being-published">Nothing is being published</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Symptom in <code>AutoTasks.out</code></th>
+<th>Cause</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>No <code>WriteWorklistFiles</code> lines at all</td>
+<td><code>AUTOTASKS / EXPORT_MWL</code> is not <code>YES</code>, or the
+service was not restarted after it was set</td>
+</tr>
+<tr class="even">
+<td><code>no .wl written -- AUTOTASKS/MWL_SPOOL_PATH is empty</code></td>
+<td>The path setting is blank</td>
+</tr>
+<tr class="odd">
+<td><code>ABORTED -- AUTOTASKS/MWL_SPOOL_PATH does not exist</code></td>
+<td>The path is wrong, or the directory was deleted. AutoTasks will not
+create it: a mistyped path that created itself would look like it was
+working</td>
+</tr>
+<tr class="even">
+<td><code>active set size 0</code> with orders on today’s schedule</td>
+<td>The encounters are closed or inactive, or the dates fall outside
+<code>MWL_WINDOW_DAYS</code></td>
+</tr>
+<tr class="odd">
+<td><code>no modality (not emitted)</code> accounts for everything</td>
+<td>The revenue-code mapping is not filled in. Nothing at all can be
+published until at least one code maps</td>
+</tr>
+<tr class="even">
+<td><code>write failures</code> is not <code>0</code></td>
+<td>Permissions on the worklist directory, or the disk is full</td>
+</tr>
+</tbody>
+</table>
+<p>If the table itself is missing,
+<code>GENERAL / MODALITY-WORKLIST</code> was set to <code>YES</code>
+after the last file check rather than before. Run the check again.</p>
+<blockquote>
+<p><strong>A file check does not complain when a table cannot be
+created.</strong> If <code>modalitywl</code> is still missing after a
+check that appeared to finish normally, report it rather than re-running
+it repeatedly.</p>
+</blockquote>
+<h2 id="the-server-is-not-answering">The server is not answering</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Symptom</th>
+<th>Cause</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Test-Mwl.ps1</code> says orthanc.json is <strong>not</strong>
+the Mp10 configuration</td>
+<td>Orthanc was upgraded. Re-run <code>Install-Mwl.ps1</code></td>
+</tr>
+<tr class="even">
+<td>The service is “Running” but the HTTP port does not answer</td>
+<td>Orthanc itself died at start-up while its service wrapper stayed up.
+The reason is in the last lines of the newest file in
+<code>C:\Program Files\Orthanc Server\Logs</code></td>
+</tr>
+<tr class="odd">
+<td>The log says a setting is <em>“defined in 2 different configuration
+files”</em></td>
+<td>An extra <code>.json</code> was added to Orthanc’s configuration
+directory. Orthanc refuses to start rather than guess. Remove it and
+re-run <code>Install-Mwl.ps1</code></td>
+</tr>
+<tr class="even">
+<td><code>Worklist server is disabled by the configuration file</code></td>
+<td><code>worklists.json</code> has <code>Enable: false</code> — again,
+usually an upgrade</td>
+</tr>
+<tr class="odd">
+<td>Service start type is not Automatic</td>
+<td>It will not come back after a reboot. <code>Install-Mwl.ps1</code>
+sets this</td>
+</tr>
+</tbody>
+</table>
+<h2 id="the-scanner-cannot-connect">The scanner cannot connect</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Symptom at the scanner</th>
+<th>Cause</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><em>Called AE Title Not Recognized</em></td>
+<td>The scanner is calling the wrong AE title. It must match exactly,
+including case</td>
+</tr>
+<tr class="even">
+<td>Association rejected, or refused</td>
+<td>The server was installed with <code>-Modality</code> and this
+scanner is not on the list, or it is querying from a different IP than
+the one recorded</td>
+</tr>
+<tr class="odd">
+<td>Times out with no response</td>
+<td>Firewall, or the wrong port. <code>Test-Mwl.ps1</code> confirms the
+port is listening and the rule is enabled — from there it is the network
+between the two</td>
+</tr>
+<tr class="even">
+<td>Connects, returns nothing, no error</td>
+<td>It is reaching the server. This is now a data or matching problem,
+not a connection one</td>
+</tr>
+</tbody>
+</table>
+<h2 id="the-scanner-filters-by-station">The scanner filters by
+station</h2>
+<p>Some equipment queries by <strong>Scheduled Station AE Title</strong>
+— “only show me work booked for <em>this</em> machine”. Mp10 has no
+concept of a station to book work to, so it publishes no station name,
+and such a query matches nothing while every other scanner works
+perfectly.</p>
+<p>If a device behaves that way, configure it to filter by
+<strong>modality and date</strong> instead. That is what the worklist is
+built around, and what every other device does by default.</p>
+<h2 id="a-study-is-on-the-schedule-but-not-in-the-worklist">A study is
+on the schedule but not in the worklist</h2>
+<p>In order of likelihood:</p>
+<ol type="1">
+<li><strong>Its revenue code has no modality.</strong> By far the most
+common. The <code>no modality (not emitted)</code> count in the log is
+these.</li>
+<li><strong>Its encounter is closed or inactive.</strong> Both remove it
+deliberately.</li>
+<li><strong>Its date is outside the window.</strong>
+<code>MWL_WINDOW_DAYS</code> is one day either side of today by
+default.</li>
+<li><strong>The scanner is filtering by a different modality</strong>
+than the one the revenue code maps to — an ultrasound-guided procedure
+coded as a procedure rather than as ultrasound, for instance.</li>
+</ol>
+<p><code>AutoTasks.exe --mwl-run</code> settles 1-3 in a few
+seconds.</p>
+<h2 id="things-that-look-like-faults-and-are-not">Things that look like
+faults and are not</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>What you see</th>
+<th>Why it is correct</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Files vanish from the worklist directory</td>
+<td>AutoTasks owns that directory and sweeps it every cycle. That sweep
+is what withdraws cancelled studies</td>
+</tr>
+<tr class="even">
+<td>A file you copied in by hand disappears</td>
+<td>Same sweep. Use <code>--mwl-selftest</code>, which is meant for
+this</td>
+</tr>
+<tr class="odd">
+<td><code>unchanged</code> is large and <code>written</code> is
+<code>0</code></td>
+<td>Correct on a quiet cycle. Files are rewritten only when something
+changed</td>
+</tr>
+<tr class="even">
+<td>Laboratory and office-visit orders are counted as “no modality”</td>
+<td>They are not imaging, and belong in that count. It is not a number
+that must reach zero — only the imaging codes in it matter</td>
+</tr>
+<tr class="odd">
+<td>The worklist directory contains a <code>.tmp</code> file for a
+moment</td>
+<td>Files are written under a temporary name and renamed, so a scanner
+can never read a half-written one</td>
+</tr>
+<tr class="even">
+<td>Orthanc refuses a C-STORE</td>
+<td>Deliberate. This server serves worklists and must never become an
+image archive</td>
+</tr>
+</tbody>
+</table>
+<h1 id="reference">Reference</h1>
+<h2 id="mp10-settings">Mp10 settings</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Section</th>
+<th>Entry</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>GENERAL</code></td>
+<td><code>MODALITY-WORKLIST</code></td>
+<td><code>NO</code></td>
+<td>Whether the <code>modalitywl</code> table exists. Read during a file
+check</td>
+</tr>
+<tr class="even">
+<td><code>AUTOTASKS</code></td>
+<td><code>EXPORT_MWL</code></td>
+<td><code>NO</code></td>
+<td>Runs the generator every cycle</td>
+</tr>
+<tr class="odd">
+<td><code>AUTOTASKS</code></td>
+<td><code>MWL_SPOOL_PATH</code></td>
+<td><em>(blank)</em></td>
+<td>The worklist directory. Blank publishes nothing</td>
+</tr>
+<tr class="even">
+<td><code>AUTOTASKS</code></td>
+<td><code>MWL_WINDOW_DAYS</code></td>
+<td><code>1</code></td>
+<td>Today +/- this many days</td>
+</tr>
+<tr class="odd">
+<td><code>AUTOTASKS</code></td>
+<td><code>MWL_UID_ROOT</code></td>
+<td><em>(blank)</em></td>
+<td>Leave blank unless your organisation owns a registered DICOM root.
+Never invent one</td>
+</tr>
+</tbody>
+</table>
+<h2 id="commands">Commands</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>AutoTasks.exe --mwl-run</code></td>
+<td>One worklist cycle, printed to the screen. Nothing else runs</td>
+</tr>
+<tr class="even">
+<td><code>AutoTasks.exe --mwl-selftest &lt;dir&gt;</code></td>
+<td>Publishes one fake study, with no database connection</td>
+</tr>
+<tr class="odd">
+<td><code>Test-Mwl.ps1</code></td>
+<td>Reads both halves and reports what is wrong. Changes nothing</td>
+</tr>
+<tr class="even">
+<td><code>Test-Mwl.ps1 -ExpectedSpoolPath &lt;dir&gt;</code></td>
+<td>Also confirms both halves use the same directory</td>
+</tr>
+<tr class="odd">
+<td><code>Install-Mwl.ps1</code></td>
+<td>Installs or repairs the DICOM server. Safe to re-run</td>
+</tr>
+</tbody>
+</table>
+<h2 id="what-each-worklist-entry-carries">What each worklist entry
+carries</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>The machine shows</th>
+<th>Mp10 source</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Patient name</td>
+<td>Patient record, as <code>Family^Given</code></td>
+</tr>
+<tr class="even">
+<td>Patient ID</td>
+<td>Medical record number, padded to 8 digits — the same one your
+imaging system already knows</td>
+</tr>
+<tr class="odd">
+<td>Date of birth, sex</td>
+<td>Patient record</td>
+</tr>
+<tr class="even">
+<td>Accession number</td>
+<td>The <strong>encounter</strong> number</td>
+</tr>
+<tr class="odd">
+<td>Requested procedure ID</td>
+<td>The <strong>order</strong> number — one study per order</td>
+</tr>
+<tr class="even">
+<td>Description</td>
+<td>The item’s description</td>
+</tr>
+<tr class="odd">
+<td>Modality</td>
+<td>The revenue code’s modality</td>
+</tr>
+<tr class="even">
+<td>Scheduled date and time</td>
+<td>The order’s start date, else the encounter’s admission date and
+time</td>
+</tr>
+<tr class="odd">
+<td>Referring physician</td>
+<td>The order’s requesting physician, else the encounter’s doctor</td>
+</tr>
+<tr class="even">
+<td>Study identifier</td>
+<td>Issued once by Mp10 and never changed</td>
+</tr>
+</tbody>
+</table>
+<p>The study identifier is worth understanding: it is issued when the
+study first appears on the worklist, stored, and reused for the life of
+that order. Cancel and reinstate a study and it keeps the same
+identifier, which is why images taken before and after never split into
+two studies.</p>
+</body>
+</html>

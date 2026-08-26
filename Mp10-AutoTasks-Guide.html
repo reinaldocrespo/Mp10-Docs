@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-08-23" />
+  <meta name="dcterms.date" content="2026-08-26" />
   <title>Mp10 AutoTasks — Administrator’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -148,7 +148,7 @@ a { color: inherit; }
 <p class="subtitle">Backups, electronic remittances, modality worklist,
 and automated reports</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">23 August 2026</p>
+<p class="date">26 August 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -333,6 +333,8 @@ on</a></li>
 — whether the table exists</a></li>
 <li><a href="#export_mwl-whether-the-table-is-kept-current" id="toc-export_mwl-whether-the-table-is-kept-current"><code>EXPORT_MWL</code>
 — whether the table is kept current</a></li>
+<li><a href="#mwl_spool_path-where-the-worklist-files-go" id="toc-mwl_spool_path-where-the-worklist-files-go"><code>MWL_SPOOL_PATH</code>
+— where the worklist files go</a></li>
 <li><a href="#mwl_window_days-how-wide-the-window-is" id="toc-mwl_window_days-how-wide-the-window-is"><code>MWL_WINDOW_DAYS</code>
 — how wide the window is</a></li>
 <li><a href="#mwl_uid_root-how-studies-are-identified-it-task" id="toc-mwl_uid_root-how-studies-are-identified-it-task"><code>MWL_UID_ROOT</code>
@@ -345,6 +347,7 @@ worklist</a></li>
 <li><a href="#telling-the-machine-what-kind-of-study-it-is" id="toc-telling-the-machine-what-kind-of-study-it-is">Telling the
 machine what kind of study it is</a></li>
 <li><a href="#what-the-log-tells-you" id="toc-what-the-log-tells-you">What the log tells you</a></li>
+<li><a href="#running-one-cycle-by-hand" id="toc-running-one-cycle-by-hand">Running one cycle by hand</a></li>
 </ul></li>
 <li><a href="#troubleshooting" id="toc-troubleshooting">Troubleshooting</a>
 <ul>
@@ -2569,15 +2572,17 @@ asks Mp10 and fills its own screen in.</p>
 study that can be labelled wrongly, and a mistyped accession number is
 what makes an image arrive in the wrong patient’s file.</p>
 <blockquote>
-<p><strong>Read this before switching anything on.</strong> AutoTasks
-keeps a table called <code>ModalityWL</code> in step with the orders on
-your schedule, and that part works today. The part that hands those
-entries to the machines — writing the worklist files a DICOM worklist
-server reads — <strong>is not built yet.</strong> Turning this on now
-keeps a correct, current table; <strong>no scanner can query it
-yet.</strong> Switching it on early is useful for exactly one thing:
-proving the worklist matches your schedule before anything depends on
-it.</p>
+<p><strong>This chapter covers the AutoTasks half only.</strong>
+AutoTasks decides which studies belong on the worklist and writes one
+small file per study. A <strong>DICOM worklist server</strong> — a
+separate piece, installed once on your server — is what the machines
+actually query, and it serves those files. Without it, AutoTasks is
+writing files nothing reads.</p>
+<p>If you are setting this up for the first time, read the <strong>Mp10
+Modality Worklist</strong> guide instead: it covers both halves,
+installing the server, pointing a scanner at it, and what to do when the
+worklist looks empty. This chapter is the AutoTasks settings reference
+that guide refers back to.</p>
 </blockquote>
 <h2 id="turning-it-on-two-separate-switches">Turning it on — two
 separate switches</h2>
@@ -2686,12 +2691,21 @@ a file check, not by AutoTasks</td>
 </tr>
 <tr class="odd">
 <td><code>AUTOTASKS</code></td>
+<td><code>MWL_SPOOL_PATH</code></td>
+<td><code>C:\Mp10Mwl\worklists</code></td>
+<td><em>(blank)</em></td>
+<td>Where the worklist files are written. <strong>Must match the
+worklist server’s own setting exactly.</strong> Blank means no files are
+written</td>
+</tr>
+<tr class="even">
+<td><code>AUTOTASKS</code></td>
 <td><code>MWL_WINDOW_DAYS</code></td>
 <td><code>1</code></td>
 <td><code>1</code></td>
 <td>How far either side of today to look, in days</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>AUTOTASKS</code></td>
 <td><code>MWL_UID_ROOT</code></td>
 <td><em>(blank)</em></td>
@@ -2714,6 +2728,28 @@ maintaining it.</p>
 <p>With this <code>NO</code>, the table sits exactly as it was last
 left. With it <code>YES</code>, AutoTasks re-checks the whole worklist
 against your schedule on every cycle — by default every two minutes.</p>
+<h3 id="mwl_spool_path-where-the-worklist-files-go"><code>MWL_SPOOL_PATH</code>
+— where the worklist files go</h3>
+<p>The worklist server watches one directory. This tells AutoTasks to
+write into that same directory, and the two settings must name
+<strong>exactly the same place</strong>.</p>
+<p>Leave it blank and the table is still kept current but no files are
+written — which is a reasonable way to run for a while before the
+imaging side exists, and is what the log line
+<code>no .wl written -- AUTOTASKS/MWL_SPOOL_PATH is empty</code> is
+telling you.</p>
+<blockquote>
+<p><strong>Wrong path, empty worklist, no error.</strong> If the two
+settings disagree, each half does exactly what it was told: AutoTasks
+writes files, the server serves the empty directory it was pointed at,
+and nothing anywhere reports a problem. The scanner simply shows
+nothing. <code>Test-Mwl.ps1</code> on the server compares the two in one
+line, and is the fastest way to rule this out.</p>
+</blockquote>
+<p><strong>AutoTasks owns that directory.</strong> It writes what
+belongs there and deletes everything else in it — that is how a
+cancelled study disappears from the machines. Do not keep anything else
+in it.</p>
 <h3 id="mwl_window_days-how-wide-the-window-is"><code>MWL_WINDOW_DAYS</code>
 — how wide the window is</h3>
 <p><code>1</code> means yesterday, today and tomorrow. <code>0</code>
@@ -2766,7 +2802,7 @@ them comes off it.</p>
 trying to remember what changed. That is deliberate: it means a missed
 cycle, a service restart or a crash cannot leave the worklist
 permanently out of step. The next cycle simply puts it right.</p>
-<p>Each pass does three things:</p>
+<p>Each pass does four things:</p>
 <ol type="1">
 <li><strong>Works out which orders belong</strong> on the worklist right
 now.</li>
@@ -2775,7 +2811,14 @@ now.</li>
 again.</li>
 <li><strong>Cancels</strong> anything on the worklist that no longer
 qualifies.</li>
+<li><strong>Writes a file for every study a machine should see</strong>,
+and <strong>deletes every other file</strong> in the worklist directory.
+That last sweep is what actually withdraws a cancelled study from the
+machines.</li>
 </ol>
+<p>Step 4 rewrites a file only when its content has changed — or when
+the file has gone missing, which is how a directory somebody has cleaned
+out repairs itself on the next cycle.</p>
 <h2 id="cancelling-is-not-deleting">Cancelling is not deleting</h2>
 <p>When an order falls off the worklist — the encounter is closed, or
 the date moves out of the window — its entry is <strong>marked
@@ -2840,9 +2883,70 @@ a catalogue problem rather than a worklist one</td>
 </tr>
 </tbody>
 </table>
+<p>Then search it for <code>EmitWorklistFiles</code> — that is the part
+the machines see:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Line</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>written</code></td>
+<td>Files written this cycle. High on the first run of the day, then
+usually <code>0</code></td>
+</tr>
+<tr class="even">
+<td><code>unchanged</code></td>
+<td>Studies already published and unaltered. This is the number that
+should match what a scanner sees</td>
+</tr>
+<tr class="odd">
+<td><code>purged</code></td>
+<td>Files removed — cancelled studies, studies past the window, and
+anything else that was in the directory</td>
+</tr>
+<tr class="even">
+<td><code>no modality (not emitted)</code></td>
+<td>Studies held back because their revenue code does not say what kind
+of study they are. <strong>These are invisible to every
+machine.</strong> Non-imaging orders — laboratory, office visits — are
+counted here too and belong here</td>
+</tr>
+<tr class="odd">
+<td><code>write failures</code></td>
+<td>Should always be <code>0</code>. Anything else is a permissions or
+disk problem on the worklist directory</td>
+</tr>
+<tr class="even">
+<td><code>no .wl written -- AUTOTASKS/MWL_SPOOL_PATH is empty</code></td>
+<td>The path is not set, so nothing is published</td>
+</tr>
+<tr class="odd">
+<td><code>ABORTED -- AUTOTASKS/MWL_SPOOL_PATH does not exist</code></td>
+<td>The path is set but wrong, or the directory was deleted</td>
+</tr>
+</tbody>
+</table>
 <p>A healthy log on a normal day shows a steady
-<code>active set size</code>, small or zero change counts, and a zero
-mapping count.</p>
+<code>active set size</code>, small or zero change counts, a zero
+mapping count, and
+<code>written 0 / unchanged &lt;today&#39;s studies&gt;</code> on most
+cycles.</p>
+<h2 id="running-one-cycle-by-hand">Running one cycle by hand</h2>
+<p>You do not have to wait two minutes and read around everything else
+the service does. On the server:</p>
+<pre><code>AutoTasks.exe --mwl-run</code></pre>
+<p>That runs <strong>one worklist cycle and nothing else</strong> — no
+backup, no remittances, no e-mail, no texts — and prints the same lines
+to the screen. It is safe to run in the middle of a working day, and it
+is the quickest answer to “is the worklist right <em>now</em>”.</p>
 <h1 id="troubleshooting">Troubleshooting</h1>
 <p>Start with <code>AutoTasks.out</code>. Search it for the date you
 expected something to happen. Almost every question below is answered by
@@ -3265,9 +3369,21 @@ entries come back</td>
 these names example revenue codes to start with</td>
 </tr>
 <tr class="even">
-<td>No worklist files anywhere on disk</td>
-<td><strong>Working as designed — that part is not built yet.</strong>
-See the note at the start of the modality worklist chapter</td>
+<td>The table looks right but no files are written</td>
+<td><code>AUTOTASKS</code> / <code>MWL_SPOOL_PATH</code> is blank or
+names a directory that does not exist. The
+<code>EmitWorklistFiles</code> log line says which</td>
+</tr>
+<tr class="odd">
+<td>Files are written but a scanner sees nothing</td>
+<td>The two halves are pointed at different directories, or the DICOM
+server is not running. Run <code>Test-Mwl.ps1</code> on the server; the
+<strong>Mp10 Modality Worklist</strong> guide covers this in full</td>
+</tr>
+<tr class="even">
+<td>A study is on the table but has no file</td>
+<td>It has no modality — see <code>no modality (not emitted)</code> in
+the log. A laboratory or office-visit order belongs in that count</td>
 </tr>
 </tbody>
 </table>
