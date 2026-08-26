@@ -340,6 +340,8 @@ after the last file check rather than before. Run the check again.
 | The log says a setting is *"defined in 2 different configuration files"* | An extra `.json` was added to Orthanc's configuration directory. Orthanc refuses to start rather than guess. Remove it and re-run `Install-Mwl.ps1` |
 | `Worklist server is disabled by the configuration file` | `worklists.json` has `Enable: false` — again, usually an upgrade |
 | Service start type is not Automatic | It will not come back after a reboot. `Install-Mwl.ps1` sets this |
+| `Test-Mwl.ps1` warns **Orthanc cannot list the directory (HTTP 400)** | Something in the worklist directory is not readable as DICOM — usually a zero-length file, or something the generator did not write. **Scanners are unaffected**: a C-FIND skips the bad file and answers normally. Find it and delete it |
+| `Test-Mwl.ps1` says *n* files are **not being served** | Same cause, seen from the other side: Orthanc parsed fewer files than are on disk. The warning prints the two commands that turn on verbose logging, which names the file |
 
 ## The scanner cannot connect
 

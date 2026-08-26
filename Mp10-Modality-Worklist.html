@@ -709,6 +709,21 @@ usually an upgrade</td>
 <td>It will not come back after a reboot. <code>Install-Mwl.ps1</code>
 sets this</td>
 </tr>
+<tr class="even">
+<td><code>Test-Mwl.ps1</code> warns <strong>Orthanc cannot list the
+directory (HTTP 400)</strong></td>
+<td>Something in the worklist directory is not readable as DICOM —
+usually a zero-length file, or something the generator did not write.
+<strong>Scanners are unaffected</strong>: a C-FIND skips the bad file
+and answers normally. Find it and delete it</td>
+</tr>
+<tr class="odd">
+<td><code>Test-Mwl.ps1</code> says <em>n</em> files are <strong>not
+being served</strong></td>
+<td>Same cause, seen from the other side: Orthanc parsed fewer files
+than are on disk. The warning prints the two commands that turn on
+verbose logging, which names the file</td>
+</tr>
 </tbody>
 </table>
 <h2 id="the-scanner-cannot-connect">The scanner cannot connect</h2>
