@@ -171,6 +171,14 @@ mapping</a></li>
 <li><a href="#prove-it-in-the-right-order" id="toc-prove-it-in-the-right-order">Prove it, in the right
 order</a></li>
 </ul></li>
+<li><a href="#sending-each-scanner-its-own-work" id="toc-sending-each-scanner-its-own-work">Sending each scanner its own
+work</a>
+<ul>
+<li><a href="#the-rows" id="toc-the-rows">The rows</a></li>
+<li><a href="#fill-it-in-before-you-switch-a-scanner-to-station-filtering" id="toc-fill-it-in-before-you-switch-a-scanner-to-station-filtering">Fill
+it in before you switch a scanner to station filtering</a></li>
+<li><a href="#what-it-does-not-change" id="toc-what-it-does-not-change">What it does not change</a></li>
+</ul></li>
 <li><a href="#day-to-day" id="toc-day-to-day">Day to day</a>
 <ul>
 <li><a href="#where-things-are" id="toc-where-things-are">Where things
@@ -191,8 +199,8 @@ empty</a></li>
 <li><a href="#the-server-is-not-answering" id="toc-the-server-is-not-answering">The server is not
 answering</a></li>
 <li><a href="#the-scanner-cannot-connect" id="toc-the-scanner-cannot-connect">The scanner cannot connect</a></li>
-<li><a href="#the-scanner-filters-by-station" id="toc-the-scanner-filters-by-station">The scanner filters by
-station</a></li>
+<li><a href="#a-station-filtering-scanner-sees-nothing" id="toc-a-station-filtering-scanner-sees-nothing">A station-filtering
+scanner sees nothing</a></li>
 <li><a href="#a-study-is-on-the-schedule-but-not-in-the-worklist" id="toc-a-study-is-on-the-schedule-but-not-in-the-worklist">A study is
 on the schedule but not in the worklist</a></li>
 <li><a href="#things-that-look-like-faults-and-are-not" id="toc-things-that-look-like-faults-and-are-not">Things that look like
@@ -328,11 +336,12 @@ spaces</td>
 </table>
 <p>You also need, for each scanner: its <strong>AE title</strong>, its
 <strong>IP address</strong>, and — this one is easy to forget —
-<strong>which fields it filters its query by</strong>. Almost all filter
-by modality and date, which is what Mp10 publishes. A scanner that
-filters by <em>Scheduled Station AE Title</em> will match nothing,
-because Mp10 has no concept of a station to put there. Find that out
-during the first scanner test, not during a clinic.</p>
+<strong>which fields it filters its query by</strong>. Most filter by
+modality and date. Some also filter by <em>Scheduled Station AE
+Title</em> — “only my work” — which Mp10 supports and which is how you
+stop three CTs showing each other’s patients, but which needs the
+mapping in <em>Sending each scanner its own work</em> filled in first.
+Find that out during the first scanner test, not during a clinic.</p>
 <h2 id="install-the-dicom-server">Install the DICOM server</h2>
 <p>On the server that will host the worklist, as
 <strong>Administrator</strong>:</p>
@@ -468,6 +477,98 @@ and what it wrote. Then query from the scanner again.</p>
 <strong>data</strong>: nothing scheduled in the window, or revenue codes
 not mapped. If step 2 fails too, the problem is in the <strong>DICOM
 half</strong>, and step 1 says which part.</p>
+<h1 id="sending-each-scanner-its-own-work">Sending each scanner its own
+work</h1>
+<p>With one CT, every CT study can go to every CT and nothing is wrong.
+With three, a technologist at one site should not be looking at another
+site’s patients to find today’s list.</p>
+<p>DICOM’s answer is <strong>Scheduled Station AE Title</strong>: the
+worklist entry says which station the study is booked on, and each
+scanner asks only for its own. Mp10 has no station field on an order —
+nobody chooses a scanner when the study is ordered — so the station is
+<strong>derived</strong>:</p>
+<pre><code>   the encounter&#39;s location   (admit type: &quot;San Francisco&quot;, &quot;Mariolga&quot; ...)
+                +
+   the study&#39;s modality       (from the revenue code: CT, US, DX ...)
+                |
+                v
+   Tables -&gt; Imaging Stations  -&gt;  AE title the scanner calls itself</code></pre>
+<p>Nothing is typed at order entry, and adding a scanner is one row in
+<strong>Admin10 → Tables → Imaging Stations</strong>, not a code
+change.</p>
+<h2 id="the-rows">The rows</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Location</strong></td>
+<td>Must match the encounter type used for that site. Spelling matters,
+capitalisation does not</td>
+</tr>
+<tr class="even">
+<td><strong>Modality</strong></td>
+<td><code>CT</code>, <code>MR</code>, <code>DX</code>, <code>US</code>,
+<code>MG</code> — the same value the revenue code maps to</td>
+</tr>
+<tr class="odd">
+<td><strong>AE Title</strong></td>
+<td>What the scanner calls itself when it asks for its worklist. This is
+the field that does the routing</td>
+</tr>
+<tr class="even">
+<td><strong>Station Name</strong></td>
+<td>Free label, shown on some consoles</td>
+</tr>
+<tr class="odd">
+<td><strong>Notes</strong></td>
+<td>For people, not for DICOM — room, vendor, whoever to call</td>
+</tr>
+<tr class="even">
+<td><strong>Inactive</strong></td>
+<td>Tick to stop routing to it without deleting the row</td>
+</tr>
+</tbody>
+</table>
+<p>One row per location and modality. <strong>Two X-ray rooms in the
+same building share a worklist</strong> — that is Phase 1 as designed,
+not a fault. Splitting them needs a finer key than location and modality
+(body part is the intended next step).</p>
+<h2 id="fill-it-in-before-you-switch-a-scanner-to-station-filtering">Fill it
+in before you switch a scanner to station filtering</h2>
+<p>The order matters, for the reason in the troubleshooting chapter: a
+scanner that filters by station sees nothing for any location and
+modality you have not mapped.</p>
+<ol type="1">
+<li><p>Add a row for every (location, modality) that scanner will ask
+for.</p></li>
+<li><p>Watch <code>AutoTasks.out</code> —
+<code>published with NO station</code> should not name that scanner’s
+pairs any more. <code>AutoTasks.exe --mwl-run</code> gives the answer in
+seconds rather than at the next cycle.</p></li>
+<li><p>Prove it before real work depends on it:</p>
+<pre><code>AutoTasks.exe --mwl-selftest c:\Mp10Mwl\worklists CT SFCT01</code></pre>
+<p>That publishes one obviously-fake study booked on
+<code>SFCT01</code>. The scanner configured as <code>SFCT01</code>
+should see it; the others should not.</p></li>
+<li><p>Then switch the scanner to filter by station AE title.</p></li>
+</ol>
+<p>Reverse the order and the symptom is an empty worklist on a machine
+that was working ten minutes ago.</p>
+<h2 id="what-it-does-not-change">What it does not change</h2>
+<p>A scanner that filters by <strong>modality and date</strong> is
+unaffected by any of this. It sees every study of its modality, mapped
+or not, exactly as before. You can run a mixed estate — some devices
+station-filtered, some not — and the only rule is the one above: any
+device that filters by station needs its pairs mapped.</p>
 <h1 id="day-to-day">Day to day</h1>
 <h2 id="where-things-are">Where things are</h2>
 <table>
@@ -477,27 +578,31 @@ half</strong>, and step 1 says which part.</p>
 </colgroup>
 <tbody>
 <tr class="odd">
+<td>Imaging stations</td>
+<td>Admin10 -&gt; Tables -&gt; <strong>Imaging Stations</strong></td>
+</tr>
+<tr class="even">
 <td>Worklist files</td>
 <td><code>C:\Mp10Mwl\worklists\&lt;order number&gt;.wl</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>AutoTasks log</td>
 <td><code>AutoTasks.out</code>, beside <code>AutoTasks.exe</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Orthanc logs</td>
 <td><code>C:\Program Files\Orthanc Server\Logs</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Orthanc configuration</td>
 <td><code>C:\Program Files\Orthanc Server\Configuration\orthanc.json</code>
 and <code>worklists.json</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Health check</td>
 <td><code>http://127.0.0.1:8042/system</code> on the server itself</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>What is published right now</td>
 <td><code>http://127.0.0.1:8042/worklists</code></td>
 </tr>
@@ -517,6 +622,8 @@ no start date of its own), and</li>
 <p>Nothing is ticked per order. An order that meets those tests is on
 the worklist; one that stops meeting them comes off it, and its file is
 deleted within a couple of minutes.</p>
+<p>Whether a given scanner then <em>sees</em> it is a second question,
+answered by <em>Sending each scanner its own work</em>.</p>
 <h2 id="cancelling-is-not-deleting">Cancelling is not deleting</h2>
 <p>When a study falls off the worklist its file is removed but its
 <strong>entry is kept and marked cancelled</strong>. Re-open the
@@ -763,16 +870,33 @@ not a connection one</td>
 </tr>
 </tbody>
 </table>
-<h2 id="the-scanner-filters-by-station">The scanner filters by
-station</h2>
+<h2 id="a-station-filtering-scanner-sees-nothing">A station-filtering
+scanner sees nothing</h2>
 <p>Some equipment queries by <strong>Scheduled Station AE Title</strong>
-— “only show me work booked for <em>this</em> machine”. Mp10 has no
-concept of a station to book work to, so it publishes no station name,
-and such a query matches nothing while every other scanner works
-perfectly.</p>
-<p>If a device behaves that way, configure it to filter by
-<strong>modality and date</strong> instead. That is what the worklist is
-built around, and what every other device does by default.</p>
+— “only show me work booked for <em>this</em> machine”. That works, and
+it is how you keep three CTs from all showing each other’s patients (see
+<em>Sending each scanner its own work</em>). It has one sharp edge:</p>
+<blockquote>
+<p><strong>A study with no station is invisible to a scanner that
+filters by station.</strong> Not “shown anyway” — invisible. Measured:
+65 X-ray studies scheduled for one day answered a modality-and-date
+query and returned <strong>zero</strong> to an X-ray scanner asking by
+its own AE title, because no station was mapped for that location and
+modality.</p>
+</blockquote>
+<p>So the mapping and the scanner configuration are one job, not two.
+Either:</p>
+<ul>
+<li>every location and modality that scanner needs has a row in
+<strong>Imaging Stations</strong>, or</li>
+<li>that scanner filters by <strong>modality and date</strong>
+only.</li>
+</ul>
+<p><code>AutoTasks.out</code> counts the gap every cycle:</p>
+<pre><code>EmitWorklistFiles: published with NO station -- invisible to any scanner that
+filters by station AE title   135   example location/modality   Degetau/US San Francisco/DX ...</code></pre>
+<p>Those example pairs are exactly the rows missing from Imaging
+Stations.</p>
 <h2 id="a-study-is-on-the-schedule-but-not-in-the-worklist">A study is
 on the schedule but not in the worklist</h2>
 <p>In order of likelihood:</p>
@@ -909,8 +1033,9 @@ Never invent one</td>
 <td>One worklist cycle, printed to the screen. Nothing else runs</td>
 </tr>
 <tr class="even">
-<td><code>AutoTasks.exe --mwl-selftest &lt;dir&gt;</code></td>
-<td>Publishes one fake study, with no database connection</td>
+<td><code>AutoTasks.exe --mwl-selftest &lt;dir&gt; [modality] [station AE]</code></td>
+<td>Publishes one fake study, with no database connection. Give it a
+station AE title to prove a station-filtering scanner</td>
 </tr>
 <tr class="odd">
 <td><code>Test-Mwl.ps1</code></td>
@@ -977,6 +1102,15 @@ time</td>
 <tr class="odd">
 <td>Referring physician</td>
 <td>The order’s requesting physician, else the encounter’s doctor</td>
+</tr>
+<tr class="even">
+<td>Scheduled station AE title</td>
+<td>The scanner it is booked on, from Imaging Stations. Absent when that
+(location, modality) is not mapped</td>
+</tr>
+<tr class="odd">
+<td>Station name and location</td>
+<td>The same row’s label and the encounter’s site, for display</td>
 </tr>
 <tr class="even">
 <td>Study identifier</td>

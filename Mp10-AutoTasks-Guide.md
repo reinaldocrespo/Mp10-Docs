@@ -1640,6 +1640,8 @@ Then search it for `EmitWorklistFiles` — that is the part the machines see:
 | `purged` | Files removed — cancelled studies, studies past the window, and anything else that was in the directory |
 | `no modality (not emitted)` | Studies held back because their revenue code does not say what kind of study they are. **These are invisible to every machine.** Non-imaging orders — laboratory, office visits — are counted here too and belong here |
 | `write failures` | Should always be `0`. Anything else is a permissions or disk problem on the worklist directory |
+| `published with NO station` | How many studies carry no imaging station. They answer a modality-and-date query but are invisible to a scanner filtering by station AE title. The line names example location/modality pairs — those are the missing **Imaging Stations** rows |
+| `station routing is OFF` | The imaging stations table is absent or unreadable. The worklist is still published; nothing is routed |
 | `no .wl written -- AUTOTASKS/MWL_SPOOL_PATH is empty` | The path is not set, so nothing is published |
 | `ABORTED -- AUTOTASKS/MWL_SPOOL_PATH does not exist` | The path is set but wrong, or the directory was deleted |
 

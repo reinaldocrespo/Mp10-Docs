@@ -90,11 +90,12 @@ because changing them afterwards means visiting every scanner:
 | **Worklist directory** | `C:\Mp10Mwl\worklists` | Where the files live. Local disk, not a network share |
 
 You also need, for each scanner: its **AE title**, its **IP address**, and —
-this one is easy to forget — **which fields it filters its query by**. Almost
-all filter by modality and date, which is what Mp10 publishes. A scanner that
-filters by *Scheduled Station AE Title* will match nothing, because Mp10 has no
-concept of a station to put there. Find that out during the first scanner test,
-not during a clinic.
+this one is easy to forget — **which fields it filters its query by**. Most
+filter by modality and date. Some also filter by *Scheduled Station AE Title*
+— "only my work" — which Mp10 supports and which is how you stop three CTs
+showing each other's patients, but which needs the mapping in *Sending each
+scanner its own work* filled in first. Find that out during the first scanner
+test, not during a clinic.
 
 ## Install the DICOM server
 
@@ -224,12 +225,80 @@ If step 2 works and step 3 does not, the problem is in the **data**: nothing
 scheduled in the window, or revenue codes not mapped. If step 2 fails too, the
 problem is in the **DICOM half**, and step 1 says which part.
 
+# Sending each scanner its own work
+
+With one CT, every CT study can go to every CT and nothing is wrong. With three,
+a technologist at one site should not be looking at another site's patients to
+find today's list.
+
+DICOM's answer is **Scheduled Station AE Title**: the worklist entry says which
+station the study is booked on, and each scanner asks only for its own. Mp10
+has no station field on an order — nobody chooses a scanner when the study is
+ordered — so the station is **derived**:
+
+```
+   the encounter's location   (admit type: "San Francisco", "Mariolga" ...)
+                +
+   the study's modality       (from the revenue code: CT, US, DX ...)
+                |
+                v
+   Tables -> Imaging Stations  ->  AE title the scanner calls itself
+```
+
+Nothing is typed at order entry, and adding a scanner is one row in **Admin10 →
+Tables → Imaging Stations**, not a code change.
+
+## The rows
+
+| Field | What it is |
+|---|---|
+| **Location** | Must match the encounter type used for that site. Spelling matters, capitalisation does not |
+| **Modality** | `CT`, `MR`, `DX`, `US`, `MG` — the same value the revenue code maps to |
+| **AE Title** | What the scanner calls itself when it asks for its worklist. This is the field that does the routing |
+| **Station Name** | Free label, shown on some consoles |
+| **Notes** | For people, not for DICOM — room, vendor, whoever to call |
+| **Inactive** | Tick to stop routing to it without deleting the row |
+
+One row per location and modality. **Two X-ray rooms in the same building share
+a worklist** — that is Phase 1 as designed, not a fault. Splitting them needs a
+finer key than location and modality (body part is the intended next step).
+
+## Fill it in before you switch a scanner to station filtering
+
+The order matters, for the reason in the troubleshooting chapter: a scanner that
+filters by station sees nothing for any location and modality you have not
+mapped.
+
+1. Add a row for every (location, modality) that scanner will ask for.
+2. Watch `AutoTasks.out` — `published with NO station` should not name that
+   scanner's pairs any more. `AutoTasks.exe --mwl-run` gives the answer in
+   seconds rather than at the next cycle.
+3. Prove it before real work depends on it:
+   ```
+   AutoTasks.exe --mwl-selftest c:\Mp10Mwl\worklists CT SFCT01
+   ```
+   That publishes one obviously-fake study booked on `SFCT01`. The scanner
+   configured as `SFCT01` should see it; the others should not.
+4. Then switch the scanner to filter by station AE title.
+
+Reverse the order and the symptom is an empty worklist on a machine that was
+working ten minutes ago.
+
+## What it does not change
+
+A scanner that filters by **modality and date** is unaffected by any of this.
+It sees every study of its modality, mapped or not, exactly as before. You can
+run a mixed estate — some devices station-filtered, some not — and the only
+rule is the one above: any device that filters by station needs its pairs
+mapped.
+
 # Day to day
 
 ## Where things are
 
 | | |
 |---|---|
+| Imaging stations | Admin10 -> Tables -> **Imaging Stations** |
 | Worklist files | `C:\Mp10Mwl\worklists\<order number>.wl` |
 | AutoTasks log | `AutoTasks.out`, beside `AutoTasks.exe` |
 | Orthanc logs | `C:\Program Files\Orthanc Server\Logs` |
@@ -251,6 +320,9 @@ An order is on the worklist when **all** of these are true:
 Nothing is ticked per order. An order that meets those tests is on the
 worklist; one that stops meeting them comes off it, and its file is deleted
 within a couple of minutes.
+
+Whether a given scanner then *sees* it is a second question, answered by
+*Sending each scanner its own work*.
 
 ## Cancelling is not deleting
 
@@ -352,16 +424,33 @@ after the last file check rather than before. Run the check again.
 | Times out with no response | Firewall, or the wrong port. `Test-Mwl.ps1` confirms the port is listening and the rule is enabled — from there it is the network between the two |
 | Connects, returns nothing, no error | It is reaching the server. This is now a data or matching problem, not a connection one |
 
-## The scanner filters by station
+## A station-filtering scanner sees nothing
 
 Some equipment queries by **Scheduled Station AE Title** — "only show me work
-booked for *this* machine". Mp10 has no concept of a station to book work to,
-so it publishes no station name, and such a query matches nothing while every
-other scanner works perfectly.
+booked for *this* machine". That works, and it is how you keep three CTs from
+all showing each other's patients (see *Sending each scanner its own work*).
+It has one sharp edge:
 
-If a device behaves that way, configure it to filter by **modality and date**
-instead. That is what the worklist is built around, and what every other device
-does by default.
+> **A study with no station is invisible to a scanner that filters by station.**
+> Not "shown anyway" — invisible. Measured: 65 X-ray studies scheduled for one
+> day answered a modality-and-date query and returned **zero** to an X-ray
+> scanner asking by its own AE title, because no station was mapped for that
+> location and modality.
+
+So the mapping and the scanner configuration are one job, not two. Either:
+
+- every location and modality that scanner needs has a row in **Imaging
+  Stations**, or
+- that scanner filters by **modality and date** only.
+
+`AutoTasks.out` counts the gap every cycle:
+
+```
+EmitWorklistFiles: published with NO station -- invisible to any scanner that
+filters by station AE title   135   example location/modality   Degetau/US San Francisco/DX ...
+```
+
+Those example pairs are exactly the rows missing from Imaging Stations.
 
 ## A study is on the schedule but not in the worklist
 
@@ -405,7 +494,7 @@ In order of likelihood:
 | Command | What it does |
 |---|---|
 | `AutoTasks.exe --mwl-run` | One worklist cycle, printed to the screen. Nothing else runs |
-| `AutoTasks.exe --mwl-selftest <dir>` | Publishes one fake study, with no database connection |
+| `AutoTasks.exe --mwl-selftest <dir> [modality] [station AE]` | Publishes one fake study, with no database connection. Give it a station AE title to prove a station-filtering scanner |
 | `Test-Mwl.ps1` | Reads both halves and reports what is wrong. Changes nothing |
 | `Test-Mwl.ps1 -ExpectedSpoolPath <dir>` | Also confirms both halves use the same directory |
 | `Install-Mwl.ps1` | Installs or repairs the DICOM server. Safe to re-run |
@@ -423,6 +512,8 @@ In order of likelihood:
 | Modality | The revenue code's modality |
 | Scheduled date and time | The order's start date, else the encounter's admission date and time |
 | Referring physician | The order's requesting physician, else the encounter's doctor |
+| Scheduled station AE title | The scanner it is booked on, from Imaging Stations. Absent when that (location, modality) is not mapped |
+| Station name and location | The same row's label and the encounter's site, for display |
 | Study identifier | Issued once by Mp10 and never changed |
 
 The study identifier is worth understanding: it is issued when the study first
