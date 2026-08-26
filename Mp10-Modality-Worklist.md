@@ -76,6 +76,12 @@ already sends to your imaging system keep flowing exactly as before.
 The worklist server stores no images. It is configured to refuse them
 outright — it must never quietly become a second archive.
 
+> **The worklist files themselves are patient data.** Each one carries a name,
+> a date of birth and a medical record number. Keep the directory on local
+> disk, off any share, and out of anything that copies folders to a cloud
+> service. Orthanc's own web port is bound to the server's loopback address for
+> the same reason: it is a health check, not a viewer.
+
 # Installing
 
 ## Before you start
@@ -142,6 +148,11 @@ Then run a **file check** in Admin10. The table is created during that check
 and at no other time — setting this *after* a check has run does nothing until
 the next one.
 
+Station routing needs **data dictionary 10.72 or later**. The same file check
+creates `mwlstations` and grants rights on it; until it has run, the generator
+logs `station routing is OFF` and publishes every study unrouted — safe, but
+Imaging Stations will not appear in Admin10.
+
 **2. Turn the generator on.**
 
 | Section | Entry | Set to |
@@ -150,7 +161,9 @@ the next one.
 | `AUTOTASKS` | `MWL_SPOOL_PATH` | the worklist directory, e.g. `C:\Mp10Mwl\worklists` |
 | `AUTOTASKS` | `MWL_WINDOW_DAYS` | `1` unless you have a reason |
 
-Then **restart the AutoTasks service** — settings are read at start-up.
+No restart is needed. **AutoTasks re-reads every setting at the start of each
+cycle**, so a change takes effect within a couple of minutes. (If you are
+watching for it, `AutoTasks.exe --mwl-run` applies it immediately.)
 
 > These entries usually exist already, set to `NO` or blank. That is Mp10
 > writing down a question it asked, not somebody else's change. Your value
@@ -237,7 +250,7 @@ has no station field on an order — nobody chooses a scanner when the study is
 ordered — so the station is **derived**:
 
 ```
-   the encounter's location   (admit type: "San Francisco", "Mariolga" ...)
+   the encounter's location   (admit type: "Site A", "Site B" ...)
                 +
    the study's modality       (from the revenue code: CT, US, DX ...)
                 |
@@ -282,7 +295,7 @@ finer key than location and modality (body part is the intended next step).
 
 | | |
 |---|---|
-| **Location** | The encounter types you already use. If encounters are opened as `San Francisco`, `Mariolga` and `Degetau`, those are the three values — typed the same way, not abbreviated |
+| **Location** | The encounter types you already use. If encounters are opened as `Site A`, `Site B` and `Site C`, those are the three values — typed exactly as they appear on the encounter, not abbreviated |
 | **Modality** | Whatever the revenue codes map to. If no revenue code maps to `MR`, a station for `MR` will never be used, and the screen says so when you save |
 | **AE Title** | **From the scanner, not from you.** It is the name the device calls *itself* in its worklist query — read it off the machine's DICOM configuration, or ask whoever installed it. Up to 16 characters, no spaces. Getting this wrong is invisible: the row saves, looks right, and routes nothing |
 
@@ -292,15 +305,16 @@ Three buildings, one CT and one X-ray room in each:
 
 | Location | Modality | AE Title | Station Name | Notes |
 |---|---|---|---|---|
-| San Francisco | CT | `SFCT01` | SF CT | Siemens, room 2 |
-| San Francisco | DX | `SFDX01` | SF X-ray | |
-| Mariolga | CT | `MGCT01` | Mariolga CT | |
-| Mariolga | DX | `MGDX01` | Mariolga X-ray | |
-| Degetau | CT | `DGCT01` | Degetau CT | |
-| Degetau | DX | `DGDX01` | Degetau X-ray | |
+| Site A | CT | `SITEA_CT` | Site A CT | Siemens, room 2 |
+| Site A | DX | `SITEA_DX` | Site A X-ray | |
+| Site B | CT | `SITEB_CT` | Site B CT | |
+| Site B | DX | `SITEB_DX` | Site B X-ray | |
+| Site C | CT | `SITEC_CT` | Site C CT | |
+| Site C | DX | `SITEC_DX` | Site C X-ray | |
 
-Six rows, and a CT study opened at Mariolga now goes to `MGCT01` and to no
-other machine.
+Six rows, and a CT study opened at Site B now goes to `SITEB_CT` and to no
+other machine. Substitute your own encounter types and the AE titles the
+devices actually use.
 
 ### What the screen checks
 
@@ -330,10 +344,10 @@ mapped.
    seconds rather than at the next cycle.
 3. Prove it before real work depends on it:
    ```
-   AutoTasks.exe --mwl-selftest c:\Mp10Mwl\worklists CT SFCT01
+   AutoTasks.exe --mwl-selftest c:\Mp10Mwl\worklists CT SITEB_CT
    ```
-   That publishes one obviously-fake study booked on `SFCT01`. The scanner
-   configured as `SFCT01` should see it; the others should not.
+   That publishes one obviously-fake study booked on `SITEB_CT`. The scanner
+   configured as `SITEB_CT` should see it; the others should not.
 4. Then switch the scanner to filter by station AE title.
 
 Reverse the order and the symptom is an empty worklist on a machine that was
@@ -379,6 +393,17 @@ within a couple of minutes.
 Whether a given scanner then *sees* it is a second question, answered by
 *Sending each scanner its own work*.
 
+## A finished study stays on the list
+
+Nothing tells Mp10 that a scan has been performed — the equipment reports that
+to the PACS, not to the worklist — so a study that has already been done
+remains on the worklist until its date falls outside the window, usually the
+next day. That is normal, and every modality worklist behaves this way;
+technologists work from the list and ignore what they have already done.
+
+If it is a nuisance, the answer is a narrower `MWL_WINDOW_DAYS` (`0` = today
+only), not a change of procedure.
+
 ## Cancelling is not deleting
 
 When a study falls off the worklist its file is removed but its **entry is kept
@@ -407,6 +432,35 @@ that last number is the one with work behind it.
 
 `written` is high on the first cycle after a change and `0` the rest of the
 time. `write failures` should always be `0`.
+
+Two more lines appear once station routing is in play:
+
+```
+EmitWorklistFiles: published with NO station -- invisible to any scanner that
+filters by station AE title   135   example location/modality   SiteC/US SiteA/DX
+EmitWorklistFiles: station routing is OFF -- no mwlstations, or it cannot be read
+```
+
+The first counts studies that no Imaging Stations row matched, and names
+examples — those are the rows to add. The second means the table is absent or
+unreadable: expected before the 10.72 file check has run, worth investigating
+after it.
+
+## Turning it off
+
+Setting `AUTOTASKS / EXPORT_MWL` to `NO` stops the generator — and **leaves the
+files it has already written**. Orthanc goes on serving them, so the scanners
+keep seeing a worklist that has quietly stopped being true, which is worse than
+no worklist at all.
+
+To stop publishing properly:
+
+1. set `EXPORT_MWL` to `NO`,
+2. wait one cycle, then **delete the `.wl` files** in the worklist directory.
+
+To stop one *site or modality* rather than everything, tick **Inactive** on its
+Imaging Stations row instead; the generator keeps publishing, and those studies
+simply stop carrying a station.
 
 ## Adding a scanner
 
@@ -478,6 +532,7 @@ after the last file check rather than before. Run the check again.
 | Association rejected, or refused | The server was installed with `-Modality` and this scanner is not on the list, or it is querying from a different IP than the one recorded |
 | Times out with no response | Firewall, or the wrong port. `Test-Mwl.ps1` confirms the port is listening and the rule is enabled — from there it is the network between the two |
 | Connects, returns nothing, no error | It is reaching the server. This is now a data or matching problem, not a connection one |
+| Returns nothing, and the device's clock is wrong | The scanner asks for *its* today. If its date differs from the server's, the dates do not match and nothing comes back. Check the clock on the device before looking anywhere else |
 
 ## A station-filtering scanner sees nothing
 
@@ -502,7 +557,7 @@ So the mapping and the scanner configuration are one job, not two. Either:
 
 ```
 EmitWorklistFiles: published with NO station -- invisible to any scanner that
-filters by station AE title   135   example location/modality   Degetau/US San Francisco/DX ...
+filters by station AE title   135   example location/modality   SiteC/US SiteA/DX ...
 ```
 
 Those example pairs are exactly the rows missing from Imaging Stations.
@@ -531,6 +586,8 @@ In order of likelihood:
 | Laboratory and office-visit orders are counted as "no modality" | They are not imaging, and belong in that count. It is not a number that must reach zero — only the imaging codes in it matter |
 | The worklist directory contains a `.tmp` file for a moment | Files are written under a temporary name and renamed, so a scanner can never read a half-written one |
 | Orthanc refuses a C-STORE | Deliberate. This server serves worklists and must never become an image archive |
+| The worklist directory was emptied by hand, or restored from backup | Nothing to do. The generator compares what is on disk, not only what it remembers writing, so the files come back on the next cycle |
+| A study that has already been scanned is still on the list | Expected — see *A finished study stays on the list* |
 
 # Reference
 

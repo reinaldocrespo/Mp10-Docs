@@ -118,9 +118,14 @@ Every setting has four parts:
 > matched by name. A misspelled entry is not an error — it is simply a setting
 > nobody reads, so the feature stays switched off with no warning.
 
-Settings are read when AutoTasks starts. **After changing anything in this
-guide, restart the AutoTasks service** so it picks up the new values. *(IT
-task.)*
+**AutoTasks re-reads its settings at the start of every cycle**, so a change
+you make in the System Registry takes effect within a couple of minutes. There
+is nothing to restart.
+
+The exception is anything the service holds in memory rather than reads: the
+daily jobs remember that they have already run today, so a backup that has
+already failed today will not try again until tomorrow unless the service is
+restarted (see *Backups*).
 
 # Backups
 
@@ -1211,7 +1216,8 @@ The screenshot in *Where settings live* shows exactly this entry being edited.
 > setting. If `EOBIMAGESPATH` has a value, remittance processing is on; if it is
 > blank, it is off. Include the trailing backslash.
 
-Restart the AutoTasks service after setting it. *(IT task.)*
+It takes effect on the next cycle — a couple of minutes — with nothing to
+restart.
 
 ## Step 3 — Save your remittance PDFs there
 
@@ -1476,8 +1482,8 @@ and at no other time.
 |---|---|---|
 | `AUTOTASKS` | `EXPORT_MWL` | `YES` |
 
-Then **restart the AutoTasks service** *(IT task)*. Settings are read when the
-service starts.
+That takes effect on the next cycle, a couple of minutes later; settings are
+re-read every cycle and nothing needs restarting.
 
 ## The settings
 
@@ -1674,7 +1680,7 @@ happen. Almost every question below is answered by a line in that file.
 |---|---|
 | Is the service running? | Windows **Services**, look for the Mp10 AutoTasks service *(IT task)* |
 | Is it writing to the log? | Check the timestamp on `AutoTasks.out` — it should update every couple of minutes |
-| Were settings changed and the service not restarted? | Restart it; settings are read at start-up |
+| Were settings changed less than a cycle ago? | Wait one cycle — they are re-read every time, no restart needed. If a change has still not taken effect after that, check the spelling of the entry: a misspelt one is a setting nobody reads |
 
 ## The backup never runs
 

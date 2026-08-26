@@ -545,9 +545,13 @@ guide.</strong> They are matched by name. A misspelled entry is not an
 error — it is simply a setting nobody reads, so the feature stays
 switched off with no warning.</p>
 </blockquote>
-<p>Settings are read when AutoTasks starts. <strong>After changing
-anything in this guide, restart the AutoTasks service</strong> so it
-picks up the new values. <em>(IT task.)</em></p>
+<p><strong>AutoTasks re-reads its settings at the start of every
+cycle</strong>, so a change you make in the System Registry takes effect
+within a couple of minutes. There is nothing to restart.</p>
+<p>The exception is anything the service holds in memory rather than
+reads: the daily jobs remember that they have already run today, so a
+backup that has already failed today will not try again until tomorrow
+unless the service is restarted (see <em>Backups</em>).</p>
 <h1 id="backups">Backups</h1>
 <p>AutoTasks can take an <strong>Advantage Database Server hot
 backup</strong> — a consistent copy of your live data taken while people
@@ -2260,8 +2264,8 @@ separate “enable” setting. If <code>EOBIMAGESPATH</code> has a value,
 remittance processing is on; if it is blank, it is off. Include the
 trailing backslash.</p>
 </blockquote>
-<p>Restart the AutoTasks service after setting it. <em>(IT
-task.)</em></p>
+<p>It takes effect on the next cycle — a couple of minutes — with
+nothing to restart.</p>
 <h2 id="step-3-save-your-remittance-pdfs-there">Step 3 — Save your
 remittance PDFs there</h2>
 <p>Download the remittance PDF from your insurer’s portal as you
@@ -2653,8 +2657,8 @@ on</h3>
 </tr>
 </tbody>
 </table>
-<p>Then <strong>restart the AutoTasks service</strong> <em>(IT
-task)</em>. Settings are read when the service starts.</p>
+<p>That takes effect on the next cycle, a couple of minutes later;
+settings are re-read every cycle and nothing needs restarting.</p>
 <h2 id="the-settings-1">The settings</h2>
 <table>
 <colgroup>
@@ -2987,8 +2991,10 @@ service <em>(IT task)</em></td>
 every couple of minutes</td>
 </tr>
 <tr class="odd">
-<td>Were settings changed and the service not restarted?</td>
-<td>Restart it; settings are read at start-up</td>
+<td>Were settings changed less than a cycle ago?</td>
+<td>Wait one cycle — they are re-read every time, no restart needed. If
+a change has still not taken effect after that, check the spelling of
+the entry: a misspelt one is a setting nobody reads</td>
 </tr>
 </tbody>
 </table>

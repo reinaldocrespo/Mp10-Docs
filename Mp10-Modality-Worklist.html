@@ -194,9 +194,13 @@ it in before you switch a scanner to station filtering</a></li>
 are</a></li>
 <li><a href="#which-studies-appear" id="toc-which-studies-appear">Which
 studies appear</a></li>
+<li><a href="#a-finished-study-stays-on-the-list" id="toc-a-finished-study-stays-on-the-list">A finished study stays on
+the list</a></li>
 <li><a href="#cancelling-is-not-deleting" id="toc-cancelling-is-not-deleting">Cancelling is not deleting</a></li>
 <li><a href="#what-a-healthy-log-looks-like" id="toc-what-a-healthy-log-looks-like">What a healthy log looks
 like</a></li>
+<li><a href="#turning-it-off" id="toc-turning-it-off">Turning it
+off</a></li>
 <li><a href="#adding-a-scanner" id="toc-adding-a-scanner">Adding a
 scanner</a></li>
 </ul></li>
@@ -305,6 +309,14 @@ orders Mp10 already sends to your imaging system keep flowing exactly as
 before.</p>
 <p>The worklist server stores no images. It is configured to refuse them
 outright — it must never quietly become a second archive.</p>
+<blockquote>
+<p><strong>The worklist files themselves are patient data.</strong> Each
+one carries a name, a date of birth and a medical record number. Keep
+the directory on local disk, off any share, and out of anything that
+copies folders to a cloud service. Orthanc’s own web port is bound to
+the server’s loopback address for the same reason: it is a health check,
+not a viewer.</p>
+</blockquote>
 <h1 id="installing">Installing</h1>
 <h2 id="before-you-start">Before you start</h2>
 <p>You need three answers. Get them from whoever configures the imaging
@@ -399,6 +411,11 @@ order:</p>
 <p>Then run a <strong>file check</strong> in Admin10. The table is
 created during that check and at no other time — setting this
 <em>after</em> a check has run does nothing until the next one.</p>
+<p>Station routing needs <strong>data dictionary 10.72 or
+later</strong>. The same file check creates <code>mwlstations</code> and
+grants rights on it; until it has run, the generator logs
+<code>station routing is OFF</code> and publishes every study unrouted —
+safe, but Imaging Stations will not appear in Admin10.</p>
 <p><strong>2. Turn the generator on.</strong></p>
 <table>
 <colgroup>
@@ -431,8 +448,10 @@ created during that check and at no other time — setting this
 </tr>
 </tbody>
 </table>
-<p>Then <strong>restart the AutoTasks service</strong> — settings are
-read at start-up.</p>
+<p>No restart is needed. <strong>AutoTasks re-reads every setting at the
+start of each cycle</strong>, so a change takes effect within a couple
+of minutes. (If you are watching for it,
+<code>AutoTasks.exe --mwl-run</code> applies it immediately.)</p>
 <blockquote>
 <p>These entries usually exist already, set to <code>NO</code> or blank.
 That is Mp10 writing down a question it asked, not somebody else’s
@@ -496,7 +515,7 @@ worklist entry says which station the study is booked on, and each
 scanner asks only for its own. Mp10 has no station field on an order —
 nobody chooses a scanner when the study is ordered — so the station is
 <strong>derived</strong>:</p>
-<pre><code>   the encounter&#39;s location   (admit type: &quot;San Francisco&quot;, &quot;Mariolga&quot; ...)
+<pre><code>   the encounter&#39;s location   (admit type: &quot;Site A&quot;, &quot;Site B&quot; ...)
                 +
    the study&#39;s modality       (from the revenue code: CT, US, DX ...)
                 |
@@ -577,8 +596,8 @@ not a fault. Splitting them needs a finer key than location and modality
 <tr class="odd">
 <td><strong>Location</strong></td>
 <td>The encounter types you already use. If encounters are opened as
-<code>San Francisco</code>, <code>Mariolga</code> and
-<code>Degetau</code>, those are the three values — typed the same way,
+<code>Site A</code>, <code>Site B</code> and <code>Site C</code>, those
+are the three values — typed exactly as they appear on the encounter,
 not abbreviated</td>
 </tr>
 <tr class="even">
@@ -611,51 +630,52 @@ looks right, and routes nothing</td>
 </thead>
 <tbody>
 <tr class="odd">
-<td>San Francisco</td>
+<td>Site A</td>
 <td>CT</td>
-<td><code>SFCT01</code></td>
-<td>SF CT</td>
+<td><code>SITEA_CT</code></td>
+<td>Site A CT</td>
 <td>Siemens, room 2</td>
 </tr>
 <tr class="even">
-<td>San Francisco</td>
+<td>Site A</td>
 <td>DX</td>
-<td><code>SFDX01</code></td>
-<td>SF X-ray</td>
+<td><code>SITEA_DX</code></td>
+<td>Site A X-ray</td>
 <td></td>
 </tr>
 <tr class="odd">
-<td>Mariolga</td>
+<td>Site B</td>
 <td>CT</td>
-<td><code>MGCT01</code></td>
-<td>Mariolga CT</td>
+<td><code>SITEB_CT</code></td>
+<td>Site B CT</td>
 <td></td>
 </tr>
 <tr class="even">
-<td>Mariolga</td>
+<td>Site B</td>
 <td>DX</td>
-<td><code>MGDX01</code></td>
-<td>Mariolga X-ray</td>
+<td><code>SITEB_DX</code></td>
+<td>Site B X-ray</td>
 <td></td>
 </tr>
 <tr class="odd">
-<td>Degetau</td>
+<td>Site C</td>
 <td>CT</td>
-<td><code>DGCT01</code></td>
-<td>Degetau CT</td>
+<td><code>SITEC_CT</code></td>
+<td>Site C CT</td>
 <td></td>
 </tr>
 <tr class="even">
-<td>Degetau</td>
+<td>Site C</td>
 <td>DX</td>
-<td><code>DGDX01</code></td>
-<td>Degetau X-ray</td>
+<td><code>SITEC_DX</code></td>
+<td>Site C X-ray</td>
 <td></td>
 </tr>
 </tbody>
 </table>
-<p>Six rows, and a CT study opened at Mariolga now goes to
-<code>MGCT01</code> and to no other machine.</p>
+<p>Six rows, and a CT study opened at Site B now goes to
+<code>SITEB_CT</code> and to no other machine. Substitute your own
+encounter types and the AE titles the devices actually use.</p>
 <h3 id="what-the-screen-checks">What the screen checks</h3>
 <p>It <strong>refuses</strong> a row with no Location, no Modality or no
 AE Title (a row with no AE title routes nothing — it exists only to be
@@ -683,9 +703,9 @@ for.</p></li>
 pairs any more. <code>AutoTasks.exe --mwl-run</code> gives the answer in
 seconds rather than at the next cycle.</p></li>
 <li><p>Prove it before real work depends on it:</p>
-<pre><code>AutoTasks.exe --mwl-selftest c:\Mp10Mwl\worklists CT SFCT01</code></pre>
+<pre><code>AutoTasks.exe --mwl-selftest c:\Mp10Mwl\worklists CT SITEB_CT</code></pre>
 <p>That publishes one obviously-fake study booked on
-<code>SFCT01</code>. The scanner configured as <code>SFCT01</code>
+<code>SITEB_CT</code>. The scanner configured as <code>SITEB_CT</code>
 should see it; the others should not.</p></li>
 <li><p>Then switch the scanner to filter by station AE title.</p></li>
 </ol>
@@ -752,6 +772,17 @@ the worklist; one that stops meeting them comes off it, and its file is
 deleted within a couple of minutes.</p>
 <p>Whether a given scanner then <em>sees</em> it is a second question,
 answered by <em>Sending each scanner its own work</em>.</p>
+<h2 id="a-finished-study-stays-on-the-list">A finished study stays on
+the list</h2>
+<p>Nothing tells Mp10 that a scan has been performed — the equipment
+reports that to the PACS, not to the worklist — so a study that has
+already been done remains on the worklist until its date falls outside
+the window, usually the next day. That is normal, and every modality
+worklist behaves this way; technologists work from the list and ignore
+what they have already done.</p>
+<p>If it is a nuisance, the answer is a narrower
+<code>MWL_WINDOW_DAYS</code> (<code>0</code> = today only), not a change
+of procedure.</p>
 <h2 id="cancelling-is-not-deleting">Cancelling is not deleting</h2>
 <p>When a study falls off the worklist its file is removed but its
 <strong>entry is kept and marked cancelled</strong>. Re-open the
@@ -774,6 +805,30 @@ a modality — that last number is the one with work behind it.</p>
 <p><code>written</code> is high on the first cycle after a change and
 <code>0</code> the rest of the time. <code>write failures</code> should
 always be <code>0</code>.</p>
+<p>Two more lines appear once station routing is in play:</p>
+<pre><code>EmitWorklistFiles: published with NO station -- invisible to any scanner that
+filters by station AE title   135   example location/modality   SiteC/US SiteA/DX
+EmitWorklistFiles: station routing is OFF -- no mwlstations, or it cannot be read</code></pre>
+<p>The first counts studies that no Imaging Stations row matched, and
+names examples — those are the rows to add. The second means the table
+is absent or unreadable: expected before the 10.72 file check has run,
+worth investigating after it.</p>
+<h2 id="turning-it-off">Turning it off</h2>
+<p>Setting <code>AUTOTASKS / EXPORT_MWL</code> to <code>NO</code> stops
+the generator — and <strong>leaves the files it has already
+written</strong>. Orthanc goes on serving them, so the scanners keep
+seeing a worklist that has quietly stopped being true, which is worse
+than no worklist at all.</p>
+<p>To stop publishing properly:</p>
+<ol type="1">
+<li>set <code>EXPORT_MWL</code> to <code>NO</code>,</li>
+<li>wait one cycle, then <strong>delete the <code>.wl</code>
+files</strong> in the worklist directory.</li>
+</ol>
+<p>To stop one <em>site or modality</em> rather than everything, tick
+<strong>Inactive</strong> on its Imaging Stations row instead; the
+generator keeps publishing, and those studies simply stop carrying a
+station.</p>
 <h2 id="adding-a-scanner">Adding a scanner</h2>
 <ol type="1">
 <li>On the scanner, configure the worklist source: <strong>called AE
@@ -996,6 +1051,12 @@ between the two</td>
 <td>It is reaching the server. This is now a data or matching problem,
 not a connection one</td>
 </tr>
+<tr class="odd">
+<td>Returns nothing, and the device’s clock is wrong</td>
+<td>The scanner asks for <em>its</em> today. If its date differs from
+the server’s, the dates do not match and nothing comes back. Check the
+clock on the device before looking anywhere else</td>
+</tr>
 </tbody>
 </table>
 <h2 id="a-station-filtering-scanner-sees-nothing">A station-filtering
@@ -1022,7 +1083,7 @@ only.</li>
 </ul>
 <p><code>AutoTasks.out</code> counts the gap every cycle:</p>
 <pre><code>EmitWorklistFiles: published with NO station -- invisible to any scanner that
-filters by station AE title   135   example location/modality   Degetau/US San Francisco/DX ...</code></pre>
+filters by station AE title   135   example location/modality   SiteC/US SiteA/DX ...</code></pre>
 <p>Those example pairs are exactly the rows missing from Imaging
 Stations.</p>
 <h2 id="a-study-is-on-the-schedule-but-not-in-the-worklist">A study is
@@ -1088,6 +1149,16 @@ can never read a half-written one</td>
 <td>Orthanc refuses a C-STORE</td>
 <td>Deliberate. This server serves worklists and must never become an
 image archive</td>
+</tr>
+<tr class="odd">
+<td>The worklist directory was emptied by hand, or restored from
+backup</td>
+<td>Nothing to do. The generator compares what is on disk, not only what
+it remembers writing, so the files come back on the next cycle</td>
+</tr>
+<tr class="even">
+<td>A study that has already been scanned is still on the list</td>
+<td>Expected — see <em>A finished study stays on the list</em></td>
 </tr>
 </tbody>
 </table>
