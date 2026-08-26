@@ -373,7 +373,7 @@ mapped.
 | Orthanc logs | `C:\Program Files\Orthanc Server\Logs` |
 | Orthanc configuration | `C:\Program Files\Orthanc Server\Configuration\orthanc.json` and `worklists.json` |
 | Health check | `http://127.0.0.1:8042/system` on the server itself |
-| What is published right now | `http://127.0.0.1:8042/worklists` |
+| What is published right now | `http://127.0.0.1:8042/worklists` — see *Seeing exactly what a scanner would get* |
 
 ## Which studies appear
 
@@ -462,6 +462,61 @@ To stop one *site or modality* rather than everything, tick **Inactive** on its
 Imaging Stations row instead; the generator keeps publishing, and those studies
 simply stop carrying a station.
 
+## Seeing exactly what a scanner would get
+
+The log says how many studies were published. This says **what is in them**,
+decoded, without a scanner or any DICOM tooling. On the server itself:
+
+| | |
+|---|---|
+| `http://127.0.0.1:8042/worklists` | every published entry |
+| `http://127.0.0.1:8042/worklists/<order number>` | just that one, e.g. `.../worklists/OR26-00046110` |
+
+The entry id **is** the Mp10 order number, so a question that starts "is order
+OR26-00046110 on the worklist, and does it say the right thing?" is one URL.
+
+```json
+{
+   "ID" : "OR26-00046110",
+   "Tags" : {
+      "AccessionNumber" : "EN26-00281843",
+      "PatientID" : "00100947",
+      "PatientName" : "PEREZ ALVIRA^INGRID",
+      "ReferringPhysicianName" : "SALGUEIRO^JESUS M",
+      "ScheduledProcedureStepSequence" : [ {
+         "Modality" : "CT",
+         "ScheduledProcedureStepStartDate" : "20260826",
+         "ScheduledStationAETitle" : "SITEB_CT",
+         "ScheduledStationName" : "Site B CT"
+      } ],
+      "StudyInstanceUID" : "2.25.1553995747295557493394282228217242855"
+   }
+}
+```
+
+What to look at, in the order it usually matters:
+
+- **`ScheduledStationAETitle`** — the routing answer. **Absent** means no
+  Imaging Stations row matched, so a station-filtering scanner will not see
+  this study.
+- **`Modality`** — must be exactly what the scanner asks for. A study with no
+  modality is never published at all, so if it is here, it has one.
+- **`ScheduledProcedureStepStartDate`** — the day the scanner has to ask for.
+- **`PatientName`** and **`AccessionNumber`** — what the technologist will see,
+  and what ties the images back to the encounter.
+
+Three things to know about this page:
+
+> It is bound to the server's **loopback address**, so it only opens on the
+> server itself — not from a workstation, by design. It shows **patient data**,
+> so treat the browser window as you would any clinical screen. And it is
+> **not** the worklist users are meant to read: that is the Worklist page in
+> Mp10 Web.
+
+If it answers **HTTP 400** instead of a list, something in the worklist
+directory is not readable as DICOM — see the troubleshooting chapter. Scanners
+are unaffected in that state; only this listing breaks.
+
 ## Adding a scanner
 
 1. On the scanner, configure the worklist source: **called AE title**, **host**
@@ -490,7 +545,7 @@ Work down this list; each step rules something out.
 |---|---|---|---|
 | 1 | Are files being written? | Look in the worklist directory | Go to *Nothing is being published* |
 | 2 | Do the two halves agree on the directory? | `Test-Mwl.ps1 -ExpectedSpoolPath <the Mp10 setting>` | Fix `MWL_SPOOL_PATH`, or re-run `Install-Mwl.ps1` with `-SpoolPath` |
-| 3 | Is Orthanc actually serving? | `Test-Mwl.ps1` — "Worklist plugin is serving *n* entries" | Go to *The server is not answering* |
+| 3 | Is Orthanc actually serving? | `Test-Mwl.ps1` — "Worklist plugin is serving *n* entries", or open `http://127.0.0.1:8042/worklists` and read one | Go to *The server is not answering* |
 | 4 | Does the scanner reach it? | `--mwl-selftest`, then query from the scanner | Go to *The scanner cannot connect* |
 | 5 | Does the scanner filter by something we do not publish? | Ask it to query with no filters, or by date only | See *The scanner filters by station* |
 

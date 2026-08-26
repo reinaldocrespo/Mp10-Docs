@@ -22,6 +22,70 @@ margin: 0 0.8em 0.2em -1.6em;
 vertical-align: middle;
 }
 .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
   <style type="text/css">
 :root {
@@ -201,6 +265,8 @@ the list</a></li>
 like</a></li>
 <li><a href="#turning-it-off" id="toc-turning-it-off">Turning it
 off</a></li>
+<li><a href="#seeing-exactly-what-a-scanner-would-get" id="toc-seeing-exactly-what-a-scanner-would-get">Seeing exactly what a
+scanner would get</a></li>
 <li><a href="#adding-a-scanner" id="toc-adding-a-scanner">Adding a
 scanner</a></li>
 </ul></li>
@@ -752,7 +818,8 @@ and <code>worklists.json</code></td>
 </tr>
 <tr class="odd">
 <td>What is published right now</td>
-<td><code>http://127.0.0.1:8042/worklists</code></td>
+<td><code>http://127.0.0.1:8042/worklists</code> — see <em>Seeing
+exactly what a scanner would get</em></td>
 </tr>
 </tbody>
 </table>
@@ -829,6 +896,72 @@ files</strong> in the worklist directory.</li>
 <strong>Inactive</strong> on its Imaging Stations row instead; the
 generator keeps publishing, and those studies simply stop carrying a
 station.</p>
+<h2 id="seeing-exactly-what-a-scanner-would-get">Seeing exactly what a
+scanner would get</h2>
+<p>The log says how many studies were published. This says <strong>what
+is in them</strong>, decoded, without a scanner or any DICOM tooling. On
+the server itself:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><code>http://127.0.0.1:8042/worklists</code></td>
+<td>every published entry</td>
+</tr>
+<tr class="even">
+<td><code>http://127.0.0.1:8042/worklists/&lt;order number&gt;</code></td>
+<td>just that one, e.g. <code>.../worklists/OR26-00046110</code></td>
+</tr>
+</tbody>
+</table>
+<p>The entry id <strong>is</strong> the Mp10 order number, so a question
+that starts “is order OR26-00046110 on the worklist, and does it say the
+right thing?” is one URL.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>   <span class="dt">&quot;ID&quot;</span> <span class="fu">:</span> <span class="st">&quot;OR26-00046110&quot;</span><span class="fu">,</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>   <span class="dt">&quot;Tags&quot;</span> <span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;AccessionNumber&quot;</span> <span class="fu">:</span> <span class="st">&quot;EN26-00281843&quot;</span><span class="fu">,</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;PatientID&quot;</span> <span class="fu">:</span> <span class="st">&quot;00100947&quot;</span><span class="fu">,</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;PatientName&quot;</span> <span class="fu">:</span> <span class="st">&quot;PEREZ ALVIRA^INGRID&quot;</span><span class="fu">,</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;ReferringPhysicianName&quot;</span> <span class="fu">:</span> <span class="st">&quot;SALGUEIRO^JESUS M&quot;</span><span class="fu">,</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;ScheduledProcedureStepSequence&quot;</span> <span class="fu">:</span> <span class="ot">[</span> <span class="fu">{</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>         <span class="dt">&quot;Modality&quot;</span> <span class="fu">:</span> <span class="st">&quot;CT&quot;</span><span class="fu">,</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>         <span class="dt">&quot;ScheduledProcedureStepStartDate&quot;</span> <span class="fu">:</span> <span class="st">&quot;20260826&quot;</span><span class="fu">,</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>         <span class="dt">&quot;ScheduledStationAETitle&quot;</span> <span class="fu">:</span> <span class="st">&quot;SITEB_CT&quot;</span><span class="fu">,</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>         <span class="dt">&quot;ScheduledStationName&quot;</span> <span class="fu">:</span> <span class="st">&quot;Site B CT&quot;</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span> <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;StudyInstanceUID&quot;</span> <span class="fu">:</span> <span class="st">&quot;2.25.1553995747295557493394282228217242855&quot;</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>   <span class="fu">}</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>What to look at, in the order it usually matters:</p>
+<ul>
+<li><strong><code>ScheduledStationAETitle</code></strong> — the routing
+answer. <strong>Absent</strong> means no Imaging Stations row matched,
+so a station-filtering scanner will not see this study.</li>
+<li><strong><code>Modality</code></strong> — must be exactly what the
+scanner asks for. A study with no modality is never published at all, so
+if it is here, it has one.</li>
+<li><strong><code>ScheduledProcedureStepStartDate</code></strong> — the
+day the scanner has to ask for.</li>
+<li><strong><code>PatientName</code></strong> and
+<strong><code>AccessionNumber</code></strong> — what the technologist
+will see, and what ties the images back to the encounter.</li>
+</ul>
+<p>Three things to know about this page:</p>
+<blockquote>
+<p>It is bound to the server’s <strong>loopback address</strong>, so it
+only opens on the server itself — not from a workstation, by design. It
+shows <strong>patient data</strong>, so treat the browser window as you
+would any clinical screen. And it is <strong>not</strong> the worklist
+users are meant to read: that is the Worklist page in Mp10 Web.</p>
+</blockquote>
+<p>If it answers <strong>HTTP 400</strong> instead of a list, something
+in the worklist directory is not readable as DICOM — see the
+troubleshooting chapter. Scanners are unaffected in that state; only
+this listing breaks.</p>
 <h2 id="adding-a-scanner">Adding a scanner</h2>
 <ol type="1">
 <li>On the scanner, configure the worklist source: <strong>called AE
@@ -888,7 +1021,8 @@ empty</h2>
 <td>3</td>
 <td>Is Orthanc actually serving?</td>
 <td><code>Test-Mwl.ps1</code> — “Worklist plugin is serving <em>n</em>
-entries”</td>
+entries”, or open <code>http://127.0.0.1:8042/worklists</code> and read
+one</td>
 <td>Go to <em>The server is not answering</em></td>
 </tr>
 <tr class="even">
