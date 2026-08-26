@@ -245,8 +245,23 @@ ordered — so the station is **derived**:
    Tables -> Imaging Stations  ->  AE title the scanner calls itself
 ```
 
-Nothing is typed at order entry, and adding a scanner is one row in **Admin10 →
-Tables → Imaging Stations**, not a code change.
+Nothing is typed at order entry, and adding a scanner is one row in the
+**Imaging Stations** screen, not a code change.
+
+## Where the screen is
+
+**Admin10 → the "Tables" panel on the left → Imaging Stations**, between
+*Referring Phys* and *Fee Schedule*. It is a long list; the entry is about
+two-thirds of the way down.
+
+> **If it is not there**, the feature is switched off in this dictionary. The
+> link only appears where `GENERAL / MODALITY-WORKLIST` is `YES` — the same
+> setting that decides whether the table exists at all, so a link to a missing
+> table can never appear. Set it, run **Update Data Dictionary**, and restart
+> Admin10: the panel is built once, when the program starts.
+
+The screen also needs the dictionary at **version 10.72 or later**. Opening it
+against an older one says so rather than failing quietly.
 
 ## The rows
 
@@ -262,6 +277,46 @@ Tables → Imaging Stations**, not a code change.
 One row per location and modality. **Two X-ray rooms in the same building share
 a worklist** — that is Phase 1 as designed, not a fault. Splitting them needs a
 finer key than location and modality (body part is the intended next step).
+
+### Where each value comes from
+
+| | |
+|---|---|
+| **Location** | The encounter types you already use. If encounters are opened as `San Francisco`, `Mariolga` and `Degetau`, those are the three values — typed the same way, not abbreviated |
+| **Modality** | Whatever the revenue codes map to. If no revenue code maps to `MR`, a station for `MR` will never be used, and the screen says so when you save |
+| **AE Title** | **From the scanner, not from you.** It is the name the device calls *itself* in its worklist query — read it off the machine's DICOM configuration, or ask whoever installed it. Up to 16 characters, no spaces. Getting this wrong is invisible: the row saves, looks right, and routes nothing |
+
+### A worked example
+
+Three buildings, one CT and one X-ray room in each:
+
+| Location | Modality | AE Title | Station Name | Notes |
+|---|---|---|---|---|
+| San Francisco | CT | `SFCT01` | SF CT | Siemens, room 2 |
+| San Francisco | DX | `SFDX01` | SF X-ray | |
+| Mariolga | CT | `MGCT01` | Mariolga CT | |
+| Mariolga | DX | `MGDX01` | Mariolga X-ray | |
+| Degetau | CT | `DGCT01` | Degetau CT | |
+| Degetau | DX | `DGDX01` | Degetau X-ray | |
+
+Six rows, and a CT study opened at Mariolga now goes to `MGCT01` and to no
+other machine.
+
+### What the screen checks
+
+It **refuses** a row with no Location, no Modality or no AE Title (a row with no
+AE title routes nothing — it exists only to be misread later), an AE title
+containing a space, and a second row for a location and modality that already
+has one.
+
+It **asks** — rather than refuses — when the Location matches no encounter type
+or the Modality matches no revenue code, because a site may map a scanner before
+its first study goes through it. A typo produces exactly that question, so read
+it rather than clicking past it.
+
+Location and Modality **cannot be edited afterwards**: changing either is
+indistinguishable from adding the station somewhere else, and would leave the
+old pairing routed to nothing. Delete the row and add it again.
 
 ## Fill it in before you switch a scanner to station filtering
 

@@ -174,7 +174,16 @@ order</a></li>
 <li><a href="#sending-each-scanner-its-own-work" id="toc-sending-each-scanner-its-own-work">Sending each scanner its own
 work</a>
 <ul>
-<li><a href="#the-rows" id="toc-the-rows">The rows</a></li>
+<li><a href="#where-the-screen-is" id="toc-where-the-screen-is">Where
+the screen is</a></li>
+<li><a href="#the-rows" id="toc-the-rows">The rows</a>
+<ul>
+<li><a href="#where-each-value-comes-from" id="toc-where-each-value-comes-from">Where each value comes
+from</a></li>
+<li><a href="#a-worked-example" id="toc-a-worked-example">A worked
+example</a></li>
+<li><a href="#what-the-screen-checks" id="toc-what-the-screen-checks">What the screen checks</a></li>
+</ul></li>
 <li><a href="#fill-it-in-before-you-switch-a-scanner-to-station-filtering" id="toc-fill-it-in-before-you-switch-a-scanner-to-station-filtering">Fill
 it in before you switch a scanner to station filtering</a></li>
 <li><a href="#what-it-does-not-change" id="toc-what-it-does-not-change">What it does not change</a></li>
@@ -494,8 +503,24 @@ nobody chooses a scanner when the study is ordered — so the station is
                 v
    Tables -&gt; Imaging Stations  -&gt;  AE title the scanner calls itself</code></pre>
 <p>Nothing is typed at order entry, and adding a scanner is one row in
-<strong>Admin10 → Tables → Imaging Stations</strong>, not a code
-change.</p>
+the <strong>Imaging Stations</strong> screen, not a code change.</p>
+<h2 id="where-the-screen-is">Where the screen is</h2>
+<p><strong>Admin10 → the “Tables” panel on the left → Imaging
+Stations</strong>, between <em>Referring Phys</em> and <em>Fee
+Schedule</em>. It is a long list; the entry is about two-thirds of the
+way down.</p>
+<blockquote>
+<p><strong>If it is not there</strong>, the feature is switched off in
+this dictionary. The link only appears where
+<code>GENERAL / MODALITY-WORKLIST</code> is <code>YES</code> — the same
+setting that decides whether the table exists at all, so a link to a
+missing table can never appear. Set it, run <strong>Update Data
+Dictionary</strong>, and restart Admin10: the panel is built once, when
+the program starts.</p>
+</blockquote>
+<p>The screen also needs the dictionary at <strong>version 10.72 or
+later</strong>. Opening it against an older one says so rather than
+failing quietly.</p>
 <h2 id="the-rows">The rows</h2>
 <table>
 <colgroup>
@@ -542,6 +567,109 @@ the field that does the routing</td>
 same building share a worklist</strong> — that is Phase 1 as designed,
 not a fault. Splitting them needs a finer key than location and modality
 (body part is the intended next step).</p>
+<h3 id="where-each-value-comes-from">Where each value comes from</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>Location</strong></td>
+<td>The encounter types you already use. If encounters are opened as
+<code>San Francisco</code>, <code>Mariolga</code> and
+<code>Degetau</code>, those are the three values — typed the same way,
+not abbreviated</td>
+</tr>
+<tr class="even">
+<td><strong>Modality</strong></td>
+<td>Whatever the revenue codes map to. If no revenue code maps to
+<code>MR</code>, a station for <code>MR</code> will never be used, and
+the screen says so when you save</td>
+</tr>
+<tr class="odd">
+<td><strong>AE Title</strong></td>
+<td><strong>From the scanner, not from you.</strong> It is the name the
+device calls <em>itself</em> in its worklist query — read it off the
+machine’s DICOM configuration, or ask whoever installed it. Up to 16
+characters, no spaces. Getting this wrong is invisible: the row saves,
+looks right, and routes nothing</td>
+</tr>
+</tbody>
+</table>
+<h3 id="a-worked-example">A worked example</h3>
+<p>Three buildings, one CT and one X-ray room in each:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Location</th>
+<th>Modality</th>
+<th>AE Title</th>
+<th>Station Name</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>San Francisco</td>
+<td>CT</td>
+<td><code>SFCT01</code></td>
+<td>SF CT</td>
+<td>Siemens, room 2</td>
+</tr>
+<tr class="even">
+<td>San Francisco</td>
+<td>DX</td>
+<td><code>SFDX01</code></td>
+<td>SF X-ray</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Mariolga</td>
+<td>CT</td>
+<td><code>MGCT01</code></td>
+<td>Mariolga CT</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Mariolga</td>
+<td>DX</td>
+<td><code>MGDX01</code></td>
+<td>Mariolga X-ray</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Degetau</td>
+<td>CT</td>
+<td><code>DGCT01</code></td>
+<td>Degetau CT</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Degetau</td>
+<td>DX</td>
+<td><code>DGDX01</code></td>
+<td>Degetau X-ray</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Six rows, and a CT study opened at Mariolga now goes to
+<code>MGCT01</code> and to no other machine.</p>
+<h3 id="what-the-screen-checks">What the screen checks</h3>
+<p>It <strong>refuses</strong> a row with no Location, no Modality or no
+AE Title (a row with no AE title routes nothing — it exists only to be
+misread later), an AE title containing a space, and a second row for a
+location and modality that already has one.</p>
+<p>It <strong>asks</strong> — rather than refuses — when the Location
+matches no encounter type or the Modality matches no revenue code,
+because a site may map a scanner before its first study goes through it.
+A typo produces exactly that question, so read it rather than clicking
+past it.</p>
+<p>Location and Modality <strong>cannot be edited afterwards</strong>:
+changing either is indistinguishable from adding the station somewhere
+else, and would leave the old pairing routed to nothing. Delete the row
+and add it again.</p>
 <h2 id="fill-it-in-before-you-switch-a-scanner-to-station-filtering">Fill it
 in before you switch a scanner to station filtering</h2>
 <p>The order matters, for the reason in the troubleshooting chapter: a
