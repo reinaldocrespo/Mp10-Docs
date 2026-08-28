@@ -517,6 +517,50 @@ If it answers **HTTP 400** instead of a list, something in the worklist
 directory is not readable as DICOM — see the troubleshooting chapter. Scanners
 are unaffected in that state; only this listing breaks.
 
+## Older equipment that "needs its own worklist server"
+
+Some legacy devices — older ultrasound systems in particular — are said to need
+a worklist server of their own. Usually they do not. What they have is a fixed
+setting you cannot change on the device, and the mismatch shows up at the
+console as *cannot connect*, which reads like an incompatibility rather than a
+configuration difference.
+
+Three fixed settings account for most of it:
+
+| The device insists on | What to do |
+|---|---|
+| **A particular Called AE title** it will not let you edit | Install with `-AcceptAnyCalledAet`. The server then answers whatever a device calls it. Verified against devices calling `PHILIPS_MWL`, `WORKLIST` and `HDI5000` |
+| **Port 104**, the standard DICOM port | `-DicomPort 104`. Nothing else changes |
+| **Querying with almost no filters** — no date, sometimes not even a modality | Already handled. This server answers a query with an empty Scheduled Procedure Step, or none at all, by returning everything |
+
+```
+.\Install-Mwl.ps1 -DicomPort 104 -AcceptAnyCalledAet
+```
+
+> `-AcceptAnyCalledAet` is a real loosening: any host that can reach the port is
+> answered, whatever it calls itself. Pair it with `-Modality`, which restricts
+> by source address, and prefer changing the device where the device allows it.
+
+**Before assuming a device cannot do this at all**, two checks settle it in
+minutes:
+
+1. **Point it at this server and read the log.** Set Orthanc to verbose
+   (`Invoke-RestMethod http://127.0.0.1:8042/tools/log-level -Method Put -Body
+   verbose`), have the device query, then read the newest file in
+   `C:\Program Files\Orthanc Server\Logs`. It shows the association — what
+   the device called itself and called us — and the query it sent. Put the
+   level back to `default` afterwards.
+2. **Read the vendor's DICOM conformance statement** for that model and
+   software version. It states plainly whether *Modality Worklist Information
+   Model — FIND* is supported as an SCU, and which keys the device sends. If
+   worklist is absent from that document, the device genuinely cannot do it and
+   no server-side change will help.
+
+If it turns out the device does not speak worklist at all, the only routes are
+a software option or upgrade from the vendor, or the interface box the site is
+presumably already running — and that is worth knowing definitely rather than
+by inference.
+
 ## Adding a scanner
 
 1. On the scanner, configure the worklist source: **called AE title**, **host**
@@ -664,7 +708,8 @@ In order of likelihood:
 | `AutoTasks.exe --mwl-selftest <dir> [modality] [station AE]` | Publishes one fake study, with no database connection. Give it a station AE title to prove a station-filtering scanner |
 | `Test-Mwl.ps1` | Reads both halves and reports what is wrong. Changes nothing |
 | `Test-Mwl.ps1 -ExpectedSpoolPath <dir>` | Also confirms both halves use the same directory |
-| `Install-Mwl.ps1` | Installs or repairs the DICOM server. Safe to re-run |
+| `Install-Mwl.ps1` | Installs or repairs the DICOM server. Safe to re-run, including while it is running |
+| `Install-Mwl.ps1 -AcceptAnyCalledAet` | Answers whatever Called AE title a device uses — for legacy equipment whose worklist AE title is fixed |
 
 ## What each worklist entry carries
 

@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-08-26" />
+  <meta name="dcterms.date" content="2026-08-28" />
   <title>Mp10 Modality Worklist</title>
   <style>
 code{white-space: pre-wrap;}
@@ -212,7 +212,7 @@ a { color: inherit; }
 <p class="subtitle">Installing, running and troubleshooting the DICOM
 worklist server</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">26 August 2026</p>
+<p class="date">28 August 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -267,6 +267,8 @@ like</a></li>
 off</a></li>
 <li><a href="#seeing-exactly-what-a-scanner-would-get" id="toc-seeing-exactly-what-a-scanner-would-get">Seeing exactly what a
 scanner would get</a></li>
+<li><a href="#older-equipment-that-needs-its-own-worklist-server" id="toc-older-equipment-that-needs-its-own-worklist-server">Older
+equipment that “needs its own worklist server”</a></li>
 <li><a href="#adding-a-scanner" id="toc-adding-a-scanner">Adding a
 scanner</a></li>
 </ul></li>
@@ -962,6 +964,74 @@ users are meant to read: that is the Worklist page in Mp10 Web.</p>
 in the worklist directory is not readable as DICOM — see the
 troubleshooting chapter. Scanners are unaffected in that state; only
 this listing breaks.</p>
+<h2 id="older-equipment-that-needs-its-own-worklist-server">Older
+equipment that “needs its own worklist server”</h2>
+<p>Some legacy devices — older ultrasound systems in particular — are
+said to need a worklist server of their own. Usually they do not. What
+they have is a fixed setting you cannot change on the device, and the
+mismatch shows up at the console as <em>cannot connect</em>, which reads
+like an incompatibility rather than a configuration difference.</p>
+<p>Three fixed settings account for most of it:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>The device insists on</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>A particular Called AE title</strong> it will not let you
+edit</td>
+<td>Install with <code>-AcceptAnyCalledAet</code>. The server then
+answers whatever a device calls it. Verified against devices calling
+<code>PHILIPS_MWL</code>, <code>WORKLIST</code> and
+<code>HDI5000</code></td>
+</tr>
+<tr class="even">
+<td><strong>Port 104</strong>, the standard DICOM port</td>
+<td><code>-DicomPort 104</code>. Nothing else changes</td>
+</tr>
+<tr class="odd">
+<td><strong>Querying with almost no filters</strong> — no date,
+sometimes not even a modality</td>
+<td>Already handled. This server answers a query with an empty Scheduled
+Procedure Step, or none at all, by returning everything</td>
+</tr>
+</tbody>
+</table>
+<pre><code>.\Install-Mwl.ps1 -DicomPort 104 -AcceptAnyCalledAet</code></pre>
+<blockquote>
+<p><code>-AcceptAnyCalledAet</code> is a real loosening: any host that
+can reach the port is answered, whatever it calls itself. Pair it with
+<code>-Modality</code>, which restricts by source address, and prefer
+changing the device where the device allows it.</p>
+</blockquote>
+<p><strong>Before assuming a device cannot do this at all</strong>, two
+checks settle it in minutes:</p>
+<ol type="1">
+<li><strong>Point it at this server and read the log.</strong> Set
+Orthanc to verbose
+(<code>Invoke-RestMethod http://127.0.0.1:8042/tools/log-level -Method Put -Body    verbose</code>),
+have the device query, then read the newest file in
+<code>C:\Program Files\Orthanc Server\Logs</code>. It shows the
+association — what the device called itself and called us — and the
+query it sent. Put the level back to <code>default</code>
+afterwards.</li>
+<li><strong>Read the vendor’s DICOM conformance statement</strong> for
+that model and software version. It states plainly whether <em>Modality
+Worklist Information Model — FIND</em> is supported as an SCU, and which
+keys the device sends. If worklist is absent from that document, the
+device genuinely cannot do it and no server-side change will help.</li>
+</ol>
+<p>If it turns out the device does not speak worklist at all, the only
+routes are a software option or upgrade from the vendor, or the
+interface box the site is presumably already running — and that is worth
+knowing definitely rather than by inference.</p>
 <h2 id="adding-a-scanner">Adding a scanner</h2>
 <ol type="1">
 <li>On the scanner, configure the worklist source: <strong>called AE
@@ -1380,7 +1450,13 @@ station AE title to prove a station-filtering scanner</td>
 </tr>
 <tr class="odd">
 <td><code>Install-Mwl.ps1</code></td>
-<td>Installs or repairs the DICOM server. Safe to re-run</td>
+<td>Installs or repairs the DICOM server. Safe to re-run, including
+while it is running</td>
+</tr>
+<tr class="even">
+<td><code>Install-Mwl.ps1 -AcceptAnyCalledAet</code></td>
+<td>Answers whatever Called AE title a device uses — for legacy
+equipment whose worklist AE title is fixed</td>
 </tr>
 </tbody>
 </table>
