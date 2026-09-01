@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-08-28" />
+  <meta name="dcterms.date" content="2026-09-01" />
   <title>Mp10 Modality Worklist</title>
   <style>
 code{white-space: pre-wrap;}
@@ -212,7 +212,7 @@ a { color: inherit; }
 <p class="subtitle">Installing, running and troubleshooting the DICOM
 worklist server</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">28 August 2026</p>
+<p class="date">01 September 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -271,6 +271,13 @@ scanner would get</a></li>
 equipment that “needs its own worklist server”</a></li>
 <li><a href="#adding-a-scanner" id="toc-adding-a-scanner">Adding a
 scanner</a></li>
+<li><a href="#philips-iu22-and-ie33-software-6.x" id="toc-philips-iu22-and-ie33-software-6.x">Philips iU22 and iE33,
+software 6.x</a>
+<ul>
+<li><a href="#on-the-scanner" id="toc-on-the-scanner">On the
+scanner</a></li>
+<li><a href="#proving-it" id="toc-proving-it">Proving it</a></li>
+</ul></li>
 </ul></li>
 <li><a href="#troubleshooting" id="toc-troubleshooting">Troubleshooting</a>
 <ul>
@@ -1045,6 +1052,148 @@ reports as “cannot connect”.</li>
 <li>Use <code>--mwl-selftest</code> (above) for the first query rather
 than a real patient.</li>
 </ol>
+<h2 id="philips-iu22-and-ie33-software-6.x">Philips iU22 and iE33,
+software 6.x</h2>
+<p>The commonest “legacy ultrasound” at a site, and the machine most
+often given as the reason for keeping a second worklist server. It does
+not need one. Its conformance statement (iU22/iE33 R6.0.X.X, document
+000168000000037) describes an ordinary Modality Worklist SCU: Implicit
+and Explicit VR Little Endian, ISO_IR 100 for characters — which is
+exactly what Mp10 publishes — and an automatic query of <strong>modality
+plus today’s date</strong>, which every published entry answers.</p>
+<p>Three of its habits are worth knowing before configuring it:</p>
+<ul>
+<li>It <strong>abandons the whole update</strong> on any response status
+but success or pending. There is no partial worklist and no retry queue,
+so if the server is down the console says <em>query failed</em> and
+keeps the list it already had. That is the machine working correctly,
+not a fault to chase.</li>
+<li>It queries <strong>the one worklist device selected</strong> on the
+Device Selection page. Selecting ours is what stops it reading the old
+server.</li>
+<li>Its query has three <strong>optional</strong> extra filters — AE
+Title, Station Name, System Location. Tick only AE Title, for the reason
+in the warning below.</li>
+</ul>
+<h3 id="on-the-scanner">On the scanner</h3>
+<p><strong>1. Add the device.</strong>
+<code>Setups &gt; Print/Network &gt; Global Config &gt; Devices &gt; New Device</code></p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Device Type</td>
+<td><strong>DICOM Worklist Server</strong></td>
+</tr>
+<tr class="even">
+<td>Device Name</td>
+<td>anything — an alias for the console’s own lists</td>
+</tr>
+<tr class="odd">
+<td>AE Title</td>
+<td>the server’s called AE title, <code>MP10MWL</code> unless it was
+installed with another. Exact, or the association is refused</td>
+</tr>
+<tr class="even">
+<td>IP Address</td>
+<td>the worklist server</td>
+</tr>
+<tr class="odd">
+<td>Port</td>
+<td><code>104</code>, or whatever <code>-DicomPort</code> the server was
+installed with</td>
+</tr>
+</tbody>
+</table>
+<p>Press <strong>Verify</strong> before going any further. That is a
+C-ECHO, and it settles network, firewall, port and AE title in one
+click.</p>
+<p><strong>2. Point it at us.</strong>
+<code>Setups &gt; Print/Network &gt; Device Selection &gt; Worklist</code></p>
+<p>Select the new device. <strong>This is the cutover.</strong> Leave
+the previous worklist device defined but unselected, so going back is
+one click rather than a re-typed configuration.</p>
+<p>In the <strong>Define Query</strong> section, tick <strong>AE
+Title</strong> only; modality stays <code>US</code>. Set the automatic
+update interval (15–120 minutes) and/or on End Exam to suit the
+department.</p>
+<p><strong>3. Change nothing on
+<code>Global Config &gt; System</code>.</strong> The AE Title there —
+the name the scanner calls <em>itself</em> — is the value the Imaging
+Stations row routes on. Changing it empties the worklist, and the row
+still looks right.</p>
+<blockquote>
+<p><strong>Do not tick Station Name or System Location.</strong> They
+buy nothing that AE Title does not already do, and AE Title is the field
+you control from Imaging Stations. System Location is worse than
+redundant: the server matches it <strong>case-sensitively</strong>
+(measured), and the value in the worklist entry is the encounter’s
+location exactly as it is spelled in the <strong>Admission
+Types</strong> table — so it would have to be typed on every scanner
+character for character, and re-typed on all of them if that table is
+ever re-worded. Ticking either one also hides the
+<code>--mwl-selftest</code> entry, which carries labels of its own.</p>
+</blockquote>
+<h3 id="proving-it">Proving it</h3>
+<p><em>Prove it, in the right order</em> applies unchanged. On this
+machine the steps land as:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Do this</th>
+<th>It tells you</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Test-Mwl.ps1 -ExpectedSpoolPath &lt;dir&gt;</code></td>
+<td>the server is healthy and both halves agree on the directory</td>
+</tr>
+<tr class="even">
+<td><strong>Verify</strong> on the scanner’s new device entry</td>
+<td>network, port, called AE title</td>
+</tr>
+<tr class="odd">
+<td><code>AutoTasks.exe --mwl-selftest &lt;dir&gt; US &lt;the scanner&#39;s own AE title&gt;</code>,
+then <strong>Update Worklist</strong></td>
+<td>expect <code>MP10 SELFTEST / DO NOT SCAN</code>. Proves the file
+format and station routing with no patient data involved</td>
+</tr>
+<tr class="even">
+<td><code>AutoTasks.exe --mwl-run</code>, then open
+<code>http://127.0.0.1:8042/worklists/&lt;a US order number&gt;</code>
+on the server</td>
+<td>confirms <code>ScheduledStationAETitle</code> is present. If it is
+absent, no Imaging Stations row matched, and nothing will appear on the
+scanner</td>
+</tr>
+<tr class="odd">
+<td><strong>Update Worklist</strong> again</td>
+<td>real patients, right names, accession = encounter number</td>
+</tr>
+<tr class="even">
+<td>Scan one patient from the list and find the study in the PACS</td>
+<td>the acceptance test. Mp10 issues the Study Instance UID now, so this
+is the step that proves the loop closes</td>
+</tr>
+</tbody>
+</table>
+<p>If this scanner’s own AE title or port could not be changed — on this
+model both can — the fallbacks under <em>Older equipment that “needs its
+own worklist server”</em> apply unchanged.</p>
 <h1 id="troubleshooting">Troubleshooting</h1>
 <p>Almost every worklist problem is one of two questions, and telling
 them apart is most of the work:</p>

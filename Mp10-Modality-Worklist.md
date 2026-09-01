@@ -571,6 +571,84 @@ by inference.
    association, which the scanner usually reports as "cannot connect".
 3. Use `--mwl-selftest` (above) for the first query rather than a real patient.
 
+## Philips iU22 and iE33, software 6.x
+
+The commonest "legacy ultrasound" at a site, and the machine most often given
+as the reason for keeping a second worklist server. It does not need one. Its
+conformance statement (iU22/iE33 R6.0.X.X, document 000168000000037) describes
+an ordinary Modality Worklist SCU: Implicit and Explicit VR Little Endian,
+ISO_IR 100 for characters — which is exactly what Mp10 publishes — and an
+automatic query of **modality plus today's date**, which every published entry
+answers.
+
+Three of its habits are worth knowing before configuring it:
+
+- It **abandons the whole update** on any response status but success or
+  pending. There is no partial worklist and no retry queue, so if the server is
+  down the console says *query failed* and keeps the list it already had. That
+  is the machine working correctly, not a fault to chase.
+- It queries **the one worklist device selected** on the Device Selection page.
+  Selecting ours is what stops it reading the old server.
+- Its query has three **optional** extra filters — AE Title, Station Name,
+  System Location. Tick only AE Title, for the reason in the warning below.
+
+### On the scanner
+
+**1. Add the device.** `Setups > Print/Network > Global Config > Devices > New Device`
+
+| Field | Value |
+|---|---|
+| Device Type | **DICOM Worklist Server** |
+| Device Name | anything — an alias for the console's own lists |
+| AE Title | the server's called AE title, `MP10MWL` unless it was installed with another. Exact, or the association is refused |
+| IP Address | the worklist server |
+| Port | `104`, or whatever `-DicomPort` the server was installed with |
+
+Press **Verify** before going any further. That is a C-ECHO, and it settles
+network, firewall, port and AE title in one click.
+
+**2. Point it at us.** `Setups > Print/Network > Device Selection > Worklist`
+
+Select the new device. **This is the cutover.** Leave the previous worklist
+device defined but unselected, so going back is one click rather than a
+re-typed configuration.
+
+In the **Define Query** section, tick **AE Title** only; modality stays `US`.
+Set the automatic update interval (15–120 minutes) and/or on End Exam to suit
+the department.
+
+**3. Change nothing on `Global Config > System`.** The AE Title there — the
+name the scanner calls *itself* — is the value the Imaging Stations row routes
+on. Changing it empties the worklist, and the row still looks right.
+
+> **Do not tick Station Name or System Location.** They buy nothing that AE
+> Title does not already do, and AE Title is the field you control from
+> Imaging Stations. System Location is worse than redundant: the server matches
+> it **case-sensitively** (measured), and the value in the worklist entry is
+> the encounter's location exactly as it is spelled in the **Admission Types**
+> table — so it would have to be typed on every scanner character for
+> character, and re-typed on all of them if that table is ever re-worded.
+> Ticking either one also hides the `--mwl-selftest` entry, which carries
+> labels of its own.
+
+### Proving it
+
+*Prove it, in the right order* applies unchanged. On this machine the steps
+land as:
+
+| Do this | It tells you |
+|---|---|
+| `Test-Mwl.ps1 -ExpectedSpoolPath <dir>` | the server is healthy and both halves agree on the directory |
+| **Verify** on the scanner's new device entry | network, port, called AE title |
+| `AutoTasks.exe --mwl-selftest <dir> US <the scanner's own AE title>`, then **Update Worklist** | expect `MP10 SELFTEST / DO NOT SCAN`. Proves the file format and station routing with no patient data involved |
+| `AutoTasks.exe --mwl-run`, then open `http://127.0.0.1:8042/worklists/<a US order number>` on the server | confirms `ScheduledStationAETitle` is present. If it is absent, no Imaging Stations row matched, and nothing will appear on the scanner |
+| **Update Worklist** again | real patients, right names, accession = encounter number |
+| Scan one patient from the list and find the study in the PACS | the acceptance test. Mp10 issues the Study Instance UID now, so this is the step that proves the loop closes |
+
+If this scanner's own AE title or port could not be changed — on this model
+both can — the fallbacks under *Older equipment that "needs its own worklist
+server"* apply unchanged.
+
 # Troubleshooting
 
 Almost every worklist problem is one of two questions, and telling them apart
