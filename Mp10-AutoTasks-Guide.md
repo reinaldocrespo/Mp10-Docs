@@ -146,6 +146,22 @@ blank and no backup will ever run.
 
 All three go in section **`BACKUPS`**.
 
+One optional setting lives with them:
+
+| Entry | Example | Default | What it means |
+|---|---|---|---|
+| `BACKUP_MAX_HOURS` | `8` | `8` | How long the database backup may run before AutoTasks is treated as hung and restarted |
+
+AutoTasks watches itself for hangs: if it stops responding, it restarts rather
+than sitting there doing nothing all night. The database backup is the one step
+that legitimately runs for hours, so it gets its own allowance, and
+`BACKUP_MAX_HOURS` is it. Set it comfortably above the longest backup your site
+has ever taken — the completion e-mail tells you what that is.
+
+> **If a backup is cut short you are told about it.** AutoTasks notices at its
+> next start that a backup was running when it stopped, and e-mails
+> `Mp10 backup INTERRUPTED`. See *Being told what happened* below.
+
 ### BACKUP_PATH — read this carefully
 
 This is the one setting people most often get wrong.
@@ -211,6 +227,7 @@ archive, **reads that archive back to check it**, and only then prunes old ones.
 |---|---|---|---|
 | `BACKUP_ZIP_PATH` | `D:\Backups\Zips\` | *(blank)* | Where dated zips are written. Blank = do not zip |
 | `MAX_BACKUPS_TO_KEEP` | `20` | `20` | How many zips to keep. Oldest beyond this are deleted |
+| `ARCHIVE_MAX_HOURS` | `12` | `12` | How long the zip step may run before it is stopped and reported as failed |
 | `FILES_TO_SKIP` | `oldtable.adt;temp.adt` | *(blank)* | Data files to leave out of the backup, separated by semicolons |
 
 Zip files are named by date, so they sort chronologically:
@@ -272,6 +289,18 @@ mistaken for archives or counted as one.
 nothing to learn from half an archive, and keeping a partial copy of a very
 large backup on a disk that has just filled up only makes the next night worse —
 so it is deleted, and the failure e-mail says so.
+
+**It took longer than `ARCHIVE_MAX_HOURS`.** The zip step is stopped, along with
+everything it started, and the night is reported as a failed archive. Whatever
+had been written by then is renamed to `.failed` in the same way, so it cannot
+occupy one of your retention slots as though it were a good backup.
+
+> **A slow archive is not a broken one.** `ARCHIVE_MAX_HOURS` exists only so a
+> zip that will never finish cannot park AutoTasks on it indefinitely — it is
+> not a target. The failure e-mail says how long the archive actually ran; if it
+> was simply still working, raise this number rather than leaving the site with
+> no archive. Zipping a large, image-heavy database can legitimately take many
+> hours.
 
 > **Kept `.failed` files are pruned, but only the most recent few survive.**
 > They do not count towards `MAX_BACKUPS_TO_KEEP`; AutoTasks keeps the last
@@ -400,6 +429,19 @@ today's data is safe in `BACKUP_PATH`; only the zip step failed, so there is no
 dated archive for today and **nothing was rotated or deleted**. Usually a full
 disk, a permission problem on `BACKUP_ZIP_PATH`, or Python missing from the
 server.
+
+**`Mp10 backup INTERRUPTED`** — the backup started and AutoTasks stopped before
+it finished. Whatever is in `BACKUP_PATH` is half a backup and must not be
+relied on; earlier archives are untouched. The service was restarted, the server
+rebooted, or the backup passed `BACKUP_MAX_HOURS` and the hang watchdog
+restarted it. The log says which: look for a `WATCHDOG` line just before the
+restart, and if it is there, raise `BACKUP_MAX_HOURS` — the backup was still
+working when it was cut off.
+
+A backup interrupted **today** is not retried today, for the same reason a
+failed one is not: an hours-long backup that keeps being cut short would
+otherwise restart every couple of minutes for the rest of the day. The e-mail
+says which case you are in.
 
 The message names what actually went wrong and where to look. Two files next to
 the AutoTasks program carry the detail:

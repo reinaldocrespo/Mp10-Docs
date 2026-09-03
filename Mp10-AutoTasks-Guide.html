@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-09-01" />
+  <meta name="dcterms.date" content="2026-09-03" />
   <title>Mp10 AutoTasks — Administrator’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -148,7 +148,7 @@ a { color: inherit; }
 <p class="subtitle">Backups, electronic remittances, modality worklist,
 and automated reports</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">01 September 2026</p>
+<p class="date">03 September 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -592,6 +592,44 @@ Leave any one of them blank and no backup will ever run.</p>
 </tbody>
 </table>
 <p>All three go in section <strong><code>BACKUPS</code></strong>.</p>
+<p>One optional setting lives with them:</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Entry</th>
+<th>Example</th>
+<th>Default</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>BACKUP_MAX_HOURS</code></td>
+<td><code>8</code></td>
+<td><code>8</code></td>
+<td>How long the database backup may run before AutoTasks is treated as
+hung and restarted</td>
+</tr>
+</tbody>
+</table>
+<p>AutoTasks watches itself for hangs: if it stops responding, it
+restarts rather than sitting there doing nothing all night. The database
+backup is the one step that legitimately runs for hours, so it gets its
+own allowance, and <code>BACKUP_MAX_HOURS</code> is it. Set it
+comfortably above the longest backup your site has ever taken — the
+completion e-mail tells you what that is.</p>
+<blockquote>
+<p><strong>If a backup is cut short you are told about it.</strong>
+AutoTasks notices at its next start that a backup was running when it
+stopped, and e-mails <code>Mp10 backup INTERRUPTED</code>. See <em>Being
+told what happened</em> below.</p>
+</blockquote>
 <h3 id="backup_path-read-this-carefully">BACKUP_PATH — read this
 carefully</h3>
 <p>This is the one setting people most often get wrong.</p>
@@ -728,6 +766,13 @@ only then prunes old ones.</p>
 <td>How many zips to keep. Oldest beyond this are deleted</td>
 </tr>
 <tr class="odd">
+<td><code>ARCHIVE_MAX_HOURS</code></td>
+<td><code>12</code></td>
+<td><code>12</code></td>
+<td>How long the zip step may run before it is stopped and reported as
+failed</td>
+</tr>
+<tr class="even">
 <td><code>FILES_TO_SKIP</code></td>
 <td><code>oldtable.adt;temp.adt</code></td>
 <td><em>(blank)</em></td>
@@ -787,6 +832,20 @@ file is truncated. There is nothing to learn from half an archive, and
 keeping a partial copy of a very large backup on a disk that has just
 filled up only makes the next night worse — so it is deleted, and the
 failure e-mail says so.</p>
+<p><strong>It took longer than <code>ARCHIVE_MAX_HOURS</code>.</strong>
+The zip step is stopped, along with everything it started, and the night
+is reported as a failed archive. Whatever had been written by then is
+renamed to <code>.failed</code> in the same way, so it cannot occupy one
+of your retention slots as though it were a good backup.</p>
+<blockquote>
+<p><strong>A slow archive is not a broken one.</strong>
+<code>ARCHIVE_MAX_HOURS</code> exists only so a zip that will never
+finish cannot park AutoTasks on it indefinitely — it is not a target.
+The failure e-mail says how long the archive actually ran; if it was
+simply still working, raise this number rather than leaving the site
+with no archive. Zipping a large, image-heavy database can legitimately
+take many hours.</p>
+</blockquote>
 <blockquote>
 <p><strong>Kept <code>.failed</code> files are pruned, but only the most
 recent few survive.</strong> They do not count towards
@@ -942,6 +1001,19 @@ serious. The backup itself worked and today’s data is safe in
 archive for today and <strong>nothing was rotated or deleted</strong>.
 Usually a full disk, a permission problem on
 <code>BACKUP_ZIP_PATH</code>, or Python missing from the server.</p>
+<p><strong><code>Mp10 backup INTERRUPTED</code></strong> — the backup
+started and AutoTasks stopped before it finished. Whatever is in
+<code>BACKUP_PATH</code> is half a backup and must not be relied on;
+earlier archives are untouched. The service was restarted, the server
+rebooted, or the backup passed <code>BACKUP_MAX_HOURS</code> and the
+hang watchdog restarted it. The log says which: look for a
+<code>WATCHDOG</code> line just before the restart, and if it is there,
+raise <code>BACKUP_MAX_HOURS</code> — the backup was still working when
+it was cut off.</p>
+<p>A backup interrupted <strong>today</strong> is not retried today, for
+the same reason a failed one is not: an hours-long backup that keeps
+being cut short would otherwise restart every couple of minutes for the
+rest of the day. The e-mail says which case you are in.</p>
 <p>The message names what actually went wrong and where to look. Two
 files next to the AutoTasks program carry the detail:</p>
 <table>
