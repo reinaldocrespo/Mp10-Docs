@@ -181,7 +181,7 @@ column</a></li>
 </ul></li>
 <li><a href="#claims" id="toc-claims">Claims</a>
 <ul>
-<li><a href="#the-flag-column" id="toc-the-flag-column">The Flag
+<li><a href="#the-status-column" id="toc-the-status-column">The Status
 column</a></li>
 <li><a href="#what-you-can-do-with-a-claim" id="toc-what-you-can-do-with-a-claim">What you can do with a
 claim</a></li>
@@ -560,7 +560,8 @@ grid rather than showing an empty list.</p>
 <p><strong>Filtering by payer.</strong> The Insurance heading has a
 small funnel; select it to tick one or more payers. The heading is
 highlighted while a filter is on; Clear removes it.</p>
-<h3 id="the-flag-column">The Flag column</h3>
+<h3 id="the-status-column">The Status column</h3>
+<p>The first column shows a coloured flag:</p>
 <table>
 <colgroup>
 <col style="width: 50%" />
@@ -600,9 +601,18 @@ file</td>
 </table>
 <p>The colour is worked out from the claim’s CPT lines and its payments,
 the same figures the balance columns show, so a flag and its row always
-agree. Hover over a flag to read its meaning. <strong>Status</strong>
-shows the newest entry in the claim’s status history and, on hover, the
-date it was received.</p>
+agree. Hover over a flag to read its meaning. <strong>Click a
+flag</strong> to see the claim’s status history — every answer the payer
+has sent, newest first, with the date, the amount, the file it came in
+and any notes.</p>
+<p>The Status heading has a funnel like Insurance’s: tick one or more
+colours (“No flag” is a choice too) and the list narrows to claims in
+that state across the whole window, not only the page on screen.
+Filtering by colour takes a moment longer than the other filters — about
+a second for a month of claims — because each claim’s payments are added
+up to answer it.</p>
+<p><strong>Payer status</strong> shows the newest entry in the claim’s
+status history and, on hover, the date it was received.</p>
 <h3 id="what-you-can-do-with-a-claim">What you can do with a claim</h3>
 <p>Select a row and use the action bar: <strong>Open</strong> shows the
 claim (and lets you edit it if you may edit encounters),
@@ -618,9 +628,13 @@ saving; on a saved claim it is left alone. Performing physician is
 picked from the staff list rather than typed: the staff set up for the
 claim’s payer come first, then everyone else, each shown as number,
 name, NPI and payer.</p>
-<p>Printing needs permission to edit encounters; the button explains
-that on hover if you do not have it. Raising a new claim is done from
-the encounter, not from here — see “Working an encounter”.</p>
+<p>Opening, printing and raising a claim need the billing permission,
+which the desktop Admin module grants to the
+<strong>BillingUsers</strong> group; a button you lack the permission
+for explains that on hover. The Claims page itself appears only for that
+group. Admissions staff still see an encounter’s claims list from
+Encounters, read-only. Raising a new claim is done from the encounter,
+not from here — see “Working an encounter”.</p>
 <h2 id="the-grid-action-bar">The grid action bar</h2>
 <p>The patients list and both encounters grids (the standalone
 Encounters list and the patient’s own Encounters tab) each have a row of
@@ -696,11 +710,12 @@ original widths and order. It leaves your search and filters alone.</p>
 practice’s own lists rather than accepting anything.</p>
 <p><strong>Doctor.</strong> Type an id, or a surname, or a first name,
 and a short list of matches drops down — choose one with the mouse, or
-the arrow keys and Enter. The field beside it then shows <strong>who
-that doctor is</strong>, read-only. With nearly ten thousand doctors on
-file, an id on its own tells you very little, and this is how you
-confirm you picked the right one. Upper or lower case makes no
-difference to the search.</p>
+the arrow keys and Enter. Click the small arrow at the right of the box
+to browse the whole list instead of typing. The field beside it then
+shows <strong>who that doctor is</strong>, read-only. With nearly ten
+thousand doctors on file, an id on its own tells you very little, and
+this is how you confirm you picked the right one. Upper or lower case
+makes no difference to the search.</p>
 <p>If you type an id that does not exist, the box turns red. Nothing
 stops you saving — it is a warning, not a barrier.</p>
 <p><strong>Admitting code.</strong> The same control, against the
@@ -834,6 +849,13 @@ comes from is empty in every dictionary so far, so the column shows
 yet.”</em> That is a data question for your administrator, not a fault
 in this screen.</p>
 </blockquote>
+<p><strong>Source and Station.</strong> Source is the site the encounter
+belongs to. Station is the scanner the entry is routed to — the AE title
+your administrator mapped for that site and modality under Imaging
+Stations in the desktop Admin module. A dash in Station means no mapping
+exists for that pairing; the entry is still in the worklist, but a
+scanner that filters by its own AE title will not see it. That is the
+first thing to check when a machine says its list is empty.</p>
 <ul>
 <li><strong>Search</strong> by patient name or accession number. Case
 does not matter — type <code>rivera</code> or <code>RIVERA</code>,
@@ -841,8 +863,9 @@ whichever is quicker.</li>
 <li><strong>Status</strong> is <strong>Scheduled</strong> by default.
 <strong>Cancelled</strong> shows what has been called off, and
 <strong>All</strong> shows both.</li>
-<li><strong>Modality</strong> is a funnel in that column heading, and
-takes more than one at once — CT and MR together, say.</li>
+<li><strong>Modality</strong> and <strong>Source</strong> are funnels in
+their column headings, and each takes more than one at once — CT and MR
+together, say, or two sites.</li>
 <li><strong>Dates</strong> default to today, plus and minus a day, so a
 procedure scheduled late last night or early tomorrow is still in view.
 <strong>Change them and your window is remembered</strong>, like every

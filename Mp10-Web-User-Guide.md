@@ -337,7 +337,9 @@ it says so above the grid rather than showing an empty list.
 to tick one or more payers. The heading is highlighted while a filter is
 on; Clear removes it.
 
-### The Flag column
+### The Status column
+
+The first column shows a coloured flag:
 
 | Flag | Means |
 |---|---|
@@ -349,8 +351,18 @@ on; Clear removes it.
 
 The colour is worked out from the claim's CPT lines and its payments, the
 same figures the balance columns show, so a flag and its row always agree.
-Hover over a flag to read its meaning. **Status** shows the newest entry
-in the claim's status history and, on hover, the date it was received.
+Hover over a flag to read its meaning. **Click a flag** to see the claim's
+status history — every answer the payer has sent, newest first, with the
+date, the amount, the file it came in and any notes.
+
+The Status heading has a funnel like Insurance's: tick one or more colours
+("No flag" is a choice too) and the list narrows to claims in that state
+across the whole window, not only the page on screen. Filtering by colour
+takes a moment longer than the other filters — about a second for a month
+of claims — because each claim's payments are added up to answer it.
+
+**Payer status** shows the newest entry in the claim's status history and,
+on hover, the date it was received.
 
 ### What you can do with a claim
 
@@ -368,9 +380,12 @@ left alone. Performing physician is picked from the staff list rather than
 typed: the staff set up for the claim's payer come first, then everyone
 else, each shown as number, name, NPI and payer.
 
-Printing needs permission to edit encounters; the button explains that on
-hover if you do not have it. Raising a new claim is done from the
-encounter, not from here — see "Working an encounter".
+Opening, printing and raising a claim need the billing permission, which
+the desktop Admin module grants to the **BillingUsers** group; a button you
+lack the permission for explains that on hover. The Claims page itself
+appears only for that group. Admissions staff still see an encounter's
+claims list from Encounters, read-only. Raising a new claim is done from
+the encounter, not from here — see "Working an encounter".
 
 ## The grid action bar
 
@@ -443,6 +458,8 @@ own lists rather than accepting anything.
 
 **Doctor.** Type an id, or a surname, or a first name, and a short list of
 matches drops down — choose one with the mouse, or the arrow keys and Enter.
+Click the small arrow at the right of the box to browse the whole list
+instead of typing.
 The field beside it then shows **who that doctor is**, read-only. With nearly
 ten thousand doctors on file, an id on its own tells you very little, and
 this is how you confirm you picked the right one. Upper or lower case makes
@@ -579,12 +596,20 @@ scheduled for.
 > *"Nothing to choose from yet."* That is a data question for your
 > administrator, not a fault in this screen.
 
+**Source and Station.** Source is the site the encounter belongs to. Station
+is the scanner the entry is routed to — the AE title your administrator
+mapped for that site and modality under Imaging Stations in the desktop
+Admin module. A dash in Station means no mapping exists for that pairing;
+the entry is still in the worklist, but a scanner that filters by its own AE
+title will not see it. That is the first thing to check when a machine says
+its list is empty.
+
 - **Search** by patient name or accession number. Case does not matter — type
   `rivera` or `RIVERA`, whichever is quicker.
 - **Status** is **Scheduled** by default. **Cancelled** shows what has been
   called off, and **All** shows both.
-- **Modality** is a funnel in that column heading, and takes more than one at
-  once — CT and MR together, say.
+- **Modality** and **Source** are funnels in their column headings, and each
+  takes more than one at once — CT and MR together, say, or two sites.
 - **Dates** default to today, plus and minus a day, so a procedure scheduled
   late last night or early tomorrow is still in view. **Change them and your
   window is remembered**, like every other filter, until you close the
