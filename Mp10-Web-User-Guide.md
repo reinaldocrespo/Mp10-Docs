@@ -58,10 +58,11 @@ here does not change the one you use in the desktop applications.
 
 After signing in you'll see a menu down the left. It only lists the areas you
 have permission to use, so two people may see different menus on the same
-system. The main areas are **Dashboard**, then **Patients**, **Encounters** and
-**Modality worklist** grouped under a **Records** heading. There is also an
-**Admin** heading, and **it starts collapsed** — select it to find **Print
-helper** and **Signature helper**, which are referred to later in this guide.
+system. The main areas are **Dashboard**, then **Patients**, **Encounters**,
+**Claims** and **Modality worklist** grouped under a **Records** heading.
+There is also an **Admin** heading, and **it starts collapsed** — select it
+to find **Print helper** and **Signature helper**, which are referred to
+later in this guide.
 
 **Two ways a button can be unavailable, and they mean different things.** A
 button your account may not use is not shown at all. A button you may use, but
@@ -78,8 +79,8 @@ grids more room. Mp10 Web remembers whether you left it collapsed.
 
 ### What the grids remember
 
-The three big screens — Patients, Encounters and Modality worklist — all
-behave the same way, and both kinds of memory below are per person, so two
+The four big screens — Patients, Encounters, Claims and Modality worklist —
+all behave the same way, and both kinds of memory below are per person, so two
 people sharing a computer keep their own.
 
 **Column widths and order are remembered for good.** Drag a column edge to
@@ -318,6 +319,58 @@ remember which shape is which.
 The column does not sort. Both marks are worked out after the page of
 encounters has already been fetched, so a sort arrow there could not do
 anything, and one that silently did nothing would be worse than none.
+
+## Claims
+
+**Claims**, under Records between Encounters and the Modality worklist,
+lists every claim raised on any patient. It opens showing claims with a
+**service date in the last 30 days**; change the From and To dates to look
+further back, or press **Today**. **Clear** puts the 30-day window back.
+
+**Finding one claim.** The search box takes a claim number (`CL26-…`), an
+encounter number (`EN26-…`) or a patient's record number, and finds it
+regardless of the dates. It does not search by name — for that, find the
+patient and open their record. If you type something it does not recognise
+it says so above the grid rather than showing an empty list.
+
+**Filtering by payer.** The Insurance heading has a small funnel; select it
+to tick one or more payers. The heading is highlighted while a filter is
+on; Clear removes it.
+
+### The Flag column
+
+| Flag | Means |
+|---|---|
+| green | paid in full — a payment is on file and the insurance balance is zero |
+| yellow | partially paid — a payment is on file and a balance is still owed |
+| black | overpaid — the insurance balance is below zero |
+| white | no payment yet, but the payer has answered — a status is on file |
+| none | no payment and no status yet |
+
+The colour is worked out from the claim's CPT lines and its payments, the
+same figures the balance columns show, so a flag and its row always agree.
+Hover over a flag to read its meaning. **Status** shows the newest entry
+in the claim's status history and, on hover, the date it was received.
+
+### What you can do with a claim
+
+Select a row and use the action bar: **Open** shows the claim (and lets you
+edit it if you may edit encounters), **Preview** shows the CMS-1500 as a
+PDF, **Print** sends it to the FORMS printer, and **837** shows the
+electronic claim exactly as it was transmitted — one entry per send, newest
+first, with the segments the payer received. A claim that has never been
+transmitted says so.
+
+**Two boxes fill themselves on a new claim.** Contract starts as the member
+number on the patient's insurance card for the payer being billed, and
+follows the payer if you change it before saving; on a saved claim it is
+left alone. Performing physician is picked from the staff list rather than
+typed: the staff set up for the claim's payer come first, then everyone
+else, each shown as number, name, NPI and payer.
+
+Printing needs permission to edit encounters; the button explains that on
+hover if you do not have it. Raising a new claim is done from the
+encounter, not from here — see "Working an encounter".
 
 ## The grid action bar
 

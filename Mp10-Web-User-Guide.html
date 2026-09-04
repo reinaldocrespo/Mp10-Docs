@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-09-03" />
+  <meta name="dcterms.date" content="2026-09-04" />
   <title>Mp10 Web — User Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -148,7 +148,7 @@ a { color: inherit; }
 <p class="subtitle">Finding patients, working encounters, and everything
 the browser can do</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">03 September 2026</p>
+<p class="date">04 September 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -178,6 +178,13 @@ HIPAA signature</a></li>
 <li><a href="#encounters" id="toc-encounters">Encounters</a></li>
 <li><a href="#the-flags-column" id="toc-the-flags-column">The Flags
 column</a></li>
+</ul></li>
+<li><a href="#claims" id="toc-claims">Claims</a>
+<ul>
+<li><a href="#the-flag-column" id="toc-the-flag-column">The Flag
+column</a></li>
+<li><a href="#what-you-can-do-with-a-claim" id="toc-what-you-can-do-with-a-claim">What you can do with a
+claim</a></li>
 </ul></li>
 <li><a href="#the-grid-action-bar" id="toc-the-grid-action-bar">The grid
 action bar</a>
@@ -263,9 +270,9 @@ applications.</p>
 <p>After signing in you’ll see a menu down the left. It only lists the
 areas you have permission to use, so two people may see different menus
 on the same system. The main areas are <strong>Dashboard</strong>, then
-<strong>Patients</strong>, <strong>Encounters</strong> and
-<strong>Modality worklist</strong> grouped under a
-<strong>Records</strong> heading. There is also an
+<strong>Patients</strong>, <strong>Encounters</strong>,
+<strong>Claims</strong> and <strong>Modality worklist</strong> grouped
+under a <strong>Records</strong> heading. There is also an
 <strong>Admin</strong> heading, and <strong>it starts collapsed</strong>
 — select it to find <strong>Print helper</strong> and <strong>Signature
 helper</strong>, which are referred to later in this guide.</p>
@@ -283,9 +290,9 @@ do not have to sign out and back in.</p>
 give the grids more room. Mp10 Web remembers whether you left it
 collapsed.</p>
 <h3 id="what-the-grids-remember">What the grids remember</h3>
-<p>The three big screens — Patients, Encounters and Modality worklist —
-all behave the same way, and both kinds of memory below are per person,
-so two people sharing a computer keep their own.</p>
+<p>The four big screens — Patients, Encounters, Claims and Modality
+worklist — all behave the same way, and both kinds of memory below are
+per person, so two people sharing a computer keep their own.</p>
 <p><strong>Column widths and order are remembered for good.</strong>
 Drag a column edge to resize it, or drag a heading to move it, and it
 stays that way the next time you sign in — on that computer. If you get
@@ -537,6 +544,83 @@ to remember which shape is which.</p>
 encounters has already been fetched, so a sort arrow there could not do
 anything, and one that silently did nothing would be worse than
 none.</p>
+<h2 id="claims">Claims</h2>
+<p><strong>Claims</strong>, under Records between Encounters and the
+Modality worklist, lists every claim raised on any patient. It opens
+showing claims with a <strong>service date in the last 30 days</strong>;
+change the From and To dates to look further back, or press
+<strong>Today</strong>. <strong>Clear</strong> puts the 30-day window
+back.</p>
+<p><strong>Finding one claim.</strong> The search box takes a claim
+number (<code>CL26-…</code>), an encounter number (<code>EN26-…</code>)
+or a patient’s record number, and finds it regardless of the dates. It
+does not search by name — for that, find the patient and open their
+record. If you type something it does not recognise it says so above the
+grid rather than showing an empty list.</p>
+<p><strong>Filtering by payer.</strong> The Insurance heading has a
+small funnel; select it to tick one or more payers. The heading is
+highlighted while a filter is on; Clear removes it.</p>
+<h3 id="the-flag-column">The Flag column</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Flag</th>
+<th>Means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>green</td>
+<td>paid in full — a payment is on file and the insurance balance is
+zero</td>
+</tr>
+<tr class="even">
+<td>yellow</td>
+<td>partially paid — a payment is on file and a balance is still
+owed</td>
+</tr>
+<tr class="odd">
+<td>black</td>
+<td>overpaid — the insurance balance is below zero</td>
+</tr>
+<tr class="even">
+<td>white</td>
+<td>no payment yet, but the payer has answered — a status is on
+file</td>
+</tr>
+<tr class="odd">
+<td>none</td>
+<td>no payment and no status yet</td>
+</tr>
+</tbody>
+</table>
+<p>The colour is worked out from the claim’s CPT lines and its payments,
+the same figures the balance columns show, so a flag and its row always
+agree. Hover over a flag to read its meaning. <strong>Status</strong>
+shows the newest entry in the claim’s status history and, on hover, the
+date it was received.</p>
+<h3 id="what-you-can-do-with-a-claim">What you can do with a claim</h3>
+<p>Select a row and use the action bar: <strong>Open</strong> shows the
+claim (and lets you edit it if you may edit encounters),
+<strong>Preview</strong> shows the CMS-1500 as a PDF,
+<strong>Print</strong> sends it to the FORMS printer, and
+<strong>837</strong> shows the electronic claim exactly as it was
+transmitted — one entry per send, newest first, with the segments the
+payer received. A claim that has never been transmitted says so.</p>
+<p><strong>Two boxes fill themselves on a new claim.</strong> Contract
+starts as the member number on the patient’s insurance card for the
+payer being billed, and follows the payer if you change it before
+saving; on a saved claim it is left alone. Performing physician is
+picked from the staff list rather than typed: the staff set up for the
+claim’s payer come first, then everyone else, each shown as number,
+name, NPI and payer.</p>
+<p>Printing needs permission to edit encounters; the button explains
+that on hover if you do not have it. Raising a new claim is done from
+the encounter, not from here — see “Working an encounter”.</p>
 <h2 id="the-grid-action-bar">The grid action bar</h2>
 <p>The patients list and both encounters grids (the standalone
 Encounters list and the patient’s own Encounters tab) each have a row of
