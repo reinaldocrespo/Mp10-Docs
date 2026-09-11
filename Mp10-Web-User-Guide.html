@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-09-04" />
+  <meta name="dcterms.date" content="2026-09-11" />
   <title>Mp10 Web — User Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -148,7 +148,7 @@ a { color: inherit; }
 <p class="subtitle">Finding patients, working encounters, and everything
 the browser can do</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">04 September 2026</p>
+<p class="date">11 September 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -185,6 +185,7 @@ column</a></li>
 column</a></li>
 <li><a href="#what-you-can-do-with-a-claim" id="toc-what-you-can-do-with-a-claim">What you can do with a
 claim</a></li>
+<li><a href="#payments" id="toc-payments">Payments</a></li>
 </ul></li>
 <li><a href="#the-grid-action-bar" id="toc-the-grid-action-bar">The grid
 action bar</a>
@@ -634,7 +635,41 @@ which the desktop Admin module grants to the
 for explains that on hover. The Claims page itself appears only for that
 group. Admissions staff still see an encounter’s claims list from
 Encounters, read-only. Raising a new claim is done from the encounter,
-not from here — see “Working an encounter”.</p>
+not from here — see “Working an encounter”. Adjustments (a non-zero Ins
+adjust or Pat adjust on a payment line, or a negative amount in any of
+the four money columns) additionally need the AdjustmentAuthUsers group.
+That group grants only the adjustment permission, so an operator who
+posts adjustments needs BillingUsers as well — AdjustmentAuthUsers on
+its own does not open the Claims page.</p>
+<h3 id="payments">Payments</h3>
+<p>Select a claim and press <strong>Payments</strong>. The top grid is
+every payment posted to the claim, newest first, with a total under each
+money column. Below it, if you are in the BillingUsers group, is a grid
+to post new payments:</p>
+<ul>
+<li><strong>One line per CPT.</strong> Pick a CPT from the claim’s own
+lines or type one (a payer sometimes pays under a different code; the
+page warns, it does not refuse).</li>
+<li><strong>Insurance</strong> may be blank — that is a patient
+payment.</li>
+<li><strong>Date paid</strong> starts as today and can be changed per
+line.</li>
+<li>A line with every amount zero must carry a <strong>check #</strong>
+— it records a rejection. A line with no amounts and no check is not
+saved.</li>
+<li><strong>Ins adjust / Pat adjust</strong> need a
+<strong>Reason</strong>, and posting them needs the AdjustmentAuthUsers
+group. Without it the cell is marked and Save stays off.</li>
+<li>A <strong>negative amount in any column</strong> — a reversal of a
+payment posted in error, a refund — is an adjustment too: it needs the
+same Reason and the same AdjustmentAuthUsers group.</li>
+</ul>
+<p>The two balance panels show the insurance and patient balances now
+and what they would be after Save. Save posts the lines, brings the
+claim’s stored totals and status in line, and the Claims page behind
+reloads — the Status flag may change.</p>
+<p>Co-insurance assignment and the complementary claim are still posted
+on the desktop.</p>
 <h2 id="the-grid-action-bar">The grid action bar</h2>
 <p>The patients list and both encounters grids (the standalone
 Encounters list and the patient’s own Encounters tab) each have a row of

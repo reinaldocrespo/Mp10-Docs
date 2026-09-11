@@ -385,7 +385,39 @@ the desktop Admin module grants to the **BillingUsers** group; a button you
 lack the permission for explains that on hover. The Claims page itself
 appears only for that group. Admissions staff still see an encounter's
 claims list from Encounters, read-only. Raising a new claim is done from
-the encounter, not from here — see "Working an encounter".
+the encounter, not from here — see "Working an encounter". Adjustments (a
+non-zero Ins adjust or Pat adjust on a payment line, or a negative amount in
+any of the four money columns) additionally need the AdjustmentAuthUsers
+group. That group grants only the adjustment permission, so an operator who
+posts adjustments needs BillingUsers as well — AdjustmentAuthUsers on its own
+does not open the Claims page.
+
+### Payments
+
+Select a claim and press **Payments**. The top grid is every payment posted
+to the claim, newest first, with a total under each money column. Below it,
+if you are in the BillingUsers group, is a grid to post new payments:
+
+- **One line per CPT.** Pick a CPT from the claim's own lines or type one
+  (a payer sometimes pays under a different code; the page warns, it does
+  not refuse).
+- **Insurance** may be blank — that is a patient payment.
+- **Date paid** starts as today and can be changed per line.
+- A line with every amount zero must carry a **check #** — it records a
+  rejection. A line with no amounts and no check is not saved.
+- **Ins adjust / Pat adjust** need a **Reason**, and posting them needs the
+  AdjustmentAuthUsers group. Without it the cell is marked and Save stays off.
+- A **negative amount in any column** — a reversal of a payment posted in
+  error, a refund — is an adjustment too: it needs the same Reason and the
+  same AdjustmentAuthUsers group.
+
+The two balance panels show the insurance and patient balances now and what
+they would be after Save. Save posts the lines, brings the claim's stored
+totals and status in line, and the Claims page behind reloads — the Status
+flag may change.
+
+Co-insurance assignment and the complementary claim are still posted on the
+desktop.
 
 ## The grid action bar
 
