@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-09-11" />
+  <meta name="dcterms.date" content="2026-09-16" />
   <title>Mp10 Web — User Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -148,7 +148,7 @@ a { color: inherit; }
 <p class="subtitle">Finding patients, working encounters, and everything
 the browser can do</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">11 September 2026</p>
+<p class="date">16 September 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -187,6 +187,17 @@ column</a></li>
 claim</a></li>
 <li><a href="#payments" id="toc-payments">Payments</a></li>
 </ul></li>
+<li><a href="#remittances" id="toc-remittances">Remittances</a>
+<ul>
+<li><a href="#the-list" id="toc-the-list">The list</a></li>
+<li><a href="#the-check-and-its-claims" id="toc-the-check-and-its-claims">The check, and its claims</a></li>
+<li><a href="#correcting-a-remittance" id="toc-correcting-a-remittance">Correcting a remittance</a></li>
+<li><a href="#posting" id="toc-posting">Posting</a></li>
+<li><a href="#printing-a-remittance" id="toc-printing-a-remittance">Printing a remittance</a></li>
+<li><a href="#who-may-do-what" id="toc-who-may-do-what">Who may do
+what</a></li>
+</ul></li>
+<li><a href="#reports" id="toc-reports">Reports</a></li>
 <li><a href="#the-grid-action-bar" id="toc-the-grid-action-bar">The grid
 action bar</a>
 <ul>
@@ -229,6 +240,8 @@ and labels</a>
 <ul>
 <li><a href="#if-it-asks-you-to-choose-a-printer" id="toc-if-it-asks-you-to-choose-a-printer">If it asks you to choose a
 printer</a></li>
+<li><a href="#page-numbers-and-printing-to-pdf" id="toc-page-numbers-and-printing-to-pdf">Page numbers, and printing to
+PDF</a></li>
 <li><a href="#when-printing-does-not-work" id="toc-when-printing-does-not-work">When printing does not
 work</a></li>
 </ul></li>
@@ -242,6 +255,14 @@ change</a></li>
 <p>This guide is for clinic staff using Mp10 Web in a browser. It does
 not cover how the system is installed or built — that is the
 <strong>Mp10 Web — Installation</strong> guide.</p>
+<p>Mp10 Web gains screens as they are built, and this guide is revised
+with them. If a screen here is missing from your menu, either your
+account has no permission for it or your site has not turned that
+feature on; if a screen in your menu is missing here, your site is
+running a newer version than this guide. Last revised <strong>September
+2026</strong>, covering the Dashboard, Patients, Encounters, Claims,
+Remittances, Reports, the Modality worklist, attachments, signatures and
+printing.</p>
 <p>Three companion guides cover things this one only points at:
 <strong>Mp10 Web — Printing</strong> for the print helper, <strong>Mp10
 — Signature Helper</strong> for the program that drives both the pad
@@ -272,11 +293,20 @@ applications.</p>
 areas you have permission to use, so two people may see different menus
 on the same system. The main areas are <strong>Dashboard</strong>, then
 <strong>Patients</strong>, <strong>Encounters</strong>,
-<strong>Claims</strong> and <strong>Modality worklist</strong> grouped
-under a <strong>Records</strong> heading. There is also an
-<strong>Admin</strong> heading, and <strong>it starts collapsed</strong>
-— select it to find <strong>Print helper</strong> and <strong>Signature
-helper</strong>, which are referred to later in this guide.</p>
+<strong>Claims</strong>, <strong>Remittances</strong> and
+<strong>Modality worklist</strong> grouped under a
+<strong>Records</strong> heading, and <strong>Reports</strong> under its
+own. There is also an <strong>Admin</strong> heading, and <strong>it
+starts collapsed</strong> — select it to find <strong>Print
+helper</strong> and <strong>Signature helper</strong>, which are
+referred to later in this guide.</p>
+<p><strong>Two entries appear only where the site uses them.</strong>
+<strong>Modality worklist</strong> is there when the site runs the
+imaging worklist; where it was never turned on the menu entry is absent,
+because there is nothing behind it. The <strong>HL7 interface</strong>
+row on the Dashboard behaves the same way. Neither is a fault or a
+permission problem — it is the difference between a feature your site
+does not use and one your account may not see.</p>
 <p><strong>Two ways a button can be unavailable, and they mean different
 things.</strong> A button your account may not use is not shown at all.
 A button you may use, but not on the row you have selected, is shown
@@ -317,18 +347,18 @@ calendar.</p>
 see depends on what you are allowed to see, so a colleague’s may have
 fewer cards than yours:</p>
 <ul>
-<li><strong>Today</strong> — a quick count of today’s encounters, split
-out by site. If today shows nothing yet — first thing in the morning, or
-on a weekend or holiday when the office is closed — that’s normal, not a
-fault: the card names the day it’s showing and also tells you the last
-day that actually had encounters, so you can tell “quiet today” from
-“something’s wrong” at a glance.</li>
-<li><strong>Needs attention</strong> — encounters from the last several
-days that still need a signature. Use it to catch anything that was
-missed before it gets old.</li>
-<li><strong>System health</strong> — a few quick status rows (the
+<li><p><strong>Today</strong> — a quick count of today’s encounters,
+split out by site. If today shows nothing yet — first thing in the
+morning, or on a weekend or holiday when the office is closed — that’s
+normal, not a fault: the card names the day it’s showing and also tells
+you the last day that actually had encounters, so you can tell “quiet
+today” from “something’s wrong” at a glance.</p></li>
+<li><p><strong>Needs attention</strong> — encounters from the last
+several days that still need a signature. Use it to catch anything that
+was missed before it gets old.</p></li>
+<li><p><strong>System health</strong> — a few quick status rows (the
 Modality worklist row is there only if your account may see the
-worklist):
+worklist):</p>
 <ul>
 <li><strong>Print helper (this workstation)</strong> — whether the print
 helper program is answering on <strong>the computer you’re sitting at
@@ -341,22 +371,37 @@ printing does not work</strong>.</li>
 thing for the program that drives the signature pad at your desk. Also
 workstation-local, and also normal to differ from desk to desk: a
 computer with no pad attached has no reason to be running it.</li>
-<li><strong>HL7 interface</strong> — when the last message came in from
-the lab/imaging interface, and how many are still waiting to be
-processed. This only turns red when messages have gone quiet for longer
-than expected — a large “unprocessed” count on its own is normal for a
-busy practice and does not turn the row red by itself.</li>
+<li><strong>HL7 interface</strong> — shown only where the site runs an
+interface. It gives when the last message came in from the lab or
+imaging interface and how many are still waiting to be processed. It
+turns red when the interface program itself stops reporting in, and when
+messages have gone quiet for longer than expected. A large “unprocessed”
+count on its own is normal for a busy practice and does not turn the row
+red by itself.</li>
 <li><strong>Modality worklist</strong> — how many imaging orders are
 queued. Seeing “nothing scheduled” here is a normal, everyday answer,
 not an error — it just means nothing is queued right now.</li>
 </ul></li>
-<li><strong>Print helper</strong> and <strong>Signature helper</strong>
-— one card each, when you have permission to see them, giving the fuller
-version of those two health rows: whether the program is answering at
-this desk, how many jobs it has done and how many failed. Both link
-through to their own page. Like the rows above, they describe
-<strong>this computer</strong> — sitting at another desk shows that
-desk’s answer.</li>
+<li><p><strong>Billing</strong> — four counts over the last 90 days:
+encounters with no claim (“unbilled”), then that window’s claims that
+were rejected, paid, and have no status yet. The first is a count of
+<strong>encounters</strong>, the other three of <strong>claims</strong>,
+so an encounter with two claims counts twice in those. Under them the
+card names the oldest of each, which is the one worth chasing.</p>
+<p><strong>Encounters dated ahead of today are never counted as
+unbilled.</strong> An encounter created for an upcoming appointment
+carries no charge yet, and the window the card counts ends today, so it
+falls outside. Where such encounters exist the card says so on its own
+line — <em>“16 upcoming encounters pre-created, next 2026-10-09”</em> —
+and where there are none the line is absent rather than showing a
+zero.</p></li>
+<li><p><strong>Print helper</strong> and <strong>Signature
+helper</strong> — one card each, when you have permission to see them,
+giving the fuller version of those two health rows: whether the program
+is answering at this desk, how many jobs it has done and how many
+failed. Both link through to their own page. Like the rows above, they
+describe <strong>this computer</strong> — sitting at another desk shows
+that desk’s answer.</p></li>
 </ul>
 <h2 id="finding-a-patient">Finding a patient</h2>
 <p>The patient list shows every patient in a scrollable grid, with
@@ -590,9 +635,18 @@ owed</td>
 <td>overpaid — the insurance balance is below zero</td>
 </tr>
 <tr class="even">
+<td>red</td>
+<td>rejected — no payment, and the payer’s latest answer is a
+rejection</td>
+</tr>
+<tr class="odd">
 <td>white</td>
-<td>no payment yet, but the payer has answered — a status is on
-file</td>
+<td>no payment yet, but the payer has answered something else</td>
+</tr>
+<tr class="even">
+<td>blue, orange, pink, purple</td>
+<td>no payment, and the payer’s latest answer is one of the four
+statuses your site defines for itself</td>
 </tr>
 <tr class="odd">
 <td>none</td>
@@ -600,12 +654,23 @@ file</td>
 </tr>
 </tbody>
 </table>
-<p>The colour is worked out from the claim’s CPT lines and its payments,
-the same figures the balance columns show, so a flag and its row always
-agree. Hover over a flag to read its meaning. <strong>Click a
-flag</strong> to see the claim’s status history — every answer the payer
-has sent, newest first, with the date, the amount, the file it came in
-and any notes.</p>
+<p><strong>Money outranks status.</strong> The first three colours are
+worked out from the claim’s CPT lines and its payments, the same figures
+the balance columns show, so a flag and its row always agree. A claim
+that was paid in part and later rejected stays yellow, because the
+balance beside it is real. Only where nothing has been paid does the
+payer’s latest answer set the colour.</p>
+<p>The four site-defined colours are the statuses your practice names
+itself — they read with your own wording, which the desktop Admin module
+sets, so “Blue” may be “Appealed” at one site and something else at
+another.</p>
+<p>Hover over a flag to read its meaning. <strong>Click a flag</strong>
+to see the claim’s status history — every answer the payer has sent,
+newest first. The first column is <strong>Recorded</strong>: the date
+<em>and time</em> the answer was written down, since several answers
+often arrive on one day and the order matters; hover it to see the
+payer’s own date, which carries no time. Where the payer’s file named no
+insurance, the claim’s own is shown rather than a dash.</p>
 <p>The Status heading has a funnel like Insurance’s: tick one or more
 colours (“No flag” is a choice too) and the list narrows to claims in
 that state across the whole window, not only the page on screen.
@@ -670,6 +735,204 @@ claim’s stored totals and status in line, and the Claims page behind
 reloads — the Status flag may change.</p>
 <p>Co-insurance assignment and the complementary claim are still posted
 on the desktop.</p>
+<h2 id="remittances">Remittances</h2>
+<p>A remittance is one payer’s check and everything it pays: several
+claims, each with its own CPT lines. Most arrive as an electronic 835
+file that AutoTasks loads overnight; some are read out of a PDF the
+payer sent; and one can be keyed here by hand. This page is where you
+look at them, correct them, and post them to the claims.</p>
+<p>It needs the billing permission to open, and posting needs one more —
+see <strong>Who may do what</strong>, below.</p>
+<h3 id="the-list">The list</h3>
+<p>The top half is one row per remittance, over a date range that works
+like the other screens: the last 30 days to begin with, changeable, with
+<strong>Today</strong> and <strong>Clear</strong>. The search box finds
+a <strong>check number</strong>; unlike the Claims search, it keeps the
+date range, because check numbers repeat between payers and years.</p>
+<p>Two funnels sit in the headings: <strong>Payer</strong> and
+<strong>Posted</strong>.</p>
+<p>The <strong>Posted</strong> column is a dot, so the state is readable
+at a glance:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Dot</th>
+<th>Means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>green</td>
+<td>every line of the check has been posted</td>
+</tr>
+<tr class="even">
+<td>red, “Unposted”</td>
+<td>none of it has been posted</td>
+</tr>
+<tr class="odd">
+<td>red, “3 unposted”</td>
+<td>some of it posted and some did not — the count is how many lines are
+still out</td>
+</tr>
+</tbody>
+</table>
+<p>The line under the grid gives the window’s totals: how many
+remittances, and what they paid, adjusted, took as deductible and
+assigned.</p>
+<h3 id="the-check-and-its-claims">The check, and its claims</h3>
+<p>Select a remittance and the strip below fills in with the check’s
+facts — payer, check number, check date, received, deposit, check total
+— then <strong>Lines paid</strong> and <strong>Difference</strong>. The
+difference is the check total less what the lines add up to; it is red
+when it is not zero, which is the number to settle before posting.</p>
+<p>While a remittance is unposted, the received date, deposit date and
+check total can be edited in the strip. Once any line is posted the
+whole check becomes read-only, and the strip says who posted it.</p>
+<p>Under the strip is the check’s claims. Each row is one claim:
+patient, ICN, the money it was paid, and its flag. Expand a claim to see
+its CPT lines. The <strong>Find claim or patient</strong> box filters
+this tree as you type, by claim number or patient name, which is how you
+find one claim on a check that pays four hundred.</p>
+<p>The flags here are the payer’s own answer for that claim, and the
+legend above the tree names them: balanced, rejected, pending,
+duplicate, claim not found, reversal, zero paid. <strong>Claim not
+found</strong> matters most: it means the claim the payer names is not
+in this dictionary, so posting will skip it — fix the claim number first
+or remove the line.</p>
+<p><strong>Click a claim number</strong> to open that claim’s own
+record, read-only, without leaving the remittance.</p>
+<h3 id="correcting-a-remittance">Correcting a remittance</h3>
+<p>Everything here is possible only while the remittance is unposted,
+and only with the billing permission.</p>
+<ul>
+<li><strong>Add claim</strong> finds a claim by number, encounter or
+record number, shows what it was billed, and gives you a line per CPT to
+fill in.</li>
+<li><strong>A line can be edited where it sits</strong>: click a Paid,
+Adjusted, Deductible, Assigned or Reason cell in the tree and type. The
+claim’s totals and the strip’s difference follow as you type.
+<strong>Save</strong> writes them.</li>
+<li><strong>Delete claim / Delete line</strong> removes what is
+highlighted, after asking. A claim takes its lines with it; the last
+line of a claim takes the claim; the last claim takes the remittance.
+Only this remittance’s rows are removed — the claim record itself is
+never touched.</li>
+<li><strong>Delete remittance</strong> removes the whole check, and only
+while nothing on it is posted.</li>
+</ul>
+<p><strong>New remittance</strong> keys one from scratch: fill in the
+payer, check number and dates, add the claims, and Save.</p>
+<h3 id="posting">Posting</h3>
+<p><strong>Post</strong> writes the remittance to the claims: each line
+becomes a payment, the claims’ totals and status are brought in line,
+and the lines are marked posted. It asks first, and the confirmation is
+worth reading:</p>
+<ul>
+<li>It shows the check total against the lines paid. <strong>If they
+differ, posting needs you to tick “post anyway”</strong> — that is the
+safety catch for a check that was keyed short.</li>
+<li><strong>Post deductibles</strong> is on by default and matches the
+desktop.</li>
+<li>It names how many claims will post and how many are <strong>not
+found</strong>. Those stay unposted, which is why the check then shows a
+red dot with a count rather than a green one. Fix them and post again —
+the second pass only touches what is still out.</li>
+</ul>
+<p>Posting cannot be undone from the browser, and a posted remittance
+cannot be edited or deleted here. A remittance whose claims carry
+<strong>assigned</strong> amounts prints a note saying the complementary
+claims have not been created — that step is still the desktop’s.</p>
+<h3 id="printing-a-remittance">Printing a remittance</h3>
+<p><strong>Print</strong> opens the remittance in a new browser tab,
+laid out for paper: the check’s facts, then each claim with its CPT
+lines, and <strong>under each line the payer’s own explanation of what
+it adjusted</strong> — the code and the sentence that goes with it,
+which the grid has no room for.</p>
+<p>Highlight a claim first and the button reads <strong>Print
+claim</strong>: the tab then holds that one claim, and its total line
+says how many claims are on the whole check.</p>
+<p>The tab has its own <strong>Print</strong> button, which opens the
+browser’s print dialog. That dialog is also where you save it as a PDF —
+choose <strong>Save as PDF</strong> as the destination instead of a
+printer.</p>
+<p><strong>Page numbers come from the print dialog, not from the
+page.</strong> Browsers do not let a page number its own sheets, so
+“Page 2 of 9” is printed by the browser itself, along with the date and
+the document name, when <strong>Headers and footers</strong> is ticked.
+It is ticked by default, under <strong>More settings</strong> in Chrome
+and Edge. If you turn it off the numbers go with it; every page still
+carries the payer and check number across the top, so a loose sheet can
+be placed.</p>
+<p>A long check paginates properly: the column headings repeat at the
+top of each page, a claim’s heading never sits alone at the foot of one,
+and a line is never separated from the explanation beneath it.</p>
+<h3 id="who-may-do-what">Who may do what</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>To</th>
+<th>You need</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>open Remittances and look</td>
+<td>the billing permission (<strong>BillingUsers</strong>)</td>
+</tr>
+<tr class="even">
+<td>key, edit or delete an unposted remittance</td>
+<td>the same</td>
+</tr>
+<tr class="odd">
+<td><strong>post</strong> a remittance</td>
+<td><strong>remits.post</strong> as well — your administrator grants it
+in the desktop Admin module</td>
+</tr>
+<tr class="even">
+<td>print</td>
+<td>the billing permission</td>
+</tr>
+</tbody>
+</table>
+<p>A button you may not use is not shown at all, so a Remittances page
+with no <strong>Post</strong> button means your account does not have
+that one.</p>
+<h2 id="reports">Reports</h2>
+<p><strong>Reports</strong> in the menu opens a page of report cards,
+grouped Financial, Productivity and Coding. It needs the reports
+permission, which the desktop Admin module grants with the billing
+group.</p>
+<p>Five reports run today:</p>
+<ul>
+<li><strong>Ageing of Accounts</strong> — what is owed, by how long it
+has been owed.</li>
+<li><strong>Payments + Adjustments</strong> — what came in over a
+period, and what was written off.</li>
+<li><strong>Billing Report</strong> — what was billed over a
+period.</li>
+<li><strong>Periodical Summary</strong> — the period’s totals in one
+sheet.</li>
+<li><strong>Claims Status</strong> — claims by the payer’s latest
+answer.</li>
+</ul>
+<p>The rest of the cards are greyed and marked as not built yet. They
+are named so you can see what is coming rather than wonder whether you
+have lost a permission.</p>
+<p>Each report works the same way: choose the parameters on the left,
+<strong>Run</strong>, and the result appears with a chart where one
+helps and a grid under it. <strong>Export</strong> saves the grid as a
+spreadsheet; <strong>Print</strong> opens the browser’s print dialog,
+where the destination list also offers <strong>Save as PDF</strong>. As
+with the remittance print above, page numbers come from the dialog’s
+<strong>Headers and footers</strong>, not from the report.</p>
 <h2 id="the-grid-action-bar">The grid action bar</h2>
 <p>The patients list and both encounters grids (the standalone
 Encounters list and the patient’s own Encounters tab) each have a row of
@@ -1164,6 +1427,22 @@ Print claims from the desktop application in the meantime.</p>
 <p><strong>Designing and editing the report templates stays in the
 desktop application</strong>, deliberately: a template is shared by
 everyone in the practice, and editing one is a deskbound job.</p>
+<h3 id="page-numbers-and-printing-to-pdf">Page numbers, and printing to
+PDF</h3>
+<p>Two different printing paths exist in Mp10 Web, and they behave
+differently.</p>
+<p><strong>Encounter forms, labels, claims and results</strong> are
+printed by the print helper at your desk, from the same templates the
+desktop uses. They are laid out by Mp10, and anything printed on them —
+page numbers included — is part of the template.</p>
+<p><strong>Remittances and reports</strong> are printed by the browser
+itself, from a tab. There the <strong>page numbers come from the
+browser’s print dialog</strong>: browsers do not allow a page to number
+its own sheets, so “Page 2 of 9” is added by the browser, along with the
+date and the document name, when <strong>Headers and footers</strong> is
+ticked under <strong>More settings</strong>. It is ticked by default in
+Chrome and Edge. The same dialog is how you make a PDF of either: choose
+<strong>Save as PDF</strong> as the destination.</p>
 <h3 id="when-printing-does-not-work">When printing does not work</h3>
 <p>Nothing is ever half-printed: when it fails, nothing was sent, and
 the message on screen names the cause. The commonest one — no printer
