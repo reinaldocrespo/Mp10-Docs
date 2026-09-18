@@ -596,6 +596,143 @@ never separated from the explanation beneath it.
 A button you may not use is not shown at all, so a Remittances page with no
 **Post** button means your account does not have that one.
 
+## Submissions
+
+Submitting claims electronically is a hand-off in stages: **Claims** is where
+you pick which claims go out, **Create 837** is where you agree to what will
+be built, the file itself is built in the background by the AutoTasks
+service, and **Submissions**, next to Remittances under Records, is where you
+watch all of that happen and, when a file is ready, send it. Every action on
+this page and the Create 837 button on Claims need **claims.submit**, which
+your administrator grants in the desktop Admin module — the billing
+permission alone is not enough.
+
+### Picking claims on the Claims page
+
+A tick-box column appears on the left of the Claims grid. Tick a row, or:
+
+- **Shift-click** a second row to tick every row between the two.
+- **Ctrl-click** a row to toggle just that one, without disturbing the rest.
+- The box in the column heading ticks or clears **the page** — it can only
+  reach the rows on screen.
+
+**The selection survives paging.** That is the point of it: a batch can span
+many pages of claims, and moving to the next page does not lose what you
+already ticked on this one. A bar appears above the grid as soon as anything
+is picked, showing how many claims that is.
+
+If the filter you have set (dates, payer, status) matches more claims than
+are ticked, the bar offers **Select all *N* matching** — meaning every claim
+the current filter finds, not only the page you are looking at. Use it to
+submit an entire batch (for example, everything unbilled for one payer) in
+one motion instead of paging through and ticking each row.
+
+**Clear selection** empties the bar. **Create 837…** opens the dialog that
+actually queues the work, and is greyed out for anyone without
+**claims.submit**.
+
+### Create 837
+
+The dialog shows what would be built, before anything is written: **one file
+per payer** in your selection — a mixed batch is split automatically rather
+than refused. The table lists each payer with how many claims and how much is
+billed, and **every number on this screen comes from the server**, not from
+counting the ticks in the browser, so what you agree to is exactly what gets
+queued a moment later.
+
+Before that table is filled in, each claim is checked. Some findings **block**
+a claim — it is left out of the count and the file entirely:
+
+| Blocked because… |
+|---|
+| the claim has no CPT lines — nothing would be billed |
+| the payer has no provider NPI on file — check the insurance definition |
+| the claim has no insurance member number |
+| the patient's sex is not recorded as M or F |
+| the patient's date of birth is missing, or later than the service date |
+
+Other findings only **warn** — the claim still goes in the file, but you are
+told:
+
+| Warned because… |
+|---|
+| the patient-to-insured relationship on the claim is not one the 837 accepts |
+| the claim's remarks are longer than 80 characters and will be truncated |
+| the claim was already put in an earlier 837 file |
+
+Blocking findings are listed first and are why the count above them may be
+smaller than what you ticked; the dialog says how many of the selection could
+not be sent. Warnings are listed too, so a claim that goes in flagged is not a
+surprise later.
+
+Press **Create the file** (or **Create *N* files**, one per payer) to queue
+the work. Nothing is sent at this point either — the files are only queued
+for the AutoTasks service to build — and the dialog then takes you to the
+Submissions page to watch it.
+
+### The Submissions page
+
+Every job you and your colleagues have queued is listed here, newest first,
+and refreshes itself on its own while anything is still moving — you do not
+need to press anything to see a job's status change.
+
+| Status | Means |
+|---|---|
+| Queued | waiting for AutoTasks to pick it up |
+| Building | AutoTasks is building the file now |
+| Built | the file exists; the Result column names it |
+| Failed | AutoTasks could not build it; the Result column says why |
+| Cancelled | you (or a colleague) cancelled it before it was built |
+
+**A job sitting at Queued for a minute or two is normal, not stuck.**
+AutoTasks looks for new submissions every couple of minutes, not
+continuously, so a freshly-created job waits for that next pass before it
+starts building. A banner above the grid says as much while anything is
+still waiting.
+
+The **Waiting** column says how long each job has been in the state it is in,
+and stays blank once a job has finished. **If anything has been queued or
+building for longer than about ten minutes, an amber warning appears above
+the grid** and names what to check — usually that the AutoTasks service is
+not running on the server, that 837 processing has been switched off for the
+site, or that the dictionary was updated without running the admin module's
+structure update. That warning is the difference between "waiting is normal" and
+"nothing is coming": a job that has stopped part-way through building or
+sending is not retried on its own, and your administrator has to clear it
+(the AutoTasks install guide says how). Tell them rather than queueing the
+same claims again — a submission that really did go out and is then sent a
+second time bills every claim in it twice.
+
+**Cancel** is offered only on a job that is still Queued — once AutoTasks has
+started building it, it can no longer be pulled back, and the button is
+greyed out with that explanation. If you press Cancel just as AutoTasks
+happens to pick the job up, the page tells you plainly that you were too
+late rather than treating it as an error.
+
+### Sending
+
+Building a file and sending it to the clearinghouse are two separate,
+deliberate actions — nothing here is transmitted automatically. Once a job
+reads **Built**, select it and press **Send to clearinghouse**. The
+confirmation names exactly what you are about to send — the payer, how many
+claims, and the file — because this cannot be undone from here once it has
+gone. Pressing it does not send the file itself; it asks AutoTasks to send it
+on its next pass, the same way a build is queued, so a row reading "Queued to
+send" for a short while is normal too.
+
+The **Sent** column tracks the send the same way Status tracks the build; the
+**Result** column shows the outcome, and where the clearinghouse itself
+answered, hovering over the Sent column shows its reply.
+
+### A claim already submitted
+
+Ticking a claim that was already sent in an earlier 837 does not stop you —
+it is one of the pre-flight's warnings, not a block — because resubmitting a
+corrected claim is a normal thing to do. Every send is recorded on the claim
+itself: open the claim on the Claims page and press **837** to see every
+transmission, newest first, with the segments exactly as they were sent. A
+claim that has never been transmitted says so there instead.
+
 ## Reports
 
 **Reports** in the menu opens a page of report cards, grouped Financial,

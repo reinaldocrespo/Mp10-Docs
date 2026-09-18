@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-09-16" />
+  <meta name="dcterms.date" content="2026-09-18" />
   <title>Mp10 Web — User Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -148,7 +148,7 @@ a { color: inherit; }
 <p class="subtitle">Finding patients, working encounters, and everything
 the browser can do</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">16 September 2026</p>
+<p class="date">18 September 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -196,6 +196,16 @@ claim</a></li>
 <li><a href="#printing-a-remittance" id="toc-printing-a-remittance">Printing a remittance</a></li>
 <li><a href="#who-may-do-what" id="toc-who-may-do-what">Who may do
 what</a></li>
+</ul></li>
+<li><a href="#submissions" id="toc-submissions">Submissions</a>
+<ul>
+<li><a href="#picking-claims-on-the-claims-page" id="toc-picking-claims-on-the-claims-page">Picking claims on the Claims
+page</a></li>
+<li><a href="#create-837" id="toc-create-837">Create 837</a></li>
+<li><a href="#the-submissions-page" id="toc-the-submissions-page">The
+Submissions page</a></li>
+<li><a href="#sending" id="toc-sending">Sending</a></li>
+<li><a href="#a-claim-already-submitted" id="toc-a-claim-already-submitted">A claim already submitted</a></li>
 </ul></li>
 <li><a href="#reports" id="toc-reports">Reports</a></li>
 <li><a href="#the-grid-action-bar" id="toc-the-grid-action-bar">The grid
@@ -905,6 +915,195 @@ in the desktop Admin module</td>
 <p>A button you may not use is not shown at all, so a Remittances page
 with no <strong>Post</strong> button means your account does not have
 that one.</p>
+<h2 id="submissions">Submissions</h2>
+<p>Submitting claims electronically is a hand-off in stages:
+<strong>Claims</strong> is where you pick which claims go out,
+<strong>Create 837</strong> is where you agree to what will be built,
+the file itself is built in the background by the AutoTasks service, and
+<strong>Submissions</strong>, next to Remittances under Records, is
+where you watch all of that happen and, when a file is ready, send it.
+Every action on this page and the Create 837 button on Claims need
+<strong>claims.submit</strong>, which your administrator grants in the
+desktop Admin module — the billing permission alone is not enough.</p>
+<h3 id="picking-claims-on-the-claims-page">Picking claims on the Claims
+page</h3>
+<p>A tick-box column appears on the left of the Claims grid. Tick a row,
+or:</p>
+<ul>
+<li><strong>Shift-click</strong> a second row to tick every row between
+the two.</li>
+<li><strong>Ctrl-click</strong> a row to toggle just that one, without
+disturbing the rest.</li>
+<li>The box in the column heading ticks or clears <strong>the
+page</strong> — it can only reach the rows on screen.</li>
+</ul>
+<p><strong>The selection survives paging.</strong> That is the point of
+it: a batch can span many pages of claims, and moving to the next page
+does not lose what you already ticked on this one. A bar appears above
+the grid as soon as anything is picked, showing how many claims that
+is.</p>
+<p>If the filter you have set (dates, payer, status) matches more claims
+than are ticked, the bar offers <strong>Select all <em>N</em>
+matching</strong> — meaning every claim the current filter finds, not
+only the page you are looking at. Use it to submit an entire batch (for
+example, everything unbilled for one payer) in one motion instead of
+paging through and ticking each row.</p>
+<p><strong>Clear selection</strong> empties the bar. <strong>Create
+837…</strong> opens the dialog that actually queues the work, and is
+greyed out for anyone without <strong>claims.submit</strong>.</p>
+<h3 id="create-837">Create 837</h3>
+<p>The dialog shows what would be built, before anything is written:
+<strong>one file per payer</strong> in your selection — a mixed batch is
+split automatically rather than refused. The table lists each payer with
+how many claims and how much is billed, and <strong>every number on this
+screen comes from the server</strong>, not from counting the ticks in
+the browser, so what you agree to is exactly what gets queued a moment
+later.</p>
+<p>Before that table is filled in, each claim is checked. Some findings
+<strong>block</strong> a claim — it is left out of the count and the
+file entirely:</p>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Blocked because…</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>the claim has no CPT lines — nothing would be billed</td>
+</tr>
+<tr class="even">
+<td>the payer has no provider NPI on file — check the insurance
+definition</td>
+</tr>
+<tr class="odd">
+<td>the claim has no insurance member number</td>
+</tr>
+<tr class="even">
+<td>the patient’s sex is not recorded as M or F</td>
+</tr>
+<tr class="odd">
+<td>the patient’s date of birth is missing, or later than the service
+date</td>
+</tr>
+</tbody>
+</table>
+<p>Other findings only <strong>warn</strong> — the claim still goes in
+the file, but you are told:</p>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Warned because…</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>the patient-to-insured relationship on the claim is not one the 837
+accepts</td>
+</tr>
+<tr class="even">
+<td>the claim’s remarks are longer than 80 characters and will be
+truncated</td>
+</tr>
+<tr class="odd">
+<td>the claim was already put in an earlier 837 file</td>
+</tr>
+</tbody>
+</table>
+<p>Blocking findings are listed first and are why the count above them
+may be smaller than what you ticked; the dialog says how many of the
+selection could not be sent. Warnings are listed too, so a claim that
+goes in flagged is not a surprise later.</p>
+<p>Press <strong>Create the file</strong> (or <strong>Create <em>N</em>
+files</strong>, one per payer) to queue the work. Nothing is sent at
+this point either — the files are only queued for the AutoTasks service
+to build — and the dialog then takes you to the Submissions page to
+watch it.</p>
+<h3 id="the-submissions-page">The Submissions page</h3>
+<p>Every job you and your colleagues have queued is listed here, newest
+first, and refreshes itself on its own while anything is still moving —
+you do not need to press anything to see a job’s status change.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Status</th>
+<th>Means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Queued</td>
+<td>waiting for AutoTasks to pick it up</td>
+</tr>
+<tr class="even">
+<td>Building</td>
+<td>AutoTasks is building the file now</td>
+</tr>
+<tr class="odd">
+<td>Built</td>
+<td>the file exists; the Result column names it</td>
+</tr>
+<tr class="even">
+<td>Failed</td>
+<td>AutoTasks could not build it; the Result column says why</td>
+</tr>
+<tr class="odd">
+<td>Cancelled</td>
+<td>you (or a colleague) cancelled it before it was built</td>
+</tr>
+</tbody>
+</table>
+<p><strong>A job sitting at Queued for a minute or two is normal, not
+stuck.</strong> AutoTasks looks for new submissions every couple of
+minutes, not continuously, so a freshly-created job waits for that next
+pass before it starts building. A banner above the grid says as much
+while anything is still waiting.</p>
+<p>The <strong>Waiting</strong> column says how long each job has been
+in the state it is in, and stays blank once a job has finished.
+<strong>If anything has been queued or building for longer than about
+ten minutes, an amber warning appears above the grid</strong> and names
+what to check — usually that the AutoTasks service is not running on the
+server, that 837 processing has been switched off for the site, or that
+the dictionary was updated without running the admin module’s structure
+update. That warning is the difference between “waiting is normal” and
+“nothing is coming”: a job that has stopped part-way through building or
+sending is not retried on its own, and your administrator has to clear
+it (the AutoTasks install guide says how). Tell them rather than
+queueing the same claims again — a submission that really did go out and
+is then sent a second time bills every claim in it twice.</p>
+<p><strong>Cancel</strong> is offered only on a job that is still Queued
+— once AutoTasks has started building it, it can no longer be pulled
+back, and the button is greyed out with that explanation. If you press
+Cancel just as AutoTasks happens to pick the job up, the page tells you
+plainly that you were too late rather than treating it as an error.</p>
+<h3 id="sending">Sending</h3>
+<p>Building a file and sending it to the clearinghouse are two separate,
+deliberate actions — nothing here is transmitted automatically. Once a
+job reads <strong>Built</strong>, select it and press <strong>Send to
+clearinghouse</strong>. The confirmation names exactly what you are
+about to send — the payer, how many claims, and the file — because this
+cannot be undone from here once it has gone. Pressing it does not send
+the file itself; it asks AutoTasks to send it on its next pass, the same
+way a build is queued, so a row reading “Queued to send” for a short
+while is normal too.</p>
+<p>The <strong>Sent</strong> column tracks the send the same way Status
+tracks the build; the <strong>Result</strong> column shows the outcome,
+and where the clearinghouse itself answered, hovering over the Sent
+column shows its reply.</p>
+<h3 id="a-claim-already-submitted">A claim already submitted</h3>
+<p>Ticking a claim that was already sent in an earlier 837 does not stop
+you — it is one of the pre-flight’s warnings, not a block — because
+resubmitting a corrected claim is a normal thing to do. Every send is
+recorded on the claim itself: open the claim on the Claims page and
+press <strong>837</strong> to see every transmission, newest first, with
+the segments exactly as they were sent. A claim that has never been
+transmitted says so there instead.</p>
 <h2 id="reports">Reports</h2>
 <p><strong>Reports</strong> in the menu opens a page of report cards,
 grouped Financial, Productivity and Coding. It needs the reports
