@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-09-18" />
+  <meta name="dcterms.date" content="2026-09-22" />
   <title>Mp10 Web — User Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -148,7 +148,7 @@ a { color: inherit; }
 <p class="subtitle">Finding patients, working encounters, and everything
 the browser can do</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">18 September 2026</p>
+<p class="date">22 September 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -271,8 +271,8 @@ account has no permission for it or your site has not turned that
 feature on; if a screen in your menu is missing here, your site is
 running a newer version than this guide. Last revised <strong>September
 2026</strong>, covering the Dashboard, Patients, Encounters, Claims,
-Remittances, Reports, the Modality worklist, attachments, signatures and
-printing.</p>
+Remittances, Submissions, Reports, the Modality worklist, attachments,
+signatures and printing.</p>
 <p>Three companion guides cover things this one only points at:
 <strong>Mp10 Web — Printing</strong> for the print helper, <strong>Mp10
 — Signature Helper</strong> for the program that drives both the pad
@@ -303,13 +303,56 @@ applications.</p>
 areas you have permission to use, so two people may see different menus
 on the same system. The main areas are <strong>Dashboard</strong>, then
 <strong>Patients</strong>, <strong>Encounters</strong>,
-<strong>Claims</strong>, <strong>Remittances</strong> and
-<strong>Modality worklist</strong> grouped under a
-<strong>Records</strong> heading, and <strong>Reports</strong> under its
-own. There is also an <strong>Admin</strong> heading, and <strong>it
-starts collapsed</strong> — select it to find <strong>Print
-helper</strong> and <strong>Signature helper</strong>, which are
-referred to later in this guide.</p>
+<strong>Claims</strong>, <strong>Remittances</strong>,
+<strong>Submissions</strong> and <strong>Modality worklist</strong>
+grouped under a <strong>Records</strong> heading, and
+<strong>Reports</strong> under its own. There is also an
+<strong>Admin</strong> heading, and <strong>it starts collapsed</strong>
+— select it to find <strong>Print helper</strong> and <strong>Signature
+helper</strong>, which are referred to later in this guide.</p>
+<p><strong>Which of those you get depends on the group your
+administrator put you in</strong> — the same groups the Mp10 desktop
+uses, set in the desktop Admin module. There is no separate web
+permission to ask for. As a rule of thumb:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>If you are</th>
+<th>You see</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>admissions staff</td>
+<td>Patients and Encounters, and an encounter’s claims read-only —
+<strong>not</strong> the Claims page, Remittances, Submissions or
+Reports</td>
+</tr>
+<tr class="even">
+<td>billing staff</td>
+<td>Claims, Remittances, Submissions and Reports, with Patients and
+Encounters read-only</td>
+</tr>
+<tr class="odd">
+<td>transcription</td>
+<td>the Modality worklist</td>
+</tr>
+<tr class="even">
+<td>an administrator</td>
+<td>Patients, Encounters, Claims, Reports, the worklist and the Admin
+screens — but posting a remittance, sending an 837 and entering an
+adjustment are billing rights, granted separately</td>
+</tr>
+</tbody>
+</table>
+<p>So a colleague who does billing having screens you do not is
+expected, not a sign that your account is broken. If you need one of
+them, it is a change to your group in the desktop Admin module, and it
+takes effect the next time the page loads.</p>
 <p><strong>Two entries appear only where the site uses them.</strong>
 <strong>Modality worklist</strong> is there when the site runs the
 imaging worklist; where it was never turned on the menu entry is absent,

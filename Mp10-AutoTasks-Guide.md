@@ -590,7 +590,7 @@ There is a way in, and it is worth knowing *before* the bad day.
 into it like any other. Start it with the backup folder as the path:
 
 ```
-PrAdmin10.exe PATH:e:\adsdata\sfi-2026\backup\
+PrAdmin10.exe PATH:e:\adsdata\restore\backup\
 ```
 
 Give the path of the *folder* holding the backup's `mp.add`, with a trailing
@@ -1070,6 +1070,47 @@ There are no separate path settings — acknowledgements use the 277 pair.
 > They are **not** copied to the history folder first, so if you want to keep
 > them for an audit, this is not the mechanism that will do it.
 
+# Claim submissions from Mp10 Web (837)
+
+Billing staff can select claims in Mp10 Web and press **Create 837**. That
+queues a job; it does not build or send anything. AutoTasks picks the job up
+on its next sweep, builds the 837 file, and — only after someone presses
+**Send to clearinghouse** on the web's Submissions page — transmits it on a
+later sweep. Both halves are deliberate, separate actions, and both happen
+here, in the service, not in the browser.
+
+| Section | Entry | Value | What it means |
+|---|---|---|---|
+| `AUTOTASKS` | `PROCESS_837_JOBS` | `YES` | Build the 837 files Mp10 Web queues. Anything other than `YES` = off. **The default is `YES`**; set `NO` only at a site that bills from the desktop alone |
+| `X12FILE_PATH` | `837` | `\\server\data\x12files\837\` | Where the built file is written. **The service's account must be able to write here** — a path the desktop can reach but the service cannot fails the job, and the job says so |
+| `X12FILE_PATH` | `835_COPY_PATH` | `\\server\data\x12files\history\` | A sent file is filed here once the clearinghouse has taken it — the same history folder the 835s use |
+| `X12` | `Copy837_Path` | *(optional)* | Where a built file is copied **only when it was not transmitted**, so it can be handed over by hand. Not a copy of what was sent |
+
+Sending needs the clearinghouse web-service account in `sys_registry` under
+section `X12WebService` — `FileTransfer_Url`, `UserName` and `Password` — the
+same entries the desktop's claims screen sends with. A site that has never set
+them gets a plain refusal naming them, and nothing is transmitted; nothing is
+configured separately for the web.
+
+**A job that never leaves *Queued* on the web page** means this service is not
+running against the same dictionary, or `PROCESS_837_JOBS` is not `YES`. The
+web page cannot see the service and cannot tell you which. To prove the
+service side from the server without waiting for a sweep:
+
+```
+AutoTasks --job=0 --no-send
+```
+
+builds every queued job right away and prints what it did, ignoring the
+switch. **Keep the `--no-send`.** Without it the same command is one full
+sweep — it builds *and* transmits anything already marked for sending — and
+the banner it prints says which of the two it is about to do.
+
+Each transmission is recorded against the claims it carried, and the web's
+**837** button on a claim shows them. Resubmitting a claim that was already
+sent is allowed on purpose (corrected claims are normal); the web warns, it
+does not block.
+
 # Insurance eligibility (270 / 271)
 
 AutoTasks can ask insurers whether a patient's coverage is active — a 270
@@ -1250,7 +1291,7 @@ Requirements:
 
 | Section | Entry | Example value |
 |---|---|---|
-| `SCANNING` | `EOBIMAGESPATH` | `\\192.168.0.202\data\mp8\data\x12files\scannedEOBs\` |
+| `SCANNING` | `EOBIMAGESPATH` | `\\server\data\x12files\scannedEOBs\` |
 
 The screenshot in *Where settings live* shows exactly this entry being edited.
 

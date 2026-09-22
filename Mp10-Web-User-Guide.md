@@ -31,8 +31,8 @@ If a screen here is missing from your menu, either your account has no
 permission for it or your site has not turned that feature on; if a screen in
 your menu is missing here, your site is running a newer version than this
 guide. Last revised **September 2026**, covering the Dashboard, Patients,
-Encounters, Claims, Remittances, Reports, the Modality worklist, attachments,
-signatures and printing.
+Encounters, Claims, Remittances, Submissions, Reports, the Modality worklist,
+attachments, signatures and printing.
 
 Three companion guides cover things this one only points at: **Mp10 Web —
 Printing** for the print helper, **Mp10 — Signature Helper** for the program
@@ -67,10 +67,26 @@ here does not change the one you use in the desktop applications.
 After signing in you'll see a menu down the left. It only lists the areas you
 have permission to use, so two people may see different menus on the same
 system. The main areas are **Dashboard**, then **Patients**, **Encounters**,
-**Claims**, **Remittances** and **Modality worklist** grouped under a
-**Records** heading, and **Reports** under its own. There is also an **Admin**
-heading, and **it starts collapsed** — select it to find **Print helper** and
-**Signature helper**, which are referred to later in this guide.
+**Claims**, **Remittances**, **Submissions** and **Modality worklist** grouped
+under a **Records** heading, and **Reports** under its own. There is also an
+**Admin** heading, and **it starts collapsed** — select it to find **Print
+helper** and **Signature helper**, which are referred to later in this guide.
+
+**Which of those you get depends on the group your administrator put you in**
+— the same groups the Mp10 desktop uses, set in the desktop Admin module.
+There is no separate web permission to ask for. As a rule of thumb:
+
+| If you are | You see |
+|---|---|
+| admissions staff | Patients and Encounters, and an encounter's claims read-only — **not** the Claims page, Remittances, Submissions or Reports |
+| billing staff | Claims, Remittances, Submissions and Reports, with Patients and Encounters read-only |
+| transcription | the Modality worklist |
+| an administrator | Patients, Encounters, Claims, Reports, the worklist and the Admin screens — but posting a remittance, sending an 837 and entering an adjustment are billing rights, granted separately |
+
+So a colleague who does billing having screens you do not is expected, not a
+sign that your account is broken. If you need one of them, it is a change to
+your group in the desktop Admin module, and it takes effect the next time the
+page loads.
 
 **Two entries appear only where the site uses them.** **Modality worklist** is
 there when the site runs the imaging worklist; where it was never turned on the

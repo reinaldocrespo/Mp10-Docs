@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-09-18" />
+  <meta name="dcterms.date" content="2026-09-22" />
   <title>Mp10 AutoTasks — Administrator’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -148,7 +148,7 @@ a { color: inherit; }
 <p class="subtitle">Backups, electronic remittances, modality worklist,
 and automated reports</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">18 September 2026</p>
+<p class="date">22 September 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -259,6 +259,8 @@ files</a></li>
 (277)</a></li>
 <li><a href="#claim-acknowledgements-edi" id="toc-claim-acknowledgements-edi">Claim acknowledgements
 (EDI)</a></li>
+<li><a href="#claim-submissions-from-mp10-web-837" id="toc-claim-submissions-from-mp10-web-837">Claim submissions from Mp10
+Web (837)</a></li>
 <li><a href="#insurance-eligibility-270-271" id="toc-insurance-eligibility-270-271">Insurance eligibility (270 /
 271)</a>
 <ul>
@@ -1227,7 +1229,7 @@ day.</p>
 image contains its own <code>mp.add</code>, so it is a data dictionary
 in its own right and Admin10 can log into it like any other. Start it
 with the backup folder as the path:</p>
-<pre><code>PrAdmin10.exe PATH:e:\adsdata\sfi-2026\backup\</code></pre>
+<pre><code>PrAdmin10.exe PATH:e:\adsdata\restore\backup\</code></pre>
 <p>Give the path of the <em>folder</em> holding the backup’s
 <code>mp.add</code>, with a trailing backslash — Admin10 adds the
 dictionary name itself. (The same thing can be done by changing the
@@ -2005,6 +2007,87 @@ accumulating. They are <strong>not</strong> copied to the history folder
 first, so if you want to keep them for an audit, this is not the
 mechanism that will do it.</p>
 </blockquote>
+<h1 id="claim-submissions-from-mp10-web-837">Claim submissions from Mp10
+Web (837)</h1>
+<p>Billing staff can select claims in Mp10 Web and press <strong>Create
+837</strong>. That queues a job; it does not build or send anything.
+AutoTasks picks the job up on its next sweep, builds the 837 file, and —
+only after someone presses <strong>Send to clearinghouse</strong> on the
+web’s Submissions page — transmits it on a later sweep. Both halves are
+deliberate, separate actions, and both happen here, in the service, not
+in the browser.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Section</th>
+<th>Entry</th>
+<th>Value</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>AUTOTASKS</code></td>
+<td><code>PROCESS_837_JOBS</code></td>
+<td><code>YES</code></td>
+<td>Build the 837 files Mp10 Web queues. Anything other than
+<code>YES</code> = off. <strong>The default is
+<code>YES</code></strong>; set <code>NO</code> only at a site that bills
+from the desktop alone</td>
+</tr>
+<tr class="even">
+<td><code>X12FILE_PATH</code></td>
+<td><code>837</code></td>
+<td><code>\\server\data\x12files\837\</code></td>
+<td>Where the built file is written. <strong>The service’s account must
+be able to write here</strong> — a path the desktop can reach but the
+service cannot fails the job, and the job says so</td>
+</tr>
+<tr class="odd">
+<td><code>X12FILE_PATH</code></td>
+<td><code>835_COPY_PATH</code></td>
+<td><code>\\server\data\x12files\history\</code></td>
+<td>A sent file is filed here once the clearinghouse has taken it — the
+same history folder the 835s use</td>
+</tr>
+<tr class="even">
+<td><code>X12</code></td>
+<td><code>Copy837_Path</code></td>
+<td><em>(optional)</em></td>
+<td>Where a built file is copied <strong>only when it was not
+transmitted</strong>, so it can be handed over by hand. Not a copy of
+what was sent</td>
+</tr>
+</tbody>
+</table>
+<p>Sending needs the clearinghouse web-service account in
+<code>sys_registry</code> under section <code>X12WebService</code> —
+<code>FileTransfer_Url</code>, <code>UserName</code> and
+<code>Password</code> — the same entries the desktop’s claims screen
+sends with. A site that has never set them gets a plain refusal naming
+them, and nothing is transmitted; nothing is configured separately for
+the web.</p>
+<p><strong>A job that never leaves <em>Queued</em> on the web
+page</strong> means this service is not running against the same
+dictionary, or <code>PROCESS_837_JOBS</code> is not <code>YES</code>.
+The web page cannot see the service and cannot tell you which. To prove
+the service side from the server without waiting for a sweep:</p>
+<pre><code>AutoTasks --job=0 --no-send</code></pre>
+<p>builds every queued job right away and prints what it did, ignoring
+the switch. <strong>Keep the <code>--no-send</code>.</strong> Without it
+the same command is one full sweep — it builds <em>and</em> transmits
+anything already marked for sending — and the banner it prints says
+which of the two it is about to do.</p>
+<p>Each transmission is recorded against the claims it carried, and the
+web’s <strong>837</strong> button on a claim shows them. Resubmitting a
+claim that was already sent is allowed on purpose (corrected claims are
+normal); the web warns, it does not block.</p>
 <h1 id="insurance-eligibility-270-271">Insurance eligibility (270 /
 271)</h1>
 <p>AutoTasks can ask insurers whether a patient’s coverage is active — a
@@ -2308,11 +2391,6 @@ processes and then moves <em>every</em> PDF it finds there.</li>
 </ul>
 <h2 id="step-2-declare-the-folder">Step 2 — Declare the folder</h2>
 <table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
 <thead>
 <tr class="header">
 <th>Section</th>
@@ -2324,7 +2402,7 @@ processes and then moves <em>every</em> PDF it finds there.</li>
 <tr class="odd">
 <td><code>SCANNING</code></td>
 <td><code>EOBIMAGESPATH</code></td>
-<td><code>\\192.168.0.202\data\mp8\data\x12files\scannedEOBs\</code></td>
+<td><code>\\server\data\x12files\scannedEOBs\</code></td>
 </tr>
 </tbody>
 </table>

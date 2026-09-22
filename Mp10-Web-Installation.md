@@ -21,10 +21,10 @@ header-includes: |
 
 # About this guide
 
-Mp10 Web is the browser-based front end for patients, encounters and
-insurance — a PHP 8 API and a Vue 3 single-page app, reading and writing the
-same Advantage Database Server dictionary (`mp.add`) the Mp10 Win32 desktop
-applications already use.
+Mp10 Web is the browser-based front end for patients, encounters, insurance,
+claims, remittances, electronic claim submission and reports — a PHP 8 API
+and a Vue 3 single-page app, reading and writing the same Advantage Database
+Server dictionary (`mp.add`) the Mp10 Win32 desktop applications already use.
 
 This guide is for whoever installs and maintains it on a server. It covers
 one thing: taking a published bundle (a single zip) and turning it into a
@@ -166,7 +166,7 @@ run** — a half-configured install is worse than a refused one:
 | 5/8 Deploy files | Copies the application into the install root, and sets the SPA's `<base href>` to the URL path. |
 | 6/8 Configuration file | Writes `database.local.php` (fresh install only — see "Updating"). |
 | 7/8 Apache | Renders `<install root>\apache\mp10web.conf`, adds one `Include` line to the site's `httpd.conf`, validates it with `httpd -t`, and restarts Apache only if something changed. |
-| 8/8 Database | Runs the migration: creates the `web_users`, `web_groups` and `web_group_members` **tables** if they don't exist. It creates no accounts — see "Accounts" below — and reports how many active ones the dictionary already has. |
+| 8/8 Database | Runs the migration: creates the `web_users`, `web_groups`, `web_group_members` and `web_x12jobs` **tables** if they don't exist. It creates no accounts and grants no permissions — see "Accounts" below — and reports how many active accounts the dictionary already has. |
 | Smoke test | Posts a login for a random username through the real URL and requires a 401 back. |
 
 ## The questions
@@ -220,7 +220,7 @@ value read back from the **existing install**, then the built-in default.
     "apache_service": "Apache2.4",
     "httpd_conf": "C:\\Apache24\\conf\\httpd.conf",
     "ads_mode": "Remote",
-    "dd_path": "\\\\HOST:6262\\VOL\\sfi\\mp.add",
+    "dd_path": "\\\\HOST:6262\\VOL\\dictionary\\mp.add",
     "ads_user": "adssys",
     "url_prefix": "/mpweb",
     "public_origin": "https://mp10.clinic.local"
@@ -242,7 +242,8 @@ moved its dictionary can simply type the new path over the old one.
 ## Accounts: this installer creates none, on purpose
 
 **The installer creates tables, never users.** Step 8/8 makes `web_users`,
-`web_groups` and `web_group_members` exist; it puts nothing in them. A freshly
+`web_groups`, `web_group_members` and `web_x12jobs` exist; it puts nothing in
+them. A freshly
 installed site therefore has **no one who can sign in**, and the installer says
 so plainly rather than letting you find out at the login screen:
 
@@ -276,6 +277,44 @@ account that signs in successfully and can then do nothing at all.
 
 Order matters only between 1 and 2/3: do the structure update first, or the
 first person to sign in will have an account with no capabilities.
+
+### Which group sees what
+
+The structure update writes one `web_groups` row per dictionary group below.
+A person's menu is the union of the rows for the groups they belong to, so
+**the group you put an operator in decides which screens exist for them**.
+There is no separate "web role"; there is only dictionary group membership.
+
+| Dictionary group | Sees in Mp10 Web |
+|---|---|
+| **Administrators** | Patients and Encounters (edit), Claims (view and edit), Reports, the Modality worklist, and the Admin screens for the print and signature helpers |
+| **Admission** | Patients and Encounters (edit), and an encounter's claims list read-only. **No** Claims page, Remittances, Submissions or Reports |
+| **BillingUsers** | Patients and Encounters (read-only), Claims (view, edit, raise, print, payments), Remittances including **Post**, Submissions (Create 837 and Send), Reports |
+| **AdjustmentAuthUsers** | Only the right to enter a non-zero adjustment on a payment line. Opens nothing on its own — it is granted **in addition to** BillingUsers, matching how the desktop authorises adjustments |
+| **Transcription** | The Modality worklist only |
+
+Anything not in that table gets no row and its members sign in to the
+Dashboard and nothing else.
+
+Three consequences worth telling the site before the first sign-in, because
+each one looks like a fault and is not:
+
+- **Not every operator is a billing user.** An admissions clerk does not see
+  Claims, Remittances, Submissions or Reports, and should not. When someone
+  reports a screen "missing", check their groups in the Admin module before
+  anything else.
+- **Administrators do not post remittances, submit 837s or adjust
+  balances.** Those three are money actions and are granted to the billing
+  groups only, exactly as the desktop does. An administrator who also bills
+  is a member of BillingUsers as well.
+- **Group names are matched exactly** as the Admin module creates them
+  (`Admission`, singular). A group added by hand under a near-miss name
+  writes happily and matches nobody.
+
+A site that wants a different split (for instance, posting restricted to a
+supervisor group) changes the declaration in the Admin module, not the web
+app, and reconciles; the update is additive, so a permission removed there
+also has to be removed from the existing row by hand.
 
 ### A forgotten password *(IT task)*
 
@@ -420,8 +459,10 @@ Two practical notes that cost time when they are not known:
 
 Deliberately little, and every bit of it is listed here:
 
-- **Three tables in the dictionary**: `web_users`, `web_groups`,
-  `web_group_members`. The clinical schema, its stored procedures, and the
+- **Four tables in the dictionary**: `web_users`, `web_groups`,
+  `web_group_members`, `web_x12jobs` (the electronic-submission queue). The
+  desktop Admin module declares the same four, so a dictionary that has had a
+  structure update already has them. The clinical schema, its stored procedures, and the
   `NewSeqKey` key-minting function all belong to the **Win32 Admin module** —
   this installer neither creates nor inspects them. If a dictionary is
   missing something Mp10 Web needs at that level, that is fixed by running
@@ -517,6 +558,37 @@ restart. Apache is restarted only when the rendered file or the `Include`
 actually changed, so a routine update of the application alone does not
 interrupt anything the server is serving.
 
+# Electronic claim submission needs AutoTasks
+
+The **Submissions** screen queues work; it transmits nothing itself. Building
+an 837 file from the queued claims, and later sending it to the clearinghouse,
+is done by the **AutoTasks** service on its regular sweep — the same service
+that fetches eligibility, imports 835s and keeps the modality worklist. That
+is deliberate: the clearinghouse credentials, the file paths and the X12
+writer already live in the desktop and the service, and the web app was not
+given a second copy of any of them.
+
+For submission to work at a site:
+
+| | |
+|---|---|
+| AutoTasks is installed and running | against the **same dictionary** the web app uses. See the *Mp10 AutoTasks* guide. |
+| `AUTOTASKS` / `PROCESS_837_JOBS` is `YES` | in `sys_registry`. The default **is** `YES`; a site that bills from the desktop only sets it `NO`, and then nothing queued from the web is ever built. |
+| `X12FILE_PATH` / `837` names a directory **the service's account can write** | the built file is placed there. A path the desktop can reach but the service cannot fails the build, and the job says so. |
+| The clearinghouse settings the desktop already uses are in place | sending reuses them; nothing is configured on the web side. |
+
+**A job that never leaves *Queued*** means the service is not running against
+this dictionary, or the switch is `NO`. The web page has no view of the
+service and cannot tell you which; check the service first. From the server,
+`AutoTasks --job=0 --no-send` builds every queued row from the command line
+regardless of the switch, printing what it does, which is the quickest way to
+prove the service side on a new site. Keep the `--no-send`: without it the
+same command also transmits anything already marked for sending.
+
+When the web bundle is updated, update AutoTasks from the same release. The
+job protocol between the two is shared, and an older service may not
+recognise what a newer page queues.
+
 # TLS
 
 There is nothing to do here, and nothing the installer will do. Mp10 Web
@@ -567,14 +639,29 @@ linger — the deployed tree is exactly this bundle. `backend\php\config`,
 `logs\` and `apache\` are excluded from that mirroring.
 
 What always re-runs: **the migration** (step 8/8). It is idempotent — a
-second run reports what was already there (`already present`,
-`already granted`) rather than doing it again — but it is not optional.
-**New permissions arrive only through the migration.** Permissions are
-stored as data in `web_groups.perms`, with no admin screen to grant them
-yet, so a feature gated on a permission that shipped in this update is
-simply invisible — no error, no empty state — until the migration that
-grants it actually runs. Skipping the update-and-rerun step because "nothing
-looked different" is exactly how that gap gets missed.
+second run reports what was already there (`already present`) rather than
+doing it again — but it is not optional: a release that adds a **table**
+(electronic submission added `web_x12jobs`) needs it.
+
+**Then run the desktop Admin module's structure update — every time.** A
+release that adds a **permission** delivers it that way and no other:
+permissions are data in `web_groups.perms`, this installer never writes them,
+and the structure update appends whatever the new release declares (it never
+removes anything a site added by hand). Reports, remittance posting and
+electronic submission each arrived as a new permission in September 2026. A
+feature gated on a permission that has not been granted is simply invisible —
+no error, no empty state, just a menu entry that is not there — so "the update
+ran but the new screen is missing" almost always means this step, not the
+install. Use the Admin module built for the same release as the web bundle:
+an older one does not know the new permission exists.
+
+**Who sees what afterwards** is decided by group membership, which the site
+controls in the same Admin module. Not every operator is a billing user; see
+the table under *Accounts* before treating a missing menu entry as a fault.
+
+If the site submits claims from the web, **update the AutoTasks service from
+the same release too** — see *Electronic claim submission needs AutoTasks*
+below. The builder and sender live there, not in this bundle.
 
 # Removing it
 
@@ -584,8 +671,10 @@ Three steps, and the installer prints them for your machine when it finishes:
    everything from `# BEGIN Mp10 Web` to `# END Mp10 Web` inclusive — and
    restart that Apache service. Nothing else in that file was ever changed,
    so nothing else needs reverting.
-2. **Drop the three tables** (`web_users`, `web_groups`,
-   `web_group_members`) from the dictionary.
+2. **Drop the four tables** (`web_users`, `web_groups`,
+   `web_group_members`, `web_x12jobs`) from the dictionary. Note that a later
+   structure update from the desktop Admin module recreates them, empty; that
+   is harmless.
 3. **Delete the install root** (`C:\Mp10Web` by default), and
    `%ProgramData%\Mp10Web\` if you do not want the remembered answers kept
    for a future install.
@@ -593,8 +682,8 @@ Three steps, and the installer prints them for your machine when it finishes:
 **Do not delete the `sequences` row for `field = 'recno'`.** It is not
 Mp10-Web-owned data — it is shared dictionary infrastructure the desktop
 apps read too, and removing it (rather than merely leaving Mp10 Web's own
-three tables behind) would affect record-number minting outside this
-application entirely. Removing Mp10 Web means dropping the three `web_*`
+four tables behind) would affect record-number minting outside this
+application entirely. Removing Mp10 Web means dropping the four `web_*`
 tables; it does not mean touching `sequences`.
 
 # Fault-finding
