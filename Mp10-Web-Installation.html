@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-09-22" />
+  <meta name="dcterms.date" content="2026-09-23" />
   <title>Mp10 Web — Installation</title>
   <style>
 code{white-space: pre-wrap;}
@@ -211,7 +211,7 @@ a { color: inherit; }
 <h1 class="title">Mp10 Web — Installation</h1>
 <p class="subtitle">Installing and updating the browser application</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">22 September 2026</p>
+<p class="date">23 September 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -222,6 +222,8 @@ guide</a></li>
 verify the download</a></li>
 <li><a href="#installing" id="toc-installing">Installing</a>
 <ul>
+<li><a href="#if-powershell-refuses-to-run-it" id="toc-if-powershell-refuses-to-run-it">If PowerShell refuses to run
+it</a></li>
 <li><a href="#the-questions" id="toc-the-questions">The
 questions</a></li>
 <li><a href="#remembered-answers" id="toc-remembered-answers">Remembered
@@ -411,8 +413,27 @@ to.</p>
 folder:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">.</span>\install<span class="op">.</span><span class="fu">ps1</span></span></code></pre></div>
 <p>Everything it needs, it asks for, so the bare command above is the
-normal way to run it. Every answer can also be given as a parameter,
-which then skips that prompt:</p>
+normal way to run it.</p>
+<h2 id="if-powershell-refuses-to-run-it">If PowerShell refuses to run
+it</h2>
+<p>The script is not code-signed, so on a server whose execution policy
+is <code>AllSigned</code> or <code>Restricted</code> the bare command
+stops with <em>“is not digitally signed”</em> or <em>“running scripts is
+disabled on this system”</em>. Run it through a one-process bypass
+instead — this changes nothing in the machine’s policy; it applies to
+that single invocation only:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>powershell <span class="op">-</span>NoProfile <span class="op">-</span>ExecutionPolicy Bypass <span class="op">-</span>File <span class="op">.</span>\install<span class="op">.</span><span class="fu">ps1</span></span></code></pre></div>
+<p>Parameters go after the script name exactly as before, and for an
+update <code>-NonInteractive</code> can be added at the end.</p>
+<p>If it still refuses, or every file prompts <em>“Do you want to run
+this software?”</em>, the extracted files carry the mark-of-the-web from
+the download. Clear it once, from the bundle folder, then run the
+command above again:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Get-ChildItem</span> <span class="op">-</span>Recurse <span class="op">|</span> <span class="fu">Unblock-File</span></span></code></pre></div>
+<p>Only the bundle folder is touched; nothing under the install root or
+the site’s Apache is changed by either command.</p>
+<p>Every answer can also be given as a parameter, which then skips that
+prompt:</p>
 <table>
 <colgroup>
 <col style="width: 50%" />
@@ -605,19 +626,19 @@ scripted update needs no arguments at all beyond
 <strong>parameter</strong> on the command line wins, then the
 <strong>answers file</strong>, then a value read back from the
 <strong>existing install</strong>, then the built-in default.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;schema&quot;</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;written_utc&quot;</span><span class="fu">:</span> <span class="st">&quot;2026-08-18T15:26:01Z&quot;</span><span class="fu">,</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;install_root&quot;</span><span class="fu">:</span> <span class="st">&quot;C:</span><span class="ch">\\</span><span class="st">Mp10Web&quot;</span><span class="fu">,</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;php_path&quot;</span><span class="fu">:</span> <span class="st">&quot;C:</span><span class="ch">\\</span><span class="st">php</span><span class="ch">\\</span><span class="st">php.exe&quot;</span><span class="fu">,</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;apache_service&quot;</span><span class="fu">:</span> <span class="st">&quot;Apache2.4&quot;</span><span class="fu">,</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;httpd_conf&quot;</span><span class="fu">:</span> <span class="st">&quot;C:</span><span class="ch">\\</span><span class="st">Apache24</span><span class="ch">\\</span><span class="st">conf</span><span class="ch">\\</span><span class="st">httpd.conf&quot;</span><span class="fu">,</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;ads_mode&quot;</span><span class="fu">:</span> <span class="st">&quot;Remote&quot;</span><span class="fu">,</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;dd_path&quot;</span><span class="fu">:</span> <span class="st">&quot;</span><span class="ch">\\\\</span><span class="st">HOST:6262</span><span class="ch">\\</span><span class="st">VOL</span><span class="ch">\\</span><span class="st">dictionary</span><span class="ch">\\</span><span class="st">mp.add&quot;</span><span class="fu">,</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;ads_user&quot;</span><span class="fu">:</span> <span class="st">&quot;adssys&quot;</span><span class="fu">,</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;url_prefix&quot;</span><span class="fu">:</span> <span class="st">&quot;/mpweb&quot;</span><span class="fu">,</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;public_origin&quot;</span><span class="fu">:</span> <span class="st">&quot;https://mp10.clinic.local&quot;</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;schema&quot;</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;written_utc&quot;</span><span class="fu">:</span> <span class="st">&quot;2026-08-18T15:26:01Z&quot;</span><span class="fu">,</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;install_root&quot;</span><span class="fu">:</span> <span class="st">&quot;C:</span><span class="ch">\\</span><span class="st">Mp10Web&quot;</span><span class="fu">,</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;php_path&quot;</span><span class="fu">:</span> <span class="st">&quot;C:</span><span class="ch">\\</span><span class="st">php</span><span class="ch">\\</span><span class="st">php.exe&quot;</span><span class="fu">,</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;apache_service&quot;</span><span class="fu">:</span> <span class="st">&quot;Apache2.4&quot;</span><span class="fu">,</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;httpd_conf&quot;</span><span class="fu">:</span> <span class="st">&quot;C:</span><span class="ch">\\</span><span class="st">Apache24</span><span class="ch">\\</span><span class="st">conf</span><span class="ch">\\</span><span class="st">httpd.conf&quot;</span><span class="fu">,</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;ads_mode&quot;</span><span class="fu">:</span> <span class="st">&quot;Remote&quot;</span><span class="fu">,</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;dd_path&quot;</span><span class="fu">:</span> <span class="st">&quot;</span><span class="ch">\\\\</span><span class="st">HOST:6262</span><span class="ch">\\</span><span class="st">VOL</span><span class="ch">\\</span><span class="st">dictionary</span><span class="ch">\\</span><span class="st">mp.add&quot;</span><span class="fu">,</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;ads_user&quot;</span><span class="fu">:</span> <span class="st">&quot;adssys&quot;</span><span class="fu">,</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;url_prefix&quot;</span><span class="fu">:</span> <span class="st">&quot;/mpweb&quot;</span><span class="fu">,</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;public_origin&quot;</span><span class="fu">:</span> <span class="st">&quot;https://mp10.clinic.local&quot;</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <p><strong>The ADS password is never written there</strong> — not
 encrypted, not hashed, not “just the first part”. On an update the
 installer reads it back from the site’s own
@@ -850,8 +871,8 @@ failed install.</strong></p>
 installer for this</h2>
 <p>The desk half has its own bundle, built alongside this one, which
 installs <strong>both</strong> helpers at a workstation:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Expand<span class="op">-</span>Archive Mp10Web<span class="op">-</span>Workstation<span class="op">-</span>Install<span class="op">.</span><span class="fu">zip</span> <span class="op">-</span>DestinationPath C<span class="op">:</span>\Mp10Helpers</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>C<span class="op">:</span>\Mp10Helpers\Install<span class="op">-</span>Workstation<span class="op">.</span><span class="fu">ps1</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>Expand<span class="op">-</span>Archive Mp10Web<span class="op">-</span>Workstation<span class="op">-</span>Install<span class="op">.</span><span class="fu">zip</span> <span class="op">-</span>DestinationPath C<span class="op">:</span>\Mp10Helpers</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>C<span class="op">:</span>\Mp10Helpers\Install<span class="op">-</span>Workstation<span class="op">.</span><span class="fu">ps1</span></span></code></pre></div>
 <p>Run it elevated, at each desk that prints, signs or scans. It asks
 for the Mp10 program folder and the origin, copies
 <code>MpPrintSrv.exe</code>, <code>MpSigSrv.exe</code>,
@@ -891,11 +912,11 @@ workstation installer that exact value — it is what its Origin prompt is
 asking for.</p>
 <p>Each helper reads an allowlist from <code>Mp10.ini</code> beside
 it:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[PRINT]</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="dt">ORIGIN</span><span class="ot">=</span><span class="st">https://mp10.clinic.local</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">[SIGN]</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="dt">ORIGIN</span><span class="ot">=</span><span class="st">https://mp10.clinic.local</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[PRINT]</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="dt">ORIGIN</span><span class="ot">=</span><span class="st">https://mp10.clinic.local</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">[SIGN]</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="dt">ORIGIN</span><span class="ot">=</span><span class="st">https://mp10.clinic.local</span></span></code></pre></div>
 <p>Exactly as the browser sends it: scheme and host, the port when it is
 not 80 or 443, and no trailing slash. It must match the public origin
 you answered, and it is the ORIGIN alone - never the /mpweb path, which
@@ -991,9 +1012,9 @@ has</strong>, as an alias. It adds no service, no port and no
 certificate of its own.</p>
 <p>The whole of the edit to the site’s <code>httpd.conf</code> is
 this:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode apache"><code class="sourceCode apache"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="re">BEGIN</span><span class="co"> Mp10 Web (managed by install.ps1 - do not edit between the markers)</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>Include<span class="st"> &quot;C:/Mp10Web/apache/mp10web.conf&quot;</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="re">END</span><span class="co"> Mp10 Web</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode apache"><code class="sourceCode apache"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="re">BEGIN</span><span class="co"> Mp10 Web (managed by install.ps1 - do not edit between the markers)</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>Include<span class="st"> &quot;C:/Mp10Web/apache/mp10web.conf&quot;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="re">END</span><span class="co"> Mp10 Web</span></span></code></pre></div>
 <p>Everything else lives in <code>C:\Mp10Web\apache\mp10web.conf</code>,
 which the installer owns and re-renders on every run:</p>
 <ul>
@@ -1114,7 +1135,7 @@ Web arrived.</li>
 </ul>
 <h1 id="updating">Updating</h1>
 <p>Run the same command against the same install root:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="op">.</span>\install<span class="op">.</span><span class="fu">ps1</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="op">.</span>\install<span class="op">.</span><span class="fu">ps1</span></span></code></pre></div>
 <p>Nothing needs to be given again: the answers file supplies the
 install root, the Apache service, the URL path and the rest, so an
 update is Enter through the questions — or
@@ -1246,6 +1267,17 @@ workstation side</a>, and check the origin allowlist first.</p>
 configuration and restarts the Apache service.</td>
 <td>PowerShell was not run as Administrator.</td>
 <td>Re-open PowerShell with “Run as administrator” and re-run.</td>
+</tr>
+<tr class="even">
+<td><code>install.ps1</code> cannot be loaded because running scripts is
+disabled on this system / is not digitally signed.</td>
+<td>The server’s execution policy refuses unsigned scripts. The
+installer never got as far as step 0.</td>
+<td><code>powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1</code>
+— see <em>If PowerShell refuses to run it</em> above. If the files also
+prompt “Do you want to run this software?”,
+<code>Get-ChildItem -Recurse \| Unblock-File</code> in the bundle folder
+first.</td>
 </tr>
 </tbody>
 </table>

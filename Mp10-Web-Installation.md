@@ -121,8 +121,36 @@ From an **elevated** PowerShell, in the extracted bundle folder:
 ```
 
 Everything it needs, it asks for, so the bare command above is the normal
-way to run it. Every answer can also be given as a parameter, which then
-skips that prompt:
+way to run it.
+
+## If PowerShell refuses to run it
+
+The script is not code-signed, so on a server whose execution policy is
+`AllSigned` or `Restricted` the bare command stops with *"is not digitally
+signed"* or *"running scripts is disabled on this system"*. Run it through a
+one-process bypass instead — this changes nothing in the machine's policy;
+it applies to that single invocation only:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1
+```
+
+Parameters go after the script name exactly as before, and for an update
+`-NonInteractive` can be added at the end.
+
+If it still refuses, or every file prompts *"Do you want to run this
+software?"*, the extracted files carry the mark-of-the-web from the
+download. Clear it once, from the bundle folder, then run the command
+above again:
+
+```powershell
+Get-ChildItem -Recurse | Unblock-File
+```
+
+Only the bundle folder is touched; nothing under the install root or the
+site's Apache is changed by either command.
+
+Every answer can also be given as a parameter, which then skips that prompt:
 
 | Parameter | What it decides |
 |---|---|
@@ -718,6 +746,7 @@ embeds a value (a path, a count, a port), that part is shown as `<...>`.
 | Message | What it means | What to do |
 |---|---|---|
 | Run this from an elevated PowerShell. It writes to the Apache configuration and restarts the Apache service. | PowerShell was not run as Administrator. | Re-open PowerShell with "Run as administrator" and re-run. |
+| `install.ps1` cannot be loaded because running scripts is disabled on this system / is not digitally signed. | The server's execution policy refuses unsigned scripts. The installer never got as far as step 0. | `powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1` — see *If PowerShell refuses to run it* above. If the files also prompt "Do you want to run this software?", `Get-ChildItem -Recurse \| Unblock-File` in the bundle folder first. |
 
 ## Step 1/8 — Verify the bundle
 
