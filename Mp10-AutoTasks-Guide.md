@@ -1383,13 +1383,29 @@ fails.
 
 # Automated reports
 
-Any Mp10 report can be scheduled to run by itself and be e-mailed out. You set
-this up from the report itself, not from a central screen.
+Every Billing and Patients report with an **Automate Report** tab can run by themselves on a schedule and be
+e-mailed out. You set this up from the report itself, not from a central
+screen. AutoTasks does the running, so it must be installed and running on the
+server. If it isn't, nothing is sent.
+
+## Before you start
+
+- **Who can set one up:** only members of the **Supervisors** or
+  **Administrators** groups. Other users can see the **Automate Report** tab
+  but cannot save from it.
+- **Who can receive one:** only members of the **BillingUsers** group appear
+  in the recipient list. That is true in the Patients module too. If someone
+  is missing, add them to that group in the admin module, or ask your Mp10
+  administrator to.
+- **Outgoing e-mail must work.** See *Making sure e-mail actually goes out*
+  below. Without it, reports run and nobody receives them.
 
 ## Setting up a report
 
-Open the report you want as you normally would, set its parameters, then go to
-the **Automate Report** tab.
+Open the report as you normally would. Set its parameters on the other tabs
+(insurances, doctors, encounter types and so on), then go to the **Automate
+Report** tab. The filters you chose on the other tabs are saved with the
+automation and used every time it runs.
 
 ![The Automate Report tab, here on the Unbilled Report](images/automated-reports.png)
 
@@ -1400,31 +1416,41 @@ In **Automated Report Users**, press the green **+** and pick a user from the
 recipients as you need; the red **−** removes the selected one.
 
 > The address comes from the user's Mp10 record. If it is wrong or missing, fix
-> it on the user, not here.
+> it on the user and pick them again here. A recipient with no e-mail address
+> is dropped when you save.
 
 ### When it runs
 
-Tick one of the **Frequency** options:
+Tick one of the **Frequency** options. The option also decides which dates the
+report covers, because an automated report ignores the dates on the **Dates**
+tab:
 
-| Option | Runs |
-|---|---|
-| **Daily** | Every day |
-| **Weekly** | Once a week, on the day you select on the right |
-| **First day of month** | On the 1st |
-| **Last day of month** | On the last day of the month |
-| **End of Each Period** | On your billing period's closing day |
-| **Suspend** | Not at all — see below |
+| Option | Runs | Covers |
+|---|---|---|
+| **Daily** | Every day | Yesterday |
+| **Weekly** | Once a week, on the day selected below it | The seven days before the run day, ending yesterday |
+| **First day of month** | On the 1st | The whole previous month |
+| **Last day of month** | On the last day of the month | The current month |
+| **End of Each Period** | On your billing period's closing day | The whole previous calendar month |
+| **Scheduled Date** | Once, on that date | The dates you set on the **Dates** tab |
+| **Suspend** | Not at all (see *Stopping a report*) | — |
 
-**Scheduled Date** runs the report once, on that specific date, instead of
-repeating.
+**End of Each Period** uses the day of the month set in `BILLING` /
+`DAYS_INTO_MONTH_BEFORE_CLOSING`. If that setting is `0` or missing, these
+reports never run.
 
-**End of Each Period** uses the day-of-month set in
-`BILLING` / `DAYS_INTO_MONTH_BEFORE_CLOSING`.
+**Scheduled Date** is the only way to send a fixed date range, such as a
+one-off report for last quarter. Set the range on the **Dates** tab first,
+then pick the date it should go out.
+
+Ticking **Daily** clears the monthly and weekly options, because a daily
+report cannot also be monthly. Choose **Daily**, or any combination of the
+others.
 
 ### What time it runs
 
-**Scheduled Time** sets the time of day. If you leave it blank the system
-default is used:
+**Scheduled Time** sets the time of day. A new automation starts with the
+system default:
 
 | Setting | Section | Default |
 |---|---|---|
@@ -1433,33 +1459,74 @@ default is used:
 > **A report is only queued for a time that has not yet arrived today.** If it
 > is 3 p.m. and you schedule a daily report for 2 p.m., it will not run this
 > afternoon — it starts tomorrow. When setting up a report you want to see
-> today, pick a time that is still ahead of you, or use **Run** to produce it
-> immediately.
+> today, pick a time that is still ahead of you.
+
+The report goes out on AutoTasks' first wake-up after that time, so allow a
+couple of minutes (see *How AutoTasks works*).
 
 ### What format it arrives in
 
-Tick one or more of **Send as PDF**, **Send as XLS**, **Send as Fp3**, **Send as
-HTML**. PDF is the usual choice. XLS is worth ticking when the recipient will
-want to sort or total the figures themselves.
+Tick one or more of the following. Each format arrives as a **separate
+e-mail**, so ticking PDF and XLS sends every recipient two messages.
 
-**Report Pswrd** puts a password on the attachment. Use it for anything leaving
-the practice.
+| Format | Good for | Password protected? |
+|---|---|---|
+| **Send as PDF** | Reading and printing; the usual choice | Yes |
+| **Send as XLS** | Recipients who want to sort, filter or total the figures | Yes |
+| **Send as Fp3** | Opening in the FastReport report viewer | No |
+| **Send as HTML** | Reading on a phone or in a browser without opening an attachment viewer | No |
+
+If you tick none, the report is sent as PDF.
+
+An HTML report arrives as an `.html` file. Any logos or charts in the report
+come as separate picture files attached to the same e-mail.
+
+**Report Pswrd** protects the PDF and XLS attachments: the recipient needs it
+to open them. Use it for anything leaving the practice, and give recipients
+the password some other way, never in the same e-mail. It does not protect Fp3
+or HTML attachments, so don't use those formats for patient information sent
+outside the practice.
 
 ### Naming and saving
 
-Give it a clear **Report Name** — this is what identifies the scheduled job and
-what recipients will see. `Daily Unbilled Report` is a better name than
-`report1`.
+Give it a clear **Report Name**. This name identifies the automation, and it
+appears in the subject of every e-mail. For example, a PDF arrives as *"PDF
+formatted Daily Unbilled Report Automated Report"*. `Daily Unbilled Report` is
+a better name than `report1`.
 
-Press **Save Automated Report**. Press **Run** to test it right away without
-waiting for the schedule.
+Press **Save Automated Report**.
+
+**Run** does not send anything. It shows the report on screen with the
+current parameters, the same as running it by hand. Use it to check the
+filters return what you expect. To see the e-mail itself, schedule the report
+a few minutes ahead and wait for it.
+
+### More than one schedule for the same report
+
+You can save as many automations of one report as you like, each with its own
+name, recipients, filters and timing. For example, keep a *Daily Unbilled
+Report* for the billing staff and a *Monthly Unbilled Report* for management.
+
+## Changing an existing automated report
+
+1. Open the same report and go to the **Automate Report** tab.
+2. Press the magnifying glass in **Report Name**. It lists the automations
+   already saved for this report. Pick one, and its recipients, timing,
+   formats and filters load into the screen.
+3. Make your changes and press **Save Automated Report**.
+
+> **Do not rename it while changing it.** The name is how the automation is
+> identified. Saving under a new name creates a *second* automation; the old
+> one keeps running under the old name. To rename, save under the new name and
+> then suspend the old one.
 
 ## Stopping a report
 
-Tick **Suspend** and save. The job stays configured, with its recipients and
-settings, but stops running. Untick it to resume.
+Tick **Suspend** and save. The automation keeps its recipients and settings
+but stops running. Untick it and save to resume.
 
-This is preferable to deleting a report you may want back.
+Mp10 has no button for deleting an automation, so suspending is how you
+retire one.
 
 ## Making sure e-mail actually goes out
 
@@ -1485,14 +1552,37 @@ These live in section **`eMail`** *(IT task)*:
 
 ## Keeping a copy on disk
 
-To have every automated report also written to a folder — useful as an audit
-trail, or to feed a shared drive:
+To have every automated report also written to a folder (useful as an audit
+trail, or to feed a shared drive):
 
 | Section | Entry | Example |
 |---|---|---|
 | `AUTOREPORTS` | `COPY_TO_PATH` | `\\fileserver\mp10\reports\` |
 
-Leave it blank to skip.
+Leave it blank to skip. The folder must exist, and the account AutoTasks runs
+under must be able to write to it.
+
+## When a report does not arrive
+
+Open the AutoTasks log (see *The log file*) and search for the report's name.
+Each step leaves a line:
+
+| What the log says | What it means |
+|---|---|
+| `AutoRep: <name> … queued` | Scheduled for today and waiting for its time |
+| `not queued: not scheduled for today` | The frequency doesn't fall on today. Check the ticked options and the weekday |
+| `not queued: suspended` | **Suspend** is ticked |
+| `not queued: run time already past` | Today's run time has passed. Either it already ran today (look for its `Report e-mail` line), or it was saved after its time and starts on the next scheduled day |
+| `already on queue` | Waiting for its time; nothing wrong |
+| `Report e-mail SENT … to: …` | Delivered to the mail server, with the addresses it went to |
+| `Report e-mail FAILED` | The mail server refused it. Check the `eMail` settings |
+| `Report NOT e-mailed -- no recipients configured` | The report ran but the recipient list was empty |
+| `AutoRep: not run -- AutoTasks cannot build this report` | The AutoTasks installed is older than the Mp10 module the automation was saved from. Update AutoTasks |
+
+AutoTasks writes one `AutoRep:` line for every saved automation on every
+wake-up. If the report's name never appears, either AutoTasks is not running
+or it is connected to a different database than the one where the report was
+saved.
 
 # Modality worklist (imaging)
 
