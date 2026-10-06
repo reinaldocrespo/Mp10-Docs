@@ -375,6 +375,36 @@ run a mixed estate — some devices station-filtered, some not — and the only
 rule is the one above: any device that filters by station needs its pairs
 mapped.
 
+## When the scanner will not filter: routing by caller
+
+Some consoles cannot be told to ask for their own station. A Philips Brilliance
+CT, for instance, asks for "all CT, today and tomorrow" and nothing else, so
+with three CTs in three buildings each of them lists all three buildings' work,
+however carefully the Imaging Stations table is filled in.
+
+The server can do the filtering for them. Installed with `-FilterByCallingAet`,
+a query that names no station is answered with the entries booked on the
+station **named like the scanner itself** — the AE title it called us from —
+and nothing else. A query that does name a station is answered as asked.
+
+```
+.\Install-Mwl.ps1 -FilterByCallingAet
+```
+
+This changes the rule for **every** scanner using the server, not just the one
+you had in mind:
+
+- A scanner with **no Imaging Stations row** gets an empty worklist, because an
+  entry with no station no longer answers an unfiltered query.
+- A row whose AE title is **not exactly** what the scanner sends — `MxView` is
+  not `MXVIEW` — is the same as no row. The capture script in the
+  troubleshooting chapter shows the exact name.
+- A scanner that used to see several locations' work now sees only its own.
+
+So before switching it on, make sure every machine that queries this server has
+its row, and type each AE title the way the machine sends it. `Test-Mwl.ps1`
+says whether routing by caller is on.
+
 # Day to day
 
 ## Where things are
@@ -558,12 +588,14 @@ Three fixed settings account for most of it:
 **Before assuming a device cannot do this at all**, two checks settle it in
 minutes:
 
-1. **Point it at this server and read the log.** Set Orthanc to verbose
-   (`Invoke-RestMethod http://127.0.0.1:8042/tools/log-level -Method Put -Body
-   verbose`), have the device query, then read the newest file in
-   `C:\Program Files\Orthanc Server\Logs`. It shows the association — what
-   the device called itself and called us — and the query it sent. Put the
-   level back to `default` afterwards.
+1. **Point it at this server and watch what it sends.** On the server run
+   `Capture-MwlQuery.ps1` from the bundle: it turns Orthanc's log to verbose,
+   prints every connection as it arrives — what the device called itself and
+   called us, the query it sent, how many entries matched — and puts the log
+   level back when you press Ctrl+C. A device that never appears is pointed
+   at the wrong address or port; one that is *rejected* is calling us by the
+   wrong name; one that is answered with *n* entries and still shows nothing
+   is discarding them on its own side.
 2. **Read the vendor's DICOM conformance statement** for that model and
    software version. It states plainly whether *Modality Worklist Information
    Model — FIND* is supported as an SCU, and which keys the device sends. If
@@ -830,8 +862,10 @@ In order of likelihood:
 | `AutoTasks.exe --mwl-watchdog` | The service's own server check, on demand: restarts the Orthanc service if it is not answering, and sends the notice |
 | `Test-Mwl.ps1` | Reads both halves and reports what is wrong. Changes nothing |
 | `Test-Mwl.ps1 -ExpectedSpoolPath <dir>` | Also confirms both halves use the same directory |
+| `Capture-MwlQuery.ps1` | Shows live what each scanner sends: its AE title, its query, how many entries it got. Ctrl+C to stop; the only thing it changes is the log level, and it puts that back |
 | `Install-Mwl.ps1` | Installs or repairs the DICOM server. Safe to re-run, including while it is running |
 | `Install-Mwl.ps1 -AcceptAnyCalledAet` | Answers whatever Called AE title a device uses — for legacy equipment whose worklist AE title is fixed |
+| `Install-Mwl.ps1 -FilterByCallingAet` | A query that names no station gets only its caller's station — for scanners that cannot filter by their own AE title. Every scanner then needs its Imaging Stations row |
 
 ## What each worklist entry carries
 

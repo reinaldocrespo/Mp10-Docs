@@ -251,6 +251,8 @@ example</a></li>
 <li><a href="#fill-it-in-before-you-switch-a-scanner-to-station-filtering" id="toc-fill-it-in-before-you-switch-a-scanner-to-station-filtering">Fill
 it in before you switch a scanner to station filtering</a></li>
 <li><a href="#what-it-does-not-change" id="toc-what-it-does-not-change">What it does not change</a></li>
+<li><a href="#when-the-scanner-will-not-filter-routing-by-caller" id="toc-when-the-scanner-will-not-filter-routing-by-caller">When the
+scanner will not filter: routing by caller</a></li>
 </ul></li>
 <li><a href="#day-to-day" id="toc-day-to-day">Day to day</a>
 <ul>
@@ -829,6 +831,35 @@ unaffected by any of this. It sees every study of its modality, mapped
 or not, exactly as before. You can run a mixed estate — some devices
 station-filtered, some not — and the only rule is the one above: any
 device that filters by station needs its pairs mapped.</p>
+<h2 id="when-the-scanner-will-not-filter-routing-by-caller">When the
+scanner will not filter: routing by caller</h2>
+<p>Some consoles cannot be told to ask for their own station. A Philips
+Brilliance CT, for instance, asks for “all CT, today and tomorrow” and
+nothing else, so with three CTs in three buildings each of them lists
+all three buildings’ work, however carefully the Imaging Stations table
+is filled in.</p>
+<p>The server can do the filtering for them. Installed with
+<code>-FilterByCallingAet</code>, a query that names no station is
+answered with the entries booked on the station <strong>named like the
+scanner itself</strong> — the AE title it called us from — and nothing
+else. A query that does name a station is answered as asked.</p>
+<pre><code>.\Install-Mwl.ps1 -FilterByCallingAet</code></pre>
+<p>This changes the rule for <strong>every</strong> scanner using the
+server, not just the one you had in mind:</p>
+<ul>
+<li>A scanner with <strong>no Imaging Stations row</strong> gets an
+empty worklist, because an entry with no station no longer answers an
+unfiltered query.</li>
+<li>A row whose AE title is <strong>not exactly</strong> what the
+scanner sends — <code>MxView</code> is not <code>MXVIEW</code> — is the
+same as no row. The capture script in the troubleshooting chapter shows
+the exact name.</li>
+<li>A scanner that used to see several locations’ work now sees only its
+own.</li>
+</ul>
+<p>So before switching it on, make sure every machine that queries this
+server has its row, and type each AE title the way the machine sends it.
+<code>Test-Mwl.ps1</code> says whether routing by caller is on.</p>
 <h1 id="day-to-day">Day to day</h1>
 <h2 id="where-things-are">Where things are</h2>
 <table>
@@ -966,22 +997,22 @@ the server itself:</p>
 <p>The entry id <strong>is</strong> the Mp10 order number, so a question
 that starts “is order OR26-00046110 on the worklist, and does it say the
 right thing?” is one URL.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>   <span class="dt">&quot;ID&quot;</span> <span class="fu">:</span> <span class="st">&quot;OR26-00046110&quot;</span><span class="fu">,</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>   <span class="dt">&quot;Tags&quot;</span> <span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;AccessionNumber&quot;</span> <span class="fu">:</span> <span class="st">&quot;EN26-00281843&quot;</span><span class="fu">,</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;PatientID&quot;</span> <span class="fu">:</span> <span class="st">&quot;00100947&quot;</span><span class="fu">,</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;PatientName&quot;</span> <span class="fu">:</span> <span class="st">&quot;PEREZ ALVIRA^INGRID&quot;</span><span class="fu">,</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;ReferringPhysicianName&quot;</span> <span class="fu">:</span> <span class="st">&quot;SALGUEIRO^JESUS M&quot;</span><span class="fu">,</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;ScheduledProcedureStepSequence&quot;</span> <span class="fu">:</span> <span class="ot">[</span> <span class="fu">{</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>         <span class="dt">&quot;Modality&quot;</span> <span class="fu">:</span> <span class="st">&quot;CT&quot;</span><span class="fu">,</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>         <span class="dt">&quot;ScheduledProcedureStepStartDate&quot;</span> <span class="fu">:</span> <span class="st">&quot;20260826&quot;</span><span class="fu">,</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>         <span class="dt">&quot;ScheduledStationAETitle&quot;</span> <span class="fu">:</span> <span class="st">&quot;SITEB_CT&quot;</span><span class="fu">,</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>         <span class="dt">&quot;ScheduledStationName&quot;</span> <span class="fu">:</span> <span class="st">&quot;Site B CT&quot;</span></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span> <span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;StudyInstanceUID&quot;</span> <span class="fu">:</span> <span class="st">&quot;2.25.1553995747295557493394282228217242855&quot;</span></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>   <span class="fu">}</span></span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>   <span class="dt">&quot;ID&quot;</span> <span class="fu">:</span> <span class="st">&quot;OR26-00046110&quot;</span><span class="fu">,</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>   <span class="dt">&quot;Tags&quot;</span> <span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;AccessionNumber&quot;</span> <span class="fu">:</span> <span class="st">&quot;EN26-00281843&quot;</span><span class="fu">,</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;PatientID&quot;</span> <span class="fu">:</span> <span class="st">&quot;00100947&quot;</span><span class="fu">,</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;PatientName&quot;</span> <span class="fu">:</span> <span class="st">&quot;PEREZ ALVIRA^INGRID&quot;</span><span class="fu">,</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;ReferringPhysicianName&quot;</span> <span class="fu">:</span> <span class="st">&quot;SALGUEIRO^JESUS M&quot;</span><span class="fu">,</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;ScheduledProcedureStepSequence&quot;</span> <span class="fu">:</span> <span class="ot">[</span> <span class="fu">{</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>         <span class="dt">&quot;Modality&quot;</span> <span class="fu">:</span> <span class="st">&quot;CT&quot;</span><span class="fu">,</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>         <span class="dt">&quot;ScheduledProcedureStepStartDate&quot;</span> <span class="fu">:</span> <span class="st">&quot;20260826&quot;</span><span class="fu">,</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>         <span class="dt">&quot;ScheduledStationAETitle&quot;</span> <span class="fu">:</span> <span class="st">&quot;SITEB_CT&quot;</span><span class="fu">,</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>         <span class="dt">&quot;ScheduledStationName&quot;</span> <span class="fu">:</span> <span class="st">&quot;Site B CT&quot;</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span> <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;StudyInstanceUID&quot;</span> <span class="fu">:</span> <span class="st">&quot;2.25.1553995747295557493394282228217242855&quot;</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>   <span class="fu">}</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <p>What to look at, in the order it usually matters:</p>
 <ul>
 <li><strong><code>ScheduledStationAETitle</code></strong> — the routing
@@ -1058,14 +1089,15 @@ changing the device where the device allows it.</p>
 <p><strong>Before assuming a device cannot do this at all</strong>, two
 checks settle it in minutes:</p>
 <ol type="1">
-<li><strong>Point it at this server and read the log.</strong> Set
-Orthanc to verbose
-(<code>Invoke-RestMethod http://127.0.0.1:8042/tools/log-level -Method Put -Body    verbose</code>),
-have the device query, then read the newest file in
-<code>C:\Program Files\Orthanc Server\Logs</code>. It shows the
-association — what the device called itself and called us — and the
-query it sent. Put the level back to <code>default</code>
-afterwards.</li>
+<li><strong>Point it at this server and watch what it sends.</strong> On
+the server run <code>Capture-MwlQuery.ps1</code> from the bundle: it
+turns Orthanc’s log to verbose, prints every connection as it arrives —
+what the device called itself and called us, the query it sent, how many
+entries matched — and puts the log level back when you press Ctrl+C. A
+device that never appears is pointed at the wrong address or port; one
+that is <em>rejected</em> is calling us by the wrong name; one that is
+answered with <em>n</em> entries and still shows nothing is discarding
+them on its own side.</li>
 <li><strong>Read the vendor’s DICOM conformance statement</strong> for
 that model and software version. It states plainly whether <em>Modality
 Worklist Information Model — FIND</em> is supported as an SCU, and which
@@ -1742,14 +1774,26 @@ service if it is not answering, and sends the notice</td>
 <td>Also confirms both halves use the same directory</td>
 </tr>
 <tr class="odd">
+<td><code>Capture-MwlQuery.ps1</code></td>
+<td>Shows live what each scanner sends: its AE title, its query, how
+many entries it got. Ctrl+C to stop; the only thing it changes is the
+log level, and it puts that back</td>
+</tr>
+<tr class="even">
 <td><code>Install-Mwl.ps1</code></td>
 <td>Installs or repairs the DICOM server. Safe to re-run, including
 while it is running</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>Install-Mwl.ps1 -AcceptAnyCalledAet</code></td>
 <td>Answers whatever Called AE title a device uses — for legacy
 equipment whose worklist AE title is fixed</td>
+</tr>
+<tr class="even">
+<td><code>Install-Mwl.ps1 -FilterByCallingAet</code></td>
+<td>A query that names no station gets only its caller’s station — for
+scanners that cannot filter by their own AE title. Every scanner then
+needs its Imaging Stations row</td>
 </tr>
 </tbody>
 </table>
