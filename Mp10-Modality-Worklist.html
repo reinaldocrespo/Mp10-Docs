@@ -536,6 +536,43 @@ change. Your value always wins once you set it.</p>
 directory</strong> the installer reported. Not a share pointing at it,
 not a different capitalisation of a different folder — the same
 directory.</p>
+<p><strong>3. Tell the watchdog where the server is.</strong></p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Section</th>
+<th>Entry</th>
+<th>Set to</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>AUTOTASKS</code></td>
+<td><code>MWL_SCP_PORT</code></td>
+<td>the DICOM port the installer reported. <code>4242</code> unless you
+chose another</td>
+</tr>
+<tr class="even">
+<td><code>AUTOTASKS</code></td>
+<td><code>MWL_SCP_AET</code></td>
+<td>the server’s AE title. <code>MP10MWL</code> unless you chose
+another</td>
+</tr>
+</tbody>
+</table>
+<p>While the generator is on, AutoTasks asks the DICOM server every
+cycle whether it is answering. If it is not, twice in a row, AutoTasks
+restarts the Orthanc service once and sends a notice to the addresses in
+<code>ERRORREPORTS</code> / <code>NOTIFY_EMAIL</code> — see <em>The
+server is not answering</em>. Installed with the defaults, these two
+entries are already right and there is nothing to do.
+<code>AutoTasks.exe --mwl-probe</code> tells you in one line whether
+they are.</p>
 <h2 id="fill-in-the-modality-mapping">Fill in the modality mapping</h2>
 <p>A worklist entry has to say whether the study is a CT, an ultrasound
 or an X-ray. Mp10 takes that from the <strong>revenue code</strong> on
@@ -1312,6 +1349,63 @@ check that appeared to finish normally, report it rather than re-running
 it repeatedly.</p>
 </blockquote>
 <h2 id="the-server-is-not-answering">The server is not answering</h2>
+<p><strong>AutoTasks watches for this itself.</strong> Every cycle,
+while the generator is on, it opens and closes a DICOM connection to the
+server on <code>MWL_SCP_PORT</code>. Nothing is logged while the server
+answers. When it does not:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>What AutoTasks finds</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>No answer, once</td>
+<td>Logs it and waits for the next cycle — the server may simply be
+starting</td>
+</tr>
+<tr class="even">
+<td>No answer, twice in a row</td>
+<td>Restarts the Orthanc service (ending its processes if it will not
+stop), waits for the port, and mails <strong>“worklist server stopped
+answering and was restarted”</strong> — or <strong>“worklist server is
+DOWN”</strong> if that did not bring it back</td>
+</tr>
+<tr class="odd">
+<td>Still no answer on later cycles</td>
+<td>Logs it. <strong>It does not restart again during the same
+outage.</strong> One reminder a day is mailed</td>
+</tr>
+<tr class="even">
+<td>It answers again</td>
+<td>Mails <strong>“worklist server is answering again”</strong></td>
+</tr>
+<tr class="odd">
+<td>A DICOM server answers but refuses the connection</td>
+<td><code>MWL_SCP_PORT</code> or <code>MWL_SCP_AET</code> does not match
+the server. Nothing is restarted; one notice a day says so. Correct the
+entry — <code>Test-Mwl.ps1</code> prints the right values</td>
+</tr>
+</tbody>
+</table>
+<p>Notices go to <code>ERRORREPORTS</code> / <code>NOTIFY_EMAIL</code>.
+With that entry blank, or no outgoing mail server configured, the
+restart still happens and the AutoTasks log is the only record.
+<code>MWL_SCP_RESTART</code> = <code>NO</code> keeps the notices and
+leaves the restarting to you; <code>MWL_SCP_PORT</code> = <code>0</code>
+switches the whole check off.</p>
+<p><code>AutoTasks.exe --mwl-watchdog</code> runs the same check on
+demand, <strong>including the restart and the notice</strong>.
+<code>AutoTasks.exe --mwl-probe</code> only asks.</p>
+<p>A restart puts the server back; it does not say why it stopped. That
+is in the server’s log from before the restart, and the table below is
+how to read it.</p>
 <table>
 <colgroup>
 <col style="width: 50%" />
@@ -1578,6 +1672,33 @@ check</td>
 <td>Leave blank unless your organisation owns a registered DICOM root.
 Never invent one</td>
 </tr>
+<tr class="even">
+<td><code>AUTOTASKS</code></td>
+<td><code>MWL_SCP_PORT</code></td>
+<td><code>4242</code></td>
+<td>The DICOM server’s port, for the watchdog. <code>0</code> switches
+the watchdog off</td>
+</tr>
+<tr class="odd">
+<td><code>AUTOTASKS</code></td>
+<td><code>MWL_SCP_AET</code></td>
+<td><code>MP10MWL</code></td>
+<td>The DICOM server’s AE title, for the watchdog</td>
+</tr>
+<tr class="even">
+<td><code>AUTOTASKS</code></td>
+<td><code>MWL_SCP_RESTART</code></td>
+<td><code>YES</code></td>
+<td>Whether the watchdog restarts the Orthanc service. <code>NO</code> =
+notices only</td>
+</tr>
+<tr class="odd">
+<td><code>ERRORREPORTS</code></td>
+<td><code>NOTIFY_EMAIL</code></td>
+<td><em>(blank)</em></td>
+<td>Who is told when the worklist server stops answering (and when an
+Mp10 program fails). Blank = nobody is mailed</td>
+</tr>
 </tbody>
 </table>
 <h2 id="commands">Commands</h2>
@@ -1601,6 +1722,16 @@ Never invent one</td>
 <td><code>AutoTasks.exe --mwl-selftest &lt;dir&gt; [modality] [station AE]</code></td>
 <td>Publishes one fake study, with no database connection. Give it a
 station AE title to prove a station-filtering scanner</td>
+</tr>
+<tr class="odd">
+<td><code>AutoTasks.exe --mwl-probe [port] [AE title]</code></td>
+<td>Asks the DICOM server whether it is answering, with no database
+connection. Changes nothing</td>
+</tr>
+<tr class="even">
+<td><code>AutoTasks.exe --mwl-watchdog</code></td>
+<td>The service’s own server check, on demand: restarts the Orthanc
+service if it is not answering, and sends the notice</td>
 </tr>
 <tr class="odd">
 <td><code>Test-Mwl.ps1</code></td>

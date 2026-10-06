@@ -173,6 +173,20 @@ watching for it, `AutoTasks.exe --mwl-run` applies it immediately.)
 share pointing at it, not a different capitalisation of a different folder —
 the same directory.
 
+**3. Tell the watchdog where the server is.**
+
+| Section | Entry | Set to |
+|---|---|---|
+| `AUTOTASKS` | `MWL_SCP_PORT` | the DICOM port the installer reported. `4242` unless you chose another |
+| `AUTOTASKS` | `MWL_SCP_AET` | the server's AE title. `MP10MWL` unless you chose another |
+
+While the generator is on, AutoTasks asks the DICOM server every cycle whether
+it is answering. If it is not, twice in a row, AutoTasks restarts the Orthanc
+service once and sends a notice to the addresses in `ERRORREPORTS` /
+`NOTIFY_EMAIL` — see *The server is not answering*. Installed with the
+defaults, these two entries are already right and there is nothing to do.
+`AutoTasks.exe --mwl-probe` tells you in one line whether they are.
+
 ## Fill in the modality mapping
 
 A worklist entry has to say whether the study is a CT, an ultrasound or an
@@ -691,6 +705,29 @@ after the last file check rather than before. Run the check again.
 
 ## The server is not answering
 
+**AutoTasks watches for this itself.** Every cycle, while the generator is on,
+it opens and closes a DICOM connection to the server on `MWL_SCP_PORT`. Nothing
+is logged while the server answers. When it does not:
+
+| What AutoTasks finds | What it does |
+|---|---|
+| No answer, once | Logs it and waits for the next cycle — the server may simply be starting |
+| No answer, twice in a row | Restarts the Orthanc service (ending its processes if it will not stop), waits for the port, and mails **"worklist server stopped answering and was restarted"** — or **"worklist server is DOWN"** if that did not bring it back |
+| Still no answer on later cycles | Logs it. **It does not restart again during the same outage.** One reminder a day is mailed |
+| It answers again | Mails **"worklist server is answering again"** |
+| A DICOM server answers but refuses the connection | `MWL_SCP_PORT` or `MWL_SCP_AET` does not match the server. Nothing is restarted; one notice a day says so. Correct the entry — `Test-Mwl.ps1` prints the right values |
+
+Notices go to `ERRORREPORTS` / `NOTIFY_EMAIL`. With that entry blank, or no
+outgoing mail server configured, the restart still happens and the AutoTasks log
+is the only record. `MWL_SCP_RESTART` = `NO` keeps the notices and leaves the
+restarting to you; `MWL_SCP_PORT` = `0` switches the whole check off.
+
+`AutoTasks.exe --mwl-watchdog` runs the same check on demand, **including the
+restart and the notice**. `AutoTasks.exe --mwl-probe` only asks.
+
+A restart puts the server back; it does not say why it stopped. That is in the
+server's log from before the restart, and the table below is how to read it.
+
 | Symptom | Cause |
 |---|---|
 | `Test-Mwl.ps1` says orthanc.json is **not** the Mp10 configuration | Orthanc was upgraded. Re-run `Install-Mwl.ps1` |
@@ -778,6 +815,10 @@ In order of likelihood:
 | `AUTOTASKS` | `MWL_SPOOL_PATH` | *(blank)* | The worklist directory. Blank publishes nothing |
 | `AUTOTASKS` | `MWL_WINDOW_DAYS` | `1` | Today +/- this many days |
 | `AUTOTASKS` | `MWL_UID_ROOT` | *(blank)* | Leave blank unless your organisation owns a registered DICOM root. Never invent one |
+| `AUTOTASKS` | `MWL_SCP_PORT` | `4242` | The DICOM server's port, for the watchdog. `0` switches the watchdog off |
+| `AUTOTASKS` | `MWL_SCP_AET` | `MP10MWL` | The DICOM server's AE title, for the watchdog |
+| `AUTOTASKS` | `MWL_SCP_RESTART` | `YES` | Whether the watchdog restarts the Orthanc service. `NO` = notices only |
+| `ERRORREPORTS` | `NOTIFY_EMAIL` | *(blank)* | Who is told when the worklist server stops answering (and when an Mp10 program fails). Blank = nobody is mailed |
 
 ## Commands
 
@@ -785,6 +826,8 @@ In order of likelihood:
 |---|---|
 | `AutoTasks.exe --mwl-run` | One worklist cycle, printed to the screen. Nothing else runs |
 | `AutoTasks.exe --mwl-selftest <dir> [modality] [station AE]` | Publishes one fake study, with no database connection. Give it a station AE title to prove a station-filtering scanner |
+| `AutoTasks.exe --mwl-probe [port] [AE title]` | Asks the DICOM server whether it is answering, with no database connection. Changes nothing |
+| `AutoTasks.exe --mwl-watchdog` | The service's own server check, on demand: restarts the Orthanc service if it is not answering, and sends the notice |
 | `Test-Mwl.ps1` | Reads both halves and reports what is wrong. Changes nothing |
 | `Test-Mwl.ps1 -ExpectedSpoolPath <dir>` | Also confirms both halves use the same directory |
 | `Install-Mwl.ps1` | Installs or repairs the DICOM server. Safe to re-run, including while it is running |
