@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-10-01" />
+  <meta name="dcterms.date" content="2026-10-06" />
   <title>Mp10 Modality Worklist</title>
   <style>
 code{white-space: pre-wrap;}
@@ -212,7 +212,7 @@ a { color: inherit; }
 <p class="subtitle">Installing, running and troubleshooting the DICOM
 worklist server</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">01 October 2026</p>
+<p class="date">06 October 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -1331,28 +1331,41 @@ the Mp10 configuration</td>
 </tr>
 <tr class="even">
 <td>The service is “Running” but the HTTP port does not answer</td>
-<td>Orthanc itself died at start-up while its service wrapper stayed up.
-The reason is in the last lines of the newest file in
-<code>C:\Program Files\Orthanc Server\Logs</code></td>
+<td>Orthanc itself died while its service wrapper stayed up — a healthy
+server shows two processes, <code>OrthancService</code> and
+<code>Orthanc</code>, and this one shows only the first. The reason is
+in the last lines of the newest file in
+<code>C:\Program Files\Orthanc Server\Logs</code>. Restart the service;
+if stopping hangs, end <code>OrthancService.exe</code> and start it</td>
 </tr>
 <tr class="odd">
+<td>That log ends with <em>“The specified path does not point to a
+regular file: …&lt;order number&gt;.wl”</em></td>
+<td>The worklist plugin’s housekeeper met a file the generator had just
+removed, and Orthanc stopped. Installations made before this was known
+have the housekeeper on. <code>Test-Mwl.ps1</code> says so; re-running
+<code>Install-Mwl.ps1</code> turns it off
+(<code>DeleteWorklistsOnStableStudy: false</code> in
+<code>worklists.json</code>)</td>
+</tr>
+<tr class="even">
 <td>The log says a setting is <em>“defined in 2 different configuration
 files”</em></td>
 <td>An extra <code>.json</code> was added to Orthanc’s configuration
 directory. Orthanc refuses to start rather than guess. Remove it and
 re-run <code>Install-Mwl.ps1</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>Worklist server is disabled by the configuration file</code></td>
 <td><code>worklists.json</code> has <code>Enable: false</code> — again,
 usually an upgrade</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Service start type is not Automatic</td>
 <td>It will not come back after a reboot. <code>Install-Mwl.ps1</code>
 sets this</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>Test-Mwl.ps1</code> warns <strong>Orthanc cannot list the
 directory (HTTP 400)</strong></td>
 <td>Something in the worklist directory is not readable as DICOM —
@@ -1360,7 +1373,7 @@ usually a zero-length file, or something the generator did not write.
 <strong>Scanners are unaffected</strong>: a C-FIND skips the bad file
 and answers normally. Find it and delete it</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>Test-Mwl.ps1</code> says <em>n</em> files are <strong>not
 being served</strong></td>
 <td>Same cause, seen from the other side: Orthanc parsed fewer files

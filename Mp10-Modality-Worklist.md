@@ -694,7 +694,8 @@ after the last file check rather than before. Run the check again.
 | Symptom | Cause |
 |---|---|
 | `Test-Mwl.ps1` says orthanc.json is **not** the Mp10 configuration | Orthanc was upgraded. Re-run `Install-Mwl.ps1` |
-| The service is "Running" but the HTTP port does not answer | Orthanc itself died at start-up while its service wrapper stayed up. The reason is in the last lines of the newest file in `C:\Program Files\Orthanc Server\Logs` |
+| The service is "Running" but the HTTP port does not answer | Orthanc itself died while its service wrapper stayed up — a healthy server shows two processes, `OrthancService` and `Orthanc`, and this one shows only the first. The reason is in the last lines of the newest file in `C:\Program Files\Orthanc Server\Logs`. Restart the service; if stopping hangs, end `OrthancService.exe` and start it |
+| That log ends with *"The specified path does not point to a regular file: …\<order number>.wl"* | The worklist plugin's housekeeper met a file the generator had just removed, and Orthanc stopped. Installations made before this was known have the housekeeper on. `Test-Mwl.ps1` says so; re-running `Install-Mwl.ps1` turns it off (`DeleteWorklistsOnStableStudy: false` in `worklists.json`) |
 | The log says a setting is *"defined in 2 different configuration files"* | An extra `.json` was added to Orthanc's configuration directory. Orthanc refuses to start rather than guess. Remove it and re-run `Install-Mwl.ps1` |
 | `Worklist server is disabled by the configuration file` | `worklists.json` has `Enable: false` — again, usually an upgrade |
 | Service start type is not Automatic | It will not come back after a reboot. `Install-Mwl.ps1` sets this |
