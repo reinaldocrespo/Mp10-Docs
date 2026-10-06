@@ -680,7 +680,9 @@ capitalisation does not</td>
 <tr class="odd">
 <td><strong>AE Title</strong></td>
 <td>What the scanner calls itself when it asks for its worklist. This is
-the field that does the routing</td>
+the field that does the routing. <strong>Capitalisation matters
+here</strong>: <code>MxView</code> and <code>MXVIEW</code> are two
+different stations</td>
 </tr>
 <tr class="even">
 <td><strong>Station Name</strong></td>
@@ -725,8 +727,12 @@ the screen says so when you save</td>
 <td><strong>From the scanner, not from you.</strong> It is the name the
 device calls <em>itself</em> in its worklist query — read it off the
 machine’s DICOM configuration, or ask whoever installed it. Up to 16
-characters, no spaces. Getting this wrong is invisible: the row saves,
-looks right, and routes nothing</td>
+characters, no spaces, and <strong>typed exactly as the scanner has it,
+capitals and lower case included</strong> — the DICOM server compares
+the two letter for letter. Do not rename a scanner to suit this table:
+its AE title is usually the name the image archive already knows it by.
+Getting this wrong is invisible: the row saves, looks right, and routes
+nothing</td>
 </tr>
 </tbody>
 </table>

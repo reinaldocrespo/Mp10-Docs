@@ -296,7 +296,7 @@ against an older one says so rather than failing quietly.
 |---|---|
 | **Location** | Must match the encounter type used for that site. Spelling matters, capitalisation does not |
 | **Modality** | `CT`, `MR`, `DX`, `US`, `MG` — the same value the revenue code maps to |
-| **AE Title** | What the scanner calls itself when it asks for its worklist. This is the field that does the routing |
+| **AE Title** | What the scanner calls itself when it asks for its worklist. This is the field that does the routing. **Capitalisation matters here**: `MxView` and `MXVIEW` are two different stations |
 | **Station Name** | Free label, shown on some consoles |
 | **Notes** | For people, not for DICOM — room, vendor, whoever to call |
 | **Inactive** | Tick to stop routing to it without deleting the row |
@@ -311,7 +311,7 @@ finer key than location and modality (body part is the intended next step).
 |---|---|
 | **Location** | The encounter types you already use. If encounters are opened as `Site A`, `Site B` and `Site C`, those are the three values — typed exactly as they appear on the encounter, not abbreviated |
 | **Modality** | Whatever the revenue codes map to. If no revenue code maps to `MR`, a station for `MR` will never be used, and the screen says so when you save |
-| **AE Title** | **From the scanner, not from you.** It is the name the device calls *itself* in its worklist query — read it off the machine's DICOM configuration, or ask whoever installed it. Up to 16 characters, no spaces. Getting this wrong is invisible: the row saves, looks right, and routes nothing |
+| **AE Title** | **From the scanner, not from you.** It is the name the device calls *itself* in its worklist query — read it off the machine's DICOM configuration, or ask whoever installed it. Up to 16 characters, no spaces, and **typed exactly as the scanner has it, capitals and lower case included** — the DICOM server compares the two letter for letter. Do not rename a scanner to suit this table: its AE title is usually the name the image archive already knows it by. Getting this wrong is invisible: the row saves, looks right, and routes nothing |
 
 ### A worked example
 
