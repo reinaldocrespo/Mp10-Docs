@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-10-06" />
+  <meta name="dcterms.date" content="2026-10-07" />
   <title>Mp10 Modality Worklist</title>
   <style>
 code{white-space: pre-wrap;}
@@ -212,7 +212,7 @@ a { color: inherit; }
 <p class="subtitle">Installing, running and troubleshooting the DICOM
 worklist server</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">06 October 2026</p>
+<p class="date">07 October 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -280,6 +280,7 @@ software 6.x</a>
 scanner</a></li>
 <li><a href="#proving-it" id="toc-proving-it">Proving it</a></li>
 </ul></li>
+<li><a href="#philips-brilliance-ct" id="toc-philips-brilliance-ct">Philips Brilliance CT</a></li>
 </ul></li>
 <li><a href="#troubleshooting" id="toc-troubleshooting">Troubleshooting</a>
 <ul>
@@ -1119,7 +1120,10 @@ knowing definitely rather than by inference.</p>
 <li>On the scanner, configure the worklist source: <strong>called AE
 title</strong>, <strong>host</strong> and <strong>port</strong> exactly
 as <code>Test-Mwl.ps1</code> reports them. Its own AE title can be
-anything, but write it down.</li>
+anything, but write it down <strong>exactly, capitals included</strong>
+— it goes into Imaging Stations letter for letter. If in doubt,
+<code>Capture-MwlQuery.ps1</code> on the server prints the name the
+scanner really sends.</li>
 <li>If the server was installed with <code>-Modality</code>, re-run
 <code>Install-Mwl.ps1</code> with the new scanner added to the list —
 otherwise it will be refused at association, which the scanner usually
@@ -1269,6 +1273,37 @@ is the step that proves the loop closes</td>
 <p>If this scanner’s own AE title or port could not be changed — on this
 model both can — the fallbacks under <em>Older equipment that “needs its
 own worklist server”</em> apply unchanged.</p>
+<h2 id="philips-brilliance-ct">Philips Brilliance CT</h2>
+<p>Set up at a site in one afternoon; these are the things that cost
+time.</p>
+<ul>
+<li><strong>Its own AE title is mixed case by default:
+<code>MxView</code>.</strong> The Imaging Stations row must say
+<code>MxView</code>, not <code>MXVIEW</code> — the server matches it
+letter for letter. Do not rename the scanner to suit the table; the
+image archive already knows it by that name.</li>
+<li><strong>It does not filter by its own station.</strong> Its worklist
+query is “all studies of my modality, today and tomorrow”, and nothing
+else. With several CTs in several buildings, each lists all of them —
+however correct the Imaging Stations table is. Install the server with
+<code>-FilterByCallingAet</code> (see <em>When the scanner will not
+filter: routing by caller</em>) and it gets its own site’s work.</li>
+<li><strong>Where the settings live.</strong> Network → a <em>Node</em>
+with our server’s IP → under it a <em>Device</em> of type HisRis with
+the called AE title, <em>Worklist</em> ticked, and the port under
+<em>Expert Mode</em>. The port is not on the first screen; left at the
+default it is 104, and nothing answers there.</li>
+<li><strong>Press Ok on every open dialog, then restart the DICOM
+services.</strong> The console keeps running the last committed
+configuration. At one site the screen showed the right server name while
+the scanner was still sending a mistyped one, and the server rejected
+every query. The screen looked correct; the capture script showed the
+truth.</li>
+<li>A query that reaches the server and is answered shows on the console
+as the <em>Scheduled HIS/RIS</em> list. “0 entries” with no error
+usually means the query never reached us: wrong port, uncommitted
+dialogs, or the old server still selected.</li>
+</ul>
 <h1 id="troubleshooting">Troubleshooting</h1>
 <p>Almost every worklist problem is one of two questions, and telling
 them apart is most of the work:</p>

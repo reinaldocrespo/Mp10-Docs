@@ -611,7 +611,9 @@ by inference.
 
 1. On the scanner, configure the worklist source: **called AE title**, **host**
    and **port** exactly as `Test-Mwl.ps1` reports them. Its own AE title can be
-   anything, but write it down.
+   anything, but write it down **exactly, capitals included** — it goes into
+   Imaging Stations letter for letter. If in doubt, `Capture-MwlQuery.ps1` on
+   the server prints the name the scanner really sends.
 2. If the server was installed with `-Modality`, re-run `Install-Mwl.ps1` with
    the new scanner added to the list — otherwise it will be refused at
    association, which the scanner usually reports as "cannot connect".
@@ -694,6 +696,34 @@ land as:
 If this scanner's own AE title or port could not be changed — on this model
 both can — the fallbacks under *Older equipment that "needs its own worklist
 server"* apply unchanged.
+
+## Philips Brilliance CT
+
+Set up at a site in one afternoon; these are the things that cost time.
+
+- **Its own AE title is mixed case by default: `MxView`.** The Imaging Stations
+  row must say `MxView`, not `MXVIEW` — the server matches it letter for
+  letter. Do not rename the scanner to suit the table; the image archive
+  already knows it by that name.
+- **It does not filter by its own station.** Its worklist query is "all
+  studies of my modality, today and tomorrow", and nothing else. With several
+  CTs in several buildings, each lists all of them — however correct the
+  Imaging Stations table is. Install the server with `-FilterByCallingAet`
+  (see *When the scanner will not filter: routing by caller*) and it gets its
+  own site's work.
+- **Where the settings live.** Network → a *Node* with our server's IP →
+  under it a *Device* of type HisRis with the called AE title, *Worklist*
+  ticked, and the port under *Expert Mode*. The port is not on the first
+  screen; left at the default it is 104, and nothing answers there.
+- **Press Ok on every open dialog, then restart the DICOM services.** The
+  console keeps running the last committed configuration. At one site the
+  screen showed the right server name while the scanner was still sending a
+  mistyped one, and the server rejected every query. The screen looked
+  correct; the capture script showed the truth.
+- A query that reaches the server and is answered shows on the console as
+  the *Scheduled HIS/RIS* list. "0 entries" with no error usually means the
+  query never reached us: wrong port, uncommitted dialogs, or the old server
+  still selected.
 
 # Troubleshooting
 
