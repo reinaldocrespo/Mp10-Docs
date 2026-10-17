@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-10-07" />
+  <meta name="dcterms.date" content="2026-10-17" />
   <title>Mp10 AutoTasks — Administrator’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -148,7 +148,7 @@ a { color: inherit; }
 <p class="subtitle">Backups, electronic remittances, modality worklist,
 and automated reports</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">07 October 2026</p>
+<p class="date">17 October 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -297,6 +297,17 @@ serves more than one practice</a></li>
 <li><a href="#what-must-be-installed-on-the-server" id="toc-what-must-be-installed-on-the-server">What must be installed on
 the server</a></li>
 </ul></li>
+<li><a href="#keeping-the-cms-reference-data-current" id="toc-keeping-the-cms-reference-data-current">Keeping the CMS
+reference data current</a>
+<ul>
+<li><a href="#turning-it-off" id="toc-turning-it-off">Turning it
+off</a></li>
+<li><a href="#the-settings-1" id="toc-the-settings-1">The
+settings</a></li>
+<li><a href="#being-told-what-happened-1" id="toc-being-told-what-happened-1">Being told what happened</a></li>
+<li><a href="#the-yearly-icd-10-release" id="toc-the-yearly-icd-10-release">The yearly ICD-10 release</a></li>
+<li><a href="#checking-it-is-working-2" id="toc-checking-it-is-working-2">Checking it is working</a></li>
+</ul></li>
 <li><a href="#automated-reports" id="toc-automated-reports">Automated
 reports</a>
 <ul>
@@ -337,7 +348,7 @@ are already there, set to <code>NO</code></a></li>
 <li><a href="#step-2-turn-the-reconcile-on" id="toc-step-2-turn-the-reconcile-on">Step 2 — turn the reconcile
 on</a></li>
 </ul></li>
-<li><a href="#the-settings-1" id="toc-the-settings-1">The settings</a>
+<li><a href="#the-settings-2" id="toc-the-settings-2">The settings</a>
 <ul>
 <li><a href="#modality-worklist-whether-the-table-exists" id="toc-modality-worklist-whether-the-table-exists"><code>MODALITY-WORKLIST</code>
 — whether the table exists</a></li>
@@ -403,15 +414,17 @@ active</strong>,</li>
 <li>texting patients an <strong>appointment reminder</strong> they can
 reply to,</li>
 <li>keeping a <strong>modality worklist</strong> in step with the
-schedule, so imaging equipment can be told who its next patient is,
-and</li>
+schedule, so imaging equipment can be told who its next patient is,</li>
+<li>keeping the <strong>CMS reference data</strong> behind the claim
+checks current — the Medicare fee schedule and NCCI tables each quarter,
+the ICD-10-CM code set each year — and e-mailing what it did, and</li>
 <li>running <strong>reports</strong> on a schedule and e-mailing them to
 whoever needs them.</li>
 </ul>
 <p>Each of those is turned on separately. Nothing in this list happens
-until you set the corresponding entry in the System Registry, with one
-exception noted in its own chapter: eligibility requests default to
-on.</p>
+until you set the corresponding entry in the System Registry, with two
+exceptions noted in their own chapters: eligibility requests and the CMS
+reference updates default to on.</p>
 <p>This guide is for the person who administers Mp10 at the practice. It
 does not assume you are a programmer. It does assume you can open the
 <strong>Admin10</strong> module and that you know where your practice
@@ -740,7 +753,32 @@ tomorrow. This is deliberate: a hot backup runs for hours and hammering
 the database server all day cannot fix a wrong path or a full disk. It
 does mean <strong>a failure needs somebody to act on it</strong>, which
 is what the failure e-mail is for. If you fix the cause and want a
-backup the same day, restart the AutoTasks service.</p>
+backup the same day, stop the AutoTasks service, delete that
+dictionary’s <code>backup_lastattempt_….txt</code> next to the AutoTasks
+program (see below), and start the service again. A restart on its own
+is not enough: the day’s attempt is remembered on disk so that a restart
+cannot set off a second hours-long backup.</p>
+</blockquote>
+<p><strong>One AutoTasks serving several dictionaries.</strong> When
+<code>Mp10.ini</code> lists more than one (<code>PATH01</code>,
+<code>PATH02</code>, … under <code>[RDD]</code>), each dictionary is
+backed up on its own schedule, from its own <code>BACKUPS</code>
+entries, and reported from its own <code>eMail</code> settings. The
+once-a-day rule applies to each dictionary separately: one dictionary’s
+backup never uses up another’s day. The day’s attempt is remembered in a
+file per dictionary next to the AutoTasks program, named after the
+dictionary’s path — for <code>\\server\e$\AdsData\Ver10\mp.add</code> it
+is
+<code>backup_lastattempt_SERVER_E_ADSDATA_VER10_MP_ADD.txt</code>.</p>
+<blockquote>
+<p><strong>A dictionary with no outgoing mail server set up is backed up
+silently.</strong> The notices go out through the <code>eMail</code>
+section of the dictionary being backed up, not through another
+dictionary’s. If one dictionary’s notices never arrive, check that its
+<code>eMail</code> section has <code>SMTP-ServerName</code>,
+<code>SMTP-User</code>, <code>SMTP-Pass</code> and <code>Address</code>
+filled in — the AutoTasks log says “No outgoing mail server is
+configured” when they are not.</p>
 </blockquote>
 <h2 id="optional-zipping-and-retention">Optional: zipping and
 retention</h2>
@@ -2537,6 +2575,141 @@ remittances will process without them.</p>
 <p>A second log, <code>python_debug.log</code>, is written next to the
 AutoTasks program and holds the extractor’s own output. It is the place
 to look if a specific PDF fails.</p>
+<h1 id="keeping-the-cms-reference-data-current">Keeping the CMS
+reference data current</h1>
+<p>Several of the claim checks in the Billing module compare a claim
+against reference data that CMS publishes:</p>
+<ul>
+<li>the <strong>Medicare Physician Fee Schedule</strong> (the
+modifier-50 checks), updated every quarter,</li>
+<li>the <strong>NCCI tables</strong> (code pairs and unit limits),
+updated every quarter, and</li>
+<li>the <strong>ICD-10-CM code set</strong> (every diagnosis check),
+updated every October 1st.</li>
+</ul>
+<p>AutoTasks keeps all three current on its own. Once a day it looks at
+the CMS website; when a new quarter or a new ICD-10 year has been
+published, it downloads the files and imports them into your data.
+Nothing needs to be remembered, and the import menus in Admin10 remain
+available for loading a file by hand.</p>
+<h2 id="turning-it-off">Turning it off</h2>
+<p>This is on by default. To switch it off entirely, set:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Section</th>
+<th>Entry</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>AUTOTASKS</td>
+<td>FETCH_CMS</td>
+<td>NO</td>
+</tr>
+</tbody>
+</table>
+<p>A dictionary that has never had the fee schedule or NCCI tables
+loaded is skipped automatically for those two — the related claim checks
+then simply place no tags — so leaving FETCH_CMS on is harmless
+everywhere.</p>
+<h2 id="the-settings-1">The settings</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Section</th>
+<th>Entry</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>AUTOTASKS</td>
+<td>FETCH_CMS</td>
+<td>YES</td>
+<td>The whole feature</td>
+</tr>
+<tr class="even">
+<td>AUTOTASKS</td>
+<td>CMSFETCH_CHECK_HOURS</td>
+<td>24</td>
+<td>Hours between looks at the CMS site</td>
+</tr>
+<tr class="odd">
+<td>AUTOTASKS</td>
+<td>CMSFETCH_PATH</td>
+<td>empty</td>
+<td>Where downloads land. Empty means a <code>cms</code> folder beside
+AutoTasks.exe, one subfolder per quarter plus one per ICD-10 year</td>
+</tr>
+<tr class="even">
+<td>CMSFETCH</td>
+<td>NOTIFY_EMAIL</td>
+<td>empty</td>
+<td>Who is e-mailed what a check did; commas between addresses</td>
+</tr>
+</tbody>
+</table>
+<p>AutoTasks also keeps its own bookkeeping under the
+<strong>CMSFETCH</strong> section: <code>LAST_CHECK</code>,
+<code>ICD10_YEAR</code> (the latest ICD-10 year downloaded) and
+<code>ICD10_IMPORTED</code> (the latest year imported). Those entries
+are written by the service; leave them alone unless this guide says
+otherwise.</p>
+<h2 id="being-told-what-happened-1">Being told what happened</h2>
+<p>After any check that imported, downloaded or failed something,
+AutoTasks sends one e-mail listing each event — for example that the
+October fee schedule was imported, or that the new ICD-10-CM year was
+downloaded and applied. A quiet check, when CMS has published nothing
+new, sends nothing.</p>
+<p>The recipients come from <strong>CMSFETCH / NOTIFY_EMAIL</strong>. If
+that is empty, the error-report address (<strong>ERRORREPORTS /
+NOTIFY_EMAIL</strong>) is used instead; if both are empty, no mail is
+sent and the log still records everything. As with every notice
+AutoTasks sends, e-mail must be set up first — see <strong>E-mail has to
+be set up first</strong> in the backups chapter.</p>
+<h2 id="the-yearly-icd-10-release">The yearly ICD-10 release</h2>
+<p>The ICD-10-CM set changes every October 1st. AutoTasks downloads the
+year’s order file and addendum, imports them — new codes added, retired
+codes end-dated so older claims still read correctly, titles and
+laterality updated — and writes a <strong>report of every
+change</strong> beside the downloaded files. The e-mail names that
+report.</p>
+<p>If the import cannot run — most often because another session had the
+diagnosis table open at that moment — nothing is changed, the e-mail
+says so, and AutoTasks tries again on its next check until it
+succeeds.</p>
+<p>A database that has not had its Data Dictionary updated yet cannot
+take the import: its diagnosis table lacks the columns the import needs.
+There, AutoTasks downloads the files, says so in one e-mail, and then
+waits quietly. The first check after the Data Dictionary update imports
+the year on its own; nothing has to be run by hand.</p>
+<p>To load a year by hand instead (or on a machine where AutoTasks is
+not running), use <strong>Admin10 → Add 20xx ICD10 Data</strong> against
+the downloaded <code>icd10cm_order_YYYY.txt</code>, then set
+<strong>CMSFETCH / ICD10_IMPORTED</strong> to that year so AutoTasks
+does not import it again. Clearing ICD10_IMPORTED makes AutoTasks import
+that year again at its next check.</p>
+<h2 id="checking-it-is-working-2">Checking it is working</h2>
+<ul>
+<li>The log (<code>AutoTasks.out</code>) carries one
+<code>CMSFETCH:</code> line per decision: what was current, what was
+imported, what is not posted yet. “Not posted yet” close to a quarter
+change is normal and can last weeks — CMS publishes on its own schedule,
+and no e-mail is sent for it.</li>
+<li>The downloaded files are under the CMSFETCH_PATH folder.</li>
+<li>In the Billing module, the dashboard’s claim checks that depend on
+this data (the modifier-50, NCCI and MUE tags) only work where the data
+has been loaded.</li>
+</ul>
 <h1 id="automated-reports">Automated reports</h1>
 <p>Every Billing and Patients report with an <strong>Automate
 Report</strong> tab can run by themselves on a schedule and be e-mailed
@@ -2999,7 +3172,7 @@ on</h3>
 </table>
 <p>That takes effect on the next cycle, a couple of minutes later;
 settings are re-read every cycle and nothing needs restarting.</p>
-<h2 id="the-settings-1">The settings</h2>
+<h2 id="the-settings-2">The settings</h2>
 <table>
 <colgroup>
 <col style="width: 20%" />

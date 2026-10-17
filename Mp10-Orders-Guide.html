@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Structured Systems · www.structuredsystems.com" />
+  <meta name="dcterms.date" content="2026-10-17" />
+  <title>Mp10 Orders — User’s Guide</title>
+  <style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+  <style type="text/css">
+:root {
+color-scheme: light dark;
+--fg: #1a1a1a;
+--bg: #ffffff;
+--muted: #5a5a5a;
+--rule: #d8d8d8;
+--accent: #0b5cad;
+--code-bg: #f4f4f6;
+--note-bg: #f7f7f9;
+}
+@media (prefers-color-scheme: dark) {
+:root {
+--fg: #e6e6e6;
+--bg: #16181d;
+--muted: #a2a2a8;
+--rule: #33363d;
+--accent: #6cb0f5;
+--code-bg: #22252c;
+--note-bg: #1d2027;
+}
+}
+html { -webkit-text-size-adjust: 100%; }
+body {
+font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+color: var(--fg);
+background: var(--bg);
+max-width: 52rem;
+margin: 0 auto;
+padding: 2.5rem 1.25rem 5rem;
+line-height: 1.65;
+font-size: 1.02rem;
+}
+
+header#title-block-header { border-bottom: 2px solid var(--rule); margin-bottom: 2rem; }
+h1.title { margin-bottom: .2rem; font-size: 2rem; line-height: 1.2; }
+p.subtitle { margin-top: 0; color: var(--muted); font-size: 1.1rem; }
+p.author, p.date { margin: .2rem 0; color: var(--muted); font-size: .92rem; }
+h1, h2, h3, h4 { line-height: 1.25; margin-top: 2.2rem; }
+h1 { font-size: 1.7rem; padding-bottom: .3rem; border-bottom: 1px solid var(--rule); }
+h2 { font-size: 1.3rem; }
+h3 { font-size: 1.1rem; }
+a { color: var(--accent); }
+
+nav#TOC {
+background: var(--note-bg);
+border: 1px solid var(--rule);
+border-radius: .5rem;
+padding: 1rem 1.25rem;
+margin-bottom: 2.5rem;
+}
+nav#TOC > ul { margin: 0; padding-left: 1.1rem; }
+nav#TOC ul { list-style: none; padding-left: 1.1rem; }
+nav#TOC li { margin: .18rem 0; }
+nav#TOC a { text-decoration: none; }
+nav#TOC a:hover { text-decoration: underline; }
+
+table {
+border-collapse: collapse;
+width: 100%;
+margin: 1.25rem 0;
+font-size: .94rem;
+display: block;
+overflow-x: auto; 
+}
+th, td {
+border-bottom: 1px solid var(--rule);
+padding: .5rem .6rem;
+text-align: left;
+vertical-align: top;
+}
+thead th { border-bottom: 2px solid var(--rule); white-space: nowrap; }
+tbody tr:hover { background: var(--note-bg); }
+code, pre {
+font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
+font-size: .9em;
+}
+code { background: var(--code-bg); padding: .12em .35em; border-radius: .25rem; }
+pre {
+background: var(--code-bg);
+padding: .9rem 1rem;
+border-radius: .4rem;
+overflow-x: auto;
+}
+pre code { background: none; padding: 0; }
+
+blockquote {
+margin: 1.25rem 0;
+padding: .75rem 1.1rem;
+background: var(--note-bg);
+border-left: 4px solid var(--accent);
+border-radius: 0 .35rem .35rem 0;
+}
+blockquote p { margin: .35rem 0; }
+
+img {
+max-width: 100%;
+height: auto;
+display: block;
+margin: 1.25rem auto;
+border: 1px solid var(--rule);
+border-radius: .35rem;
+}
+figcaption {
+text-align: center;
+color: var(--muted);
+font-size: .9rem;
+margin-top: -.6rem;
+}
+@media print {
+body { max-width: none; font-size: 11pt; }
+nav#TOC { break-after: page; }
+h1 { break-before: page; }
+h1:first-of-type { break-before: avoid; }
+a { color: inherit; }
+}
+</style>
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Mp10 Orders — User’s Guide</h1>
+<p class="subtitle">Recording what the patient came for, and everything
+that follows from it</p>
+<p class="author">Structured Systems · www.structuredsystems.com</p>
+<p class="date">17 October 2026</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#about-this-guide" id="toc-about-this-guide">About this
+guide</a></li>
+<li><a href="#why-enter-orders" id="toc-why-enter-orders">Why enter
+orders</a></li>
+<li><a href="#setting-up-the-order-catalogue" id="toc-setting-up-the-order-catalogue">Setting up the order
+catalogue</a></li>
+<li><a href="#creating-orders" id="toc-creating-orders">Creating
+orders</a>
+<ul>
+<li><a href="#in-the-patients-module-patients10" id="toc-in-the-patients-module-patients10">In the Patients module
+(Patients10)</a></li>
+<li><a href="#from-the-billing-module" id="toc-from-the-billing-module">From the Billing module</a></li>
+<li><a href="#in-mpweb" id="toc-in-mpweb">In MpWeb</a></li>
+</ul></li>
+<li><a href="#how-orders-reach-the-biller" id="toc-how-orders-reach-the-biller">How orders reach the biller</a>
+<ul>
+<li><a href="#the-claim-is-pre-filled" id="toc-the-claim-is-pre-filled">The claim is pre-filled</a></li>
+<li><a href="#unbilled-encounters-show-what-was-ordered" id="toc-unbilled-encounters-show-what-was-ordered">Unbilled encounters
+show what was ordered</a></li>
+</ul></li>
+<li><a href="#printing-labels" id="toc-printing-labels">Printing
+labels</a></li>
+<li><a href="#sending-orders-out-by-hl7" id="toc-sending-orders-out-by-hl7">Sending orders out by HL7</a>
+<ul>
+<li><a href="#how-it-works" id="toc-how-it-works">How it works</a></li>
+<li><a href="#turning-it-on" id="toc-turning-it-on">Turning it
+on</a></li>
+<li><a href="#checking-it-is-working" id="toc-checking-it-is-working">Checking it is working</a></li>
+</ul></li>
+<li><a href="#results-coming-back" id="toc-results-coming-back">Results
+coming back</a>
+<ul>
+<li><a href="#how-a-result-finds-its-order" id="toc-how-a-result-finds-its-order">How a result finds its
+order</a></li>
+<li><a href="#where-results-appear" id="toc-where-results-appear">Where
+results appear</a></li>
+<li><a href="#the-settings" id="toc-the-settings">The settings</a></li>
+</ul></li>
+<li><a href="#the-modality-worklist" id="toc-the-modality-worklist">The
+modality worklist</a></li>
+<li><a href="#quick-reference" id="toc-quick-reference">Quick
+reference</a></li>
+</ul>
+</nav>
+<h1 id="about-this-guide">About this guide</h1>
+<p>An <strong>order</strong> records what a patient is in for: the
+study, test or procedure, picked from your practice’s catalogue and
+attached to the patient’s encounter. An encounter can carry one order or
+several.</p>
+<p>This guide is for everyone an order touches: the front desk or
+admissions staff who enter them, the billers who use them, and the
+administrator who sets up the catalogue and the interfaces. It explains
+why orders are worth entering, how to enter them, how they reach the
+biller, how they print as a label, how they can be sent by HL7 to other
+systems, and how results coming back are matched to them.</p>
+<p>Some practices enter orders on every encounter because they must:
+their imaging or reporting systems learn about each study from Mp10’s
+orders. Others do not enter them at all. The next chapter makes the case
+that every practice should.</p>
+<h1 id="why-enter-orders">Why enter orders</h1>
+<p>Entering an order takes a few seconds at registration. It can feel
+like extra typing nobody asked for. It is not, because of what happens
+to it afterwards.</p>
+<ul>
+<li><strong>The claim starts itself.</strong> When a biller creates a
+claim for an encounter that has orders, in the professional billing
+module or in MpWeb, the claim’s procedure lines are already filled in
+from them: the procedure codes and the date of the visit. Without
+orders, every line is typed from scratch, from whatever paperwork
+reached the biller.</li>
+<li><strong>The biller knows what the patient came for.</strong> The
+order is the record of the visit’s purpose, available to whoever bills
+it, wherever they sit. A biller working remotely, in MpWeb or in the
+desktop modules, has the same information the front desk had, without a
+phone call or a scanned sheet.</li>
+<li><strong>Unbilled visits say what is waiting to be billed.</strong>
+The unbilled encounters list shows, beside each patient, what they came
+for, so the billing backlog reads as work, not as a list of names.</li>
+<li><strong>A label prints from it.</strong> Each order, or the
+encounter as a whole, prints a label naming the patient and what they
+are having done: for envelopes, specimen bags, film jackets or
+folders.</li>
+<li><strong>Mistakes are caught early.</strong> When an order is saved,
+Mp10 warns if the same study was ordered twice, or if the patient’s
+insurance has already refused that procedure for this patient. Both are
+far cheaper to fix at the front desk than as a rejected claim weeks
+later.</li>
+<li><strong>Other systems can be told.</strong> Orders can be sent by
+HL7 to an imaging or reporting system, and listed on Mp10’s own modality
+worklist so the scanners know who is next. Results sent back are filed
+against the order they answer.</li>
+</ul>
+<p>None of this happens for an encounter without orders. Billing it
+still works exactly as before; it is simply slower, and blind to
+everything above.</p>
+<h1 id="setting-up-the-order-catalogue">Setting up the order
+catalogue</h1>
+<p>Orders are picked from a catalogue of <strong>order items</strong>,
+which the administrator maintains in <strong>Admin10 → Order
+Items</strong>. Each item has:</p>
+<ul>
+<li>an <strong>item code</strong> — what the front desk types or picks.
+It can be the procedure code itself (<code>72040</code>) or a code of
+your own (<code>IT18-00000136</code>).</li>
+<li>a <strong>description</strong> — what everyone sees, for example
+<code>NECK SONOGRAM</code>.</li>
+<li>a <strong>CPT</strong>, with modifiers when the item is
+side-specific (<code>73718 LT</code>). This is what the claim is built
+from, so it must be right.</li>
+<li>a <strong>body part</strong>, used to tell apart studies that share
+a CPT.</li>
+<li>a <strong>revenue code</strong>, which also decides the modality on
+the worklist (US, CT, MR and so on).</li>
+</ul>
+<p>Several items may share one CPT when they are different studies: a
+neck and a thyroid sonogram are both 76536, and a wrist, elbow and
+biceps ultrasound are all 76881 RT. Give each its own body part, and
+Mp10 will not mistake them for duplicates.</p>
+<h1 id="creating-orders">Creating orders</h1>
+<p>Orders can be entered in three places. All three write to the same
+place, so an order entered in one shows in the others.</p>
+<h2 id="in-the-patients-module-patients10">In the Patients module
+(Patients10)</h2>
+<p>This is where orders are normally entered, as the patient is
+registered.</p>
+<ol type="1">
+<li>Open the patient’s <strong>encounter</strong> and save it if it is
+new. Orders can only be added to an encounter that has been saved.</li>
+<li>Choose the <strong>Orders</strong> tab.</li>
+<li>Choose <strong>New Order</strong> (or press
+<strong>Insert</strong>). A new row opens.</li>
+<li>In the <strong>Item</strong> cell, type the item code, or choose the
+button in the cell to pick from the catalogue. The pick list shows the
+item, its description, body part and modality; typing a code that is not
+in the catalogue opens the same list so you can choose.</li>
+<li>Repeat for each study the patient is having.</li>
+<li><strong>Save the encounter.</strong> The orders are saved with
+it.</li>
+</ol>
+<p>To take an order off, select it and choose <strong>Delete
+Order</strong> (or press <strong>Delete</strong>), then save the
+encounter.</p>
+<p>When the encounter is saved, Mp10 may show one of two messages about
+the orders you just added. Neither stops the save; the orders are
+already written.</p>
+<ul>
+<li><strong>Duplicate Order</strong> — the same study is now ordered
+more than once on this encounter: the same item twice, or two items with
+the same procedure code on the same body part (for example LEFT HIP 2-3
+VIEWS and LEFT HIP AP AND FROG). Right and left are different studies,
+and so are different body parts sharing a code, so those never warn. If
+one order is extra, delete it and save again.</li>
+<li><strong>Refused For This Patient</strong> — the patient’s insurance
+has already refused this procedure <strong>for this same
+patient</strong>, and has not paid it since. The message names the date
+and the payer’s own reason, such as a missing authorization or
+credentialing. Check what the reason names before the service is billed.
+The claim created later carries the same warning as a tag.</li>
+</ul>
+<p>The same two messages appear wherever orders are entered: on this
+tab, in the Billing module’s orders window, and in MpWeb.</p>
+<h2 id="from-the-billing-module">From the Billing module</h2>
+<p>A biller can add or correct orders without leaving billing. In the
+<strong>Unbilled Encounters</strong> grid, an encounter that has orders
+shows an orders icon beside its date; choose the icon, or
+<strong>Orders</strong> in the task panel, to open the encounter’s
+orders.</p>
+<p>The window lists the catalogue on the left and the encounter’s orders
+on the right. Select an item and choose the right arrow to add it, or
+select an order and choose the left arrow to remove it, then save. The
+filter button narrows a long catalogue. Saving gives the same
+duplicate-order and refused-for-this-patient messages as the encounter’s
+Orders tab.</p>
+<h2 id="in-mpweb">In MpWeb</h2>
+<p>Billers and staff working remotely can manage orders in the browser.
+Open the <strong>Orders</strong> screen from the patient’s Encounters
+tab, the Encounters list, or <strong>Manage orders</strong> on the
+encounter itself. The catalogue is on the left and the encounter’s
+orders on the right; the arrows move items across, and nothing is saved
+until you choose <strong>Save orders</strong>. If the save added a
+duplicate study, or a code the payer has refused for this patient, the
+dialog says so in an amber box above the lists; the orders are saved
+either way. The <strong>Mp10 Web — User Guide</strong> describes the
+screen in full, including why an order that already has a result cannot
+be removed.</p>
+<h1 id="how-orders-reach-the-biller">How orders reach the biller</h1>
+<h2 id="the-claim-is-pre-filled">The claim is pre-filled</h2>
+<p>When a biller creates a <strong>new claim</strong> for an encounter
+in the professional billing module (PrBill10), Mp10 adds one procedure
+line for each code the encounter’s orders carry, with the visit date as
+the service dates and one unit. The biller completes the rest:
+diagnoses, pointers, modifiers the order did not carry, and the charges.
+A code ordered twice still makes one line. The institutional billing
+module (MpBill10) does not pre-fill claim lines from orders; its billers
+still see the orders on the encounter.</p>
+<p>MpWeb’s new-claim screen does the same, and also prices the lines
+from the payer’s contract. It leaves out any order already billed on
+another claim of the same encounter, so a second claim never repeats the
+first one’s lines.</p>
+<h2 id="unbilled-encounters-show-what-was-ordered">Unbilled encounters
+show what was ordered</h2>
+<ul>
+<li>The <strong>Unbilled Encounters</strong> grid has an
+<strong>Ordered</strong> column, right after the patient’s name, listing
+what each patient came for. A study ordered twice shows as, for example,
+<code>CERVICAL SPINE XR x2</code>, so a duplicate is visible at a
+glance. The orders icon beside the date opens the encounter’s
+orders.</li>
+<li>MpWeb’s <strong>Encounters</strong> list has the same
+<strong>Ordered</strong> column. If you had arranged that grid’s columns
+before, the new column may appear at the far right; drag it where you
+want it, or use <strong>Reset layout</strong>.</li>
+<li>The <strong>Unbilled</strong> report in the Billing module’s reports
+lists, for each unbilled encounter, every item ordered with its
+procedure code and description, and the first lines of any
+transcription.</li>
+<li>The dashboard’s <strong>Today</strong> card counts the orders
+entered on today’s encounters, so a day with visits and no orders stands
+out.</li>
+</ul>
+<h1 id="printing-labels">Printing labels</h1>
+<p>Two labels print from orders:</p>
+<ul>
+<li><strong>The order label.</strong> On the encounter’s
+<strong>Orders</strong> tab, select a saved order and choose
+<strong>Print Label</strong>. It prints the patient, the encounter, the
+doctor and that order, and lists every test ordered on the encounter.
+The Billing module’s orders window has the same button, <strong>Print
+Order Label</strong>. An order must be saved before its label can
+print.</li>
+<li><strong>The encounter label.</strong> On the encounter window,
+<strong>Print label with encounter</strong> prints the encounter label,
+which also lists the tests ordered.</li>
+</ul>
+<p>Use them on envelopes, specimen bags, film jackets or folders:
+anywhere the patient’s name and what they are having done must travel
+together.</p>
+<p>Each label opens as a preview; print it from there to the label
+printer. The layouts are report forms your reseller can adapt.</p>
+<h1 id="sending-orders-out-by-hl7">Sending orders out by HL7</h1>
+<p>Mp10 can tell another system — an imaging system, a reporting
+service, an interface engine — about each order as it is entered, using
+standard HL7 <strong>ORM</strong> (order) messages. When an order is
+deleted, a cancel message goes out instead.</p>
+<h2 id="how-it-works">How it works</h2>
+<ol type="1">
+<li>When an order is saved, a database trigger queues a message for it.
+When an order is deleted, the trigger queues a cancel, unless a result
+has already come back for that order; then the delete is refused,
+because the order is part of the clinical record.</li>
+<li>The <strong>HL7 client service</strong> picks up the queue, builds
+each message from the patient, the encounter, the doctor and the order
+item, and writes it as a file into a folder.</li>
+<li>The receiving system, or an interface engine in front of it,
+collects the files from that folder.</li>
+</ol>
+<p>The message carries Mp10’s <strong>order number</strong> (for example
+<code>OR26-00052073</code>) in the ORC segment. That same number is how
+results coming back are matched to the order; see the next chapter.</p>
+<blockquote>
+<p><strong>Files, not a network connection.</strong> The service writes
+each message to a file in the folder named below. Sending straight to a
+network address is not active in the current build, so the receiving
+side must collect the files. Without a folder set, nothing is
+delivered.</p>
+</blockquote>
+<h2 id="turning-it-on">Turning it on</h2>
+<p>All settings are in <strong>Admin10 → Global System
+Registry</strong>. Note that the two sections are spelled differently:
+one has a dash after HL7, the other does not. Copy them exactly.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Section</th>
+<th>Entry</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>HL7ORM-TRANSMIT</td>
+<td>ACTIVATE</td>
+<td>YES</td>
+</tr>
+<tr class="even">
+<td>HL7-ORM-TRANSMIT</td>
+<td>FILEPATH</td>
+<td>The folder the receiving system collects from, for example
+<code>D:\HL7\Outbound\</code></td>
+</tr>
+</tbody>
+</table>
+<p>Then:</p>
+<ol type="1">
+<li><strong>Create the folder</strong> and make sure the account the HL7
+client service runs as can write to it, and the receiving system can
+read from it.</li>
+<li><strong>Install the triggers.</strong> In Admin10, run
+<strong>Update Data Dictionary</strong> (in the <strong>Actions</strong>
+panel). Among its steps it installs the two triggers that queue a
+message whenever an order is added or deleted. Run it with the other
+modules closed. Orders entered before this step are not queued.</li>
+<li><strong>Install and start the HL7 client service</strong> on the
+server — an <strong>IT task</strong>. From a command prompt in the Mp10
+folder, run <code>MpHl7.exe I</code> once to install it, then start
+<strong>Structured Systems HL7 Client Service</strong> from Windows
+Services. <code>MpHl7.exe U</code> uninstalls it.</li>
+<li><strong>Restart the service</strong> after changing any of the
+settings above; it reads them when it starts.</li>
+</ol>
+<h2 id="checking-it-is-working">Checking it is working</h2>
+<ol type="1">
+<li>Add an order to a test encounter and save it.</li>
+<li>Within a couple of minutes a new message file appears in the
+folder.</li>
+<li>The service’s log, <code>MpHl7.out</code> beside
+<code>MpHl7.exe</code>, records each message written and the file it
+went to.</li>
+</ol>
+<p>If no file appears, check in this order: the service is running;
+ACTIVATE is YES under <strong>HL7ORM-TRANSMIT</strong>; FILEPATH is set
+under <strong>HL7-ORM-TRANSMIT</strong> and the folder exists; Update
+Data Dictionary has been run since ACTIVATE was set.</p>
+<h1 id="results-coming-back">Results coming back</h1>
+<p>When the receiving system finishes a study — the radiologist reads
+the images, the report is signed — it can send the result back to Mp10
+as an HL7 <strong>ORU</strong> (result) message. Mp10’s <strong>HL7
+server</strong>, the <strong>MpSocketServ</strong> service, receives it
+and files it against the order.</p>
+<h2 id="how-a-result-finds-its-order">How a result finds its order</h2>
+<ol type="1">
+<li>The sending system connects to MpSocketServ on the address and port
+configured for it, and sends the result.</li>
+<li>MpSocketServ stores the message as it arrives, then acknowledges it,
+so nothing received is ever lost. A message sent twice with the same
+message id is acknowledged again but stored once.</li>
+<li>It reads the <strong>order number</strong> from the message’s ORC
+segment — the same Mp10 order number that went out in the order message
+— and matches it to the order.</li>
+<li>The result becomes a <strong>transcription</strong> on that order’s
+encounter, with the ordering and performing doctors, and the order is
+now part of the clinical record: it can no longer be removed from the
+encounter.</li>
+</ol>
+<p>The order number is the only link. A result whose order number Mp10
+does not recognise, or that carries none, is stored but not filed, and
+waits; after repeated attempts it is set aside as unprocessable, so it
+does not retry forever.</p>
+<h2 id="where-results-appear">Where results appear</h2>
+<ul>
+<li>In <strong>MpWeb</strong>, select the encounter and choose
+<strong>Results</strong> to view or print it.</li>
+<li>In the desktop modules, the transcription is on the encounter, and
+the Unbilled Encounters grid shows an icon beside the patient’s name on
+encounters that have one.</li>
+</ul>
+<h2 id="the-settings">The settings</h2>
+<p>The HL7 server’s settings are in the <strong>HL7-SERVER</strong>
+section of the System Registry. Setting it up is an <strong>IT
+task</strong>, done once with whoever runs the sending system.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Entry</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>IP</td>
+<td>0.0.0.0</td>
+<td>The address MpSocketServ listens on; 0.0.0.0 means every address of
+the server</td>
+</tr>
+<tr class="even">
+<td>PORT</td>
+<td>6261</td>
+<td>The port the sending system connects to</td>
+</tr>
+<tr class="odd">
+<td>ACK_EXPECTED</td>
+<td>YES</td>
+<td>Reply to each message with an HL7 acknowledgement</td>
+</tr>
+<tr class="even">
+<td>ACK_SENDING_APP</td>
+<td>MP10</td>
+<td>The name Mp10 gives itself in its acknowledgements</td>
+</tr>
+<tr class="odd">
+<td>ACK_SENDING_FACILITY</td>
+<td>empty</td>
+<td>The facility name in its acknowledgements</td>
+</tr>
+<tr class="even">
+<td>MAX_PROCESS_ATTEMPTS</td>
+<td>5</td>
+<td>Attempts to file a result before it is set aside</td>
+</tr>
+<tr class="odd">
+<td>RAW_JOURNAL_DAYS</td>
+<td>7</td>
+<td>Days the raw incoming messages are kept. They contain patient
+data</td>
+</tr>
+</tbody>
+</table>
+<h1 id="the-modality-worklist">The modality worklist</h1>
+<p>Imaging scanners can ask Mp10 who is next. AutoTasks turns the day’s
+imaging orders into a <strong>modality worklist</strong> that the
+scanners query, each seeing its own studies. The modality comes from the
+order item’s revenue code.</p>
+<p>There is nothing extra to enter per order: an order on an open,
+active encounter within the worklist’s date window is on the list.
+Setting up the worklist server and the scanners is described in the
+<strong>Mp10 Modality Worklist</strong> guide, and its AutoTasks
+settings in the <strong>Mp10 AutoTasks</strong> guide.</p>
+<h1 id="quick-reference">Quick reference</h1>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>You want to</th>
+<th>Do this</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Add an order at registration</td>
+<td>Encounter → <strong>Orders</strong> tab → <strong>New Order</strong>
+→ pick the item → save the encounter</td>
+</tr>
+<tr class="even">
+<td>Add an order while billing</td>
+<td>Unbilled Encounters → orders icon or <strong>Orders</strong> → move
+the item across → save</td>
+</tr>
+<tr class="odd">
+<td>Add an order remotely</td>
+<td>MpWeb → encounter → <strong>Manage orders</strong></td>
+</tr>
+<tr class="even">
+<td>Remove an order</td>
+<td>Select it → <strong>Delete Order</strong> → save. An order with a
+result cannot be removed</td>
+</tr>
+<tr class="odd">
+<td>Print what the patient is having done</td>
+<td><strong>Print Label</strong> on the Orders tab, or <strong>Print
+label with encounter</strong></td>
+</tr>
+<tr class="even">
+<td>Get a claim pre-filled</td>
+<td>Enter orders before the claim is created (PrBill10 and MpWeb)</td>
+</tr>
+<tr class="odd">
+<td>Send orders to another system</td>
+<td>Set ACTIVATE and FILEPATH, run Update Data Dictionary, install and
+start the HL7 client service</td>
+</tr>
+<tr class="even">
+<td>Receive results</td>
+<td>Set up MpSocketServ with the sending system; results file against
+their order number</td>
+</tr>
+</tbody>
+</table>
+<p>Structured Systems · <a href="mailto:reinaldocrespo@structuredsystems.com" class="email">reinaldocrespo@structuredsystems.com</a> ·
+954-744-0286</p>
+</body>
+</html>

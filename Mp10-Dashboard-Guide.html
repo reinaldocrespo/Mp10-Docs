@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Structured Systems · www.structuredsystems.com" />
+  <meta name="dcterms.date" content="2026-10-17" />
+  <title>Mp10 Dashboard — User’s Guide</title>
+  <style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+  <style type="text/css">
+:root {
+color-scheme: light dark;
+--fg: #1a1a1a;
+--bg: #ffffff;
+--muted: #5a5a5a;
+--rule: #d8d8d8;
+--accent: #0b5cad;
+--code-bg: #f4f4f6;
+--note-bg: #f7f7f9;
+}
+@media (prefers-color-scheme: dark) {
+:root {
+--fg: #e6e6e6;
+--bg: #16181d;
+--muted: #a2a2a8;
+--rule: #33363d;
+--accent: #6cb0f5;
+--code-bg: #22252c;
+--note-bg: #1d2027;
+}
+}
+html { -webkit-text-size-adjust: 100%; }
+body {
+font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+color: var(--fg);
+background: var(--bg);
+max-width: 52rem;
+margin: 0 auto;
+padding: 2.5rem 1.25rem 5rem;
+line-height: 1.65;
+font-size: 1.02rem;
+}
+
+header#title-block-header { border-bottom: 2px solid var(--rule); margin-bottom: 2rem; }
+h1.title { margin-bottom: .2rem; font-size: 2rem; line-height: 1.2; }
+p.subtitle { margin-top: 0; color: var(--muted); font-size: 1.1rem; }
+p.author, p.date { margin: .2rem 0; color: var(--muted); font-size: .92rem; }
+h1, h2, h3, h4 { line-height: 1.25; margin-top: 2.2rem; }
+h1 { font-size: 1.7rem; padding-bottom: .3rem; border-bottom: 1px solid var(--rule); }
+h2 { font-size: 1.3rem; }
+h3 { font-size: 1.1rem; }
+a { color: var(--accent); }
+
+nav#TOC {
+background: var(--note-bg);
+border: 1px solid var(--rule);
+border-radius: .5rem;
+padding: 1rem 1.25rem;
+margin-bottom: 2.5rem;
+}
+nav#TOC > ul { margin: 0; padding-left: 1.1rem; }
+nav#TOC ul { list-style: none; padding-left: 1.1rem; }
+nav#TOC li { margin: .18rem 0; }
+nav#TOC a { text-decoration: none; }
+nav#TOC a:hover { text-decoration: underline; }
+
+table {
+border-collapse: collapse;
+width: 100%;
+margin: 1.25rem 0;
+font-size: .94rem;
+display: block;
+overflow-x: auto; 
+}
+th, td {
+border-bottom: 1px solid var(--rule);
+padding: .5rem .6rem;
+text-align: left;
+vertical-align: top;
+}
+thead th { border-bottom: 2px solid var(--rule); white-space: nowrap; }
+tbody tr:hover { background: var(--note-bg); }
+code, pre {
+font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
+font-size: .9em;
+}
+code { background: var(--code-bg); padding: .12em .35em; border-radius: .25rem; }
+pre {
+background: var(--code-bg);
+padding: .9rem 1rem;
+border-radius: .4rem;
+overflow-x: auto;
+}
+pre code { background: none; padding: 0; }
+
+blockquote {
+margin: 1.25rem 0;
+padding: .75rem 1.1rem;
+background: var(--note-bg);
+border-left: 4px solid var(--accent);
+border-radius: 0 .35rem .35rem 0;
+}
+blockquote p { margin: .35rem 0; }
+
+img {
+max-width: 100%;
+height: auto;
+display: block;
+margin: 1.25rem auto;
+border: 1px solid var(--rule);
+border-radius: .35rem;
+}
+figcaption {
+text-align: center;
+color: var(--muted);
+font-size: .9rem;
+margin-top: -.6rem;
+}
+@media print {
+body { max-width: none; font-size: 11pt; }
+nav#TOC { break-after: page; }
+h1 { break-before: page; }
+h1:first-of-type { break-before: avoid; }
+a { color: inherit; }
+}
+</style>
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Mp10 Dashboard — User’s Guide</h1>
+<p class="subtitle">The cards on the Billing and Patients main windows,
+and what to do about what they show</p>
+<p class="author">Structured Systems · www.structuredsystems.com</p>
+<p class="date">17 October 2026</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#about-this-guide" id="toc-about-this-guide">About this
+guide</a></li>
+<li><a href="#using-the-dashboard" id="toc-using-the-dashboard">Using
+the dashboard</a>
+<ul>
+<li><a href="#when-it-appears" id="toc-when-it-appears">When it
+appears</a></li>
+<li><a href="#which-cards-you-see" id="toc-which-cards-you-see">Which
+cards you see</a></li>
+<li><a href="#how-fresh-the-numbers-are" id="toc-how-fresh-the-numbers-are">How fresh the numbers are</a></li>
+<li><a href="#colours" id="toc-colours">Colours</a></li>
+<li><a href="#clicking" id="toc-clicking">Clicking</a></li>
+</ul></li>
+<li><a href="#the-billing-dashboard" id="toc-the-billing-dashboard">The
+Billing dashboard</a>
+<ul>
+<li><a href="#today" id="toc-today">Today</a></li>
+<li><a href="#needs-attention" id="toc-needs-attention">Needs
+attention</a></li>
+<li><a href="#billing" id="toc-billing">Billing</a>
+<ul>
+<li><a href="#the-rejected-claims-list" id="toc-the-rejected-claims-list">The rejected claims list</a></li>
+</ul></li>
+<li><a href="#system-health" id="toc-system-health">System
+health</a></li>
+<li><a href="#the-charts" id="toc-the-charts">The charts</a></li>
+</ul></li>
+<li><a href="#claims-with-error-tags" id="toc-claims-with-error-tags">Claims with error tags</a>
+<ul>
+<li><a href="#what-the-line-counts" id="toc-what-the-line-counts">What
+the line counts</a></li>
+<li><a href="#opening-the-list" id="toc-opening-the-list">Opening the
+list</a></li>
+<li><a href="#opening-a-claim-and-finding-out-why" id="toc-opening-a-claim-and-finding-out-why">Opening a claim and finding
+out why</a></li>
+<li><a href="#clearing-a-tag" id="toc-clearing-a-tag">Clearing a
+tag</a></li>
+</ul></li>
+<li><a href="#the-claim-checks" id="toc-the-claim-checks">The claim
+checks</a>
+<ul>
+<li><a href="#how-a-tag-is-placed" id="toc-how-a-tag-is-placed">How a
+tag is placed</a></li>
+<li><a href="#summary" id="toc-summary">Summary</a></li>
+<li><a href="#diagnosis-codes" id="toc-diagnosis-codes">Diagnosis
+codes</a>
+<ul>
+<li><a href="#missing-icd10s" id="toc-missing-icd10s">Missing
+ICD10s</a></li>
+<li><a href="#icd10-relation" id="toc-icd10-relation">ICD10
+Relation</a></li>
+<li><a href="#wrong-side-icd10" id="toc-wrong-side-icd10">Wrong Side
+ICD10</a></li>
+<li><a href="#icd10-side-unspecified" id="toc-icd10-side-unspecified">ICD10 Side Unspecified</a></li>
+<li><a href="#bilateral-cpt-one-side-icd10" id="toc-bilateral-cpt-one-side-icd10">Bilateral CPT, One-Side
+ICD10</a></li>
+<li><a href="#icd10-excludes1-conflict" id="toc-icd10-excludes1-conflict">ICD10 Excludes1 Conflict</a></li>
+<li><a href="#icd10-sequence" id="toc-icd10-sequence">ICD10
+Sequence</a></li>
+</ul></li>
+<li><a href="#modifiers-and-the-cms-fee-schedule" id="toc-modifiers-and-the-cms-fee-schedule">Modifiers and the CMS fee
+schedule</a>
+<ul>
+<li><a href="#modifier-50-not-allowed" id="toc-modifier-50-not-allowed">Modifier 50 Not Allowed</a></li>
+<li><a href="#modifier-50-units-over-1" id="toc-modifier-50-units-over-1">Modifier 50, Units Over 1</a></li>
+<li><a href="#modifier-50-with-rtlt" id="toc-modifier-50-with-rtlt">Modifier 50 With RT/LT</a></li>
+<li><a href="#rtlt-on-bilateral-cpt" id="toc-rtlt-on-bilateral-cpt">RT/LT On Bilateral CPT</a></li>
+</ul></li>
+<li><a href="#ncci-edits" id="toc-ncci-edits">NCCI edits</a>
+<ul>
+<li><a href="#ncci-pair-never-together" id="toc-ncci-pair-never-together">NCCI Pair, Never Together</a></li>
+<li><a href="#ncci-pair-needs-modifier" id="toc-ncci-pair-needs-modifier">NCCI Pair Needs Modifier</a></li>
+<li><a href="#units-over-mue" id="toc-units-over-mue">Units Over
+MUE</a></li>
+</ul></li>
+<li><a href="#payer-and-patient" id="toc-payer-and-patient">Payer and
+patient</a>
+<ul>
+<li><a href="#payer-not-on-patient" id="toc-payer-not-on-patient">Payer
+Not On Patient</a></li>
+<li><a href="#insurance-dob-mismatch" id="toc-insurance-dob-mismatch">Insurance DOB Mismatch</a></li>
+<li><a href="#insurance-sex-mismatch" id="toc-insurance-sex-mismatch">Insurance Sex Mismatch</a></li>
+<li><a href="#denied-before" id="toc-denied-before">Denied
+Before</a></li>
+<li><a href="#refused-for-this-patient" id="toc-refused-for-this-patient">Refused For This Patient</a></li>
+</ul></li>
+<li><a href="#the-reference-data-keeps-itself-current" id="toc-the-reference-data-keeps-itself-current">The reference data
+keeps itself current</a></li>
+<li><a href="#switching-a-check-off-or-narrowing-it" id="toc-switching-a-check-off-or-narrowing-it">Switching a check off, or
+narrowing it</a></li>
+<li><a href="#tags-you-may-see-on-older-claims" id="toc-tags-you-may-see-on-older-claims">Tags you may see on older
+claims</a></li>
+</ul></li>
+<li><a href="#unbilled-encounters" id="toc-unbilled-encounters">Unbilled
+encounters</a>
+<ul>
+<li><a href="#what-an-unbilled-encounter-is" id="toc-what-an-unbilled-encounter-is">What an unbilled encounter
+is</a></li>
+<li><a href="#why-it-matters" id="toc-why-it-matters">Why it
+matters</a></li>
+<li><a href="#working-the-list" id="toc-working-the-list">Working the
+list</a></li>
+<li><a href="#inactivating-a-no-show-encounter" id="toc-inactivating-a-no-show-encounter">Inactivating a no-show
+encounter</a></li>
+</ul></li>
+<li><a href="#the-patients-dashboard" id="toc-the-patients-dashboard">The Patients dashboard</a>
+<ul>
+<li><a href="#encounters-by-source" id="toc-encounters-by-source">Encounters by Source</a></li>
+<li><a href="#encounters-missing-something" id="toc-encounters-missing-something">Encounters missing
+something</a></li>
+<li><a href="#patient-records" id="toc-patient-records">Patient
+records</a></li>
+<li><a href="#incomplete-records" id="toc-incomplete-records">Incomplete
+records</a></li>
+<li><a href="#incompletes-by-physician" id="toc-incompletes-by-physician">Incompletes by physician</a></li>
+</ul></li>
+<li><a href="#quick-reference" id="toc-quick-reference">Quick
+reference</a></li>
+</ul>
+</nav>
+<h1 id="about-this-guide">About this guide</h1>
+<p>The Billing module (PrBill10 or MpBill10) and the Patients module
+(Patients10) open on a <strong>dashboard</strong>: a set of cards drawn
+on the main window that tell you, at a glance, what needs your attention
+today. Claims a check has flagged, encounters that were never billed,
+rejections waiting to be worked, a backup that did not run — each of
+these used to be something you had to go looking for. The dashboard puts
+them in front of you as soon as you sign in.</p>
+<p>This guide is for the people who use those modules every day:
+billers, front desk and admissions staff, and the record room. It
+explains what each card means, which lines you can click, and what to do
+about what they show.</p>
+<p>Two parts deserve particular attention, and each has its own
+chapter:</p>
+<ul>
+<li><strong>Claims with error tags</strong> — how to open a flagged
+claim and find out exactly why it was flagged. The chapter after it,
+<strong>The claim checks</strong>, lists every check and the tag it
+places.</li>
+<li><strong>Unbilled encounters</strong> — what they are, why they
+matter, and how to clear the ones that will never be billed because the
+patient did not show up.</li>
+</ul>
+<h1 id="using-the-dashboard">Using the dashboard</h1>
+<h2 id="when-it-appears">When it appears</h2>
+<p>The dashboard shows whenever <strong>no grid and no option window is
+open</strong> on the main window. Open the Patients grid, the Claims
+grid, or any other window, and the cards step aside; close it, and they
+come back.</p>
+<p>You do not have to close your work to see the dashboard. Press the
+<strong>Dashboard</strong> button on the toolbar (or choose
+<strong>Dashboard</strong> from the menu). Every open grid is hidden —
+not closed — and the cards appear. Each grid comes back exactly as you
+left it when you press its own toolbar button again.</p>
+<h2 id="which-cards-you-see">Which cards you see</h2>
+<p>Each card reads certain tables. If your user account is not allowed
+to read one of them, that card (or that line of a card) is simply left
+out. Two people at the same site can therefore see different dashboards;
+that is expected and is not a fault. If you believe you should be seeing
+a card you do not, ask your administrator to review your
+permissions.</p>
+<p>Some lines also depend on what your site uses. The HL7 line appears
+only at a site that runs an HL7 interface, the modality worklist line
+only where the worklist is installed, and so on.</p>
+<h2 id="how-fresh-the-numbers-are">How fresh the numbers are</h2>
+<p>The numbers are gathered in the background, so the dashboard never
+slows down the window you are working in. They refresh:</p>
+<ul>
+<li>about every <strong>five minutes</strong> while the dashboard is
+showing, and</li>
+<li>every time you <strong>come back</strong> to the dashboard after
+working in a grid, so what you just changed is reflected.</li>
+</ul>
+<p>When you first sign in, a card may say <strong>Loading…</strong> for
+a few seconds.</p>
+<p>If a card’s bottom line turns orange and reads <strong>“Numbers as of
+hh:mm:ss · the refresh has stopped”</strong>, the numbers on screen are
+old. Close and reopen the module. If it keeps happening, tell your
+administrator.</p>
+<p>A card that shows a <strong>red message</strong> instead of numbers
+could not read its data. The other cards are not affected. Report the
+message text to your administrator.</p>
+<h2 id="colours">Colours</h2>
+<p>The colours follow one rule throughout:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Colour</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Grey</strong></td>
+<td>Zero, or nothing to do</td>
+</tr>
+<tr class="even">
+<td><strong>Green</strong></td>
+<td>All clear, or good news (paid claims, nothing outstanding)</td>
+</tr>
+<tr class="odd">
+<td><strong>Amber</strong></td>
+<td>Something is waiting for someone</td>
+</tr>
+<tr class="even">
+<td><strong>Red</strong></td>
+<td>Something has gone wrong and needs action</td>
+</tr>
+</tbody>
+</table>
+<h2 id="clicking">Clicking</h2>
+<p>There are two kinds of click:</p>
+<ul>
+<li><strong>Click anywhere on a card</strong> to open the grid it is
+about — for example the Encounters grid from the <em>Needs
+attention</em> card.</li>
+<li><strong>Click an underlined line</strong> to open the list behind
+that one number. When the mouse is over such a line the pointer turns
+into a pointing finger. A line is underlined only when its count is
+above zero: there is nothing to open behind a zero.</li>
+</ul>
+<p>A list opened from a line (for example <em>Claims with error
+tags</em>) belongs to the dashboard. It hides when you open a grid and
+comes back, where you left it, when you return to the dashboard.</p>
+<h1 id="the-billing-dashboard">The Billing dashboard</h1>
+<p>The Billing module shows up to four cards, followed by two charts
+when there is room on the screen.</p>
+<h2 id="today">Today</h2>
+<p>The number of encounters dated today, one line per site, and at the
+bottom how many of today’s encounters are still unsigned and how many
+orders were placed.</p>
+<p>On a day with no encounters yet — early morning, a weekend — the card
+says so and shows the last day that had activity instead, so you are
+never looking at a bare zero wondering whether something is broken.</p>
+<p>Clicking the card opens the Encounters grid.</p>
+<h2 id="needs-attention">Needs attention</h2>
+<p>The big number is the count of <strong>encounters in the last 7 days
+that have no patient signature</strong>. It is amber while anything is
+outstanding and green at zero. The bottom line shows the date of the
+oldest one still waiting.</p>
+<p>Below it, depending on your permissions, two more lines:</p>
+<ul>
+<li><strong>Possible duplicate patients · new in 90 days.</strong>
+Groups of patient records that look like the same person (same last
+name, first name, birth date and city) where at least one record was
+created in the last 90 days. Click the line to see the list. Nothing is
+merged or changed from that list; it tells you who to look at.</li>
+<li><strong>Claims with error tags · last 7 days.</strong> See the next
+chapter.</li>
+</ul>
+<p>Clicking the card itself opens the Encounters grid.</p>
+<h2 id="billing">Billing</h2>
+<p>This card covers the <strong>last 90 days</strong> of active
+encounters:</p>
+<ul>
+<li><strong>Unbilled encounters</strong> (amber) — encounters with no
+claim. Click the line to open the Unbilled Encounters grid on those same
+90 days. See the chapter <em>Unbilled encounters</em>.</li>
+<li><strong>Rejected claims</strong> (red) — claims whose most recent
+status is a rejection. Click the line to open the list.</li>
+<li><strong>Paid claims</strong> (green).</li>
+<li><strong>Claims with no status</strong> — claims sent but with no
+response recorded yet.</li>
+<li><strong>of N encounters · last 90 days</strong> — the total these
+are counted from.</li>
+<li><strong>Upcoming encounters pre-created</strong> — encounters
+already entered for future dates. They are shown for information and are
+<strong>not</strong> counted as unbilled.</li>
+</ul>
+<p>The bottom line gives the oldest unbilled encounter, the oldest
+rejection and the oldest claim with no status. Those dates are the ones
+to watch: an old date here is money at risk of passing the payer’s
+filing deadline.</p>
+<h3 id="the-rejected-claims-list">The rejected claims list</h3>
+<p>The list shows each rejected claim with the patient, service date,
+insurance, charges, the date it was rejected, where the rejection came
+from and <strong>the reason</strong>. When the rejection came from the
+clearinghouse or the payer, the reason is their own wording. When the
+claim was denied on a remittance (an 835), the reason is built from the
+adjustment and remark codes on that remittance.</p>
+<p>Double-click a row to open the claim, correct it, and resubmit.
+<strong>Refresh</strong> re-reads the list after you have worked a few;
+<strong>Print</strong> gives you a paper copy to work from.</p>
+<h2 id="system-health">System health</h2>
+<p>One line per background service your site uses. A green dot means all
+is well, amber means “look at this”, red means it has stopped or
+failed.</p>
+<ul>
+<li><strong>HL7 interface</strong> — whether the interface is listening,
+when the last message arrived, and how many messages are waiting to be
+processed. Red if the listener has not been heard from, or if no message
+has arrived since the last day the clinic was busy.</li>
+<li><strong>Modality worklist</strong> — how many entries are scheduled,
+whether the worklist server is up, and when a scanner last asked for its
+list.</li>
+<li><strong>AutoTasks</strong> — when the background service last ran a
+cycle and when the last backup was taken. Red if AutoTasks has stopped
+reporting or the last backup <strong>FAILED</strong>; amber if the last
+good backup is more than two days old. AutoTasks also keeps the CMS
+reference data current and emails what it fetched — see <strong>The
+reference data keeps itself current</strong> in the claim checks
+chapter.</li>
+<li><strong>Received today</strong> — remittance files, claim statuses
+and eligibility responses that arrived today.</li>
+</ul>
+<p>Any red line here should be reported to whoever looks after your
+server the same day. A failed backup in particular must not wait.</p>
+<h2 id="the-charts">The charts</h2>
+<p>When the window is wide enough, two bar charts follow the cards:</p>
+<ul>
+<li><strong>Billed vs collected · last 12 months</strong> — what was
+billed and what was collected, month by month.</li>
+<li><strong>Encounters per month · last 12 months.</strong></li>
+</ul>
+<p>On a smaller screen the charts may not fit; maximise the main window
+to see them.</p>
+<h1 id="claims-with-error-tags">Claims with error tags</h1>
+<h2 id="what-the-line-counts">What the line counts</h2>
+<p>When a claim is saved, Mp10 runs a set of checks on it — diagnosis
+codes and modifiers that do not agree, a payer the patient does not have
+on file, a date of birth the insurer reports differently, codes this
+payer has refused before, and others. A check that finds a problem puts
+a <strong>tag</strong> on the claim: a short coloured label with the
+name of the problem, such as <em>Wrong Side ICD10</em> or <em>Insurance
+DOB Mismatch</em>.</p>
+<p>The <strong>Claims with error tags · last 7 days</strong> line on the
+<em>Needs attention</em> card counts the claims that carry at least one
+of these tags and were saved in the last seven days. Tags that a user
+added by hand are not counted. Every check, and the tag each one places,
+is described in the next chapter, <em>The claim checks</em>.</p>
+<blockquote>
+<p>In this version the count, and the list behind it, cover the
+diagnosis, payer and denial-history tags. The four fee-schedule modifier
+tags and the three NCCI tags appear on the claim itself but are not yet
+included in the dashboard count.</p>
+</blockquote>
+<p>Each of those claims is likely to be rejected or denied if it goes
+out as it is. Working this line before the claims are sent is far
+cheaper than working the rejections afterwards.</p>
+<h2 id="opening-the-list">Opening the list</h2>
+<p>Click the line. A list opens with one row per claim, newest
+first:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Shows</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Claim</td>
+<td>The claim number</td>
+</tr>
+<tr class="even">
+<td>Patient</td>
+<td>Last name, first name</td>
+</tr>
+<tr class="odd">
+<td>Service date</td>
+<td>The claim’s date of service</td>
+</tr>
+<tr class="even">
+<td>Insurance</td>
+<td>The payer</td>
+</tr>
+<tr class="odd">
+<td>Tags</td>
+<td>Every tag on the claim, separated by semicolons</td>
+</tr>
+<tr class="even">
+<td>Saved by</td>
+<td>The user who last saved the claim</td>
+</tr>
+<tr class="odd">
+<td>Saved</td>
+<td>When it was last saved</td>
+</tr>
+</tbody>
+</table>
+<p>The list title says how many claims it holds.</p>
+<h2 id="opening-a-claim-and-finding-out-why">Opening a claim and finding
+out why</h2>
+<p><strong>Double-click a row</strong> to open that claim, just as it
+opens from the Claims grid.</p>
+<p>The claim’s tags are shown along the tag strip of the claim window.
+Each tag is only a name; to see what the check actually found:</p>
+<ul>
+<li><strong>Hover</strong> the mouse over a tag. A tooltip shows the
+first finding in one short line — for example which line’s modifier
+disagrees with which diagnosis. When there is more to say, the tooltip
+ends with <strong>“(click for more)”</strong>.</li>
+<li><strong>Click</strong> the tag. A window lists
+<strong>every</strong> finding for that tag, in full.</li>
+</ul>
+<p>The explanation is worked out from the claim <strong>as it is
+now</strong>, not as it was when the tag was added. So:</p>
+<ul>
+<li>If you have already corrected the problem, the explanation says the
+check finds nothing on the claim any more, and <strong>the tag clears
+the next time the claim is saved</strong>.</li>
+<li>If the explanation still describes a problem, the claim still has
+it.</li>
+</ul>
+<h2 id="clearing-a-tag">Clearing a tag</h2>
+<ol type="1">
+<li>Read the explanation (hover or click the tag).</li>
+<li>Correct the claim — the diagnosis, modifier, payer, patient’s
+insurance record, or whatever the explanation points to.</li>
+<li><strong>Save</strong> the claim. The checks run again; a tag whose
+problem is gone is removed.</li>
+</ol>
+<p>Some tags call for judgement rather than a correction. <em>Denied
+Before</em>, for instance, says this payer has often refused these
+codes; the claim may be perfectly right and simply need supporting
+documentation. In that case the tag can stay: it is a warning, and the
+claim can still be sent.</p>
+<p>Press <strong>Refresh</strong> on the list after working a few claims
+to see what is left. The count on the dashboard updates on its next
+refresh.</p>
+<h1 id="the-claim-checks">The claim checks</h1>
+<p>This chapter lists every check Mp10 runs on a claim, the tag each one
+places, what the tag means and what to do about it.</p>
+<h2 id="how-a-tag-is-placed">How a tag is placed</h2>
+<ul>
+<li><strong>The checks run every time a claim is saved</strong> in the
+claim window. The diagnosis-side checks also run as you edit the
+procedure lines and diagnoses, so their tags can appear before you
+save.</li>
+<li><strong>Each check starts by removing its own tags</strong> and adds
+a tag back only if it still finds the problem. The tags on a saved claim
+therefore always describe the claim as it was last saved. Fix the
+problem, save, and the tag is gone.</li>
+<li><strong>A tag never stops a claim from being saved or sent.</strong>
+Each is a warning. The coder or biller decides, because the claim may be
+correct and the rule may not apply to it.</li>
+<li><strong>A check places a tag once per claim</strong>, however many
+lines have the problem. Hover over the tag or click it to see every line
+it is about.</li>
+<li><strong>Three checks also offer a correction</strong> when you save:
+the date-of-birth, sex and payer-on-file checks. Each asks first and
+changes nothing unless you answer <strong>Yes</strong>.</li>
+<li><strong>Tags you add by hand are different.</strong> No check
+removes them. They stay until you remove them, and clicking one says it
+was added by a user.</li>
+<li><strong>Some checks need reference data</strong>: the ICD-10 code
+set, the CMS fee schedule, the NCCI tables, and the denial history. The
+first three keep themselves current – AutoTasks downloads each new
+release from CMS and imports it (see <strong>The reference data keeps
+itself current</strong> below). The denial history is built from your
+own remittances. Where data is missing, the check does nothing and
+places no tag. A missing tag is not proof that a claim is clean.</li>
+</ul>
+<p>Secondary claims that Mp10 creates automatically after a primary
+payment are checked when someone opens and saves them.</p>
+<h2 id="summary">Summary</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tag</th>
+<th>The claim has…</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Missing ICD10s</td>
+<td>No diagnosis codes</td>
+</tr>
+<tr class="even">
+<td>ICD10 Relation</td>
+<td>A line pointing at a diagnosis that is not on the claim</td>
+</tr>
+<tr class="odd">
+<td>Wrong Side ICD10</td>
+<td>RT with a left-side diagnosis, or LT with a right-side one</td>
+</tr>
+<tr class="even">
+<td>ICD10 Side Unspecified</td>
+<td>RT or LT with a diagnosis that leaves the side unspecified</td>
+</tr>
+<tr class="odd">
+<td>Bilateral CPT, One-Side ICD10</td>
+<td>A surgical code with modifier 50 and diagnoses for one side
+only</td>
+</tr>
+<tr class="even">
+<td>ICD10 Excludes1 Conflict</td>
+<td>Two diagnoses ICD-10-CM says are never coded together</td>
+</tr>
+<tr class="odd">
+<td>ICD10 Sequence</td>
+<td>Diagnoses in an order a “code first” instruction contradicts</td>
+</tr>
+<tr class="even">
+<td>Modifier 50 Not Allowed</td>
+<td>Modifier 50 on a code the fee schedule does not allow it on</td>
+</tr>
+<tr class="odd">
+<td>Modifier 50, Units Over 1</td>
+<td>Modifier 50 on a line with more than one unit</td>
+</tr>
+<tr class="even">
+<td>Modifier 50 With RT/LT</td>
+<td>Modifier 50 and RT or LT on the same line</td>
+</tr>
+<tr class="odd">
+<td>RT/LT On Bilateral CPT</td>
+<td>RT or LT on a code that already means both sides</td>
+</tr>
+<tr class="even">
+<td>NCCI Pair, Never Together</td>
+<td>Two codes NCCI never pays together</td>
+</tr>
+<tr class="odd">
+<td>NCCI Pair Needs Modifier</td>
+<td>Two codes NCCI bundles unless a modifier shows they were
+separate</td>
+</tr>
+<tr class="even">
+<td>Units Over MUE</td>
+<td>More units of a code than the CMS limit allows</td>
+</tr>
+<tr class="odd">
+<td>Payer Not On Patient</td>
+<td>A payer that is not on the patient’s insurance record</td>
+</tr>
+<tr class="even">
+<td>Insurance DOB Mismatch</td>
+<td>A date of birth different from the one the payer reported</td>
+</tr>
+<tr class="odd">
+<td>Insurance Sex Mismatch</td>
+<td>A sex different from the one the payer reported, or none at all</td>
+</tr>
+<tr class="even">
+<td>Denied Before</td>
+<td>Codes this payer has refused often and recently</td>
+</tr>
+<tr class="odd">
+<td>Refused For This Patient</td>
+<td>A code this payer refused for this same patient, with nothing paid
+for it since</td>
+</tr>
+</tbody>
+</table>
+<h2 id="diagnosis-codes">Diagnosis codes</h2>
+<h3 id="missing-icd10s">Missing ICD10s</h3>
+<p>The claim has no diagnosis codes at all. Payers reject a claim
+without them. Add the diagnoses and save.</p>
+<h3 id="icd10-relation">ICD10 Relation</h3>
+<p>A procedure line’s diagnosis pointer names a diagnosis that is not on
+the claim. For example, the line points at diagnosis 3 but the claim has
+only two. Correct the pointer on the line, or add the missing
+diagnosis.</p>
+<h3 id="wrong-side-icd10">Wrong Side ICD10</h3>
+<p>A line carries modifier <strong>RT</strong> (right) and its diagnosis
+is for the <strong>left</strong> side, or <strong>LT</strong> with a
+right-side diagnosis. The modifier and the diagnosis contradict each
+other, and payers reject the line. Correct whichever of the two is
+wrong.</p>
+<p>The check reads the <strong>first</strong> diagnosis the line points
+at. Diagnoses that have no side at all are never questioned.</p>
+<h3 id="icd10-side-unspecified">ICD10 Side Unspecified</h3>
+<p>A line carries RT or LT, but its diagnosis is the “unspecified side”
+code of a family that has right and left codes. The modifier says which
+side; the diagnosis should too. Replace it with the side-specific
+code.</p>
+<h3 id="bilateral-cpt-one-side-icd10">Bilateral CPT, One-Side ICD10</h3>
+<p>A <strong>surgical</strong> procedure (codes 10000 to 69999) carries
+modifier <strong>50</strong> (bilateral), and every diagnosis the line
+points at is for one side only.</p>
+<p>The bilateral procedure is supported, and no tag is placed, when:</p>
+<ul>
+<li>the line points at a <strong>bilateral</strong> diagnosis, or</li>
+<li>it points at both a right and a left diagnosis, or</li>
+<li>the claim carries the <strong>same diagnosis for the other
+side</strong> (or its bilateral form) anywhere in its diagnosis list,
+even if the line does not point at it.</li>
+</ul>
+<p>Diagnostic procedures such as imaging are not checked. On those, a
+one-sided finding on a bilateral exam is correct coding.</p>
+<p>An administrator can exempt whole diagnosis families from the three
+side checks with the <strong>BILLING / ICD10-LATERALITY-EXCLUDE</strong>
+setting in the System Registry: a comma-separated list of code prefixes.
+It is empty by default. The claim window reads it; the MpWeb overnight
+re-tag does not, so an exempted family can still be tagged there.</p>
+<h3 id="icd10-excludes1-conflict">ICD10 Excludes1 Conflict</h3>
+<p>Two diagnoses on the claim are a pair that ICD-10-CM marks
+<strong>Excludes1</strong>: conditions that should never be reported
+together. The classic example is type 2 diabetes (E11.9) together with
+type 1 diabetes (E10.9). An Excludes1 note on a category or chapter
+applies to every code beneath it.</p>
+<p>Clicking the tag names the two codes and the note that forbids them.
+Since 2017 the guidelines allow such a pair when the two conditions are
+genuinely unrelated, so this is the coder’s decision. Remove the code
+that does not belong, or leave both if they are unrelated.</p>
+<h3 id="icd10-sequence">ICD10 Sequence</h3>
+<p>A diagnosis carries a <strong>“code first”</strong> instruction
+naming another diagnosis that is on the claim, but the claim lists them
+the other way round. For example, a rib fracture listed before the
+associated spinal cord injury, which should come first.</p>
+<p>Clicking the tag says which code should come first. Reorder the
+diagnoses and save. The order on the claim is the order sent to the
+payer.</p>
+<h2 id="modifiers-and-the-cms-fee-schedule">Modifiers and the CMS fee
+schedule</h2>
+<p>These checks compare a line’s modifiers with the <strong>bilateral
+surgery indicator</strong> in the CMS Medicare Physician Fee Schedule.
+AutoTasks imports each quarter’s file automatically; the MpAdmin menu
+remains for loading one by hand. A code the fee schedule does not list
+is not checked, and neither is indicator 3, on which payers
+disagree.</p>
+<h3 id="modifier-50-not-allowed">Modifier 50 Not Allowed</h3>
+<p>Modifier 50 is on a code whose indicator is <strong>0</strong>,
+<strong>2</strong> or <strong>9</strong>. On those codes the payer does
+not accept a bilateral adjustment:</p>
+<ul>
+<li><strong>0:</strong> the procedure cannot be billed as
+bilateral.</li>
+<li><strong>2:</strong> the code already covers both sides.</li>
+<li><strong>9:</strong> the concept does not apply.</li>
+</ul>
+<p>Remove modifier 50. If the procedure was really done on both sides of
+a code with indicator 0, bill each side as the payer requires.</p>
+<h3 id="modifier-50-units-over-1">Modifier 50, Units Over 1</h3>
+<p>A line with modifier 50 carries more than one unit. A bilateral
+procedure is one line with one unit. Set the units to 1.</p>
+<h3 id="modifier-50-with-rtlt">Modifier 50 With RT/LT</h3>
+<p>Modifier 50 and RT or LT are on the same line. They are never used
+together: use either modifier 50 on one line, or one RT line and one LT
+line.</p>
+<p>This check and the previous one need no fee schedule data, so they
+work at every site.</p>
+<h3 id="rtlt-on-bilateral-cpt">RT/LT On Bilateral CPT</h3>
+<p>A line carries RT or LT on a code whose indicator is
+<strong>2</strong>, meaning the code itself already describes both
+sides. Remove the side modifier.</p>
+<h2 id="ncci-edits">NCCI edits</h2>
+<p>The National Correct Coding Initiative (NCCI) publishes which codes
+cannot be billed together and how many units of a code are plausible.
+AutoTasks imports each quarter’s tables automatically; the MpAdmin menus
+remain for loading them by hand. Each payer is checked against either
+the professional or the facility table, depending on whether the payer
+is set up as professional.</p>
+<h3 id="ncci-pair-never-together">NCCI Pair, Never Together</h3>
+<p>Two codes on the claim form a pair that NCCI never pays together on
+the same day, <strong>whatever modifier</strong> is used. One of them
+should not be on the claim. Clicking the tag names the pair.</p>
+<h3 id="ncci-pair-needs-modifier">NCCI Pair Needs Modifier</h3>
+<p>Two codes on the claim form a pair that NCCI bundles together, unless
+the second code is marked as a separate service. No tag is placed when
+the second code’s line carries one of these modifiers:</p>
+<pre><code>24  25  27  57  58  59  78  79  91  XE  XS  XP  XU</code></pre>
+<p>No tag is placed either when one line is RT and the other LT.</p>
+<p>If the two services really were separate, add the modifier that
+documents why. If they were not, remove the bundled code.</p>
+<p><strong>Both pair checks run only for payers that ask for
+them.</strong> An administrator turns them on per payer by ticking
+<strong>Check NCCI PTP pairs</strong> on the X12 tab of the insurance
+company’s record. Payers without the tick are never checked for
+pairs.</p>
+<h3 id="units-over-mue">Units Over MUE</h3>
+<p>A code carries more units than its Medically Unlikely Edit (MUE), the
+CMS limit for one patient on one day. Depending on the code, the limit
+applies to each line or to the claim’s total for that code. This check
+runs for every payer.</p>
+<p>Bilateral billing is allowed for: one RT line and one LT line of the
+code, or 2 units of a code whose fee-schedule indicator says it may be
+billed bilaterally. Correct the units, or check whether the service was
+entered twice.</p>
+<h2 id="payer-and-patient">Payer and patient</h2>
+<h3 id="payer-not-on-patient">Payer Not On Patient</h3>
+<p>The claim’s insurance, or its secondary insurance, is a payer that
+does not appear on the patient’s insurance record. A payer counts as on
+file when the name matches, or when it has the same payer ID as one the
+patient has. Claims like this are rejected far more often than
+others.</p>
+<p>When you save, Mp10 names the payers the patient does have and asks
+whether to <strong>add the claim’s payer to the patient’s
+insurances</strong>, carrying over the claim’s policy number:</p>
+<ul>
+<li>Answer <strong>Yes</strong> if the patient’s record is out of date.
+Then check the member number and effective date on the patient’s
+record.</li>
+<li>Answer <strong>No</strong> if the claim is wrong. Use the magnifier
+beside the claim’s insurance to pick one of the payers the patient
+has.</li>
+</ul>
+<h3 id="insurance-dob-mismatch">Insurance DOB Mismatch</h3>
+<p>The date of birth the claim will send differs from the date the payer
+reported in the patient’s latest <strong>eligibility response</strong>.
+Mp10 prefers a response from the claim’s own payer and says so when the
+response came from a different one.</p>
+<p>When you save, Mp10 shows both dates and asks whether to use the
+payer’s date. If you answer <strong>Yes</strong>, the date is written to
+the patient’s <strong>insurance record for that payer</strong>, which is
+the date claims to that payer send. The patient’s own date of birth on
+the patient record is <strong>not</strong> changed: the payer’s file can
+be the wrong one, and the clinical record must stay as it is.</p>
+<h3 id="insurance-sex-mismatch">Insurance Sex Mismatch</h3>
+<p>The patient’s sex on the patient record differs from what the payer
+reported in the latest eligibility response, <strong>or the patient
+record has no sex at all</strong>. A blank is a real problem: the claim
+then sends “unknown”, and the eligibility request leaves out the
+patient’s date of birth too.</p>
+<p>When you save, Mp10 asks whether to use the payer’s answer. If you
+answer <strong>Yes</strong>, the patient record is updated, because both
+claims and eligibility requests take the sex from there.</p>
+<h3 id="denied-before">Denied Before</h3>
+<p>This payer has refused these codes before, <strong>often and
+recently</strong>. Mp10 learns this from remittances that paid nothing
+for a line, and from payer rejections. Clicking the tag names the code,
+the diagnosis, how often it was refused and the payer’s own reason.</p>
+<p>To avoid crying wolf, the tag is placed only when all of these are
+true:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Rule</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Refusals of the same payer, code and diagnosis</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>Refusals on at least this many different check dates</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<td>Refusals as a share of all this payer’s remittance lines for the
+code</td>
+<td>20%</td>
+</tr>
+<tr class="even">
+<td>The most recent refusal is no older than</td>
+<td>6 months</td>
+</tr>
+<tr class="odd">
+<td>Refusals counted from the last</td>
+<td>24 months</td>
+</tr>
+</tbody>
+</table>
+<p>Refusals that are not really a refusal of the service are ignored:
+patient responsibility, duplicates, coordination of benefits,
+contractual adjustments and reporting-only codes. Remark codes never
+count on their own.</p>
+<p>This tag is evidence, not a rule. The claim may be entirely right
+this time. Check that the diagnosis supports the procedure, attach
+documentation if the payer usually asks for it, and send the claim.</p>
+<p>The thresholds are System Registry settings under
+<strong>BILLING</strong>, named <strong>DENIAL-MIN-COUNT</strong>,
+<strong>DENIAL-MIN-DATES</strong>, <strong>DENIAL-MIN-RATE</strong>,
+<strong>DENIAL-RECENT-MONTHS</strong>, <strong>DENIAL-MONTHS</strong>
+and <strong>DENIAL-IGNORE-CODES</strong>.
+<strong>DENIAL-REASONCODES</strong> narrows the warning to a list of
+denial reason codes; empty, the default, counts every reason. A site
+that has not built its denial history never sees this tag.</p>
+<h3 id="refused-for-this-patient">Refused For This Patient</h3>
+<p>This payer has already refused one of the claim’s codes <strong>for
+this same patient</strong>, and has not paid that code for the patient
+since. Clicking the tag names the code, the date of the refusal, and the
+payer’s own reason — both halves of it: the adjustment code and the
+remark that says what was wrong, such as missing credentialing data or a
+modifier the payer expects.</p>
+<p>This is the strongest warning Mp10 gives about a payer’s behaviour.
+Measured on real data, a code the payer refused for a patient is refused
+again about two times out of three; once the payer has paid it, a later
+refusal is rare. That is why a payment clears the tag: if the payer paid
+the code for this patient after refusing it, nothing is shown.</p>
+<p>Fix what the reason names before sending: an authorization, the
+provider’s credentialing with that payer, a modifier, or a frequency
+limit. If the claim is right as it is, send it — the tag is a warning,
+as always.</p>
+<p>The same check runs <strong>when an order is placed</strong> on an
+encounter, and a message names the refused code when the encounter is
+saved. The <strong>Mp10 Orders</strong> guide describes it, with the
+duplicate-order warning that runs at the same time.</p>
+<p>It looks back as far as <strong>BILLING / DENIAL-MONTHS</strong> (24
+months by default) and ignores the same reasons <strong>BILLING /
+DENIAL-IGNORE-CODES</strong> lists, the settings Denied Before uses.</p>
+<h2 id="the-reference-data-keeps-itself-current">The reference data
+keeps itself current</h2>
+<p>AutoTasks, the background service, checks the CMS website once a day.
+When CMS publishes a new quarter of the fee schedule or the NCCI tables,
+AutoTasks downloads and imports it. When CMS publishes the yearly
+ICD-10-CM code set, effective each October 1st, AutoTasks downloads and
+imports that too, and writes a report of every code that changed next to
+the downloaded files. Nobody has to remember a quarter or a year again;
+the MpAdmin import menus remain for loading a file by hand.</p>
+<p>After any check that imported, downloaded or failed something,
+AutoTasks sends an <strong>email</strong> saying exactly what it did – a
+new ICD-10 year arriving included. A quiet check, when CMS has published
+nothing new, never sends mail.</p>
+<p>The System Registry entries behind this:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Entry</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>AUTOTASKS / FETCH_CMS</td>
+<td>YES</td>
+<td>NO switches the daily CMS check off entirely</td>
+</tr>
+<tr class="even">
+<td>AUTOTASKS / CMSFETCH_CHECK_HOURS</td>
+<td>24</td>
+<td>Hours between checks</td>
+</tr>
+<tr class="odd">
+<td>AUTOTASKS / CMSFETCH_PATH</td>
+<td>a cms folder beside AutoTasks.exe</td>
+<td>Where the downloaded files and the ICD-10 change reports land</td>
+</tr>
+<tr class="even">
+<td>CMSFETCH / NOTIFY_EMAIL</td>
+<td>empty</td>
+<td>Who gets the result email; commas between addresses</td>
+</tr>
+</tbody>
+</table>
+<p>With <strong>CMSFETCH / NOTIFY_EMAIL</strong> empty, the email goes
+to <strong>ERRORREPORTS / NOTIFY_EMAIL</strong> instead. With both
+empty, no email is sent and the AutoTasks log still records everything.
+AutoTasks must have its outgoing mail (SMTP) settings configured, as for
+backup notices.</p>
+<h2 id="switching-a-check-off-or-narrowing-it">Switching a check off, or
+narrowing it</h2>
+<p>Most checks have no off switch: they warn, they never block, and a
+tag costs nothing when the claim is right. Where a site can turn one off
+or narrow it:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Check</th>
+<th>How</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>NCCI Pair, Never Together / Needs Modifier</td>
+<td>Per payer, <strong>off by default</strong>: tick <strong>Check NCCI
+PTP pairs</strong> on the X12 tab of the insurance company’s record</td>
+</tr>
+<tr class="even">
+<td>Units Over MUE, the modifier-50 checks</td>
+<td>No switch once the tables are loaded. <strong>AUTOTASKS / FETCH_CMS
+= NO</strong> stops future quarters from loading</td>
+</tr>
+<tr class="odd">
+<td>The three side checks</td>
+<td><strong>BILLING / ICD10-LATERALITY-EXCLUDE</strong>: diagnosis-code
+prefixes to leave alone (claim window only)</td>
+</tr>
+<tr class="even">
+<td>Denied Before</td>
+<td>The <strong>BILLING / DENIAL-…</strong> thresholds above; a very
+high DENIAL-MIN-DATES silences it, DENIAL-REASONCODES narrows it</td>
+</tr>
+<tr class="odd">
+<td>Refused For This Patient</td>
+<td>No switch. <strong>BILLING / DENIAL-MONTHS</strong> shortens how far
+back it looks; <strong>DENIAL-IGNORE-CODES</strong> names reasons that
+never count</td>
+</tr>
+<tr class="even">
+<td>Everything else</td>
+<td>Always on. The DOB and sex checks only speak when an eligibility
+response exists to compare against</td>
+</tr>
+</tbody>
+</table>
+<h2 id="tags-you-may-see-on-older-claims">Tags you may see on older
+claims</h2>
+<p>Earlier versions placed <strong>Missing Right ICD10</strong> and
+<strong>Missing Left ICD10</strong>. Those checks were replaced by the
+side checks above. The old tags are removed automatically the next time
+such a claim is saved.</p>
+<h1 id="unbilled-encounters">Unbilled encounters</h1>
+<h2 id="what-an-unbilled-encounter-is">What an unbilled encounter
+is</h2>
+<p>An <strong>unbilled encounter</strong> is an active encounter dated
+in the last 90 days that has <strong>no claim</strong>. Every one of
+them is one of two things:</p>
+<ul>
+<li>a visit that happened and has <strong>not been billed yet</strong> —
+revenue the practice has earned and not asked for; or</li>
+<li>an encounter that should <strong>not</strong> be billed at all, most
+often because the patient <strong>did not show up</strong> after the
+encounter had been created.</li>
+</ul>
+<p>Encounters created ahead of time for future dates are not counted;
+the card lists them separately as <em>upcoming encounters
+pre-created</em>.</p>
+<h2 id="why-it-matters">Why it matters</h2>
+<ul>
+<li><strong>Filing deadlines.</strong> Every payer gives a limited time
+after the date of service to submit a claim. An encounter left unbilled
+past that limit is revenue that can no longer be collected. The
+<strong>“Oldest unbilled since”</strong> date at the bottom of the
+Billing card tells you how close the oldest one is.</li>
+<li><strong>A clean count is a useful count.</strong> If no-shows are
+left in the list, the number grows with encounters nobody will ever
+bill, and the real unbilled visits hide among them. A billing team that
+trusts the number to mean “visits still to bill” can work it to zero
+every week.</li>
+<li><strong>Reports and statistics.</strong> Encounters that never took
+place inflate visit counts, productivity figures and census reports
+until they are marked inactive.</li>
+</ul>
+<p>Aim to keep the number low and the oldest date recent. Look at it
+daily; work it at least weekly.</p>
+<h2 id="working-the-list">Working the list</h2>
+<p>Click <strong>unbilled encounters</strong> on the Billing card. The
+Unbilled Encounters grid opens on the same 90 days the card counted. Its
+<strong>Ordered</strong> column says what each patient came for, from
+the encounter’s orders; the orders icon beside the date opens them, to
+check or to add orders while billing. An encounter with nothing in
+Ordered had no orders entered, and has to be billed from the paperwork.
+The <strong>Mp10 Orders</strong> guide explains why entering orders at
+registration speeds billing up. For each encounter:</p>
+<ul>
+<li><strong>If the visit took place</strong>, bill it as usual. Once it
+has a claim it leaves the list.</li>
+<li><strong>If the patient did not show up</strong>, or the encounter
+was created by mistake, mark it <strong>inactive</strong> as described
+below.</li>
+</ul>
+<h2 id="inactivating-a-no-show-encounter">Inactivating a no-show
+encounter</h2>
+<ol type="1">
+<li>In the Unbilled Encounters grid (or the Encounters grid in the
+Patients module), <strong>double-click the encounter</strong> to open
+it.</li>
+<li>On the first tab of the encounter window, tick <strong>Inactive
+encounter</strong>.</li>
+<li><strong>Save</strong> the encounter.</li>
+</ol>
+<p>What happens to an inactive encounter:</p>
+<ul>
+<li>It <strong>leaves the unbilled count</strong> and the dashboard’s
+other encounter counts on the next refresh.</li>
+<li>It is <strong>kept</strong>, not deleted. Its history, notes and
+documents remain, and it still appears in the patient’s record — shown
+in <strong>grey</strong> in encounter lists.</li>
+<li>It is left out of reports that count active encounters.</li>
+<li><strong>No charges can be posted</strong> to it. If you later find
+the patient was in fact seen, open the encounter, clear <strong>Inactive
+encounter</strong>, save, and bill it as usual.</li>
+</ul>
+<p>To see inactive encounters in the Unbilled Encounters grid, tick
+<strong>Show Inactive Encounters</strong> in the grid’s side panel.</p>
+<p>Inactivate only encounters that genuinely will not be billed. An
+encounter that is merely late in being billed belongs in the list until
+it is billed; marking it inactive would hide revenue the practice is
+owed.</p>
+<h1 id="the-patients-dashboard">The Patients dashboard</h1>
+<p>Patients10 shows a dashboard for admissions and the record room. All
+counts cover <strong>active encounters in the last 90 days</strong>
+unless the card says otherwise.</p>
+<h2 id="encounters-by-source">Encounters by Source</h2>
+<p>The number of encounters in the last 90 days, one line per source,
+largest first; smaller sources are grouped as <em>other</em>. Clicking
+the card opens the Encounters grid.</p>
+<h2 id="encounters-missing-something">Encounters missing something</h2>
+<p>Of the encounters in the last 90 days, how many have:</p>
+<ul>
+<li><strong>no ICD-10 coded</strong>,</li>
+<li><strong>no patient signature</strong>,</li>
+<li><strong>no insurance</strong>, and</li>
+<li><strong>no eligibility</strong> — insured encounters for which no
+eligibility response is on file. This line appears only at sites that
+run eligibility checks.</li>
+</ul>
+<p>Each is a gap that will hold up the claim later. The card reads
+“Nothing outstanding.” when all four are zero. Clicking it opens the
+Encounters grid.</p>
+<h2 id="patient-records">Patient records</h2>
+<p>Of the patients seen in the last 90 days, how many have:</p>
+<ul>
+<li><strong>no HIPAA signature</strong> on file, and</li>
+<li><strong>incomplete demographics</strong> — no birth date, a missing
+address, city or ZIP code, or no usable telephone number at all.</li>
+</ul>
+<p>The third line, <strong>possible duplicate patients</strong>, counts
+groups of records that look like the same person across
+<strong>all</strong> patients on file. Click it to open the list.
+Clicking elsewhere on the card opens the Patients grid.</p>
+<h2 id="incomplete-records">Incomplete records</h2>
+<p>The number of open incomplete records, broken down by how long ago
+the encounter took place: 0–7 days, 8–30 days, 31–90 days, and over 90
+days (in red). This card has no 90-day limit — an old incomplete matters
+more than a new one.</p>
+<h2 id="incompletes-by-physician">Incompletes by physician</h2>
+<p>The five physicians with the most open incomplete records.</p>
+<p>Clicking either incompletes card opens the Incompletes grid, for
+users who have access to it.</p>
+<h1 id="quick-reference">Quick reference</h1>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>You see</th>
+<th>Do this</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Claims with error tags above zero</td>
+<td>Click the line, double-click each claim, hover or click each tag,
+correct, save</td>
+</tr>
+<tr class="even">
+<td>Unbilled encounters above zero</td>
+<td>Click the line; bill the visits that happened, inactivate the
+no-shows</td>
+</tr>
+<tr class="odd">
+<td>Old “Oldest unbilled since” date</td>
+<td>Work that encounter first: its filing deadline is closest</td>
+</tr>
+<tr class="even">
+<td>Rejected claims above zero</td>
+<td>Click the line, read the reason, double-click to correct and
+resubmit</td>
+</tr>
+<tr class="odd">
+<td>Possible duplicate patients</td>
+<td>Click the line and review the records with whoever maintains patient
+records</td>
+</tr>
+<tr class="even">
+<td>Unsigned encounters</td>
+<td>Collect the signature before the claim goes out</td>
+</tr>
+<tr class="odd">
+<td>Red line in System health</td>
+<td>Tell your server administrator the same day</td>
+</tr>
+<tr class="even">
+<td>“The refresh has stopped”</td>
+<td>Close and reopen the module; report it if it recurs</td>
+</tr>
+<tr class="odd">
+<td>A card you expected is missing</td>
+<td>Ask your administrator to check your permissions</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

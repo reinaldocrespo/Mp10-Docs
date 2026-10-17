@@ -874,7 +874,9 @@ cannot be billed.
 ## Orders — what the patient is in for
 
 An encounter can carry one or more **orders**: the items from your practice's
-catalogue that the patient is being seen for. You can open Orders from three
+catalogue that the patient is being seen for. Why they are worth entering, how they
+pre-fill the claim, print as a label and travel to other systems by HL7 is in
+the **Mp10 Orders** guide. You can open Orders from three
 places, and all three lead to the same screen:
 
 - the **Orders** button on the patient's Encounters tab,

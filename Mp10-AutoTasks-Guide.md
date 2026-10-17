@@ -32,12 +32,16 @@ every day:
 - asking insurers whether a patient's **coverage is active**,
 - texting patients an **appointment reminder** they can reply to,
 - keeping a **modality worklist** in step with the schedule, so imaging
-  equipment can be told who its next patient is, and
+  equipment can be told who its next patient is,
+- keeping the **CMS reference data** behind the claim checks current — the
+  Medicare fee schedule and NCCI tables each quarter, the ICD-10-CM code set
+  each year — and e-mailing what it did, and
 - running **reports** on a schedule and e-mailing them to whoever needs them.
 
 Each of those is turned on separately. Nothing in this list happens until you
-set the corresponding entry in the System Registry, with one exception noted in
-its own chapter: eligibility requests default to on.
+set the corresponding entry in the System Registry, with two exceptions noted
+in their own chapters: eligibility requests and the CMS reference updates
+default to on.
 
 This guide is for the person who administers Mp10 at the practice. It does not
 assume you are a programmer. It does assume you can open the **Admin10** module
@@ -216,7 +220,27 @@ started one, it will not start another today, however many times it wakes up.
 > deliberate: a hot backup runs for hours and hammering the database server all
 > day cannot fix a wrong path or a full disk. It does mean **a failure needs
 > somebody to act on it**, which is what the failure e-mail is for. If you fix
-> the cause and want a backup the same day, restart the AutoTasks service.
+> the cause and want a backup the same day, stop the AutoTasks service, delete
+> that dictionary's `backup_lastattempt_….txt` next to the AutoTasks program
+> (see below), and start the service again. A restart on its own is not
+> enough: the day's attempt is remembered on disk so that a restart cannot
+> set off a second hours-long backup.
+
+**One AutoTasks serving several dictionaries.** When `Mp10.ini` lists more
+than one (`PATH01`, `PATH02`, … under `[RDD]`), each dictionary is backed up on
+its own schedule, from its own `BACKUPS` entries, and reported from its own
+`eMail` settings. The once-a-day rule applies to each dictionary separately:
+one dictionary's backup never uses up another's day. The day's attempt is
+remembered in a file per dictionary next to the AutoTasks program, named after
+the dictionary's path — for `\\server\e$\AdsData\Ver10\mp.add` it is
+`backup_lastattempt_SERVER_E_ADSDATA_VER10_MP_ADD.txt`.
+
+> **A dictionary with no outgoing mail server set up is backed up silently.**
+> The notices go out through the `eMail` section of the dictionary being backed
+> up, not through another dictionary's. If one dictionary's notices never
+> arrive, check that its `eMail` section has `SMTP-ServerName`, `SMTP-User`,
+> `SMTP-Pass` and `Address` filled in — the AutoTasks log says
+> "No outgoing mail server is configured" when they are not.
 
 ## Optional: zipping and retention
 
@@ -1380,6 +1404,97 @@ insurers all publish normal text PDFs, remittances will process without them.
 A second log, `python_debug.log`, is written next to the AutoTasks program and
 holds the extractor's own output. It is the place to look if a specific PDF
 fails.
+
+# Keeping the CMS reference data current
+
+Several of the claim checks in the Billing module compare a claim against
+reference data that CMS publishes:
+
+- the **Medicare Physician Fee Schedule** (the modifier-50 checks), updated
+  every quarter,
+- the **NCCI tables** (code pairs and unit limits), updated every quarter, and
+- the **ICD-10-CM code set** (every diagnosis check), updated every October
+  1st.
+
+AutoTasks keeps all three current on its own. Once a day it looks at the CMS
+website; when a new quarter or a new ICD-10 year has been published, it
+downloads the files and imports them into your data. Nothing needs to be
+remembered, and the import menus in Admin10 remain available for loading a
+file by hand.
+
+## Turning it off
+
+This is on by default. To switch it off entirely, set:
+
+| Section | Entry | Value |
+|---|---|---|
+| AUTOTASKS | FETCH_CMS | NO |
+
+A dictionary that has never had the fee schedule or NCCI tables loaded is
+skipped automatically for those two — the related claim checks then simply
+place no tags — so leaving FETCH_CMS on is harmless everywhere.
+
+## The settings
+
+| Section | Entry | Default | Meaning |
+|---|---|---|---|
+| AUTOTASKS | FETCH_CMS | YES | The whole feature |
+| AUTOTASKS | CMSFETCH_CHECK_HOURS | 24 | Hours between looks at the CMS site |
+| AUTOTASKS | CMSFETCH_PATH | empty | Where downloads land. Empty means a `cms` folder beside AutoTasks.exe, one subfolder per quarter plus one per ICD-10 year |
+| CMSFETCH | NOTIFY_EMAIL | empty | Who is e-mailed what a check did; commas between addresses |
+
+AutoTasks also keeps its own bookkeeping under the **CMSFETCH** section:
+`LAST_CHECK`, `ICD10_YEAR` (the latest ICD-10 year downloaded) and
+`ICD10_IMPORTED` (the latest year imported). Those entries are written by the
+service; leave them alone unless this guide says otherwise.
+
+## Being told what happened
+
+After any check that imported, downloaded or failed something, AutoTasks
+sends one e-mail listing each event — for example that the October fee
+schedule was imported, or that the new ICD-10-CM year was downloaded and
+applied. A quiet check, when CMS has published nothing new, sends nothing.
+
+The recipients come from **CMSFETCH / NOTIFY_EMAIL**. If that is empty, the
+error-report address (**ERRORREPORTS / NOTIFY_EMAIL**) is used instead; if
+both are empty, no mail is sent and the log still records everything. As with
+every notice AutoTasks sends, e-mail must be set up first — see **E-mail has
+to be set up first** in the backups chapter.
+
+## The yearly ICD-10 release
+
+The ICD-10-CM set changes every October 1st. AutoTasks downloads the year's
+order file and addendum, imports them — new codes added, retired codes
+end-dated so older claims still read correctly, titles and laterality
+updated — and writes a **report of every change** beside the downloaded
+files. The e-mail names that report.
+
+If the import cannot run — most often because another session had the
+diagnosis table open at that moment — nothing is changed, the e-mail says so,
+and AutoTasks tries again on its next check until it succeeds.
+
+A database that has not had its Data Dictionary updated yet cannot take the
+import: its diagnosis table lacks the columns the import needs. There,
+AutoTasks downloads the files, says so in one e-mail, and then waits
+quietly. The first check after the Data Dictionary update imports the year
+on its own; nothing has to be run by hand.
+
+To load a year by hand instead (or on a machine where AutoTasks is not
+running), use **Admin10 → Add 20xx ICD10 Data** against the downloaded
+`icd10cm_order_YYYY.txt`, then set **CMSFETCH / ICD10_IMPORTED** to that year
+so AutoTasks does not import it again. Clearing ICD10_IMPORTED makes AutoTasks
+import that year again at its next check.
+
+## Checking it is working
+
+- The log (`AutoTasks.out`) carries one `CMSFETCH:`
+  line per decision: what was current, what was imported, what is not posted
+  yet. "Not posted yet" close to a quarter change is normal and can last
+  weeks — CMS publishes on its own schedule, and no e-mail is sent for it.
+- The downloaded files are under the CMSFETCH_PATH folder.
+- In the Billing module, the dashboard's claim checks that depend on this
+  data (the modifier-50, NCCI and MUE tags) only work where the data has
+  been loaded.
 
 # Automated reports
 
