@@ -93,9 +93,16 @@ them for duplicates.
 Orders can be entered in three places. All three write to the same place, so
 an order entered in one shows in the others.
 
-## In the Patients module (Patients10)
+## On the encounter, as the patient is registered
 
-This is where orders are normally entered, as the patient is registered.
+This is where orders are normally entered. In a professional practice the
+encounter is opened from the patient's **Encounters** tab, in PrBill10 or in
+the appointment calendar, and the encounter window has an **Orders** tab.
+
+The institutional Patients module (Patients10) has no Orders tab on its
+encounter window. There, open the **Encounters Table**, highlight the
+encounter and choose **Orders** in the side panel; the window that opens is
+the one described under *From the Billing module* below.
 
 1. Open the patient's **encounter** and save it if it is new. Orders can only
    be added to an encounter that has been saved.
@@ -163,8 +170,10 @@ why an order that already has a result cannot be removed.
 When a biller creates a **new claim** for an encounter in the professional
 billing module (PrBill10), Mp10 adds one procedure line for each code the
 encounter's orders carry, with the visit date as the service dates and one
-unit. The biller completes the rest: diagnoses, pointers, modifiers the order
-did not carry, and the charges. A code ordered twice still makes one line.
+unit, priced from the payer's fee schedule as of that date. The biller
+completes the rest: diagnoses, pointers, modifiers the order did not carry,
+and the price of any code the schedule does not have for that payer. A code
+ordered twice still makes one line.
 The institutional billing module (MpBill10) does not pre-fill claim lines
 from orders; its billers still see the orders on the encounter.
 

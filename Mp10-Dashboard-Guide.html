@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-10-17" />
+  <meta name="dcterms.date" content="2026-10-21" />
   <title>Mp10 Dashboard — User’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -148,7 +148,7 @@ a { color: inherit; }
 <p class="subtitle">The cards on the Billing and Patients main windows,
 and what to do about what they show</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">17 October 2026</p>
+<p class="date">21 October 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -417,8 +417,9 @@ claim. Click the line to open the Unbilled Encounters grid on those same
 <li><strong>Rejected claims</strong> (red) — claims whose most recent
 status is a rejection. Click the line to open the list.</li>
 <li><strong>Paid claims</strong> (green).</li>
-<li><strong>Claims with no status</strong> — claims sent but with no
-response recorded yet.</li>
+<li><strong>Claims with no status</strong> — primary claims sent but
+with no response recorded yet. Secondary claims are not counted
+here.</li>
 <li><strong>of N encounters · last 90 days</strong> — the total these
 are counted from.</li>
 <li><strong>Upcoming encounters pre-created</strong> — encounters
@@ -486,12 +487,11 @@ DOB Mismatch</em>.</p>
 of these tags and were saved in the last seven days. Tags that a user
 added by hand are not counted. Every check, and the tag each one places,
 is described in the next chapter, <em>The claim checks</em>.</p>
-<blockquote>
-<p>In this version the count, and the list behind it, cover the
-diagnosis, payer and denial-history tags. The four fee-schedule modifier
-tags and the three NCCI tags appear on the claim itself but are not yet
-included in the dashboard count.</p>
-</blockquote>
+<p>The count, and the list behind it, cover every tag a check places:
+the diagnosis, modifier, NCCI, payer and denial-history tags alike. Two
+tags are left out on purpose: <em>Unattached Patient Payments</em>,
+which is not an error in the claim, and any tag a user added by
+hand.</p>
 <p>Each of those claims is likely to be rejected or denied if it goes
 out as it is. Working this line before the claims are sent is far
 cheaper than working the rejections afterwards.</p>
@@ -1116,9 +1116,13 @@ encounter</h2>
 Patients module), <strong>double-click the encounter</strong> to open
 it.</li>
 <li>On the first tab of the encounter window, tick <strong>Inactive
-encounter</strong>.</li>
+encounter</strong>. In the institutional Patients module the box is
+worded <em>Inactivate the encounter</em>; it is the same setting.</li>
 <li><strong>Save</strong> the encounter.</li>
 </ol>
+<p>Inactivating is the only way to take a visit out of the lists:
+encounters are never deleted, so their history, signature and any
+payment stay on file.</p>
 <p>What happens to an inactive encounter:</p>
 <ul>
 <li>It <strong>leaves the unbilled count</strong> and the dashboard’s

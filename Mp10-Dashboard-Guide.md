@@ -153,7 +153,8 @@ This card covers the **last 90 days** of active encounters:
 - **Rejected claims** (red) — claims whose most recent status is a rejection.
   Click the line to open the list.
 - **Paid claims** (green).
-- **Claims with no status** — claims sent but with no response recorded yet.
+- **Claims with no status** — primary claims sent but with no response
+  recorded yet. Secondary claims are not counted here.
 - **of N encounters · last 90 days** — the total these are counted from.
 - **Upcoming encounters pre-created** — encounters already entered for future
   dates. They are shown for information and are **not** counted as unbilled.
@@ -226,10 +227,10 @@ last seven days. Tags that a user added by hand are not counted. Every check,
 and the tag each one places, is described in the next chapter, *The claim
 checks*.
 
-> In this version the count, and the list behind it, cover the diagnosis,
-> payer and denial-history tags. The four fee-schedule modifier tags and the
-> three NCCI tags appear on the claim itself but are not yet included in the
-> dashboard count.
+The count, and the list behind it, cover every tag a check places: the
+diagnosis, modifier, NCCI, payer and denial-history tags alike. Two tags are
+left out on purpose: *Unattached Patient Payments*, which is not an error in
+the claim, and any tag a user added by hand.
 
 Each of those claims is likely to be rejected or denied if it goes out as it
 is. Working this line before the claims are sent is far cheaper than working
@@ -704,8 +705,14 @@ registration speeds billing up. For each encounter:
 
 1. In the Unbilled Encounters grid (or the Encounters grid in the Patients
    module), **double-click the encounter** to open it.
-2. On the first tab of the encounter window, tick **Inactive encounter**.
+2. On the first tab of the encounter window, tick **Inactive encounter**. In
+   the institutional Patients module the box is worded *Inactivate the
+   encounter*; it is the same setting.
 3. **Save** the encounter.
+
+Inactivating is the only way to take a visit out of the lists: encounters
+are never deleted, so their history, signature and any payment stay on
+file.
 
 What happens to an inactive encounter:
 

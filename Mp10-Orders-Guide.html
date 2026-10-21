@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-10-17" />
+  <meta name="dcterms.date" content="2026-10-21" />
   <title>Mp10 Orders — User’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -148,7 +148,7 @@ a { color: inherit; }
 <p class="subtitle">Recording what the patient came for, and everything
 that follows from it</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">17 October 2026</p>
+<p class="date">21 October 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -161,8 +161,8 @@ catalogue</a></li>
 <li><a href="#creating-orders" id="toc-creating-orders">Creating
 orders</a>
 <ul>
-<li><a href="#in-the-patients-module-patients10" id="toc-in-the-patients-module-patients10">In the Patients module
-(Patients10)</a></li>
+<li><a href="#on-the-encounter-as-the-patient-is-registered" id="toc-on-the-encounter-as-the-patient-is-registered">On the encounter,
+as the patient is registered</a></li>
 <li><a href="#from-the-billing-module" id="toc-from-the-billing-module">From the Billing module</a></li>
 <li><a href="#in-mpweb" id="toc-in-mpweb">In MpWeb</a></li>
 </ul></li>
@@ -273,10 +273,17 @@ Mp10 will not mistake them for duplicates.</p>
 <h1 id="creating-orders">Creating orders</h1>
 <p>Orders can be entered in three places. All three write to the same
 place, so an order entered in one shows in the others.</p>
-<h2 id="in-the-patients-module-patients10">In the Patients module
-(Patients10)</h2>
-<p>This is where orders are normally entered, as the patient is
-registered.</p>
+<h2 id="on-the-encounter-as-the-patient-is-registered">On the encounter,
+as the patient is registered</h2>
+<p>This is where orders are normally entered. In a professional practice
+the encounter is opened from the patient’s <strong>Encounters</strong>
+tab, in PrBill10 or in the appointment calendar, and the encounter
+window has an <strong>Orders</strong> tab.</p>
+<p>The institutional Patients module (Patients10) has no Orders tab on
+its encounter window. There, open the <strong>Encounters Table</strong>,
+highlight the encounter and choose <strong>Orders</strong> in the side
+panel; the window that opens is the one described under <em>From the
+Billing module</em> below.</p>
 <ol type="1">
 <li>Open the patient’s <strong>encounter</strong> and save it if it is
 new. Orders can only be added to an encounter that has been saved.</li>
@@ -342,11 +349,13 @@ be removed.</p>
 <p>When a biller creates a <strong>new claim</strong> for an encounter
 in the professional billing module (PrBill10), Mp10 adds one procedure
 line for each code the encounter’s orders carry, with the visit date as
-the service dates and one unit. The biller completes the rest:
-diagnoses, pointers, modifiers the order did not carry, and the charges.
-A code ordered twice still makes one line. The institutional billing
-module (MpBill10) does not pre-fill claim lines from orders; its billers
-still see the orders on the encounter.</p>
+the service dates and one unit, priced from the payer’s fee schedule as
+of that date. The biller completes the rest: diagnoses, pointers,
+modifiers the order did not carry, and the price of any code the
+schedule does not have for that payer. A code ordered twice still makes
+one line. The institutional billing module (MpBill10) does not pre-fill
+claim lines from orders; its billers still see the orders on the
+encounter.</p>
 <p>MpWeb’s new-claim screen does the same, and also prices the lines
 from the payer’s contract. It leaves out any order already billed on
 another claim of the same encounter, so a second claim never repeats the

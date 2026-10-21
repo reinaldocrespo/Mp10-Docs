@@ -1,0 +1,2655 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Structured Systems · www.structuredsystems.com" />
+  <meta name="dcterms.date" content="2026-10-21" />
+  <title>Mp10 Patients, Billing and Payments — User’s Guide</title>
+  <style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+  <style type="text/css">
+:root {
+color-scheme: light dark;
+--fg: #1a1a1a;
+--bg: #ffffff;
+--muted: #5a5a5a;
+--rule: #d8d8d8;
+--accent: #0b5cad;
+--code-bg: #f4f4f6;
+--note-bg: #f7f7f9;
+}
+@media (prefers-color-scheme: dark) {
+:root {
+--fg: #e6e6e6;
+--bg: #16181d;
+--muted: #a2a2a8;
+--rule: #33363d;
+--accent: #6cb0f5;
+--code-bg: #22252c;
+--note-bg: #1d2027;
+}
+}
+html { -webkit-text-size-adjust: 100%; }
+body {
+font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+color: var(--fg);
+background: var(--bg);
+max-width: 52rem;
+margin: 0 auto;
+padding: 2.5rem 1.25rem 5rem;
+line-height: 1.65;
+font-size: 1.02rem;
+}
+
+header#title-block-header { border-bottom: 2px solid var(--rule); margin-bottom: 2rem; }
+h1.title { margin-bottom: .2rem; font-size: 2rem; line-height: 1.2; }
+p.subtitle { margin-top: 0; color: var(--muted); font-size: 1.1rem; }
+p.author, p.date { margin: .2rem 0; color: var(--muted); font-size: .92rem; }
+h1, h2, h3, h4 { line-height: 1.25; margin-top: 2.2rem; }
+h1 { font-size: 1.7rem; padding-bottom: .3rem; border-bottom: 1px solid var(--rule); }
+h2 { font-size: 1.3rem; }
+h3 { font-size: 1.1rem; }
+a { color: var(--accent); }
+
+nav#TOC {
+background: var(--note-bg);
+border: 1px solid var(--rule);
+border-radius: .5rem;
+padding: 1rem 1.25rem;
+margin-bottom: 2.5rem;
+}
+nav#TOC > ul { margin: 0; padding-left: 1.1rem; }
+nav#TOC ul { list-style: none; padding-left: 1.1rem; }
+nav#TOC li { margin: .18rem 0; }
+nav#TOC a { text-decoration: none; }
+nav#TOC a:hover { text-decoration: underline; }
+
+table {
+border-collapse: collapse;
+width: 100%;
+margin: 1.25rem 0;
+font-size: .94rem;
+display: block;
+overflow-x: auto; 
+}
+th, td {
+border-bottom: 1px solid var(--rule);
+padding: .5rem .6rem;
+text-align: left;
+vertical-align: top;
+}
+thead th { border-bottom: 2px solid var(--rule); white-space: nowrap; }
+tbody tr:hover { background: var(--note-bg); }
+code, pre {
+font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
+font-size: .9em;
+}
+code { background: var(--code-bg); padding: .12em .35em; border-radius: .25rem; }
+pre {
+background: var(--code-bg);
+padding: .9rem 1rem;
+border-radius: .4rem;
+overflow-x: auto;
+}
+pre code { background: none; padding: 0; }
+
+blockquote {
+margin: 1.25rem 0;
+padding: .75rem 1.1rem;
+background: var(--note-bg);
+border-left: 4px solid var(--accent);
+border-radius: 0 .35rem .35rem 0;
+}
+blockquote p { margin: .35rem 0; }
+
+img {
+max-width: 100%;
+height: auto;
+display: block;
+margin: 1.25rem auto;
+border: 1px solid var(--rule);
+border-radius: .35rem;
+}
+figcaption {
+text-align: center;
+color: var(--muted);
+font-size: .9rem;
+margin-top: -.6rem;
+}
+@media print {
+body { max-width: none; font-size: 11pt; }
+nav#TOC { break-after: page; }
+h1 { break-before: page; }
+h1:first-of-type { break-before: avoid; }
+a { color: inherit; }
+}
+</style>
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Mp10 Patients, Billing and Payments — User’s
+Guide</h1>
+<p class="subtitle">From the patient at the front desk to the payment on
+the claim</p>
+<p class="author">Structured Systems · www.structuredsystems.com</p>
+<p class="date">21 October 2026</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#about-this-guide" id="toc-about-this-guide">About this
+guide</a>
+<ul>
+<li><a href="#which-program-you-use" id="toc-which-program-you-use">Which program you use</a></li>
+<li><a href="#other-guides-this-one-points-to" id="toc-other-guides-this-one-points-to">Other guides this one points
+to</a></li>
+<li><a href="#who-can-do-what" id="toc-who-can-do-what">Who can do
+what</a></li>
+<li><a href="#how-the-screens-behave" id="toc-how-the-screens-behave">How the screens behave</a></li>
+</ul></li>
+<li><a href="#part-i-patients-and-encounters" id="toc-part-i-patients-and-encounters">Part I — Patients and
+encounters</a></li>
+<li><a href="#finding-a-patient" id="toc-finding-a-patient">Finding a
+patient</a>
+<ul>
+<li><a href="#possible-duplicate-patients" id="toc-possible-duplicate-patients">Possible duplicate
+patients</a></li>
+</ul></li>
+<li><a href="#adding-and-editing-a-patient" id="toc-adding-and-editing-a-patient">Adding and editing a patient</a>
+<ul>
+<li><a href="#opening-the-patient-window" id="toc-opening-the-patient-window">Opening the patient window</a></li>
+<li><a href="#the-demographics-tab" id="toc-the-demographics-tab">The
+Demographics tab</a></li>
+<li><a href="#the-record-number" id="toc-the-record-number">The record
+number</a></li>
+<li><a href="#when-mp10-thinks-the-patient-already-exists" id="toc-when-mp10-thinks-the-patient-already-exists">When Mp10 thinks
+the patient already exists</a></li>
+<li><a href="#saving-and-the-primary-insurance" id="toc-saving-and-the-primary-insurance">Saving and the primary
+insurance</a></li>
+</ul></li>
+<li><a href="#the-patients-photo-id" id="toc-the-patients-photo-id">The
+patient’s photo ID</a></li>
+<li><a href="#the-hipaa-signature" id="toc-the-hipaa-signature">The
+HIPAA signature</a>
+<ul>
+<li><a href="#taking-it" id="toc-taking-it">Taking it</a></li>
+<li><a href="#the-text-on-the-pad" id="toc-the-text-on-the-pad">The text
+on the pad</a></li>
+<li><a href="#if-the-pad-does-not-respond" id="toc-if-the-pad-does-not-respond">If the pad does not
+respond</a></li>
+</ul></li>
+<li><a href="#insurance-cards" id="toc-insurance-cards">Insurance
+cards</a>
+<ul>
+<li><a href="#why-the-card-history-matters" id="toc-why-the-card-history-matters">Why the card history
+matters</a></li>
+<li><a href="#the-fields" id="toc-the-fields">The fields</a></li>
+<li><a href="#adding-a-new-card" id="toc-adding-a-new-card">Adding a new
+card</a></li>
+<li><a href="#making-the-newest-card-primary-and-keeping-the-old-one" id="toc-making-the-newest-card-primary-and-keeping-the-old-one">Making
+the newest card primary, and keeping the old one</a></li>
+<li><a href="#the-picture-of-the-card" id="toc-the-picture-of-the-card">The picture of the card</a></li>
+<li><a href="#checking-eligibility" id="toc-checking-eligibility">Checking eligibility</a></li>
+</ul></li>
+<li><a href="#encounters" id="toc-encounters">Encounters</a>
+<ul>
+<li><a href="#creating-an-encounter" id="toc-creating-an-encounter">Creating an encounter</a></li>
+<li><a href="#encounters-made-from-the-calendar" id="toc-encounters-made-from-the-calendar">Encounters made from the
+calendar</a></li>
+<li><a href="#encounters-dated-in-the-future" id="toc-encounters-dated-in-the-future">Encounters dated in the
+future</a></li>
+<li><a href="#no-shows-inactivating-an-encounter" id="toc-no-shows-inactivating-an-encounter">No-shows: inactivating an
+encounter</a></li>
+<li><a href="#the-questionnaires-tab" id="toc-the-questionnaires-tab">The Questionnaires tab</a></li>
+</ul></li>
+<li><a href="#orders-what-the-patient-came-for" id="toc-orders-what-the-patient-came-for">Orders: what the patient came
+for</a>
+<ul>
+<li><a href="#why-the-front-desk-should-enter-them" id="toc-why-the-front-desk-should-enter-them">Why the front desk should
+enter them</a></li>
+<li><a href="#entering-orders-on-the-encounter" id="toc-entering-orders-on-the-encounter">Entering orders on the
+encounter</a></li>
+</ul></li>
+<li><a href="#the-patients-signature-on-the-encounter" id="toc-the-patients-signature-on-the-encounter">The patient’s signature
+on the encounter</a>
+<ul>
+<li><a href="#taking-it-1" id="toc-taking-it-1">Taking it</a></li>
+<li><a href="#showing-your-own-text-on-the-pad" id="toc-showing-your-own-text-on-the-pad">Showing your own text on the
+pad</a></li>
+<li><a href="#finding-encounters-with-no-signature" id="toc-finding-encounters-with-no-signature">Finding encounters with no
+signature</a></li>
+</ul></li>
+<li><a href="#payments-at-the-front-desk" id="toc-payments-at-the-front-desk">Payments at the front desk</a></li>
+<li><a href="#encounters-that-have-not-been-billed" id="toc-encounters-that-have-not-been-billed">Encounters that have not
+been billed</a></li>
+<li><a href="#part-ii-claims-coding-and-collections" id="toc-part-ii-claims-coding-and-collections">Part II — Claims, coding
+and collections</a></li>
+<li><a href="#creating-a-claim" id="toc-creating-a-claim">Creating a
+claim</a>
+<ul>
+<li><a href="#where-to-start" id="toc-where-to-start">Where to
+start</a></li>
+<li><a href="#what-is-filled-in-for-you" id="toc-what-is-filled-in-for-you">What is filled in for you</a></li>
+<li><a href="#the-claim-window" id="toc-the-claim-window">The claim
+window</a></li>
+<li><a href="#primary-and-secondary-claims" id="toc-primary-and-secondary-claims">Primary and secondary
+claims</a></li>
+</ul></li>
+<li><a href="#coding-the-diagnoses-icd-10" id="toc-coding-the-diagnoses-icd-10">Coding the diagnoses (ICD-10)</a>
+<ul>
+<li><a href="#the-icd10-tab" id="toc-the-icd10-tab">The ICD10
+tab</a></li>
+<li><a href="#looking-codes-up" id="toc-looking-codes-up">Looking codes
+up</a></li>
+<li><a href="#pointing-lines-at-diagnoses" id="toc-pointing-lines-at-diagnoses">Pointing lines at
+diagnoses</a></li>
+</ul></li>
+<li><a href="#coding-the-procedures" id="toc-coding-the-procedures">Coding the procedures</a>
+<ul>
+<li><a href="#the-procedure-lines" id="toc-the-procedure-lines">The
+procedure lines</a></li>
+<li><a href="#codes-prices-and-the-fee-schedule" id="toc-codes-prices-and-the-fee-schedule">Codes, prices and the fee
+schedule</a></li>
+<li><a href="#modifiers" id="toc-modifiers">Modifiers</a></li>
+<li><a href="#checking-a-batch-of-claims-before-sending" id="toc-checking-a-batch-of-claims-before-sending">Checking a batch of
+claims before sending</a></li>
+</ul></li>
+<li><a href="#saving-the-claim-and-error-tags" id="toc-saving-the-claim-and-error-tags">Saving the claim, and error
+tags</a>
+<ul>
+<li><a href="#when-you-save" id="toc-when-you-save">When you
+save</a></li>
+<li><a href="#error-tags" id="toc-error-tags">Error tags</a></li>
+</ul></li>
+<li><a href="#finding-claims" id="toc-finding-claims">Finding claims</a>
+<ul>
+<li><a href="#the-columns" id="toc-the-columns">The columns</a></li>
+<li><a href="#the-row-colours" id="toc-the-row-colours">The row
+colours</a></li>
+<li><a href="#filtering" id="toc-filtering">Filtering</a></li>
+<li><a href="#doing-things-with-claims" id="toc-doing-things-with-claims">Doing things with claims</a></li>
+</ul></li>
+<li><a href="#sending-claims" id="toc-sending-claims">Sending claims</a>
+<ul>
+<li><a href="#electronically-837" id="toc-electronically-837">Electronically (837)</a></li>
+<li><a href="#on-paper" id="toc-on-paper">On paper</a></li>
+</ul></li>
+<li><a href="#what-the-payers-record-decides" id="toc-what-the-payers-record-decides">What the payer’s record
+decides</a></li>
+<li><a href="#status-flags-the-rebilling-and-collections-system" id="toc-status-flags-the-rebilling-and-collections-system">Status flags:
+the rebilling and collections system</a>
+<ul>
+<li><a href="#the-flags" id="toc-the-flags">The flags</a></li>
+<li><a href="#where-flags-come-from" id="toc-where-flags-come-from">Where flags come from</a></li>
+<li><a href="#the-status-history" id="toc-the-status-history">The status
+history</a></li>
+<li><a href="#working-the-queue" id="toc-working-the-queue">Working the
+queue</a></li>
+</ul></li>
+<li><a href="#correcting-and-resubmitting-a-claim" id="toc-correcting-and-resubmitting-a-claim">Correcting and resubmitting
+a claim</a></li>
+<li><a href="#collecting-from-the-patient" id="toc-collecting-from-the-patient">Collecting from the
+patient</a></li>
+<li><a href="#part-iii-remittances-and-payments" id="toc-part-iii-remittances-and-payments">Part III — Remittances and
+payments</a></li>
+<li><a href="#what-a-remittance-is" id="toc-what-a-remittance-is">What a
+remittance is</a></li>
+<li><a href="#finding-a-remittance" id="toc-finding-a-remittance">Finding a remittance</a>
+<ul>
+<li><a href="#the-list" id="toc-the-list">The list</a></li>
+<li><a href="#opening-one" id="toc-opening-one">Opening one</a></li>
+</ul></li>
+<li><a href="#reading-a-remittance" id="toc-reading-a-remittance">Reading a remittance</a>
+<ul>
+<li><a href="#the-check" id="toc-the-check">The check</a></li>
+<li><a href="#the-claims" id="toc-the-claims">The claims</a></li>
+</ul></li>
+<li><a href="#posting-a-remittance" id="toc-posting-a-remittance">Posting a remittance</a>
+<ul>
+<li><a href="#before-you-post" id="toc-before-you-post">Before you
+post</a></li>
+<li><a href="#posting" id="toc-posting">Posting</a></li>
+<li><a href="#there-is-no-undo" id="toc-there-is-no-undo">There is no
+undo</a></li>
+<li><a href="#complementary-insurance-claims" id="toc-complementary-insurance-claims">Complementary insurance
+claims</a></li>
+<li><a href="#when-a-claim-is-not-found" id="toc-when-a-claim-is-not-found">When a claim is not found</a></li>
+</ul></li>
+<li><a href="#entering-a-remittance-by-hand" id="toc-entering-a-remittance-by-hand">Entering a remittance by
+hand</a></li>
+<li><a href="#other-ways-to-enter-a-payment" id="toc-other-ways-to-enter-a-payment">Other ways to enter a payment</a>
+<ul>
+<li><a href="#a-payment-on-one-claim" id="toc-a-payment-on-one-claim">A
+payment on one claim</a></li>
+<li><a href="#patient-payments" id="toc-patient-payments">Patient
+payments</a></li>
+<li><a href="#adjusting-balances-in-bulk" id="toc-adjusting-balances-in-bulk">Adjusting balances in bulk</a></li>
+<li><a href="#refunds" id="toc-refunds">Refunds</a></li>
+</ul></li>
+<li><a href="#why-post-whole-remittances" id="toc-why-post-whole-remittances">Why post whole remittances</a></li>
+<li><a href="#reports-for-payment-posting" id="toc-reports-for-payment-posting">Reports for payment
+posting</a></li>
+<li><a href="#quick-reference" id="toc-quick-reference">Quick
+reference</a></li>
+</ul>
+</nav>
+<h1 id="about-this-guide">About this guide</h1>
+<p>This guide follows a visit through Mp10 from start to finish. The
+patient is registered, their insurance card is scanned, they sign, an
+encounter is opened and what they came for is ordered. The biller turns
+that encounter into a claim, codes it and sends it. The payer answers.
+The answer is posted, and whatever is still owed is worked until it is
+paid.</p>
+<p>It is written for the people who do that work every day:</p>
+<ul>
+<li><strong>Front desk and admissions staff</strong> — Part I,
+<em>Patients and encounters</em>.</li>
+<li><strong>Billers and coders</strong> — Part II, <em>Claims, coding
+and collections</em>.</li>
+<li><strong>Payment posters</strong> — Part III, <em>Remittances and
+payments</em>.</li>
+</ul>
+<p>Each part can be read on its own, but each one hands over to the
+next, and the reasons behind many of the steps only make sense further
+along. The insurance card you mark as primary at the front desk is the
+one the claim bills. The order you enter on the encounter is the line
+the biller starts from. The remittance you post whole teaches the system
+which codes a payer refuses. It is worth reading the parts you do not do
+yourself, at least once.</p>
+<h2 id="which-program-you-use">Which program you use</h2>
+<p>Mp10 comes in two editions, and the screens differ a little between
+them.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Your practice</th>
+<th>Patients and encounters</th>
+<th>Claims and payments</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Professional</strong> (physician practice, clinic, imaging
+centre)</td>
+<td>The billing program <strong>PrBill10</strong>, or the appointment
+calendar <strong>MpXtrmCal10</strong></td>
+<td><strong>PrBill10</strong></td>
+</tr>
+<tr class="even">
+<td><strong>Institutional</strong> (hospital, facility)</td>
+<td><strong>Patients10</strong></td>
+<td><strong>MpBill10</strong></td>
+</tr>
+</tbody>
+</table>
+<p>This guide describes the professional edition first. Where the
+institutional edition works differently, a short note headed
+<strong>Institutional</strong> says how.</p>
+<p>Everything here is about the Windows programs. Mp10 Web, the browser
+version, has its own guide, the <em>Mp10 Web — User Guide</em>.</p>
+<h2 id="other-guides-this-one-points-to">Other guides this one points
+to</h2>
+<p>Several subjects already have a guide of their own. This one tells
+you when you need them rather than repeating them:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Guide</th>
+<th>What it covers</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><em>Mp10 Orders — User’s Guide</em></td>
+<td>Setting up the order catalogue, order labels, HL7 orders and
+results</td>
+</tr>
+<tr class="even">
+<td><em>Mp10 Dashboard — User’s Guide</em></td>
+<td>The dashboard cards, the full list of claim checks and their tags,
+unbilled encounters</td>
+</tr>
+<tr class="odd">
+<td><em>Mp10 Web — Signature Pads</em> and <em>Mp10 — Signature
+Helper</em></td>
+<td>Installing the signature pad, and the text and options it shows the
+patient</td>
+</tr>
+<tr class="even">
+<td><em>Mp10 AutoTasks — Administrator’s Guide</em></td>
+<td>Downloading claim responses and remittances, and reading remittance
+PDFs automatically</td>
+</tr>
+</tbody>
+</table>
+<h2 id="who-can-do-what">Who can do what</h2>
+<p>What you can do depends on the groups your user account belongs to.
+Your administrator sets this up.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Group</th>
+<th>What it opens</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Admission</strong></td>
+<td>Patients and encounters. In PrBill10 it also shows the
+<em>Encounters Table</em> button on the toolbar</td>
+</tr>
+<tr class="even">
+<td><strong>BillingUsers</strong></td>
+<td>Creating and opening claims, from encounters and from the patient
+record</td>
+</tr>
+<tr class="odd">
+<td><strong>Supervisors</strong></td>
+<td>Deleting an insurance card, changing an encounter’s date after it is
+saved, moving charges between encounters, adjusting balances in bulk,
+collecting clearinghouse files by hand</td>
+</tr>
+<tr class="even">
+<td><strong>Administrators</strong></td>
+<td>The same billing work as BillingUsers, deleting an unposted
+remittance, adjusting balances in bulk, collecting clearinghouse files
+by hand</td>
+</tr>
+<tr class="odd">
+<td><strong>AdjustmentAuthUsers</strong></td>
+<td>Authorizing adjustments. On its own it opens nothing</td>
+</tr>
+</tbody>
+</table>
+<p>If a button is missing for you, or a screen says <strong>Check user
+permissions</strong>, your account is not in the group that screen
+needs. That is usually correct; ask your administrator if you think it
+is not.</p>
+<h2 id="how-the-screens-behave">How the screens behave</h2>
+<p>A few habits are the same on every grid in Mp10:</p>
+<ul>
+<li><strong>Click a column header to sort by it.</strong> The active
+header turns red.</li>
+<li><strong>Type while a grid has focus to jump</strong> to the first
+row that starts with what you typed, in the column the grid is sorted
+by. What you have typed shows in the <em>Incremental Search</em> box on
+the left.</li>
+<li><strong>F8 (or Ctrl+F) opens the Search Dialog.</strong> It jumps to
+the first match in the sorted column. It does not hide the other
+rows.</li>
+<li><strong>The Filter panel on the left hides rows.</strong> It works
+only while the filter is switched on: click the LED or the word
+<em>Filter</em> to turn it on and off.</li>
+<li><strong>Enter or F7 opens</strong> the highlighted row.
+<strong>Insert or F5 adds</strong> a new one.</li>
+<li><strong>Right-click a grid</strong> for printing, <em>Excel</em>,
+<em>Change Font</em>, and <em>Save Current Grid State</em>, which keeps
+your column widths and order for next time.</li>
+</ul>
+<h1 class="unnumbered" id="part-i-patients-and-encounters">Part I —
+Patients and encounters</h1>
+<p>Finding and registering the patient, their ID, signature and
+insurance cards, opening the encounter, ordering what they came for, and
+seeing which visits are still waiting to be billed.</p>
+<h1 id="finding-a-patient">Finding a patient</h1>
+<p>Open the patients list with the <strong>Patients Table</strong>
+button on the toolbar (or <em>Tables → Patients</em>). The <em>Patients
+Data Grid</em> lists every patient, sorted by name.</p>
+<p>There are three ways to find someone:</p>
+<ol type="1">
+<li><strong>Type the name.</strong> With the grid sorted by
+<em>Name</em>, type the last name followed by the first:
+<code>GARCIA MARIA</code>. The grid jumps as you type. It matches from
+the start of the name, so you do not need to type all of it.</li>
+<li><strong>Search (F8).</strong> Sort by the column you know —
+<em>MedRec</em>, <em>SSN</em>, <em>Name</em>, <em>DOB</em>,
+<em>City</em>, <em>Insurance</em> or <em>Creation</em> — then press F8
+and type the value. For a record number you do not need the leading
+zeros; the search adds them.</li>
+<li><strong>Filter.</strong> In the <em>Filter</em> panel on the left,
+fill in any of <em>Last</em>, <em>Name</em>, <em>SSN</em>,
+<em>City</em>, a range of birth dates (<em>dob from</em>, <em>dob
+thru</em>) or a range of creation dates, and switch the filter on. Last,
+first name and SSN match anywhere in the field, so <code>ROD</code>
+finds RODRIGUEZ and RODNEY alike. The number of patients found shows
+under the search box.</li>
+</ol>
+<p>You cannot search by phone number.</p>
+<p>Small icons in the grid tell you more about a patient before you open
+them:</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Icon</th>
+<th>Where</th>
+<th>Means</th>
+<th>Click it to</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Paperclip or note</td>
+<td><em>MedRec</em></td>
+<td>The patient has attachments or notes</td>
+<td>Open the attachments</td>
+</tr>
+<tr class="even">
+<td>Tag</td>
+<td><em>Name</em></td>
+<td>The patient has tags</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>271 (green or red)</td>
+<td><em>Insurance</em></td>
+<td>An eligibility answer is on file, accepted or not</td>
+<td>Open the eligibility window</td>
+</tr>
+</tbody>
+</table>
+<h2 id="possible-duplicate-patients">Possible duplicate patients</h2>
+<p>Two records for the same person cause trouble for years: the history
+is split, claims go out under two record numbers, and payments land on
+the wrong one. Mp10 catches most duplicates when the patient is entered
+(next chapter), and the dashboard’s <em>Patient records</em> card lists
+the ones that slipped through as <strong>possible duplicate
+patients</strong>: records with the same last name, first name, birth
+date and city. From that list, highlight the record to keep and press
+<strong>Merge group…</strong>.</p>
+<p>A record number can also be changed or merged by hand with
+<strong>Chng Record</strong> in the patients grid’s side panel. Mp10
+merges two records only when the name, date of birth and SSN all match;
+otherwise it refuses.</p>
+<h1 id="adding-and-editing-a-patient">Adding and editing a patient</h1>
+<h2 id="opening-the-patient-window">Opening the patient window</h2>
+<ul>
+<li><strong>New patient:</strong> press Insert (or F5), or click
+<strong>New Patient</strong> in the side panel.</li>
+<li><strong>Existing patient:</strong> double-click the row, or press
+Enter.</li>
+</ul>
+<p>The patient window has these tabs in PrBill10:
+<strong>Demographics</strong>, <strong>Insurance</strong>,
+<strong>Encounters</strong>, <strong>Claims</strong>,
+<strong>Letters</strong> and <strong>Pre-Auths</strong>. The calendar
+shows only the first three.</p>
+<p>At the bottom are <strong>Save</strong> and <strong>Exit</strong>.
+Save keeps the window open, so you can carry on with the insurance and
+the encounter. <strong>Ctrl+S</strong> saves and closes in one step;
+<strong>Ctrl+E</strong> exits.</p>
+<blockquote>
+<p><strong>Institutional:</strong> Patients10 adds an
+<strong>Address</strong> tab (postal and physical address, employer) and
+shows the encounters and claims of the patient read-only on their
+tabs.</p>
+</blockquote>
+<h2 id="the-demographics-tab">The Demographics tab</h2>
+<p>Type the patient’s details: <em>Last Name</em>, <em>First Name</em>,
+<em>SSN</em>, <em>DOB</em>, address, phones, e-mail, marital information
+and an emergency contact.</p>
+<ul>
+<li><strong>Last Name holds both surnames</strong>
+(<code>RIVERA LOPEZ</code>). There is no separate second-surname
+field.</li>
+<li>Names and the SSN are kept in capitals. Mp10 removes anything that
+is not a letter, a space or a hyphen from a name when you save.</li>
+<li><strong>City and Zip</strong> have a search button. Pick either one
+and the other two (city, state, zip) fill in together.</li>
+<li>Phone numbers start with the practice’s area code.</li>
+<li><em>Age</em> is worked out from the date of birth.</li>
+</ul>
+<p>Only the last name is required. A future date of birth is refused
+with <em>Invalid DOB</em>, and an e-mail address that does not look like
+one asks you to confirm.</p>
+<h2 id="the-record-number">The record number</h2>
+<p>The record number (<em>MedRec</em>) is given <strong>when you first
+save</strong> the patient, not when you open the window. You cannot type
+it. Once saved, the window’s title shows it.</p>
+<p>Several things are unavailable until the patient has been saved once,
+because they need the record number: the insurance cards, the HIPAA
+signature, the encounters and tags. <strong>Save the patient first, then
+carry on.</strong></p>
+<h2 id="when-mp10-thinks-the-patient-already-exists">When Mp10 thinks
+the patient already exists</h2>
+<p>On a new patient, as you leave the name, SSN or date-of-birth fields,
+Mp10 looks for someone already on file with the same SSN, or a similar
+name. If it finds one, a window shows that patient’s name, SSN, date of
+birth and address, with two buttons:</p>
+<ul>
+<li><strong>Jump to Existing Pte</strong> closes the new record and
+takes you to the one on file. Choose this when it is the same
+person.</li>
+<li><strong>Continue W/New Pte</strong> carries on with the new record.
+Choose this only when you are sure it is someone else — two relatives
+with similar names, for instance.</li>
+</ul>
+<p>Your administrator can turn this check off, but should not.</p>
+<h2 id="saving-and-the-primary-insurance">Saving and the primary
+insurance</h2>
+<p>When you save a patient who has insurance cards, one of them must be
+marked <strong>Primary</strong>. If none is, Mp10 refuses with <em>Can’t
+save: no primary insurance</em> and asks you to open the card that
+should be primary, tick <em>Primary</em>, save it, and save the patient
+again.</p>
+<p>When the patient is saved, the primary card’s insurance becomes the
+<em>Insurance</em> shown for the patient in the grid and on reports.</p>
+<h1 id="the-patients-photo-id">The patient’s photo ID</h1>
+<p>The <strong>ID</strong> box on the Demographics tab holds a picture
+of the patient’s driver’s licence or ID card. It is how anyone in the
+practice, now or later, can confirm the person in front of them is the
+patient on file.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Button</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Scanner (<em>Capture Image From Scanner</em>)</td>
+<td>Scans the card from the desk scanner</td>
+</tr>
+<tr class="even">
+<td>Database (<em>Import id card image from file</em>)</td>
+<td>Loads a JPG file instead</td>
+</tr>
+<tr class="odd">
+<td>Magnifier (<em>Zoom IN</em>), or click the picture</td>
+<td>Shows the picture full size</td>
+</tr>
+<tr class="even">
+<td>Delete (<em>Remove id image</em>)</td>
+<td>Removes the picture</td>
+</tr>
+</tbody>
+</table>
+<p>To scan: place the card on the scanner and click the scanner button.
+Mp10 crops the picture to the card by itself. <strong>The picture is
+stored when you save the patient</strong>, so press Save afterwards.</p>
+<p>A patient has one ID picture. Scanning again replaces it.</p>
+<p>For anything else — the back of the ID, a referral, a signed consent
+form — use <strong>Attachments</strong> in the patients grid’s side
+panel. There you can scan, import JPG or PDF files, scan several pages
+into one PDF (<em>Scan to PDFs</em>), and give each document a type and
+a date.</p>
+<p>If the scanner does not respond, or the wrong scanner is used, ask
+your administrator: the scanner each workstation uses is a setting.</p>
+<h1 id="the-hipaa-signature">The HIPAA signature</h1>
+<p>The patient signs the practice’s HIPAA notice once, on the signature
+pad, and the signature is kept on their record. The <strong>HIPAA
+Signature</strong> box on the Demographics tab shows it, with the date
+and time it was taken underneath.</p>
+<h2 id="taking-it">Taking it</h2>
+<ol type="1">
+<li>Save the patient first. The pen button stays disabled on a new,
+unsaved patient.</li>
+<li>Click the pen, <strong>Pickup Patient Signature using signing
+pad</strong>.</li>
+<li>The pad shows the practice’s notice, a page at a time. The patient
+taps the arrow on the pad to move to the next page. While they read,
+your screen shows <em>Wait for user input</em> with a Cancel
+button.</li>
+<li>The patient signs and taps <strong>OK</strong> on the pad (or
+<strong>CLEAR</strong> to start again).</li>
+<li>Your screen shows the signature in the <em>Signature Dialog</em>.
+Click <strong>Accept</strong> to keep it, or <strong>Cancel</strong> to
+throw it away.</li>
+</ol>
+<p>Mp10 stores the signature, the time, who took it, and a fingerprint
+of the exact text the patient was shown. If the notice is reworded
+later, you can still tell which wording each patient signed.</p>
+<p><strong>Taking a signature again replaces the old one, without
+asking.</strong> Only press the pen when a new signature is wanted.</p>
+<p>The printer button beside it, <strong>Print HIPAA documents with
+patient signature printed</strong>, prints the practice’s HIPAA document
+with the patient’s signature on it.</p>
+<h2 id="the-text-on-the-pad">The text on the pad</h2>
+<p>What the pad shows is set once by the administrator, in the system
+registry under <strong>TOPAZ / Patient-Record-DisplayMessage</strong>.
+It can be plain text, or a more complete setting that also chooses the
+font, the pad model and a list of options for the patient to tap. The
+format is described in the <em>Mp10 Web — Signature Pads</em> guide,
+chapter <em>Using it</em>, and in the <em>Mp10 — Signature Helper</em>
+guide. Those guides describe the setting for the encounter signature;
+the HIPAA setting takes exactly the same format.</p>
+<p>The dashboard’s <em>Patient records</em> card counts the patients
+seen in the last 90 days who have no HIPAA signature, so the ones missed
+are easy to find.</p>
+<h2 id="if-the-pad-does-not-respond">If the pad does not respond</h2>
+<p><em>Topaz signature device could not be activated</em> or <em>TOPAZ
+signature pad is not found or missing required components</em> means
+this workstation’s pad is not connected or its software is not
+installed. Check the cable first; the installation is covered in the
+<em>Mp10 Web — Signature Pads</em> guide, chapter <em>Installing it — IT
+task</em>.</p>
+<h1 id="insurance-cards">Insurance cards</h1>
+<p>The <strong>Insurance</strong> tab of the patient window lists every
+insurance card the patient has ever presented, newest and oldest
+together. Each row is one card. Below the list are the card’s details,
+and on the right, the picture of the card.</p>
+<h2 id="why-the-card-history-matters">Why the card history matters</h2>
+<p>Patients change insurance. When they do, <strong>do not overwrite the
+old card with the new one.</strong> Add the new card as a new row, make
+it primary, and leave the old one on file. The old card is the record of
+who was billed for the earlier visits: when a payer asks about a claim
+from two years ago, or a payment arrives late for an old plan, the card
+that was in force then is still there, with its picture.</p>
+<h2 id="the-fields">The fields</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>What to enter</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><em>Member Number</em></td>
+<td>The member or subscriber ID, exactly as on the card</td>
+</tr>
+<tr class="even">
+<td><em>Group</em></td>
+<td>The group number. <strong>Fill it in whenever the card shows
+one</strong> — see below</td>
+</tr>
+<tr class="odd">
+<td><em>Insurance Co.</em></td>
+<td>The payer. Use the search button to pick from the payers your
+practice has set up</td>
+</tr>
+<tr class="even">
+<td><em>Effective Date</em>, <em>Exp Date</em></td>
+<td>When the coverage starts and ends</td>
+</tr>
+<tr class="odd">
+<td><em>Insured First, Last Names</em></td>
+<td>The subscriber — the person who holds the policy</td>
+</tr>
+<tr class="even">
+<td><em>Relationship</em></td>
+<td>The patient’s relationship to the subscriber: Self, Spouse, Child,
+Other… Choosing <em>Self</em> fills in the subscriber’s name from the
+patient</td>
+</tr>
+<tr class="odd">
+<td><em>DOB</em></td>
+<td>The subscriber’s date of birth, as the payer has it</td>
+</tr>
+<tr class="even">
+<td><em>Name as on card</em>, <em>Last as on card</em></td>
+<td>The name printed on the card, if it differs</td>
+</tr>
+<tr class="odd">
+<td><em>Coverage Codes</em>, <em>Ded Amt</em></td>
+<td>Deductible information</td>
+</tr>
+<tr class="even">
+<td><em>Primary</em>, <em>Secondary</em></td>
+<td>Which payer is billed first and second</td>
+</tr>
+</tbody>
+</table>
+<p>For Medicare, Mp10 checks that the member number looks like a
+Medicare Beneficiary Identifier and asks you to confirm if it does
+not.</p>
+<p>The <em>Group</em> matters because when Mp10 writes the electronic
+claim it chooses, among the patient’s cards for that payer, the one that
+has a group number. A new card left without a group can mean the claim
+goes out with the old card’s details.</p>
+<h2 id="adding-a-new-card">Adding a new card</h2>
+<ol type="1">
+<li>Save the patient if it is new — the Insurance tab works only on a
+saved patient.</li>
+<li>Click <strong>New</strong>.</li>
+<li>Fill in the fields.</li>
+<li>Scan the card (next section).</li>
+<li>Tick <strong>Primary</strong> if this is now the payer to bill
+first, or <strong>Secondary</strong>, or neither.</li>
+<li>Click <strong>Save</strong>.</li>
+</ol>
+<p>To change a card, highlight it, click <strong>Modify</strong>, make
+the change and click <strong>Save</strong>. <strong>Cancel</strong>
+throws your changes away. Double-clicking a row is the same as
+Modify.</p>
+<h2 id="making-the-newest-card-primary-and-keeping-the-old-one">Making
+the newest card primary, and keeping the old one</h2>
+<p>When you save a card marked <strong>Primary</strong>, Mp10 takes the
+Primary mark off whichever card had it before. That card stays on file,
+unmarked, as history, with its picture. The same happens with
+<strong>Secondary</strong>. There is always at most one primary and one
+secondary card.</p>
+<p>So, when a patient brings a new card:</p>
+<ol type="1">
+<li>Click <strong>New</strong> and enter the new card.</li>
+<li>Tick <strong>Primary</strong>.</li>
+<li>Save.</li>
+</ol>
+<p>The old card is now history and the new one is billed. If you know
+the old coverage ended, open the old card with Modify and enter its
+<em>Exp Date</em>. Mp10 does not set it for you.</p>
+<p>What uses which card:</p>
+<ul>
+<li><strong>A new encounter</strong> takes the primary card’s
+payer.</li>
+<li><strong>A new claim</strong> takes the primary card’s payer and
+member number, and the secondary card’s payer as its complementary
+insurance.</li>
+<li><strong>An eligibility check</strong> asks the primary payer.</li>
+<li><strong>Existing encounters and claims keep the payer they were
+created with.</strong> Changing the primary card later does not change
+them.</li>
+</ul>
+<p>Only <strong>Supervisors</strong> can delete a card. That is
+deliberate: a card that is no longer valid should be left as history,
+not deleted.</p>
+<h2 id="the-picture-of-the-card">The picture of the card</h2>
+<p>Each card row keeps one picture of the card. While you are adding or
+modifying a card:</p>
+<ul>
+<li><strong>Scan</strong> captures it from the desk scanner. Mp10 crops
+to the card.</li>
+<li><strong>Import card image from file</strong> loads a JPG or PDF
+file.</li>
+<li><strong>Delete</strong> removes the picture.</li>
+</ul>
+<p>The picture is stored when you save the card. To see it later,
+highlight the card in the list: its picture shows on the right.
+<strong>Preview</strong>, or a click on the picture, shows it full
+size.</p>
+<p>A card row holds one picture, normally the front. Keep the back of
+the card, when you need it, in the patient’s
+<strong>Attachments</strong>.</p>
+<p>The <strong>OCR</strong> button does not read the card for you; enter
+the details by hand.</p>
+<h2 id="checking-eligibility">Checking eligibility</h2>
+<p>Before the visit, ask the payer whether the patient is covered. In
+the patients grid, highlight the patient and click
+<strong>Eligibility</strong> in the side panel, or click the 271 icon in
+the <em>Insurance</em> column.</p>
+<p>The <em>Insurance Eligibility</em> window lists the answers already
+received. Click <strong>Fetch New Eligibility record.</strong> to ask
+the primary payer now. Mp10 connects to the clearinghouse
+(<em>Connecting with clearing house. Stand by</em>) and adds the answer
+to the list.</p>
+<p>If the payer’s answer differs from what you have on file — a
+different spelling, a different date of birth — <strong>Fix patient
+record with data from Eligibility.</strong> shows the patient record as
+the payer has it, with the differences highlighted.
+<strong>Accept</strong> saves those changes; <strong>Cancel</strong>
+leaves the record alone.</p>
+<p>Your administrator can also have Mp10 ask automatically each time the
+primary member number changes.</p>
+<h1 id="encounters">Encounters</h1>
+<p>An <strong>encounter</strong> is one visit: one patient, one date,
+one payer. Everything that happens during the visit hangs from it — what
+was ordered, the patient’s signature, the questionnaire, and in the end,
+the claim. Mp10 numbers encounters <code>EN</code> followed by the year
+and a sequence, such as <code>EN26-00012345</code>.</p>
+<h2 id="creating-an-encounter">Creating an encounter</h2>
+<ol type="1">
+<li>Open the patient (and save it, if it is new).</li>
+<li>Go to the <strong>Encounters</strong> tab.</li>
+<li>Click <strong>New</strong> (<em>Insert New Case</em>), or press
+Insert.</li>
+</ol>
+<p>The encounter window opens over the patient. Its tabs are
+<strong>Encounter Data</strong>, <strong>Remarks</strong>,
+<strong>Orders</strong> and <strong>Questionnaires</strong>.</p>
+<p>On <strong>Encounter Data</strong>:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>What to enter</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><em>Encounter Number</em></td>
+<td>Filled in by Mp10 when you first save</td>
+</tr>
+<tr class="even">
+<td>Encounter type (the list at the top)</td>
+<td>The kind of visit, from your practice’s list</td>
+</tr>
+<tr class="odd">
+<td><em>From</em></td>
+<td>The date of the visit. <strong>Tick the box and pick the
+date</strong> — a new encounter starts with no date</td>
+</tr>
+<tr class="even">
+<td><em>Thru</em></td>
+<td>The last day, for a visit that spans more than one</td>
+</tr>
+<tr class="odd">
+<td><em>Referring Phys</em></td>
+<td>The referring doctor. Use the search button; only active doctors are
+offered</td>
+</tr>
+<tr class="even">
+<td><em>Insurance</em></td>
+<td>The payer for this visit. It starts as the patient’s primary
+card</td>
+</tr>
+<tr class="odd">
+<td><em>Inactive encounter</em></td>
+<td>Tick it for a no-show (below)</td>
+</tr>
+<tr class="even">
+<td>Accident</td>
+<td><em>Is Auto Accident</em>, <em>Work related Accident</em> or <em>Is
+Other Accident</em>, and the accident date, when the visit is the result
+of one</td>
+</tr>
+</tbody>
+</table>
+<p>The referring doctor here becomes the referring doctor on the claim,
+and the accident boxes are sent on the electronic claim, so fill them in
+carefully.</p>
+<p>Click <strong>Save</strong>. Mp10:</p>
+<ul>
+<li>refuses if there is no date (<em>Encounter date cannot be
+blank</em>);</li>
+<li>warns if the patient already has an encounter on the same date, and
+asks whether to continue — answer <strong>No</strong> if this is a
+duplicate;</li>
+<li>gives the encounter its number.</li>
+</ul>
+<p>The window stays open after Save, so you can go on to the orders.
+<strong>Exit</strong> closes it.</p>
+<p>If Save says <em>This encounter is open somewhere else</em>, another
+user has the same encounter open. Ask them to close it, then press Save
+again; nothing was lost.</p>
+<p>From the patient’s Encounters tab you can also print the encounter
+form (<strong>Print Case sheet</strong>) and a label (<strong>Print Case
+Label</strong>).</p>
+<blockquote>
+<p><strong>Institutional:</strong> in Patients10 the encounter window
+has the tabs <strong>Encounter</strong>, <strong>Other
+Information</strong>, <strong>DRG/APC</strong> and
+<strong>Remarks</strong>. The encounter type is required, and you can
+enter the pre-authorization, admitting diagnosis, department, source,
+weight and height. The encounter window prints its own form and label.
+Orders are entered from the Encounters grid, not from a tab (next
+chapter).</p>
+</blockquote>
+<h2 id="encounters-made-from-the-calendar">Encounters made from the
+calendar</h2>
+<p>In the appointment calendar (MpXtrmCal10), an appointment for someone
+who is not yet a patient has a <strong>Create New Patient
+Record</strong> button. It opens a new patient window filled in from the
+questionnaire the patient answered on-line, and when you save the
+patient, the appointment is linked to the new record.</p>
+<p>The calendar does not create encounters. When the patient arrives,
+open them (the <strong>…</strong> button beside <em>Medical Record</em>
+on the appointment) and create the encounter on their Encounters tab.
+Once the encounter exists, the calendar shows the appointment as
+arrived.</p>
+<h2 id="encounters-dated-in-the-future">Encounters dated in the
+future</h2>
+<p>You can create an encounter ahead of time, for a scheduled visit. The
+Billing dashboard shows these as <em>Upcoming encounters
+pre-created</em> and does not count them as unbilled.</p>
+<h2 id="no-shows-inactivating-an-encounter">No-shows: inactivating an
+encounter</h2>
+<p>When the patient does not come, do not leave the encounter as it is:
+it would sit on the unbilled list for ever. Open it, tick
+<strong>Inactive encounter</strong> and save. Inactive encounters are
+shown in grey and left out of the unbilled lists and the dashboard
+counts.</p>
+<h2 id="the-questionnaires-tab">The Questionnaires tab</h2>
+<p>On-line questionnaires the patient filled in before the visit are
+linked to the encounter when you save it, by the patient’s record number
+or cell phone and the appointment date. The tab lists them;
+<strong>Open</strong> shows one. You can also send the patient a text
+message asking them to fill one in.</p>
+<h1 id="orders-what-the-patient-came-for">Orders: what the patient came
+for</h1>
+<p>An <strong>order</strong> records what the patient is in for — the
+study, test or procedure — picked from your practice’s catalogue. The
+<em>Mp10 Orders</em> guide explains orders in full: setting up the
+catalogue, labels, sending orders by HL7, results coming back. This
+chapter covers entering them on the encounter and what they do for
+billing.</p>
+<h2 id="why-the-front-desk-should-enter-them">Why the front desk should
+enter them</h2>
+<p>Orders are how the front desk tells the biller what happened. When
+the biller creates the claim for an encounter that has orders,
+<strong>the claim’s procedure lines start from them</strong>: one line
+per procedure code, dated on the day of the visit. The biller confirms
+them instead of reconstructing the visit from paperwork.</p>
+<p>This applies to every kind of visit, not only to studies. If your
+catalogue has an item for a follow-up visit, an injection or a
+consultation, ordering it puts its code on the claim. Ask your
+administrator to add an item to the catalogue for every service the
+practice bills.</p>
+<p>Orders also fill the <strong>Ordered</strong> column of the unbilled
+encounters list, so the billing backlog reads as work — “MRI KNEE RT,
+FOLLOW-UP” — not as a list of names.</p>
+<h2 id="entering-orders-on-the-encounter">Entering orders on the
+encounter</h2>
+<ol type="1">
+<li>Save the encounter once — the Orders tab works only on a saved
+encounter.</li>
+<li>Go to the <strong>Orders</strong> tab.</li>
+<li>Click <strong>New Order</strong> (or press Insert).</li>
+<li>In the <em>Item</em> cell, type the item code, or click the cell’s
+button to pick from the catalogue (the <em>Pick</em> list shows each
+item’s description and body part).</li>
+<li>Add as many orders as the visit needs.</li>
+<li>Click <strong>Save</strong>.</li>
+</ol>
+<p><strong>Delete Order</strong> removes the highlighted order when you
+next save. <strong>Print Label</strong> prints a label for a saved
+order.</p>
+<p>When you save, Mp10 warns if the encounter now has the same study
+ordered twice, or if the payer has already refused this item for this
+patient. The orders are saved either way; the warning is for you to act
+on. The <em>Mp10 Orders</em> guide explains both warnings.</p>
+<p>The patient’s Encounters tab, and the Encounters and Unbilled grids,
+also have an <strong>Orders</strong> link that opens a separate
+<em>Orders for</em> window over the same orders. It appears only when
+your practice has orders switched on.</p>
+<blockquote>
+<p><strong>Institutional:</strong> in Patients10, open the
+<strong>Encounters Table</strong>, highlight the encounter and click
+<strong>Orders</strong> in the side panel. On institutional claims the
+procedure lines come from the charges posted to the encounter, not from
+the orders.</p>
+</blockquote>
+<h1 id="the-patients-signature-on-the-encounter">The patient’s signature
+on the encounter</h1>
+<p>Besides the HIPAA signature, which is taken once, many practices have
+the patient sign at every visit: a consent, a financial agreement, an
+acknowledgement. That signature belongs to the encounter.</p>
+<h2 id="taking-it-1">Taking it</h2>
+<ol type="1">
+<li>Open the patient and go to the <strong>Encounters</strong> tab.</li>
+<li>Highlight the encounter.</li>
+<li>Click the pen, <strong>Pickup Patient Signature using signing
+pad</strong>.</li>
+<li>The patient reads the text on the pad, page by page, taps an option
+if one is offered, signs and taps <strong>OK</strong>.</li>
+<li>Click <strong>Accept</strong> on your screen.</li>
+</ol>
+<p>The signature shows in the <em>Signature</em> column of the encounter
+list. As with the HIPAA signature, Mp10 keeps who took it, when, the
+option the patient picked, and the exact text shown. <strong>Signing
+again replaces the earlier signature.</strong></p>
+<p>If the patient signed the on-line questionnaire before the visit,
+that signature is copied onto the encounter when you save it, unless the
+encounter already has one.</p>
+<h2 id="showing-your-own-text-on-the-pad">Showing your own text on the
+pad</h2>
+<p>What the patient reads before signing is the practice’s own text, set
+once by the administrator in the system registry under <strong>TOPAZ /
+Encounter-Signature-DisplayMessage</strong>. It can be:</p>
+<ul>
+<li><strong>plain text</strong> — the pad shows it as it is, wrapped and
+paged;</li>
+<li><strong>the path of a text file</strong> — the file is read each
+time, so the text can be changed without touching the registry;</li>
+<li><strong>a JSON setting</strong> — which also sets the pad model, the
+font and size, a list of options for the patient to choose from (for
+example <em>I agree</em> / <em>I do not agree</em>), and whether the
+options and the signature start on a page of their own.</li>
+</ul>
+<p>The text can include the patient’s e-mail address with
+<code>^email</code>, so the patient can confirm it while signing.</p>
+<p>The <em>Mp10 Web — Signature Pads</em> guide, chapter <em>Using
+it</em>, gives the format with examples, and the <em>Mp10 — Signature
+Helper</em> guide covers every option. The same setting is used by the
+Windows programs and by Mp10 Web.</p>
+<h2 id="finding-encounters-with-no-signature">Finding encounters with no
+signature</h2>
+<p>The dashboard’s <em>Encounters missing something</em> card counts
+recent encounters with no patient signature. The Billing dashboard’s
+<em>Needs attention</em> card shows unsigned encounters from the last
+seven days.</p>
+<h1 id="payments-at-the-front-desk">Payments at the front desk</h1>
+<p>Copays and deposits taken at the desk are posted with <strong>Pat
+Payment</strong> in the patients grid’s side panel (<em>Post patient
+payment</em>). The <em>Patient Payment Dialog</em> opens on the
+<strong>New Payment</strong> tab.</p>
+<ol type="1">
+<li>Choose the encounter in <em>Enc. Num.</em>, or the claim in
+<em>ClaimKey</em> if one already exists. A patient with no encounter
+cannot be given a payment: create the encounter first.</li>
+<li>If the patient pays by check, type the check number in <em>Chk
+Num.</em></li>
+<li>On each line, choose what the payment is for in <em>Concept</em>,
+type the amount — in <em>Deductible</em> if it counts toward what the
+patient owes on the claim, in <em>NonDeductible</em> if it is for
+something else, such as materials — and the <em>Method</em> (Cash,
+Check, ATH, Visa, M/C, Amex).</li>
+<li>Click <strong>Save</strong>, then <strong>Print</strong> for the
+receipt.</li>
+</ol>
+<p>All the lines saved together share one receipt number. The
+<strong>Previous</strong> tab lists the patient’s earlier payments and
+reprints any receipt.</p>
+<p>A payment taken before the claim exists is held on the encounter, and
+the claim shows it as <em>Recvd @ Pay Wndw</em>. Until the claim takes
+it over, the claim carries the tag <strong>Unattached Patient
+Payments</strong>.</p>
+<h1 id="encounters-that-have-not-been-billed">Encounters that have not
+been billed</h1>
+<p>An encounter with no claim is a visit nobody has been paid for. The
+longer it waits, the closer it gets to the payer’s filing deadline.</p>
+<p>In PrBill10, the <strong>Unbilled encounters</strong> button on the
+toolbar (or <em>Tables → Unbilled Encounters</em>) lists them. The
+dashboard’s Billing card shows how many there are in the last 90 days
+and the date of the oldest; click that line to open the list for those
+90 days.</p>
+<p>The list shows active encounters with no claim. Its columns include
+the patient, the date, the doctor, the payer, and
+<strong>Ordered</strong>: what the patient came for, from the
+orders.</p>
+<ul>
+<li>The <em>Filter</em> panel narrows it by encounter type, payer and
+dates. <strong>Changes apply when you click Refresh.</strong></li>
+<li><strong>Show Inactive Encounters</strong> includes no-shows;
+<strong>Show Only Unbilled</strong>, unticked, shows billed encounters
+too.</li>
+<li><strong>New Claim</strong> in the side panel creates the claim for
+the highlighted encounter (Part II). After you save the claim, click
+Refresh and the encounter leaves the list.</li>
+</ul>
+<p>The <em>Mp10 Dashboard</em> guide, chapter <em>Unbilled
+encounters</em>, explains how to work through the list and when to
+inactivate rather than bill.</p>
+<p>For a printed list, use <em>Reports → Unbilled Report</em>.</p>
+<blockquote>
+<p><strong>Institutional:</strong> Patients10 has no unbilled list of
+its own; use <em>Reports → Unbilled</em> there, or the Unbilled
+Encounters list in MpBill10.</p>
+</blockquote>
+<h1 class="unnumbered" id="part-ii-claims-coding-and-collections">Part
+II — Claims, coding and collections</h1>
+<p>Turning an encounter into a claim, coding it, the error tags, sending
+it, and following it with the status flags until it is paid.</p>
+<h1 id="creating-a-claim">Creating a claim</h1>
+<p>A claim is the bill sent to the payer for one encounter. Mp10 numbers
+claims <code>CL</code> followed by the year and a sequence, such as
+<code>CL26-00012345</code>.</p>
+<h2 id="where-to-start">Where to start</h2>
+<p>Claims are created from the encounter they bill:</p>
+<ul>
+<li><strong>From the unbilled list</strong> (the usual way): highlight
+the encounter and click <strong>New Claim</strong>.</li>
+<li><strong>From the Encounters grid</strong> (<em>Tables →
+Encounters</em>): highlight the encounter, click <strong>New
+Claim</strong>.</li>
+<li><strong>From the patient</strong>: on the patient’s
+<strong>Claims</strong> tab, click <strong>Create New Claim</strong> (or
+press Insert), then choose the encounter in the claim’s
+<em>Encounter</em> list.</li>
+</ul>
+<p>The Claims grid itself has no New Claim button: a claim always starts
+from its encounter. Only BillingUsers and Administrators can create
+claims.</p>
+<h2 id="what-is-filled-in-for-you">What is filled in for you</h2>
+<p>A new claim starts from what is already known:</p>
+<ul>
+<li><strong>Insurance</strong> and <strong>Card Number</strong> — the
+patient’s primary card.</li>
+<li><strong>Comp Ins</strong> — the patient’s secondary card’s payer, if
+there is one.</li>
+<li><strong>Serv/Date</strong> — the encounter’s date.</li>
+<li><strong>Referring Phys</strong> — the encounter’s referring
+doctor.</li>
+<li><strong>Facility</strong> — your practice’s facility.</li>
+<li><strong>Procedure lines</strong> — one line for each procedure code
+ordered on the encounter, dated on the visit date, with one unit,
+pointing at the first diagnosis.</li>
+</ul>
+<p>Lines that come from the orders are priced from your fee schedule for
+the claim’s payer, as of the date of service: fee, expected amount,
+deductible, description, place and type of service. A code the schedule
+does not carry for that payer stays at 0.00 — look at the <em>Fee</em>
+total before saving, and price any such line by picking the code in its
+<em>BillCode</em> cell.</p>
+<h2 id="the-claim-window">The claim window</h2>
+<p>Its tabs, in PrBill10, are <strong>Summary</strong>,
+<strong>Procs</strong> (procedures), <strong>ICD9</strong>,
+<strong>ICD10</strong>, <strong>Rmrks</strong> (remarks),
+<strong>Pymnts</strong> (payments), <strong>EncReps</strong> and
+<strong>PaprWrk</strong> (paperwork). The procedure lines appear on both
+Summary and Procs; they are the same lines.</p>
+<p>The Summary tab holds the claim’s header:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><em>Medical Record</em>, <em>Encounter</em></td>
+<td>The patient and the encounter. Fixed when the claim was started from
+the encounter</td>
+</tr>
+<tr class="even">
+<td><em>Insurance</em></td>
+<td>The payer billed</td>
+</tr>
+<tr class="odd">
+<td><em>Comp Ins</em></td>
+<td>The complementary (secondary) payer, billed after this one pays</td>
+</tr>
+<tr class="even">
+<td><em>Card Number</em></td>
+<td>The member ID. The <strong>270</strong> button beside it asks the
+payer for eligibility now</td>
+</tr>
+<tr class="odd">
+<td><em>Facility</em></td>
+<td>Where the service took place</td>
+</tr>
+<tr class="even">
+<td><em>Pre-Auth Numb.</em></td>
+<td>The prior authorization number, sent on the claim</td>
+</tr>
+<tr class="odd">
+<td><em>Perf Phys</em></td>
+<td>The performing (rendering) physician</td>
+</tr>
+<tr class="even">
+<td><em>Referring Phys</em></td>
+<td>The referring physician</td>
+</tr>
+<tr class="odd">
+<td><em>ICN</em></td>
+<td>The payer’s number for this claim, needed to correct it later — see
+<em>Correcting and resubmitting a claim</em></td>
+</tr>
+<tr class="even">
+<td><em>Serv/Date</em>, <em>Bill Date</em></td>
+<td>Date of service and the date billed</td>
+</tr>
+<tr class="odd">
+<td>The money fields</td>
+<td>Payments, adjustments and balances. Worked out by Mp10; you cannot
+type in them</td>
+</tr>
+</tbody>
+</table>
+<p>At the bottom: <strong>Save</strong>, <strong>Exit</strong> and
+<strong>Print</strong>, and the claim’s <strong>tags</strong> (see
+<em>Error tags</em>).</p>
+<blockquote>
+<p><strong>Institutional:</strong> MpBill10’s claim window adds the tabs
+<strong>UbCds</strong>, <strong>Rec Room</strong> and
+<strong>Charges</strong>. Its lines come from the charges posted to the
+encounter, an encounter number is required, and the pre-authorization
+comes from the encounter.</p>
+</blockquote>
+<h2 id="primary-and-secondary-claims">Primary and secondary claims</h2>
+<p>The claim you create is always the <strong>primary</strong> claim.
+You do not create the secondary claim yourself. When the primary payer’s
+payment is posted and part of the balance is assigned to the
+complementary payer, <strong>Mp10 creates the secondary claim
+automatically</strong>, billing exactly what was assigned. See
+<em>Complementary insurance claims</em> in Part III.</p>
+<p>A secondary claim opens with the bar <em>Complementary Insurance
+Claim</em> and does not let you change its lines.</p>
+<h1 id="coding-the-diagnoses-icd-10">Coding the diagnoses (ICD-10)</h1>
+<h2 id="the-icd10-tab">The ICD10 tab</h2>
+<p>The <strong>ICD10</strong> tab (Alt+C) lists the claim’s diagnoses in
+order. <strong>The first diagnosis is the principal one</strong> — the
+reason for the visit.</p>
+<ul>
+<li>Type a code straight into the <em>IcdCode</em> cell, with its dot
+(<code>M17.11</code>). If the code is valid, its description fills in.
+If it is not an exact code, the row turns <strong>red</strong> and the
+description of its category is shown instead.</li>
+<li><strong>New</strong> adds a row. Delete removes the highlighted
+one.</li>
+<li><strong>Move up</strong> and <strong>Move Down</strong> change the
+order.</li>
+<li><strong>Run Analizer</strong> checks every code on the claim (next
+section).</li>
+</ul>
+<p>The diagnoses belong to the <strong>encounter</strong>, not to one
+claim: if an encounter has more than one claim, they share the list. Up
+to twelve are sent on the electronic professional claim; any after the
+twelfth are not.</p>
+<h2 id="looking-codes-up">Looking codes up</h2>
+<p>Click the small button inside the <em>IcdCode</em> cell to open the
+<strong>Diagnosis Table</strong>, the ICD-10 encoder.</p>
+<ul>
+<li><strong>Search by words:</strong> type them in <em>Filter Keys</em>
+on the left and click <em>Run Filter</em>. Tick <em>Left</em>,
+<em>Right</em> or <em>Bilateral</em> to narrow to one side.</li>
+<li><strong>Search by code:</strong> on the <em>ICD10 Diagnosis</em>
+tab, sort by the <em>Icd10</em> column and type, or press F8.</li>
+<li><strong>Browse:</strong> open the chapters and sections in the
+<em>Icd10 Chapters + Sections</em> tab. Opening a subsection lists its
+codes.</li>
+<li><strong>Pick:</strong> double-click a code. It is added to the
+<em>Coding</em> box on the left. Pick as many as you need, then
+<strong>Close Encoder</strong>.</li>
+</ul>
+<p>When the encoder closes, Mp10 checks the codes you picked and adds
+them to the claim. Along the way it may ask you:</p>
+<ul>
+<li><strong>A code is not billable</strong> — <em>ICD10 Code seems
+invalid</em>, with the reason: not an ICD-10-CM code, a header code that
+has more specific codes under it, retired, or not yet valid. Choose the
+more specific code.</li>
+<li><strong>An additional code may apply</strong> — ICD-10-CM says “use
+additional code”; tick the ones that apply.</li>
+<li><strong>A seventh character is needed</strong> — pick it from the
+list.</li>
+<li><strong>Excludes1</strong> — two codes ICD-10-CM says are never
+coded together. Keep both only if the two conditions are unrelated.</li>
+<li><strong>Diagnosis sequence</strong> — a “code first” instruction
+asks for the codes the other way round. Move them.</li>
+</ul>
+<h2 id="pointing-lines-at-diagnoses">Pointing lines at diagnoses</h2>
+<p>Each procedure line has a <strong>Diag</strong> column: which
+diagnoses justify it, by their position in the ICD10 list.
+<code>1</code> is the first diagnosis, <code>1,2</code> the first and
+second. Separate numbers with commas.</p>
+<p>Two things to watch:</p>
+<ul>
+<li><strong>Picking a code on a line resets its Diag to 1.</strong> Set
+the pointers after the codes.</li>
+<li><strong>Reordering the diagnoses changes what the numbers
+mean.</strong> After moving a code up or down, check every line’s
+pointers.</li>
+</ul>
+<h1 id="coding-the-procedures">Coding the procedures</h1>
+<h2 id="the-procedure-lines">The procedure lines</h2>
+<p>Each line is one service:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>What it holds</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><em>BillCode</em></td>
+<td>The procedure code, followed by its modifiers</td>
+</tr>
+<tr class="even">
+<td><em>Unts</em></td>
+<td>Units (at least 1)</td>
+</tr>
+<tr class="odd">
+<td><em>Fee</em></td>
+<td>Your charge</td>
+</tr>
+<tr class="even">
+<td><em>Expected</em></td>
+<td>What the payer is expected to allow — this is what the claim
+bills</td>
+</tr>
+<tr class="odd">
+<td><em>Deduct</em></td>
+<td>The patient’s deductible share</td>
+</tr>
+<tr class="even">
+<td><em>From</em>, <em>Thru</em></td>
+<td>Dates of service</td>
+</tr>
+<tr class="odd">
+<td><em>Diag</em></td>
+<td>The diagnosis pointers (above)</td>
+</tr>
+<tr class="even">
+<td><em>Tos</em>, <em>Pos</em></td>
+<td>Type and place of service</td>
+</tr>
+<tr class="odd">
+<td><em>Performing</em></td>
+<td>The performing physician for the line</td>
+</tr>
+</tbody>
+</table>
+<p>Add a line with <strong>New</strong> (<em>Add a procedure line</em>),
+Insert, or the down arrow on the last line. Delete removes the
+highlighted line straight away.</p>
+<h2 id="codes-prices-and-the-fee-schedule">Codes, prices and the fee
+schedule</h2>
+<p>Type the code in <em>BillCode</em>, or click the cell’s button to
+pick it from <strong>Valid Billing Codes</strong> — the codes your
+practice has priced <strong>for this claim’s payer</strong>, as of the
+date of service. When you pick or confirm a code, Mp10 fills in
+<em>Fee</em>, <em>Expected</em>, the description, the revenue code, the
+place and type of service, and the deductible.</p>
+<p>Prices come from your practice’s billing codes table, kept by payer
+and by effective date in MpAdmin. If a code is not priced for the payer,
+the picker opens so you can choose; if it is not there at all, ask
+whoever keeps the fee schedule to add it.</p>
+<p>Changing the units changes <em>Expected</em> and <em>Deduct</em> in
+proportion.</p>
+<h2 id="modifiers">Modifiers</h2>
+<p>Type modifiers <strong>after the code, separated by spaces</strong>:
+<code>76881 TC RT</code>. Up to four are sent. If your fee schedule
+prices the code with its modifiers as a separate entry, that price is
+used; otherwise the base code’s price is. After the price fills in,
+check the modifiers are still on the line.</p>
+<h2 id="checking-a-batch-of-claims-before-sending">Checking a batch of
+claims before sending</h2>
+<p>In the Claims grid, select claims and click <strong>Analyze
+837</strong> in the side panel. Mp10 reviews them all and prints a list
+of warnings: missing or invalid codes, duplicate diagnoses, codes that
+need a seventh character or a side, missing place of service, the tags
+each claim carries. Nothing is changed or sent.</p>
+<h1 id="saving-the-claim-and-error-tags">Saving the claim, and error
+tags</h1>
+<h2 id="when-you-save">When you save</h2>
+<p>Click <strong>Save</strong>. Mp10:</p>
+<ul>
+<li>refuses a new claim with no lines (<em>Nothing to save</em>);</li>
+<li>warns if the same codes, dates and payer are already billed for this
+patient (<em>Billing Codes, dates, and insurance seems to be
+duplicated</em>) — answer No if it is a duplicate;</li>
+<li>refuses a payer that is not set up in your insurance list;</li>
+<li>gives a new claim its number;</li>
+<li>runs the <strong>claim checks</strong> and tags the claim with what
+they find.</li>
+</ul>
+<p>If anything fails, nothing is saved: <em>The claim was NOT saved.
+Everything from this save has been rolled back</em>, followed by the
+reason.</p>
+<h2 id="error-tags">Error tags</h2>
+<p>A <strong>tag</strong> is a coloured label at the bottom of the claim
+window naming a problem a check found: <em>Wrong Side ICD10</em>,
+<em>ICD10 Relation</em>, <em>NCCI Pair Needs Modifier</em>, <em>Denied
+Before</em>, and others. Tags never stop you from saving or sending a
+claim. They tell you what a payer is likely to reject, before it
+does.</p>
+<ul>
+<li><strong>Hover a tag</strong> to see what it found.</li>
+<li><strong>Click it</strong> for the full explanation: which lines,
+which codes, and why.</li>
+<li><strong>To clear it,</strong> fix what it names and save. Each check
+runs again on every save and removes its own tag when the problem is
+gone.</li>
+</ul>
+<p>Three checks offer to fix the problem for you as you save, and change
+nothing unless you answer Yes:</p>
+<ul>
+<li><strong>Insurance DOB Mismatch</strong> — the payer’s last
+eligibility answer gives a different date of birth. Yes writes the
+payer’s date on the patient’s insurance card, not on the patient.</li>
+<li><strong>Insurance Sex Mismatch</strong> — Yes updates the patient’s
+record.</li>
+<li><strong>Payer Not On Patient</strong> — the claim bills a payer the
+patient has no card for. Yes adds it to the patient’s insurances; check
+the member number and dates afterwards. Answer No if the claim is the
+one that is wrong.</li>
+</ul>
+<p>Two tags learn from the remittances you post (Part III):
+<strong>Denied Before</strong>, when this payer has refused these codes
+often and recently, and <strong>Refused For This Patient</strong>, when
+the payer refused these very codes for this patient and has paid nothing
+for them since.</p>
+<p>You can also add your own tag with the <strong>+</strong> button
+beside the tags, to mark a claim for yourself or a colleague.</p>
+<p>The full list of checks, what each looks for and how to switch one
+off is in the <em>Mp10 Dashboard</em> guide, chapters <em>Claims with
+error tags</em> and <em>The claim checks</em>. The dashboard’s <em>Needs
+attention</em> card lists every claim tagged in the last seven days.</p>
+<p>In the Claims grid, a claim with tags shows a tag icon in
+<em>SrvDate</em> and its row is coloured orange.</p>
+<h1 id="finding-claims">Finding claims</h1>
+<p>Open the <strong>Claims table</strong> from the toolbar (or
+<em>Tables → Claims</em>). The <em>Claims Data Grid</em> lists every
+claim.</p>
+<h2 id="the-columns">The columns</h2>
+<p><em>ClaimKey</em>, <em>Creation</em>, <em>MedRec</em>,
+<em>Encounter</em>, <em>SrvDate</em>, <em>Contract</em> (the member ID),
+<em>Insurance</em>, <em>BillDate</em>, <em>Name</em>, the charge
+(<em>Real Amt</em>), insurance paid, adjusted and balance, the
+deductible, patient paid, balance and adjustments, the user who created
+the claim and the performing physician.</p>
+<p>The <em>ClaimKey</em> column shows the claim’s <strong>status
+flag</strong> (next chapter). Right-click it, or press F9, to see the
+claim’s status history.</p>
+<h2 id="the-row-colours">The row colours</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Colour</th>
+<th>Means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Orange</td>
+<td>No bill date, no diagnoses, or the claim has tags</td>
+</tr>
+<tr class="even">
+<td>Cyan</td>
+<td>Resubmitted: corrected, replacement or void</td>
+</tr>
+<tr class="odd">
+<td>Magenta</td>
+<td>Created by AutoTasks, Mp10’s automatic service</td>
+</tr>
+<tr class="even">
+<td>Grey</td>
+<td>No charge or no service date</td>
+</tr>
+<tr class="odd">
+<td>Blue</td>
+<td>Everything else</td>
+</tr>
+</tbody>
+</table>
+<h2 id="filtering">Filtering</h2>
+<p>The <em>Filter</em> panel on the left narrows the grid by any
+combination of:</p>
+<ul>
+<li><strong>Status</strong> — one flag, or <em>Missing Flag</em> for
+claims with no status at all;</li>
+<li><strong>Ins</strong> — one payer;</li>
+<li><strong>Srv From / Srv Thru</strong> — dates of service;</li>
+<li><strong>Bill From / Bill Thru</strong> — billing dates;</li>
+<li><strong>Wrk From / Wrk Thru</strong> — the date the claim was
+created;</li>
+<li><strong>Med Rec</strong> — one patient.</li>
+</ul>
+<p>Switch the filter on with its LED. To jump to one claim, sort by
+<em>ClaimKey</em> and press F8.</p>
+<p><strong>Filter From File</strong> shows exactly the claims on a list
+you have — a payer’s rejection report, for instance. Paste the claim
+numbers into its grid, or point it at a text file with one per line, and
+click <em>Run Filter</em>.</p>
+<h2 id="doing-things-with-claims">Doing things with claims</h2>
+<p>The side panel acts on the highlighted claim (or claims):</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Link</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Open Claim</strong></td>
+<td>Opens it (also Enter or double-click)</td>
+</tr>
+<tr class="even">
+<td><strong>Print Claim</strong>, <strong>Preview Claim</strong></td>
+<td>The paper claim form, for every selected claim</td>
+</tr>
+<tr class="odd">
+<td><strong>Post Payment</strong></td>
+<td>The payment window for the claim (Part III)</td>
+</tr>
+<tr class="even">
+<td><strong>Notes</strong>, <strong>Attachments</strong>,
+<strong>AuditLog</strong></td>
+<td>The claim’s notes, documents, and history of changes</td>
+</tr>
+<tr class="odd">
+<td><strong>Claim Status</strong></td>
+<td>The status history; with several claims selected, change their flag
+together</td>
+</tr>
+<tr class="even">
+<td><strong>Eligibility</strong></td>
+<td>Asks the payer now; with several selected, asks for each</td>
+</tr>
+<tr class="odd">
+<td><strong>Analyze 837</strong></td>
+<td>Reviews the selected claims before sending</td>
+</tr>
+<tr class="even">
+<td><strong>Outbound 837</strong></td>
+<td>Builds and sends the electronic claims file</td>
+</tr>
+<tr class="odd">
+<td><strong>Pat Payment</strong></td>
+<td>A patient payment on this claim, with a receipt</td>
+</tr>
+</tbody>
+</table>
+<p>Double-click the <em>Encounter</em> cell to open the encounter, or
+<em>MedRec</em> to open the patient. Ctrl- or Shift-click selects
+several claims. Claims are never deleted: to cancel one, adjust it to a
+zero balance.</p>
+<h1 id="sending-claims">Sending claims</h1>
+<h2 id="electronically-837">Electronically (837)</h2>
+<ol type="1">
+<li>In the Claims grid, select the claims to send. <strong>They must all
+be for the same payer</strong>; filter by <em>Ins</em> first.</li>
+<li>Optionally, run <strong>Analyze 837</strong> and correct what it
+finds.</li>
+<li>Click <strong>Outbound 837</strong>. Mp10 writes the claims file and
+shows a report of every claim in it, with the file name and any warnings
+at the end.</li>
+<li>Answer <strong>Yes</strong> to <em>Send claims file to
+clearinghouse</em>.</li>
+</ol>
+<p>Each claim records, in its notes, the name of the file it went out
+in. That file name is your batch number.</p>
+<p>Outbound 837 also collects whatever the clearinghouse has waiting —
+acknowledgements, claim statuses and remittances — and processes it, so
+the flags in the grid are up to date afterwards.</p>
+<p>Supervisors and Administrators also have <em>Actions → Send Outbound
+837 Claims</em>, which lists the claims files waiting in the outbound
+folder and sends them, and <em>Actions → Fetch X12 Inbound
+Responses</em>, which collects and processes the clearinghouse’s files
+on demand. Normally AutoTasks does both on a schedule; see the <em>Mp10
+AutoTasks</em> guide.</p>
+<h2 id="on-paper">On paper</h2>
+<p><strong>Print Claim</strong> in the Claims grid prints the claim form
+— CMS-1500 or UB-04 — for every selected claim; <strong>Preview
+Claim</strong> shows it first. <em>Actions → Print Claims</em> prints
+all the claims of a date range for the payers you tick. Which form a
+payer gets is set on the payer’s record (<em>Form #</em>). A printer
+whose name contains <code>FORM</code> is used without asking.</p>
+<h1 id="what-the-payers-record-decides">What the payer’s record
+decides</h1>
+<p>Several things about a claim are decided not on the claim but on the
+<strong>payer’s record</strong> — the insurance company, under
+<em>Tables → Insurance Companies</em> (or in the administration
+program). A biller who knows these settings exist can tell “the system
+did it wrong” from “this payer is set up that way”, and ask for the
+right change.</p>
+<p>On the <strong>Ins Info</strong> tab:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Setting</th>
+<th>What it decides</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Professional</strong> / <strong>Institutional</strong></td>
+<td>Whether this payer’s electronic claims go out as professional (837P,
+the CMS-1500 content) or institutional (837I, UB-04), and which NCCI
+tables the claim checks use for it</td>
+</tr>
+<tr class="even">
+<td><strong>Form #</strong></td>
+<td>Which paper form prints for this payer. A payer with no form number
+cannot print a paper claim (<em>Undefined Insurance Form</em>) and is
+left out of the professional Unbilled Report</td>
+</tr>
+<tr class="odd">
+<td><strong>In-active</strong></td>
+<td>The payer can no longer be put on a card or a claim: <em>Insurance
+is Inactive</em>. Old claims keep it</td>
+</tr>
+<tr class="even">
+<td><strong>Billing Fees From</strong></td>
+<td>Institutional only: whether the payer is billed by DRG/APC, private
+rates or the fee schedule</td>
+</tr>
+</tbody>
+</table>
+<p>On the <strong>X12</strong> tab:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Setting</th>
+<th>What it decides</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Receiver ID</strong>, <strong>Submitter</strong>,
+<strong>Sender</strong> and the ISA/GS fields</td>
+<td>The clearinghouse addressing on every electronic claim, eligibility
+request and remittance match for this payer. Set once by the
+administrator with the clearinghouse’s instructions; a wrong value
+rejects every claim</td>
+</tr>
+<tr class="even">
+<td><strong>Auto-Fetch Patient Eligibilities</strong></td>
+<td>Whether AutoTasks asks this payer, by itself, for the eligibility of
+each upcoming encounter. Off, and eligibility is only checked when
+someone clicks <em>Eligibility</em></td>
+</tr>
+<tr class="odd">
+<td><strong>Include PRV Taxonomy segment</strong></td>
+<td>Whether the electronic claim carries the provider taxonomy segments.
+Some payers demand them, some reject them</td>
+</tr>
+<tr class="even">
+<td><strong>Check NCCI PTP pairs</strong></td>
+<td><strong>Off by default.</strong> Tick it and the claim checks apply
+the NCCI procedure-to-procedure edits for this payer, placing the tags
+<em>NCCI Pair, Never Together</em> and <em>NCCI Pair Needs
+Modifier</em>. Tick it for every payer that follows Medicare’s NCCI
+edits — most do. The <em>Units Over MUE</em> check runs for every payer
+regardless</td>
+</tr>
+</tbody>
+</table>
+<p>The fee schedule itself — the price and expected amount of each
+procedure code, by payer and by effective date — is the <strong>Billing
+Codes</strong> table, kept in the administration program. A line that
+prices at 0.00 on a claim means the code is not in that table for that
+payer on that date.</p>
+<h1 id="status-flags-the-rebilling-and-collections-system">Status flags:
+the rebilling and collections system</h1>
+<p>Sending a claim is the start, not the end. Payers acknowledge it,
+reject it, pay part of it or all of it, sometimes months apart.
+<strong>Mp10 keeps every one of those answers on the claim as its status
+history, and shows the latest as a coloured flag.</strong> The flags
+turn the Claims grid into a work queue: filter by flag and you have the
+list of claims that need you.</p>
+<h2 id="the-flags">The flags</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Flag</th>
+<th>Name</th>
+<th>Means</th>
+<th>Set by</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Green</td>
+<td>Fully Paid</td>
+<td>Nothing left for the insurance to pay</td>
+<td>Posting a payment or remittance</td>
+</tr>
+<tr class="even">
+<td>Yellow</td>
+<td>Partially Paid (also <em>Pending</em>)</td>
+<td>Something paid, something still owed</td>
+<td>Posting; a payer status saying it is pending</td>
+</tr>
+<tr class="odd">
+<td>Red</td>
+<td>Rejected</td>
+<td>Refused, by the clearinghouse or the payer, or paid nothing on the
+remittance</td>
+<td>Claim status responses; posting a remittance that pays nothing</td>
+</tr>
+<tr class="even">
+<td>Grey</td>
+<td>Received by Ins</td>
+<td>Accepted by the clearinghouse or payer, not paid yet</td>
+<td>Claim status responses and acknowledgements</td>
+</tr>
+<tr class="odd">
+<td>Black</td>
+<td>OverPaid</td>
+<td>More was paid than billed</td>
+<td>Posting; also a payer status saying the claim was not found</td>
+</tr>
+<tr class="even">
+<td>Blue, checkered, pink, purple</td>
+<td>User Def 1–4</td>
+<td>Your practice’s own meanings</td>
+<td>You</td>
+</tr>
+<tr class="odd">
+<td>None</td>
+<td>No status</td>
+<td>Nothing heard yet</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>The four user flags can be renamed for your practice —
+<em>Appealed</em>, <em>Called payer</em>, <em>Sent to collections</em> —
+by your administrator, in the system registry under <strong>BILLING /
+UserDefined-1-ClaimStatus</strong> to <strong>-4-</strong>.</p>
+<h2 id="where-flags-come-from">Where flags come from</h2>
+<ul>
+<li><strong>Claim status responses (277)</strong> and the
+clearinghouse’s acceptance reports arrive automatically and add a row to
+the history, with the payer’s words. They move the flag only on a claim
+that has no status, is rejected or is received. They never move a claim
+that is paid, partly paid, overpaid or carries one of your own
+flags.</li>
+<li><strong>Posting a remittance or a payment</strong> works out the
+flag from the balance: green when nothing is left, yellow when something
+is, red when nothing was paid, black when overpaid. A payment that
+settles the claim always turns it green.</li>
+<li><strong>You</strong>, through the status history or <em>Change
+Flags</em> (below).</li>
+</ul>
+<h2 id="the-status-history">The status history</h2>
+<p>Press <strong>F9</strong> on a claim in the Claims grid (or
+right-click its <em>ClaimKey</em>, or use <strong>Claim
+Status</strong>). The <em>Claim status history</em> window lists every
+status the claim has had, oldest first: the flag, the date it was
+received, what was said, who recorded it and when.</p>
+<p>The <em>Data</em> column holds the payer’s or clearinghouse’s own
+words for status responses, <em>Remittance Posting.</em> for
+remittances, <em>Payment Posted by user.</em> for payments keyed by
+hand. The button in the cell shows it in full, and its
+<strong>Print</strong> prints a status response as a readable form.</p>
+<p>To record a follow-up — a call to the payer, an appeal sent, a
+promise to reprocess:</p>
+<ol type="1">
+<li>Click <strong>Add New most recent status to list</strong>.</li>
+<li>Choose the flag.</li>
+<li>Set the date.</li>
+<li>Type a note in <em>Data</em> — what was done, who you spoke to, what
+was promised. A row saved without one reads <em>Changed by user
+manually</em>, which tells the next person nothing; write the note.</li>
+<li>Click <strong>Save</strong>.</li>
+</ol>
+<p>The new row becomes the claim’s flag. Earlier rows cannot be changed,
+so the history is a true record of what happened when.</p>
+<p>To change the flag of many claims at once, select them in the grid
+and click <strong>Claim Status</strong>. The <em>Change Claim
+Status</em> window lists the flags; tick one and click <strong>Change
+Flags</strong>. Each claim gets the new flag and a history row
+<em>Changed by user manually</em>. This is also the only way to clear a
+flag back to no status.</p>
+<p>Mp10 has no follow-up date. The date on the history row, and the
+<em>Days</em> column of the Claims Status report (below), show how long
+a claim has been waiting since its last status.</p>
+<h2 id="working-the-queue">Working the queue</h2>
+<p>A routine that keeps money from slipping past filing deadlines:</p>
+<p><strong>1. Rejections, every day.</strong> The dashboard’s Billing
+card shows the number of rejected claims in the last 90 days. Click it
+for the <strong>Rejected claims</strong> list: each claim with the date
+it was rejected, where the rejection came from — <em>277/CH</em> for the
+clearinghouse or payer, <em>835</em> for a remittance — and the reason,
+in the payer’s words or as the remittance’s reason codes. Double-click a
+claim to open it, correct it, and resubmit (next chapter). Click
+<strong>Refresh</strong> and corrected claims leave the list.</p>
+<p><strong>2. Claims with no answer.</strong> A claim that has heard
+nothing at all after a couple of weeks may never have reached the payer.
+Filter the Claims grid by <em>Missing Flag</em> and a range of bill
+dates, and check those claims. The dashboard shows the count of primary
+claims with no status and the date of the oldest.</p>
+<p><strong>3. Claims stuck in received or partly paid.</strong>
+<em>Reports → Claims Status</em> lists claims with an insurance balance
+by flag and payer, with <strong>Days</strong> — how long each has sat on
+its current flag. Tick <em>Received</em> and <em>Pending</em>, read the
+oldest first, and call or appeal. Record each call in the status history
+so the next person knows. The report lists only claims that have a flag;
+use the grid’s <em>Missing Flag</em> filter for the ones with none.</p>
+<p><strong>4. Dollars by age.</strong> <em>Reports → Aeging of
+Accounts</em> totals what is owed by age — 30, 60, 90 days and beyond —
+for insurance and for patients, by payer or by financial class. Use it
+to see where the money is waiting, and the Claims Status report to work
+it.</p>
+<p><strong>5. What the patient owes.</strong> When the insurance has
+paid its part, the rest is the patient’s: see <em>Collecting from the
+patient</em>.</p>
+<h1 id="correcting-and-resubmitting-a-claim">Correcting and resubmitting
+a claim</h1>
+<p>When a payer rejects or underpays a claim, correct the claim and send
+it again, telling the payer which claim it replaces.</p>
+<ol type="1">
+<li><strong>Correct the claim.</strong> Open it, fix what the rejection
+names, save. Check the tags.</li>
+<li><strong>Set the submission code.</strong> In the Claims grid,
+highlight the claim and press <strong>F4</strong>. In <em>Claim
+Submission Code</em>, choose:
+<ul>
+<li><strong>Corrected</strong> or <strong>Replacement</strong> — this
+claim replaces the one the payer has (frequency code 6 or 7);</li>
+<li><strong>Void</strong> — cancel the claim the payer has (frequency
+code 8);</li>
+<li><strong>Original Claim</strong> — a first submission (the
+default).</li>
+</ul>
+Click <strong>Save</strong>. The claim’s row turns cyan, and the claim
+window’s bar starts with <em>Corrected:</em>, <em>Replacement:</em> or
+<em>Void:</em>.</li>
+<li><strong>Check the ICN.</strong> A corrected, replacement or void
+claim must carry the payer’s number for the original claim, its
+<strong>ICN</strong> (on the Summary tab). When the original was paid or
+denied on an electronic remittance you posted, Mp10 has already filled
+it in. When you type it yourself from a paper EOB, <strong>type F8
+before the number</strong> — <code>F8</code> followed by the ICN, with
+no space — or it is not sent as the original claim’s number. Mp10 does
+not warn you if the ICN is missing; the payer will reject the
+claim.</li>
+<li><strong>Send it</strong> with Outbound 837, or print it.</li>
+</ol>
+<p>This is the first reason to post remittances whole: they bring the
+ICN onto the claim for you. Part III explains the others.</p>
+<h1 id="collecting-from-the-patient">Collecting from the patient</h1>
+<p>Once the insurance has paid, what remains on the claim is the
+patient’s balance, shown in the claim’s <em>Pat Balance</em> and in the
+Claims grid’s <em>PatBal</em>.</p>
+<p><strong>Collection letters.</strong> <em>Actions → Pat Collection
+Letters</em> lists the claims with a patient balance for a range of
+dates — service dates or billing dates, whichever box you tick — at or
+above the <strong>Minimum Debt to print collection letter</strong> you
+enter. For each claim it shows how many days it has been since the last
+letter, and which letter that was. Tick <strong>Also Print Next
+Corresponding Letter</strong> to print each patient their next letter:
+the first letter for a patient who has had none, and the next one in the
+series once 30 days have passed since the last. Your practice can have
+several letters, each firmer than the last; how many is set by
+<strong>BILLING / MAXIMUM_PATIENT_COLLECTION_LETTERS</strong> (three by
+default), and a patient who has had the last one is not printed again.
+Every letter printed is recorded on the patient’s
+<strong>Letters</strong> tab.</p>
+<p><strong>One patient at a time.</strong> On the patient’s
+<strong>Claims</strong> tab, <em>Current Patient Bal</em> shows what
+they owe in total, and <strong>Print Patient Statement</strong> prints a
+collection letter for them. The patients grid’s <strong>Prnt
+Statement</strong> prints a full statement of every service.</p>
+<p><strong>Taking the payment</strong> is described in <em>Payments at
+the front desk</em> (Part I), or with <strong>Pat Payment</strong> in
+the Claims grid, which prints a receipt.</p>
+<h1 class="unnumbered" id="part-iii-remittances-and-payments">Part III —
+Remittances and payments</h1>
+<p>Receiving, reading and posting the payer’s remittances, the other
+ways to enter a payment, and why the remittance is the one to use.</p>
+<h1 id="what-a-remittance-is">What a remittance is</h1>
+<p>A <strong>remittance</strong> is the payer’s explanation of one
+payment: one check or electronic transfer, and every claim it pays,
+denies or adjusts. For each claim it says what was billed, what was
+allowed, what was paid, what the patient owes, and why anything was not
+paid, in standard reason codes. It also carries the payer’s own number
+for each claim, the ICN.</p>
+<p>Mp10 receives remittances in two forms:</p>
+<ul>
+<li><strong>Electronic remittances (X12 835)</strong> come from the
+clearinghouse. AutoTasks collects and imports them on a schedule.</li>
+<li><strong>PDF remittances</strong> (EOB or ERA PDFs downloaded from a
+payer’s website) are saved into a folder that AutoTasks watches. It
+reads them and imports them.</li>
+</ul>
+<p>Both end up in the same place, the <strong>Remittances</strong>
+window, <strong>as remittances waiting to be posted</strong>. Importing
+posts nothing: no claim balance changes until someone posts the
+remittance. Setting up both is described in the <em>Mp10 AutoTasks</em>
+guide, chapters <em>Electronic remittances: the two kinds</em>, <em>X12
+835 electronic remittances</em> and <em>Electronic remittances (EOB /
+ERA PDFs)</em>.</p>
+<p>A paper EOB that arrives by mail can be entered by hand in the same
+window: see <em>Entering a remittance by hand</em>.</p>
+<h1 id="finding-a-remittance">Finding a remittance</h1>
+<p>Click <strong>Remittances Data Entry Dialog</strong> on the toolbar
+(the check), or <em>Tables → Remittances</em>. The window has two
+tabs:</p>
+<ul>
+<li><strong>Remittances</strong> — the list of remittances.</li>
+<li><strong>Detailed Check Tree View</strong> — one remittance, open for
+posting.</li>
+</ul>
+<h2 id="the-list">The list</h2>
+<p>The <strong>Remittances</strong> tab lists one row per check, with
+its <em>Check</em> number, <em>Insurance</em>, <em>ChkDate</em> (check
+date), <em>RcvDate</em>, <em>Deposit</em> date, <em>ChkTotal</em>,
+<em>Amount</em>, <em>Retained</em>, whether it is posted, the file it
+came from and the number of lines. A green dot beside the check number
+means posted; a red dot means waiting to be posted.</p>
+<p>In the <strong>Remittances Period</strong> panel on the left, narrow
+the list by check dates (<em>From</em>, <em>Thru</em>), by payer
+(<em>Insurance</em>, any part of the name), or tick <strong>Show Only
+Posting Pending</strong> for the ones still to post. Then click
+<strong>Reload Remits</strong> in the <em>Actions</em> panel.</p>
+<p>To find a check number or an amount, sort by the <em>Check</em> or
+<em>ChkTotal</em> column and look down the list.</p>
+<p>A check that is partly posted shows twice: one row for the posted
+lines, one for the lines still waiting. The waiting lines are almost
+always claims Mp10 could not match (see <em>When a claim is not
+found</em>).</p>
+<h2 id="opening-one">Opening one</h2>
+<p>Double-click it, or press Enter. It opens on the <strong>Detailed
+Check Tree View</strong> tab.</p>
+<h1 id="reading-a-remittance">Reading a remittance</h1>
+<h2 id="the-check">The check</h2>
+<p>The <strong>Remittance Info</strong> panel on the left describes the
+check:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Field</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><em>Chk Num</em>, <em>Ins</em>, <em>Chk Date</em></td>
+<td>The check (or transfer) number, the payer, the date</td>
+</tr>
+<tr class="even">
+<td><em>Rcvd On</em>, <em>Dep On</em></td>
+<td>When it was received and deposited</td>
+</tr>
+<tr class="odd">
+<td><em>Claims Pd</em></td>
+<td>The sum of everything paid on the claims</td>
+</tr>
+<tr class="even">
+<td><em>PLB Adj</em></td>
+<td>Money the payer added or withheld outside any claim — interest, a
+recovered overpayment</td>
+</tr>
+<tr class="odd">
+<td><em>Check Amt</em></td>
+<td><em>Claims Pd</em> plus <em>PLB Adj</em>: what was actually
+deposited</td>
+</tr>
+<tr class="even">
+<td><em>PLB Rsn</em></td>
+<td>Why the payer made the <em>PLB Adj</em></td>
+</tr>
+<tr class="odd">
+<td><em>Diff.</em></td>
+<td><em>Claims Pd</em> less what the lines below add up to. <strong>It
+should be zero before you post</strong></td>
+</tr>
+</tbody>
+</table>
+<h2 id="the-claims">The claims</h2>
+<p>Below, each claim on the check is a bold row, and its procedure lines
+are underneath. F9 opens every claim, F10 closes them.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>What it holds</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><em>ClaimKey / Bill-Code</em></td>
+<td>The claim, and the procedure code on each line</td>
+</tr>
+<tr class="even">
+<td><em>Account</em>, <em>SrvDate</em>, <em>PatName</em></td>
+<td>The encounter, the date of service, the patient</td>
+</tr>
+<tr class="odd">
+<td><em>Expected</em></td>
+<td>What the claim expected the payer to pay</td>
+</tr>
+<tr class="even">
+<td><em>Paid</em></td>
+<td>What the payer paid</td>
+</tr>
+<tr class="odd">
+<td><em>Adj</em></td>
+<td>The amount written off — the contractual adjustment</td>
+</tr>
+<tr class="even">
+<td><em>Deduct</em></td>
+<td>The patient’s deductible or coinsurance on this line</td>
+</tr>
+<tr class="odd">
+<td><em>CoIns</em></td>
+<td>The amount to bill to the complementary payer</td>
+</tr>
+<tr class="even">
+<td><em>Pending</em></td>
+<td>What will still be owed after posting</td>
+</tr>
+<tr class="odd">
+<td><em>AdjCodes</em></td>
+<td>The payer’s reason and remark codes, with their meaning</td>
+</tr>
+<tr class="even">
+<td><em>ICN</em></td>
+<td>The payer’s number for the claim</td>
+</tr>
+</tbody>
+</table>
+<p>The dot on each row says, before you post, what posting will do:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Dot</th>
+<th>Means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Green</td>
+<td>Nothing will be left pending</td>
+</tr>
+<tr class="even">
+<td>Yellow</td>
+<td>Paid, but something will still be owed</td>
+</tr>
+<tr class="odd">
+<td>Red</td>
+<td>Nothing paid — a denial</td>
+</tr>
+<tr class="even">
+<td>Black</td>
+<td>Overpaid</td>
+</tr>
+<tr class="odd">
+<td>Grey</td>
+<td>The claim was not found in Mp10; this line cannot post</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Open Claim</strong> (right-click) opens the highlighted claim
+to look at, and <strong>Print Single Claim 835 EOB Notice</strong>
+prints the payer’s own text for that claim. <strong>Search</strong> (F8)
+finds a claim, an account or a patient on a long check.</p>
+<h1 id="posting-a-remittance">Posting a remittance</h1>
+<h2 id="before-you-post">Before you post</h2>
+<p>The import fills in what the payer paid, the deductible and
+coinsurance, the reason codes and the ICN. Most write-offs it leaves to
+you:</p>
+<p><strong>Contractual adjustments.</strong> The difference between your
+charge and what the payer allows (reason code CO-45, and others like it)
+has to be written off before the claim balances. To write off what is
+left on a line, right-click its <em>Adj</em> cell. On a claim row, the
+same writes off every line. To do the whole check at once, click the
+<em>Adj</em> column header: <em>Maximum Amount To Adjust</em> writes off
+every paid claim whose remaining balance is no more than the amount you
+give. Read the reason codes first — not everything unpaid should be
+written off.</p>
+<p><strong>Deductibles.</strong> Click the <em>Deduct</em> column header
+to choose what posting does with deductibles: <strong>Add to patient
+responsiblity</strong> moves them to the patient’s balance (the
+default), <strong>Ignore Deductibles</strong> leaves them out.</p>
+<p><strong>Coinsurance for the complementary payer.</strong> When the
+claim has a complementary payer, what is in <em>Deduct</em> and
+<em>CoIns</em> is billed to it (see below).</p>
+<p><strong>The ICN.</strong> Check it is there; you can type it if it is
+missing.</p>
+<p>Then watch <strong>Diff.</strong>: when it is zero, every cent of the
+check is accounted for.</p>
+<h2 id="posting">Posting</h2>
+<ol type="1">
+<li>Click <strong>Save Remit</strong> (Ctrl+S).</li>
+<li>Click <strong>Post Remit</strong> in the <em>Actions</em> panel (or
+right-click → <em>Post Remittance</em>).</li>
+</ol>
+<p>A progress bar runs, and Mp10 reports how many entries it posted:
+<em>Remittance has been posted to payments table.</em></p>
+<p>Posting a check, in one step that either completes or changes
+nothing:</p>
+<ul>
+<li>records a payment, an adjustment and the reason codes on every claim
+line;</li>
+<li>recalculates each claim’s balances;</li>
+<li>sets each claim’s <strong>flag</strong> — green, yellow, red or
+black — and adds a <em>Remittance Posting.</em> row to its status
+history;</li>
+<li>moves deductibles to the patient’s balance, as you chose;</li>
+<li>creates or updates the <strong>complementary claims</strong>
+(below);</li>
+<li>records the payer’s refusals in the <strong>denial history</strong>
+that the claim checks learn from.</li>
+</ul>
+<p>Only lines that are not yet posted are posted. Posting the same check
+again posts nothing: <em>Already posted</em>. If Mp10 answers
+<em>Nothing posted</em>, the check number, payer or date on the left do
+not match the ones the remittance was saved with — correct them and post
+again.</p>
+<h2 id="there-is-no-undo">There is no undo</h2>
+<p>A posted remittance cannot be unposted. Check <em>Diff.</em> and the
+dots before you post. A mistake found afterwards is corrected on the
+claim, with the payment window (see <em>Other ways to enter a
+payment</em>).</p>
+<p>An Administrator can delete a remittance that has
+<strong>not</strong> been posted, from the right-click menu of the
+Remittances list (<em>Delete Remittance</em>): for instance, a check
+entered twice by hand.</p>
+<h2 id="complementary-insurance-claims">Complementary insurance
+claims</h2>
+<p>When the patient has a second insurance that pays after the first
+(the claim’s <em>Comp Ins</em>), posting the primary payer’s remittance
+hands the rest over:</p>
+<ul>
+<li>The amounts in <em>Deduct</em> and <em>CoIns</em> are assigned to
+the complementary payer instead of the patient.</li>
+<li><strong>If there is no secondary claim yet, Mp10 creates
+it</strong>: a claim for the complementary payer, billing exactly what
+was assigned, with the patient’s secondary card. Send it like any other
+claim.</li>
+<li>If the secondary claim already exists, it is adjusted to the new
+amount.</li>
+</ul>
+<p>Posting a check twice never creates a second secondary claim.</p>
+<h2 id="when-a-claim-is-not-found">When a claim is not found</h2>
+<p>A grey dot means Mp10 could not tell which claim the payer was paying
+— the payer quoted a number Mp10 does not know. Those lines do not post;
+the rest of the check does, and the check stays in the list as partly
+pending.</p>
+<p>To fix one:</p>
+<ul>
+<li>Type the right claim number (or the encounter number) in its
+<em>ClaimKey / Bill-Code</em> cell; the claim’s lines load. Save and
+post again.</li>
+<li><strong>Re-Fetch Missing Claims</strong> (right-click in the
+Remittances list) tries the match again from the original file — useful
+after a patient or claim has been corrected.</li>
+<li><strong>Change Insurance Info</strong> moves the whole check to the
+right payer, when it was filed under the wrong one.</li>
+<li><strong>Re-Fetch From 835</strong> throws away an unposted
+remittance and imports it again from its file.</li>
+</ul>
+<h1 id="entering-a-remittance-by-hand">Entering a remittance by
+hand</h1>
+<p>A paper EOB is entered in the same window, so that it is posted,
+reconciled and remembered exactly like an electronic one.</p>
+<ol type="1">
+<li>Click <strong>Start New Remit</strong>.</li>
+<li>On the left, enter <em>Chk Num</em>, the payer (<em>Ins</em>),
+<em>Chk Date</em>, and <em>Claims Pd</em> — the total the EOB says was
+paid on claims. Add <em>PLB Adj</em> if the payer withheld or added
+money outside the claims.</li>
+<li>Add the claims on the EOB:
+<ul>
+<li>press Insert (or right-click → <em>Add New Line</em>) and type the
+claim number in <em>ClaimKey / Bill-Code</em>: the claim’s lines load;
+or</li>
+<li>click <strong>Fetch Claims Set</strong> to load many claims at once
+— all the unpaid claims of the ticked payers for a range of dates, or a
+list of claim numbers you type in.</li>
+</ul></li>
+<li>On every line, <strong>enter what the EOB says</strong>. Mp10 fills
+<em>Paid</em> with the expected amount to save typing, so correct each
+one that differs. Enter <em>Adj</em>, <em>Deduct</em>, <em>CoIns</em>,
+and the <em>ICN</em> from the EOB.</li>
+<li>Enter the reason codes in <em>AdjCodes</em>, one per line, as
+<code>[45]-</code> followed by the description. Codes entered this way
+count toward the denial history, like the ones that come in
+electronically.</li>
+<li>When <em>Diff.</em> is zero, <strong>Save Remit</strong>, then
+<strong>Post Remit</strong>.</li>
+</ol>
+<h1 id="other-ways-to-enter-a-payment">Other ways to enter a
+payment</h1>
+<h2 id="a-payment-on-one-claim">A payment on one claim</h2>
+<p><strong>Post Payment</strong> in the Claims grid, or <strong>Add New
+Payment to Claim</strong> on the claim’s <strong>Pymnts</strong> tab,
+opens the <em>Single Payment Dialog</em>. The claim must be saved
+first.</p>
+<p>On the <strong>New Payment</strong> tab, enter the <em>Check #</em>,
+<em>Check Date</em> and <em>Deposit Date</em> (they are remembered for
+the next claim), then, on each procedure line:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Enter</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><em>InsPaid</em></td>
+<td>What the insurance paid</td>
+</tr>
+<tr class="even">
+<td><em>Substract</em></td>
+<td>The insurance write-off for the line</td>
+</tr>
+<tr class="odd">
+<td><em>PtePaid</em></td>
+<td>What the patient paid</td>
+</tr>
+<tr class="even">
+<td><em>PSubstct</em></td>
+<td>The patient write-off</td>
+</tr>
+<tr class="odd">
+<td><em>CoIns</em></td>
+<td>What to bill to the complementary payer</td>
+</tr>
+<tr class="even">
+<td><em>AdjReason</em></td>
+<td>Why, from your list of adjustment reasons</td>
+</tr>
+</tbody>
+</table>
+<p>The buttons above the grid fill columns for you: the deductible as
+paid, the expected as paid, the insurance balance as coinsurance. The
+cell buttons do the same line by line.</p>
+<p>The <strong>Simple Adjust</strong> tab adds to or subtracts from the
+whole claim’s insurance or patient balance in one entry, with a reason
+and a note. <strong>Save simple adjustments separately</strong>: when
+any Simple Adjust amount is filled in, the line payments on the New
+Payment tab are not saved in the same Save.</p>
+<p>The <strong>Previous</strong> tab lists everything already posted to
+the claim.</p>
+<p>When you save, the claim’s balances and flag are recalculated, and a
+secondary claim is created if you assigned coinsurance and the claim has
+a complementary payer.</p>
+<h2 id="patient-payments">Patient payments</h2>
+<p>Payments from the patient are posted with <strong>Pat
+Payment</strong> — from the patients grid at the front desk (Part I), or
+from the Claims grid, which ties the payment to that claim and prints a
+receipt.</p>
+<h2 id="adjusting-balances-in-bulk">Adjusting balances in bulk</h2>
+<p><em>Actions → Adjust Accts</em> (Supervisors and Administrators)
+writes off small remaining balances across many claims: by dates of
+service, a range of balances, the payers you tick, and a reason. It
+first prints the list of claims it would adjust, and asks you to confirm
+before it changes anything — <strong>Create report only</strong> is
+ticked to begin with, so a first run only shows you. Adjusted claims are
+marked paid.</p>
+<h2 id="refunds">Refunds</h2>
+<p>Mp10 has no refund function. An overpaid claim shows a black flag;
+ask your administrator how your practice records a refund.</p>
+<h1 id="why-post-whole-remittances">Why post whole remittances</h1>
+<p>Typing a check’s payments claim by claim in the payment window
+balances the claims, but it leaves out everything else the remittance
+knows. Posting the remittance itself — electronic, PDF, or a paper EOB
+entered in the Remittances window — gives you four things the payment
+window cannot:</p>
+<p><strong>The ICN, for corrections.</strong> The remittance carries the
+payer’s number for every claim, and Mp10 puts it on the claim. A
+corrected or replacement claim must quote it, or the payer rejects it as
+a duplicate. Posted from a remittance, it is already there when you need
+it.</p>
+<p><strong>The denial history.</strong> Every refusal on a posted
+remittance is remembered — which payer, which codes, which reason — and
+the claim checks learn from it. The <strong>Denied Before</strong> tag
+warns the biller, before the claim goes out, that this payer often
+refuses these codes. <strong>Refused For This Patient</strong> warns, at
+the front desk when the service is ordered and again on the claim, that
+the payer already refused it for this patient. The dashboard’s rejected
+claims list explains each remittance denial with its reason codes.
+<strong>All of this reads the remittances only.</strong> A denial typed
+into the payment window is invisible to it, and the next claim goes out
+with the same mistake.</p>
+<p><strong>Reconciliation.</strong> The remittance must add up to the
+check: <em>Diff.</em> shows you, before you post, whether every cent is
+accounted for, and <em>PLB Adj</em> explains what the payer withheld.
+The payment window has no check total to compare against.</p>
+<p><strong>The flags and the secondary claims.</strong> Posting sets
+every claim’s flag and status history in one step, and creates each
+secondary claim with exactly the amounts the primary payer assigned.</p>
+<p>So: post every remittance whole, and use the payment window for what
+is not on a remittance.</p>
+<h1 id="reports-for-payment-posting">Reports for payment posting</h1>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Report</th>
+<th>Shows</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><em>Print Remittance</em> (Remittances window)</td>
+<td>The open remittance, claim by claim</td>
+</tr>
+<tr class="even">
+<td><em>X12-835 Remittances Report</em> (right-click the Remittances
+list)</td>
+<td>The payer’s file itself; with several checks selected, totals by
+payer</td>
+</tr>
+<tr class="odd">
+<td><em>Reports → Remittances Report</em></td>
+<td>Remittances by check date, by payer or check by check, with paid,
+adjusted, deductible and retained totals</td>
+</tr>
+<tr class="even">
+<td><em>Reports → Payments + Adjustments</em></td>
+<td>Payments and adjustments for a period — by payment date, deposit
+date or the date posted — grouped by payer, check, user or referring
+physician</td>
+</tr>
+<tr class="odd">
+<td><em>Reports → Claims Status</em></td>
+<td>Claims with an insurance balance, by flag, and how long each has
+waited</td>
+</tr>
+<tr class="even">
+<td><em>Reports → Aeging of Accounts</em></td>
+<td>What is owed, by age</td>
+</tr>
+</tbody>
+</table>
+<p>Every report can be printed, exported, or scheduled to be e-mailed
+automatically from its <em>Automate Report</em> tab (Supervisors and
+Administrators).</p>
+<h1 class="unnumbered" id="quick-reference">Quick reference</h1>
+<p><strong>At the front desk</strong></p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>To</th>
+<th>Do</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Find a patient</td>
+<td>Patients Table, type the name, or F8</td>
+</tr>
+<tr class="even">
+<td>Add a patient</td>
+<td>Insert; <strong>save before</strong> adding insurance or
+encounters</td>
+</tr>
+<tr class="odd">
+<td>Scan the ID</td>
+<td>Demographics → scanner button, then Save</td>
+</tr>
+<tr class="even">
+<td>Take the HIPAA signature</td>
+<td>Demographics → pen → Accept</td>
+</tr>
+<tr class="odd">
+<td>Add a new insurance card</td>
+<td>Insurance → New → tick <strong>Primary</strong> → Save. The old card
+stays as history</td>
+</tr>
+<tr class="even">
+<td>Scan the card</td>
+<td>While adding or modifying: Scan, then Save</td>
+</tr>
+<tr class="odd">
+<td>Check eligibility</td>
+<td>Patients grid → Eligibility → Fetch New Eligibility record</td>
+</tr>
+<tr class="even">
+<td>Open an encounter</td>
+<td>Encounters tab → New → date, type, referring doctor → Save</td>
+</tr>
+<tr class="odd">
+<td>Order</td>
+<td>Encounter → Orders → New Order → Save</td>
+</tr>
+<tr class="even">
+<td>Take the visit signature</td>
+<td>Encounters tab → highlight → pen → Accept</td>
+</tr>
+<tr class="odd">
+<td>Mark a no-show</td>
+<td>Open the encounter → Inactive encounter → Save</td>
+</tr>
+<tr class="even">
+<td>Take a copay</td>
+<td>Pat Payment → encounter → lines → Save → Print</td>
+</tr>
+</tbody>
+</table>
+<p><strong>In billing</strong></p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>To</th>
+<th>Do</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>See what is unbilled</td>
+<td>Unbilled encounters (or the dashboard line)</td>
+</tr>
+<tr class="even">
+<td>Create a claim</td>
+<td>Unbilled list → New Claim. Confirm each line’s code so it
+prices</td>
+</tr>
+<tr class="odd">
+<td>Code</td>
+<td>ICD10 tab; the cell button opens the encoder. First code =
+principal</td>
+</tr>
+<tr class="even">
+<td>Point lines at diagnoses</td>
+<td><em>Diag</em>: <code>1</code>, <code>1,2</code>… Recheck after
+reordering</td>
+</tr>
+<tr class="odd">
+<td>Read a tag</td>
+<td>Hover it; click for the full explanation</td>
+</tr>
+<tr class="even">
+<td>Send</td>
+<td>Claims grid → select one payer’s claims → Outbound 837</td>
+</tr>
+<tr class="odd">
+<td>See a claim’s history</td>
+<td>F9 on the claim</td>
+</tr>
+<tr class="even">
+<td>Record a follow-up</td>
+<td>F9 → Add New → flag, date, <strong>note</strong> → Save</td>
+</tr>
+<tr class="odd">
+<td>Work rejections</td>
+<td>Dashboard → rejected claims → double-click, correct, resubmit</td>
+</tr>
+<tr class="even">
+<td>Resubmit</td>
+<td>F4 → Corrected / Replacement / Void; check the ICN
+(<code>F8</code>…)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Posting</strong></p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>To</th>
+<th>Do</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Find a check</td>
+<td>Remittances → Show Only Posting Pending → Reload Remits</td>
+</tr>
+<tr class="even">
+<td>Write off contractuals</td>
+<td>Right-click <em>Adj</em>, or the <em>Adj</em> header for the whole
+check</td>
+</tr>
+<tr class="odd">
+<td>Post</td>
+<td><em>Diff.</em> = 0 → Save Remit → Post Remit</td>
+</tr>
+<tr class="even">
+<td>Fix a grey line</td>
+<td>Type the claim number, or Re-Fetch Missing Claims</td>
+</tr>
+<tr class="odd">
+<td>Enter a paper EOB</td>
+<td>Start New Remit → claims → amounts and reason codes → Save →
+Post</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
