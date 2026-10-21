@@ -150,29 +150,37 @@ This card covers the **last 90 days** of active encounters:
 - **Unbilled encounters** (amber) — encounters with no claim. Click the line to
   open the Unbilled Encounters grid on those same 90 days. See the chapter
   *Unbilled encounters*.
-- **Rejected claims** (red) — claims whose most recent status is a rejection.
-  Click the line to open the list.
+- **Claims rejected in the last 90 days** (red) — claims whose most recent
+  status is a rejection, counted by the date the rejection was recorded, not
+  by the encounter's date. A rejection that arrives this week on a claim from
+  an older encounter is work to do this week, so it is counted. Click the line
+  to open the list.
 - **Paid claims** (green).
 - **Claims with no status** — primary claims sent but with no response
   recorded yet. Secondary claims are not counted here.
-- **of N encounters · last 90 days** — the total these are counted from.
+- **of N encounters · last 90 days** — the total the unbilled, paid and
+  no-status figures are counted from. The rejected figure has its own basis,
+  above.
 - **Upcoming encounters pre-created** — encounters already entered for future
   dates. They are shown for information and are **not** counted as unbilled.
 
-The bottom line gives the oldest unbilled encounter, the oldest rejection and
-the oldest claim with no status. Those dates are the ones to watch: an old date
+The bottom line gives the oldest unbilled encounter, the oldest rejection
+still unworked (by the date it was rejected) and the oldest claim with no
+status. Those dates are the ones to watch: an old date
 here is money at risk of passing the payer's filing deadline.
 
 ### The rejected claims list
 
-The list shows each rejected claim with the patient, service date, insurance,
-charges, the date it was rejected, where the rejection came from and **the
-reason**. When the rejection came from the clearinghouse or the payer, the
+The list shows each rejected claim with the patient's record number, the
+patient, service date, insurance, charges, the date it was rejected, where
+the rejection came from and **the reason**. When the rejection came from the clearinghouse or the payer, the
 reason is their own wording. When the claim was denied on a remittance (an
 835), the reason is built from the adjustment and remark codes on that
 remittance.
 
-Double-click a row to open the claim, correct it, and resubmit. **Refresh**
+Double-click a row to open the claim, correct it, and resubmit; double-click
+the *MedRec* column instead to open the patient's record, when the fix is
+there (an insurance card, a date of birth). **Refresh**
 re-reads the list after you have worked a few; **Print** gives you a paper
 copy to work from.
 
@@ -222,8 +230,10 @@ coloured label with the name of the problem, such as *Wrong Side ICD10* or
 *Insurance DOB Mismatch*.
 
 The **Claims with error tags · last 7 days** line on the *Needs attention* card
-counts the claims that carry at least one of these tags and were saved in the
-last seven days. Tags that a user added by hand are not counted. Every check,
+counts the primary claims that carry at least one of these tags and were saved
+in the last seven days. Secondary claims are not counted or listed: Mp10
+creates them from the primary after its payment, and the problem a tag names
+is fixed on the primary. Tags that a user added by hand are not counted. Every check,
 and the tag each one places, is described in the next chapter, *The claim
 checks*.
 
@@ -242,7 +252,8 @@ Click the line. A list opens with one row per claim, newest first:
 
 | Column | Shows |
 |---|---|
-| Claim | The claim number |
+| Claim | The claim number, with the claim's status flag in front of it — the same flags the Claims grid shows (green paid, red rejected, and so on). No flag means the claim has not been sent |
+| MedRec | The patient's record number. **Double-click it to open the patient** |
 | Patient | Last name, first name |
 | Service date | The claim's date of service |
 | Insurance | The payer |
@@ -254,8 +265,17 @@ The list title says how many claims it holds.
 
 ## Opening a claim and finding out why
 
-**Double-click a row** to open that claim, just as it opens from the Claims
-grid.
+**Double-click the claim number** (or any column other than *MedRec*) to open
+that claim, just as it opens from the Claims grid.
+
+**Double-click the MedRec column** to open the patient's record instead, just
+as it opens from the Claims grid. Several tags point at the patient rather
+than the claim — *Insurance Sex Mismatch*, *Insurance DOB Mismatch*, *Payer
+Not On Patient* — and the fix is made on the patient's demographics or
+insurance tab. Opening the patient from here means the biller does not have to
+leave the list, look the patient up in the Patients grid, and come back. A
+patient already open in the Claims grid is brought to the front rather than
+opened twice.
 
 The claim's tags are shown along the tag strip of the claim window. Each tag is
 only a name; to see what the check actually found:
@@ -278,7 +298,9 @@ when the tag was added. So:
 
 1. Read the explanation (hover or click the tag).
 2. Correct the claim — the diagnosis, modifier, payer, patient's insurance
-   record, or whatever the explanation points to.
+   record, or whatever the explanation points to. When the problem is on the
+   patient's record, double-click the *MedRec* column to open it from the
+   list.
 3. **Save** the claim. The checks run again; a tag whose problem is gone is
    removed.
 

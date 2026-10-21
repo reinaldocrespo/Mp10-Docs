@@ -170,10 +170,11 @@ yours:
     "nothing scheduled" here is a normal, everyday answer, not an error —
     it just means nothing is queued right now.
 - **Billing** — four counts over the last 90 days: encounters with no claim
-  ("unbilled"), then that window's claims that were rejected, paid, and have no
-  status yet. The first is a count of **encounters**, the other three of
-  **claims**, so an encounter with two claims counts twice in those. Under them
-  the card names the oldest of each, which is the one worth chasing.
+  ("unbilled"), claims rejected in the window (by the date the rejection was
+  recorded, whatever the encounter's date), and that window's claims that were
+  paid or have no status yet. The first is a count of **encounters**, the other
+  three of **claims**, so an encounter with two claims counts twice in those.
+  Under them the card names the oldest of each, which is the one worth chasing.
 
   **Encounters dated ahead of today are never counted as unbilled.** An
   encounter created for an upcoming appointment carries no charge yet, and the
