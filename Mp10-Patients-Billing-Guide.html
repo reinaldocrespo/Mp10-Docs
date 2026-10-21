@@ -184,7 +184,11 @@ the patient already exists</a></li>
 insurance</a></li>
 </ul></li>
 <li><a href="#the-patients-photo-id" id="toc-the-patients-photo-id">The
-patient’s photo ID</a></li>
+patient’s photo ID</a>
+<ul>
+<li><a href="#reading-the-id-into-the-fields" id="toc-reading-the-id-into-the-fields">Reading the ID into the
+fields</a></li>
+</ul></li>
 <li><a href="#the-hipaa-signature" id="toc-the-hipaa-signature">The
 HIPAA signature</a>
 <ul>
@@ -205,6 +209,14 @@ card</a></li>
 <li><a href="#making-the-newest-card-primary-and-keeping-the-old-one" id="toc-making-the-newest-card-primary-and-keeping-the-old-one">Making
 the newest card primary, and keeping the old one</a></li>
 <li><a href="#the-picture-of-the-card" id="toc-the-picture-of-the-card">The picture of the card</a></li>
+<li><a href="#reading-the-card-into-the-fields" id="toc-reading-the-card-into-the-fields">Reading the card into the
+fields</a>
+<ul>
+<li><a href="#cards-that-were-scanned-as-a-whole-page" id="toc-cards-that-were-scanned-as-a-whole-page">Cards that were scanned
+as a whole page</a></li>
+<li><a href="#for-the-administrator" id="toc-for-the-administrator">For
+the administrator</a></li>
+</ul></li>
 <li><a href="#checking-eligibility" id="toc-checking-eligibility">Checking eligibility</a></li>
 </ul></li>
 <li><a href="#encounters" id="toc-encounters">Encounters</a>
@@ -701,12 +713,43 @@ patient on file.</p>
 <td>Delete (<em>Remove id image</em>)</td>
 <td>Removes the picture</td>
 </tr>
+<tr class="odd">
+<td>OCR (<em>Read the names, sex and address off the ID</em>)</td>
+<td>Reads the ID on the screen into the fields</td>
+</tr>
 </tbody>
 </table>
-<p>To scan: place the card on the scanner and click the scanner button.
-Mp10 crops the picture to the card by itself. <strong>The picture is
-stored when you save the patient</strong>, so press Save afterwards.</p>
+<p>To scan: place the card anywhere on the scanner bed and click the
+scanner button. Mp10 finds the card on the bed and keeps only the card.
+<strong>The picture is stored when you save the patient</strong>, so
+press Save afterwards.</p>
 <p>A patient has one ID picture. Scanning again replaces it.</p>
+<h2 id="reading-the-id-into-the-fields">Reading the ID into the
+fields</h2>
+<p>When you scan or import an ID, Mp10 reads it and fills in whatever is
+still blank: <strong>last names, first name, sex, street, city, state
+and zip</strong>. Fields it filled turn pale yellow, and the line under
+the tabs says what was read. Fields that already had something in them
+are left alone.</p>
+<p>The <strong>OCR</strong> button under the picture does the same for
+an ID that is already on the screen, but it <strong>overwrites</strong>
+the fields with what the card says. Use it when the patient brings a new
+licence with a new address: scan it, press OCR, check the fields against
+the card, and Save. Nothing is stored until you save.</p>
+<p>What it reads is a proposal. Always compare the yellow fields with
+the card: a worn or faded card can turn a letter into another, and the
+card prints the full given names where the record may hold only the
+first.</p>
+<p>Two things to know:</p>
+<ul>
+<li>Mp10 scans IDs at a higher resolution than insurance cards, because
+a licence’s print is small. The scan takes a little longer. A card that
+was stored before this version, at the old resolution, may read nothing
+— Mp10 says so; type the details by hand as before.</li>
+<li>If the OCR button says the card reader is not installed on the
+workstation, the reader’s files have not reached that machine yet. Ask
+your administrator; the fields can still be typed.</li>
+</ul>
 <p>For anything else — the back of the ID, a referral, a signed consent
 form — use <strong>Attachments</strong> in the patients grid’s side
 panel. There you can scan, import JPG or PDF files, scan several pages
@@ -890,8 +933,8 @@ not deleted.</p>
 <p>Each card row keeps one picture of the card. While you are adding or
 modifying a card:</p>
 <ul>
-<li><strong>Scan</strong> captures it from the desk scanner. Mp10 crops
-to the card.</li>
+<li><strong>Scan</strong> captures it from the desk scanner. Place the
+card anywhere on the bed: Mp10 finds it and keeps only the card.</li>
 <li><strong>Import card image from file</strong> loads a JPG or PDF
 file.</li>
 <li><strong>Delete</strong> removes the picture.</li>
@@ -903,8 +946,51 @@ size.</p>
 <p>A card row holds one picture, normally the front. Keep the back of
 the card, when you need it, in the patient’s
 <strong>Attachments</strong>.</p>
-<p>The <strong>OCR</strong> button does not read the card for you; enter
-the details by hand.</p>
+<h2 id="reading-the-card-into-the-fields">Reading the card into the
+fields</h2>
+<p>When you scan or import a card on a new or modified row, Mp10 reads
+it and fills in the <strong>member number</strong> and the
+<strong>group</strong> if they are still blank. Fields it filled turn
+pale yellow, and the line under the tabs says what was read and which
+payer the card was recognised as. Typed values are never touched.</p>
+<p>The <strong>OCR</strong> button:</p>
+<ul>
+<li><strong>While you are adding or modifying the card</strong>, it
+reads the card on the screen and <strong>overwrites</strong> the member
+number and group with what the card says. Check them against the card,
+then Save or Cancel.</li>
+<li><strong>While you are only looking at a card</strong>, it reads the
+card and reports, on the line under the tabs, what the card says next to
+what the record holds — without changing the record. To apply it, press
+Modify and then OCR.</li>
+</ul>
+<p>The number is proposed <strong>exactly as the card prints
+it</strong>, letters and dashes included — a Triple-S contract keeps its
+<code>ZUA</code> prefix, a First Medical contract keeps its dash. If
+your practice keys a payer’s numbers differently, edit the field before
+saving.</p>
+<p>What it reads is a proposal: a digit can be misread on a worn card,
+and a card Mp10 does not recognise is read with general rules that find
+the right number less often. Always compare the yellow fields with the
+card.</p>
+<h3 id="cards-that-were-scanned-as-a-whole-page">Cards that were scanned
+as a whole page</h3>
+<p>Some older card pictures are a whole scanner page with a small card
+on it. When you highlight such a card, the line under the tabs says so.
+Press <strong>OCR</strong>: Mp10 cuts the card out of the page, shows
+it, and asks whether to store the card alone. Answer
+<strong>Yes</strong> and the stored picture is replaced at once, with no
+other change to the record.</p>
+<h3 id="for-the-administrator">For the administrator</h3>
+<p>The reader runs on the workstation; nothing is sent anywhere. Which
+cards it recognises, and where the number sits on each payer’s card, is
+described in <code>CardTemplates.ini</code>, which ships through the
+updates folder next to the program and can be edited at the site when a
+payer changes its card. The scan resolutions are system settings:
+<strong>SCANNING / CARDS_DPI</strong> (300) for insurance cards,
+<strong>SCANNING / ID_DPI</strong> (600) for the patient ID, and
+<strong>SCANNING / ID_STORE_PX</strong> (1650), the size the stored ID
+is capped at.</p>
 <h2 id="checking-eligibility">Checking eligibility</h2>
 <p>Before the visit, ask the payer whether the patient is covered. In
 the patients grid, highlight the patient and click
@@ -2514,7 +2600,9 @@ encounters</td>
 </tr>
 <tr class="odd">
 <td>Scan the ID</td>
-<td>Demographics → scanner button, then Save</td>
+<td>Demographics → scanner button; the blank name, sex and address
+fields fill from the card (yellow) — check them, then Save. OCR re-reads
+and overwrites</td>
 </tr>
 <tr class="even">
 <td>Take the HIPAA signature</td>
@@ -2527,7 +2615,9 @@ stays as history</td>
 </tr>
 <tr class="even">
 <td>Scan the card</td>
-<td>While adding or modifying: Scan, then Save</td>
+<td>While adding or modifying: Scan; a blank member number and group
+fill from the card (yellow) — check them, then Save. OCR re-reads and
+overwrites</td>
 </tr>
 <tr class="odd">
 <td>Check eligibility</td>
