@@ -257,8 +257,11 @@ files</a></li>
 </ul></li>
 <li><a href="#claim-status-responses-277" id="toc-claim-status-responses-277">Claim status responses
 (277)</a></li>
-<li><a href="#claim-acknowledgements-edi" id="toc-claim-acknowledgements-edi">Claim acknowledgements
-(EDI)</a></li>
+<li><a href="#claim-acknowledgements-edi" id="toc-claim-acknowledgements-edi">Claim acknowledgements (EDI)</a>
+<ul>
+<li><a href="#ta1-and-999-acknowledgements" id="toc-ta1-and-999-acknowledgements">TA1 and 999
+acknowledgements</a></li>
+</ul></li>
 <li><a href="#claim-submissions-from-mp10-web-837" id="toc-claim-submissions-from-mp10-web-837">Claim submissions from Mp10
 Web (837)</a></li>
 <li><a href="#insurance-eligibility-270-271" id="toc-insurance-eligibility-270-271">Insurance eligibility (270 /
@@ -2044,15 +2047,40 @@ off</td>
 </table>
 <p>There are no separate path settings — acknowledgements use the 277
 pair.</p>
-<blockquote>
-<p><strong>Low-level acknowledgements are deleted, not filed.</strong>
-Files named <code>TA1_…</code>, <code>_TA1_…</code>, <code>999_…</code>
-and <code>_999_…</code> are transport-level receipts that carry nothing
-a practice needs. AutoTasks erases them on sight to stop them
-accumulating. They are <strong>not</strong> copied to the history folder
-first, so if you want to keep them for an audit, this is not the
-mechanism that will do it.</p>
-</blockquote>
+<h2 id="ta1-and-999-acknowledgements">TA1 and 999 acknowledgements</h2>
+<p>Two more files come back for every 837 that is sent, minutes after it
+is sent, before the claim-level acknowledgement above:</p>
+<ul>
+<li><strong>TA1</strong> (<code>TA1_….txt</code>) — did the
+clearinghouse accept the file’s envelope.</li>
+<li><strong>999</strong> (<code>999_….txt</code>) — did each set of
+claims inside the file pass the 837 syntax checks, and if not, which
+segment and which element failed.</li>
+</ul>
+<p>AutoTasks reads both, works out which claims were in the 837 they
+answer, and records the result on each claim:</p>
+<ul>
+<li><strong>Accepted</strong> — a note on the claim (area
+<code>TA1_ack</code> or <code>999_ack</code>) saying the file was
+accepted. The claim’s flag does not change: acceptance here only means
+the file arrived intact.</li>
+<li><strong>Rejected</strong> — the same note, with the reason (for a
+999, the segment, the element and the value that failed),
+<strong>and</strong> the claim turns red: a rejected entry in its status
+history and the red flag, unless the claim is already paid, pending or
+overpaid. The claim then appears on the dashboard’s rejected-claims
+line.</li>
+</ul>
+<p>The claims are found by reading the 837 itself, named after the
+number the acknowledgement quotes (<code>610222951</code> answers
+<code>610222951.837</code>), in the 837 folder or the history folder. If
+the 837 is no longer there, the claim history notes of recent
+submissions are searched instead.</p>
+<p>Reading the same acknowledgement twice adds nothing. Afterwards the
+files are filed in the history folder like every other inbound file. An
+acknowledgement of an eligibility request (a 270), or of an 837 that was
+not sent from this dictionary, is logged and filed without touching any
+claim.</p>
 <h1 id="claim-submissions-from-mp10-web-837">Claim submissions from Mp10
 Web (837)</h1>
 <p>Billing staff can select claims in Mp10 Web and press <strong>Create
@@ -3816,9 +3844,11 @@ missing, or not writable</td>
 most often an 835</td>
 </tr>
 <tr class="even">
-<td>Acknowledgements vanish without reaching history</td>
-<td>Working as designed — <code>TA1_</code> and <code>999_</code> files
-are deleted, not filed</td>
+<td>A claim was sent but nothing came back</td>
+<td>Look at the claim’s notes for a <code>TA1_ack</code> /
+<code>999_ack</code> note. None at all: the clearinghouse has not
+answered yet, or <code>277</code> processing is off. A rejected 999
+names the segment and element to fix</td>
 </tr>
 </tbody>
 </table>

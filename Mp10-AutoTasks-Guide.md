@@ -1088,11 +1088,36 @@ received them. AutoTasks reads these and records them against the claims.
 
 There are no separate path settings — acknowledgements use the 277 pair.
 
-> **Low-level acknowledgements are deleted, not filed.** Files named `TA1_…`,
-> `_TA1_…`, `999_…` and `_999_…` are transport-level receipts that carry nothing
-> a practice needs. AutoTasks erases them on sight to stop them accumulating.
-> They are **not** copied to the history folder first, so if you want to keep
-> them for an audit, this is not the mechanism that will do it.
+## TA1 and 999 acknowledgements
+
+Two more files come back for every 837 that is sent, minutes after it is
+sent, before the claim-level acknowledgement above:
+
+- **TA1** (`TA1_….txt`) — did the clearinghouse accept the file's envelope.
+- **999** (`999_….txt`) — did each set of claims inside the file pass the
+  837 syntax checks, and if not, which segment and which element failed.
+
+AutoTasks reads both, works out which claims were in the 837 they answer, and
+records the result on each claim:
+
+- **Accepted** — a note on the claim (area `TA1_ack` or `999_ack`) saying the
+  file was accepted. The claim's flag does not change: acceptance here only
+  means the file arrived intact.
+- **Rejected** — the same note, with the reason (for a 999, the segment, the
+  element and the value that failed), **and** the claim turns red: a rejected
+  entry in its status history and the red flag, unless the claim is already
+  paid, pending or overpaid. The claim then appears on the dashboard's
+  rejected-claims line.
+
+The claims are found by reading the 837 itself, named after the number the
+acknowledgement quotes (`610222951` answers `610222951.837`), in the 837
+folder or the history folder. If the 837 is no longer there, the claim
+history notes of recent submissions are searched instead.
+
+Reading the same acknowledgement twice adds nothing. Afterwards the files are
+filed in the history folder like every other inbound file. An acknowledgement
+of an eligibility request (a 270), or of an 837 that was not sent from this
+dictionary, is logged and filed without touching any claim.
 
 # Claim submissions from Mp10 Web (837)
 
@@ -2046,7 +2071,7 @@ Once processed, the PDF is in the `history` sub-folder — it has not been lost.
 | Nothing happens at all | `AUTOTASKS` / `PROCESS_277` or `ProcessEDIs` is not `YES` |
 | The same files process repeatedly | `X12FILE_PATH` / `277_COPY_PATH` is blank, missing, or not writable |
 | `Unlegit 277` in the log | Normal — that is a file in the shared in-tray that is not a 277, most often an 835 |
-| Acknowledgements vanish without reaching history | Working as designed — `TA1_` and `999_` files are deleted, not filed |
+| A claim was sent but nothing came back | Look at the claim's notes for a `TA1_ack` / `999_ack` note. None at all: the clearinghouse has not answered yet, or `277` processing is off. A rejected 999 names the segment and element to fix |
 
 ## Eligibility is not being checked
 
