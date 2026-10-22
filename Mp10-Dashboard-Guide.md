@@ -233,7 +233,9 @@ The **Claims with error tags · last 7 days** line on the *Needs attention* card
 counts the primary claims that carry at least one of these tags and were saved
 in the last seven days. Secondary claims are not counted or listed: Mp10
 creates them from the primary after its payment, and the problem a tag names
-is fixed on the primary. Tags that a user added by hand are not counted. Every check,
+is fixed on the primary. Claims already fully paid (green flag) or overpaid
+are left out as well: a tag on them can no longer prevent a rejection. Tags
+that a user added by hand are not counted. Every check,
 and the tag each one places, is described in the next chapter, *The claim
 checks*.
 
