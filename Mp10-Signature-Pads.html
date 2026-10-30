@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-10-22" />
+  <meta name="dcterms.date" content="2026-10-30" />
   <title>Mp10 Web — Signature Pads</title>
   <style>
 code{white-space: pre-wrap;}
@@ -23,8 +23,9 @@ vertical-align: middle;
 }
 .display.math{display: block; text-align: center; margin: 0.5rem auto;}
 
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -211,7 +212,7 @@ a { color: inherit; }
 <h1 class="title">Mp10 Web — Signature Pads</h1>
 <p class="subtitle">Capturing patient signatures from a Topaz pad</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">22 October 2026</p>
+<p class="date">30 October 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -361,29 +362,29 @@ silently. The message tells you which of these it is:</p>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>What it says</th>
 <th>What it means</th>
 <th>Who fixes it</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Signature pads are only supported on Windows workstations</td>
 <td>You are on a Mac, tablet or phone</td>
 <td>Use the encounter form instead</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Topaz’s <code>SigWebTablet.js</code> was not found</td>
 <td>The web server is missing a Topaz file</td>
 <td><strong>IT task</strong> — see below</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>SigWeb … is not running on this workstation</td>
 <td>The Topaz software is not installed or not started on this PC</td>
 <td><strong>IT task</strong> — see below</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Nothing has been signed yet</td>
 <td>The pad is connected but nobody signed</td>
 <td>Ask the patient to sign</td>
@@ -459,17 +460,17 @@ both stay in step. It lives in the Mp10 System Registry (not the Windows
 registry):</p>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th>Field</th>
 <th>Value</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Section</td>
 <td><code>TOPAZ</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Entry</td>
 <td><code>ENCOUNTER-SIGNATURE-DISPLAYMESSAGE</code></td>
 </tr>

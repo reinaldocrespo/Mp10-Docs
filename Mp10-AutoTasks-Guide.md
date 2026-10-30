@@ -831,6 +831,7 @@ the other.
 | Turned on by | `AUTOTASKS` / `PROCESS_835` | `SCANNING` / `EOBIMAGESPATH` |
 | Folder settings live in | `X12FILE_PATH` | `SCANNING` |
 | Needs Python | No | Yes |
+| Files held back for a person | See that chapter | Moved to a `review` sub-folder, with a reason file |
 
 If your clearinghouse delivers 835 files, that is the path to use — it carries
 more detail and needs no interpretation. The PDF route exists for payers who
@@ -1335,6 +1336,8 @@ Requirements:
 - If more than one person will save files there, give them all write access.
 - Do not point it at a folder used for anything else. AutoTasks processes and
   then moves *every* PDF it finds there.
+- It needs permission to **create sub-folders** there. It makes `review` and
+  `failed` itself the first time it needs them.
 
 ## Step 2 — Declare the folder
 
@@ -1369,28 +1372,155 @@ Guidelines:
 
 ## What happens next
 
-On its next wake-up, for each PDF in the folder, AutoTasks:
+On its next wake-up, AutoTasks first checks that Python can be started, and
+then, for each PDF in the folder:
 
 1. **Reads the PDF.** It first tries to read the text directly. If the PDF is a
    scan with no text in it, it falls back to optical character recognition.
 2. **Writes a `..._eob.json` file** beside the PDF holding what it found — the
    check number and date, the payee, and every claim and service line.
 3. **Checks the remittance belongs to your practice** (see below).
-4. **Posts the payments** into the remittances file, ready to be applied.
-5. **Moves the PDF** into a `history` sub-folder so it is not processed twice:
+4. **Matches each line to a claim** and compares the remittance with what is
+   already in the remittances file (see *When a remittance is not imported*).
+5. **Posts the payments** into the remittances file, ready to be applied. The
+   rows of one check are written as a whole: either every row goes in, or none
+   does.
+6. **Files the PDF and its JSON** according to what happened.
+
+Each file is handled on its own. A damaged or unreadable file is set aside and
+the rest of the folder carries on.
+
+## What the folders mean
+
+Three sub-folders sit directly inside `EOBIMAGESPATH`:
+
+| Folder | What lands there | Who creates it |
+|---|---|---|
+| `history` | A remittance that was imported, and a remittance that is certainly a repeat of one already in Mp10 (see below) | **You** — AutoTasks does not create it |
+| `review` | A remittance AutoTasks would not import by itself. Each file comes with a `<name>.reason.txt` saying why | AutoTasks |
+| `failed` | A PDF the extractor could not read at all, with the JSON it left | AutoTasks |
 
 ```
-...\scannedEOBs\history\C6472004.pdf
+...\scannedEOBs\history\C1234567.pdf
+...\scannedEOBs\review\C1234567.pdf
+...\scannedEOBs\review\C1234567_eob.json
+...\scannedEOBs\review\C1234567.reason.txt
+...\scannedEOBs\failed\C1234567.pdf
 ```
 
 > **Create the `history` sub-folder yourself.** Unlike the 835 history folder,
 > this one has no setting — it is always a folder called `history` directly
-> inside `EOBIMAGESPATH`, and AutoTasks does not create it. If it is missing, or
-> the service account cannot write to it, the PDF cannot be moved and the same
-> remittance is read again on every cycle.
+> inside `EOBIMAGESPATH`. If it is missing, or the service account cannot write
+> to it, the PDF cannot be moved and the same remittance is read again on every
+> cycle.
+
+A remittance entered from the desktop (the **EOB** tab of *Fetch Claims* in the
+billing program, then **Save Remit**) is recorded the same way: the rows it
+loaded from the EOB carry the EOB's file name (rows a check already had keep
+theirs), and the PDF is moved to `history` when it came from this folder or
+from `review` (with its JSON and reason file); the billing program creates
+`history` if it is missing. AutoTasks therefore does not import it again. A
+PDF picked from elsewhere is left where it is.
+
+`history` does not hold everything that was read. A remittance that was not
+imported, and is not a certain repeat, is **not** filed there: it waits in
+`review` so that somebody looks at it.
 
 If you want to know what happened to a particular file, search `AutoTasks.out`
 for its name.
+
+## When a remittance is not imported
+
+Before anything is written, AutoTasks compares the remittance with what Mp10
+already holds, and refuses to import it when it looks like a repeat or when it
+cannot be sure of the claims. The refusal and its code are logged, and the file
+goes to `review` (or to `history`, where the table says so).
+
+| Code | Meaning | Goes to |
+|---|---|---|
+| `POSTED_CHECK` | The check is already **posted**. Posted checks are never touched | `history` |
+| `SAME_PDF` | The same PDF was imported before, and the earlier import holds rows under this remittance's own claims | `history` |
+| `SAME_PDF_INDIRECT` | The same PDF was imported before, but the earlier import was posted on a different claim of the same visit | `review` |
+| `SAME_DATE_TOTAL` | The remittance has no check number, but another check has the same date, the same total and most of the same claims | `review` |
+| `LINES_ALREADY_PAID` | Most of the lines have already been paid by this payer | `review` |
+| `NO_LINES` | Nothing on the PDF could be read as a payment line | `review` |
+| `NAME_TOO_LONG` | The file name would not fit in the remittance's file-name column | `review` |
+| `DUP_TEST_FAILED` | A database read needed for the repeat check failed, so AutoTasks cannot say it is not a repeat | `review` |
+| `WRITE_FAILED` | A row could not be written, or an error occurred while writing; everything written for that check was rolled back | `review` |
+| `NOTHING_WRITTEN` | Nothing was written: every line was held back (see below), had no usable check number, or was already on the check under another claim | `review` |
+| `JSON_UNREADABLE` | The extractor's file is empty or damaged | `review` |
+| `RUNTIME_ERROR` | An unexpected error stopped the import of that file; the error is in the reason file and the log | `review` |
+
+A check that is **in Mp10 but not yet posted** (for instance, an earlier run
+imported only part of it) is not a refusal. AutoTasks adds only the claims that
+are missing and leaves the rows already there alone.
+
+A remittance that has no check number is given the next check number in
+sequence, but only when at least one row is going to be written. A repeat or a
+remittance that is entirely held back does not use up a number. A check number
+printed on the PDF that is longer than the check column is cut to the column's
+width.
+
+### Lines that are held back
+
+Some lines are never written unattended. The rest of the check is imported, and
+each held line is logged as `EOB line skipped:` with the claim key, the key the
+PDF printed, the amount and the reason:
+
+| Reason | Meaning |
+|---|---|
+| `UNKNOWN_KEY` | The claim number on the PDF matches no claim |
+| `PAID_OVER_BILLED` | The claim is paid more than it was billed |
+| `PAID_OVER_CHECK` | The claim is paid more than the whole check |
+| `PAID_OVER_CEILING` | One line pays more than the ceiling |
+
+The ceiling guards against a misread amount on a scan, where two numbers run
+together. It defaults to 5000 and is read from the System Registry:
+
+| Section | Entry | Default |
+|---|---|---|
+| `SCANNING` | `EOB_PAID_CEILING` | `5000` |
+
+Raise it only if your practice really receives single payments above that
+amount.
+
+### Which claim a payment goes to
+
+Where a visit has a primary and a complementary (secondary) claim, a payment
+goes to the claim the PDF names. A line moves to the complementary claim only
+when the primary claim was **already paid before this check** and the amount
+fits what the complementary claim still owes. Otherwise the payment stays on the
+primary claim. If the primary claim has already received exactly this amount for
+the same procedure under another check number, the payment is treated as that
+same check posted again: it stays on the primary and the remittance is refused
+as `LINES_ALREADY_PAID`.
+
+### What staff do with `review`
+
+For each file in `review`, open its `.reason.txt` first. It gives the reason
+code, the check, where the PDF is (moved here with the JSON, or already in
+`history` because the extractor archived it earlier), and for each line not
+written the claim key, the key on the PDF, the procedure code, the amount and
+the flags. It holds keys and amounts only, no patient names.
+
+- If the code says the remittance is a repeat, check the Remittances window and
+  delete the files.
+- If it was held back for a claim number or an amount, enter the remittance by
+  hand: see *Entering a remittance by hand* in the Patients and Billing guide,
+  where the **EOB** tab of *Fetch Claims* can read the PDF for you.
+- If you cannot tell, keep the files and ask support.
+
+Nothing retries what is in `review`. When a file has been dealt with, delete it.
+If a file with the same name arrives there again, the newer one replaces the
+older.
+
+### What staff do with `failed`
+
+`failed` holds a PDF the extractor could not read: it exited with an error or
+wrote nothing. It is moved there once and is not retried. Look in
+`python_debug.log` for the reason. If the PDF opens normally, enter it by hand;
+if Python or a library was missing, fix that and then copy the PDF back into the
+main folder to try again.
 
 ## If your server serves more than one practice
 
@@ -1401,7 +1531,7 @@ AutoTasks reads the **payee** — the provider the cheque was made out to — fr
 each remittance and compares it against the NPIs and provider numbers registered
 for the practice it is currently connected to.
 
-- If they **match**, the remittance is posted and the PDF is moved to `history`.
+- If they **match**, the remittance is processed and filed as described above.
 - If they **do not match**, the file is **left exactly where it is**, untouched,
   so the run connected to the practice that owns it can pick it up.
 
@@ -1429,6 +1559,11 @@ insurers all publish normal text PDFs, remittances will process without them.
 A second log, `python_debug.log`, is written next to the AutoTasks program and
 holds the extractor's own output. It is the place to look if a specific PDF
 fails.
+
+AutoTasks checks that Python starts before it touches any PDF in a cycle. If it
+does not, the log says so, no PDF is moved, and the same files are tried again
+next cycle. The folder is shared by every practice the server serves, so a
+missing interpreter must not carry other practices' remittances away.
 
 # Keeping the CMS reference data current
 
@@ -2035,10 +2170,22 @@ the e-mail did not go out", and those need different fixes.
 | Files sit in the folder, nothing in the log | `SCANNING` / `EOBIMAGESPATH` is blank or misspelled, or the service was not restarted |
 | "belongs to another practice - left in place" | Working as designed — the cheque is payable to a different practice on this server |
 | The file was read but no payments appeared | The claims on it could not be matched. The log names each claim it could not resolve |
-| Log mentions the extractor failing | Look in `python_debug.log`. Usually Python or the extractor script is missing from the server |
+| Log says `EOB Python interpreter could not be started` | Python is not installed, or `GENERAL` / `PYTHONPATH` is wrong. Nothing was moved; fix it and the files are picked up next cycle |
+| Log says `EOB Python script not found` | `extract_eob.py` is not next to the AutoTasks program |
+| A PDF is in the `failed` sub-folder | The extractor could not read it. The log line reads `extract_eob.py failed, code:`; look in `python_debug.log`. Enter the remittance by hand, or fix the cause and copy the PDF back |
 | Only scanned remittances fail | Poppler or Tesseract is not installed |
+| A PDF is in the `review` sub-folder | AutoTasks would not import it by itself. Open the `.reason.txt` beside it: the first lines give the reason code (see *When a remittance is not imported*). Enter the remittance by hand if it is not a repeat |
+| Log says `EOB refused:` followed by a code | The same reason code as in the `.reason.txt`. `POSTED_CHECK` and a direct `SAME_PDF` are certain repeats and go to `history`; the others go to `review` |
+| Log says `EOB line skipped:` | One line was held back (`UNKNOWN_KEY`, `PAID_OVER_BILLED`, `PAID_OVER_CHECK` or `PAID_OVER_CEILING`); the rest of the check was imported. If a genuine large payment is held, raise `SCANNING` / `EOB_PAID_CEILING` |
+| A `..._eob.json` stays in the main folder, log says `TX_ALREADY_OPEN` | Another operation had a database transaction open on the AutoTasks connection, so nothing was read or written. AutoTasks closes it after the remittance pass (next row) and the file is retried on the next cycle |
+| `A transaction left open by ... was rolled back` in the log | A job ended with its database transaction still open, and AutoTasks rolled it back so later jobs do not write into it. Once is harmless; every cycle means a defect — send the log to support |
+| `... could not be rolled back: disconnecting` in the log | The rollback failed too (usually the connection to the server is broken). AutoTasks dropped the connection, which makes the server roll the transaction back, and connected again. The remittances not yet read wait for the next cycle |
+| `EOB JSON stopped by a runtime error` in the log | That one file went to `review` as `RUNTIME_ERROR` and the cycle carried on. Send the log line to support |
 
-Once processed, the PDF is in the `history` sub-folder — it has not been lost.
+Once processed, an imported PDF is in the `history` sub-folder — it has not
+been lost. A PDF AutoTasks would not import is in `review` or `failed`.
+AutoTasks creates the `history`, `review` and `failed` sub-folders when they
+are missing; it needs permission to create folders in the remittance folder.
 
 ## 835 files are not being processed
 

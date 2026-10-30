@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-10-22" />
+  <meta name="dcterms.date" content="2026-10-30" />
   <title>Mp10 Orders — User’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -148,7 +148,7 @@ a { color: inherit; }
 <p class="subtitle">Recording what the patient came for, and everything
 that follows from it</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">22 October 2026</p>
+<p class="date">30 October 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -438,19 +438,19 @@ one has a dash after HL7, the other does not. Copy them exactly.</p>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Section</th>
 <th>Entry</th>
 <th>Value</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>HL7ORM-TRANSMIT</td>
 <td>ACTIVATE</td>
 <td>YES</td>
 </tr>
-<tr class="even">
+<tr>
 <td>HL7-ORM-TRANSMIT</td>
 <td>FILEPATH</td>
 <td>The folder the receiving system collects from, for example
@@ -533,45 +533,45 @@ task</strong>, done once with whoever runs the sending system.</p>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Entry</th>
 <th>Default</th>
 <th>Meaning</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>IP</td>
 <td>0.0.0.0</td>
 <td>The address MpSocketServ listens on; 0.0.0.0 means every address of
 the server</td>
 </tr>
-<tr class="even">
+<tr>
 <td>PORT</td>
 <td>6261</td>
 <td>The port the sending system connects to</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>ACK_EXPECTED</td>
 <td>YES</td>
 <td>Reply to each message with an HL7 acknowledgement</td>
 </tr>
-<tr class="even">
+<tr>
 <td>ACK_SENDING_APP</td>
 <td>MP10</td>
 <td>The name Mp10 gives itself in its acknowledgements</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>ACK_SENDING_FACILITY</td>
 <td>empty</td>
 <td>The facility name in its acknowledgements</td>
 </tr>
-<tr class="even">
+<tr>
 <td>MAX_PROCESS_ATTEMPTS</td>
 <td>5</td>
 <td>Attempts to file a result before it is set aside</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>RAW_JOURNAL_DAYS</td>
 <td>7</td>
 <td>Days the raw incoming messages are kept. They contain patient
@@ -596,46 +596,46 @@ settings in the <strong>Mp10 AutoTasks</strong> guide.</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>You want to</th>
 <th>Do this</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Add an order at registration</td>
 <td>Encounter → <strong>Orders</strong> tab → <strong>New Order</strong>
 → pick the item → save the encounter</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Add an order while billing</td>
 <td>Unbilled Encounters → orders icon or <strong>Orders</strong> → move
 the item across → save</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Add an order remotely</td>
 <td>MpWeb → encounter → <strong>Manage orders</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Remove an order</td>
 <td>Select it → <strong>Delete Order</strong> → save. An order with a
 result cannot be removed</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Print what the patient is having done</td>
 <td><strong>Print Label</strong> on the Orders tab, or <strong>Print
 label with encounter</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Get a claim pre-filled</td>
 <td>Enter orders before the claim is created (PrBill10 and MpWeb)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Send orders to another system</td>
 <td>Set ACTIVATE and FILEPATH, run Update Data Dictionary, install and
 start the HL7 client service</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Receive results</td>
 <td>Set up MpSocketServ with the sending system; results file against
 their order number</td>

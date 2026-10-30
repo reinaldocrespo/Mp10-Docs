@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-10-22" />
+  <meta name="dcterms.date" content="2026-10-30" />
   <title>Mp10 Modality Worklist</title>
   <style>
 code{white-space: pre-wrap;}
@@ -23,8 +23,9 @@ vertical-align: middle;
 }
 .display.math{display: block; text-align: center; margin: 0.5rem auto;}
 
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -212,7 +213,7 @@ a { color: inherit; }
 <p class="subtitle">Installing, running and troubleshooting the DICOM
 worklist server</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">22 October 2026</p>
+<p class="date">30 October 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -342,31 +343,31 @@ worklist is two pieces that meet in a directory on disk:</p>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Piece</th>
 <th>What it is</th>
 <th>Where it comes from</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>The generator</strong></td>
 <td>Part of the <strong>AutoTasks</strong> service. Decides which
 studies belong on the worklist and writes one file each</td>
 <td>Installed with Mp10; switched on in the System Registry</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>The worklist directory</strong></td>
 <td>An ordinary folder. AutoTasks owns it completely</td>
 <td>Created by the installer</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>The DICOM server</strong></td>
 <td><strong>Orthanc</strong> with its worklist plugin, running as a
 Windows service</td>
 <td>Installed once, from the Mp10 Modality Worklist bundle</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>The console</strong></td>
 <td>The Worklist page in Mp10 Web — read-only, for looking at what is
 scheduled</td>
@@ -407,26 +408,26 @@ scanner:</p>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th></th>
 <th>Bench default</th>
 <th>What it is</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>AE title</strong></td>
 <td><code>MP10MWL</code></td>
 <td>The name scanners call this server by. Up to 16 characters, no
 spaces</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>DICOM port</strong></td>
 <td><code>4242</code></td>
 <td>The TCP port. Clinical sites usually want <code>104</code> or
 <code>11112</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Worklist directory</strong></td>
 <td><code>C:\Mp10Mwl\worklists</code></td>
 <td>Where the files live. Local disk, not a network share</td>
@@ -472,14 +473,14 @@ order:</p>
 <p><strong>1. Create the table.</strong></p>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th>Section</th>
 <th>Entry</th>
 <th>Set to</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code>GENERAL</code></td>
 <td><code>MODALITY-WORKLIST</code></td>
 <td><code>YES</code></td>
@@ -502,24 +503,24 @@ safe, but Imaging Stations will not appear in Admin10.</p>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Section</th>
 <th>Entry</th>
 <th>Set to</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code>AUTOTASKS</code></td>
 <td><code>EXPORT_MWL</code></td>
 <td><code>YES</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>AUTOTASKS</code></td>
 <td><code>MWL_SPOOL_PATH</code></td>
 <td>the worklist directory, e.g. <code>C:\Mp10Mwl\worklists</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>AUTOTASKS</code></td>
 <td><code>MWL_WINDOW_DAYS</code></td>
 <td><code>1</code> unless you have a reason</td>
@@ -547,20 +548,20 @@ directory.</p>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Section</th>
 <th>Entry</th>
 <th>Set to</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code>AUTOTASKS</code></td>
 <td><code>MWL_SCP_PORT</code></td>
 <td>the DICOM port the installer reported. <code>4242</code> unless you
 chose another</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>AUTOTASKS</code></td>
 <td><code>MWL_SCP_AET</code></td>
 <td>the server’s AE title. <code>MP10MWL</code> unless you chose
@@ -662,38 +663,38 @@ failing quietly.</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Field</th>
 <th>What it is</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>Location</strong></td>
 <td>Must match the encounter type used for that site. Spelling matters,
 capitalisation does not</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Modality</strong></td>
 <td><code>CT</code>, <code>MR</code>, <code>DX</code>, <code>US</code>,
 <code>MG</code> — the same value the revenue code maps to</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>AE Title</strong></td>
 <td>What the scanner calls itself when it asks for its worklist. This is
 the field that does the routing. <strong>Capitalisation matters
 here</strong>: <code>MxView</code> and <code>MXVIEW</code> are two
 different stations</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Station Name</strong></td>
 <td>Free label, shown on some consoles</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Notes</strong></td>
 <td>For people, not for DICOM — room, vendor, whoever to call</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Inactive</strong></td>
 <td>Tick to stop routing to it without deleting the row</td>
 </tr>
@@ -710,20 +711,20 @@ not a fault. Splitting them needs a finer key than location and modality
 <col style="width: 50%" />
 </colgroup>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>Location</strong></td>
 <td>The encounter types you already use. If encounters are opened as
 <code>Site A</code>, <code>Site B</code> and <code>Site C</code>, those
 are the three values — typed exactly as they appear on the encounter,
 not abbreviated</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Modality</strong></td>
 <td>Whatever the revenue codes map to. If no revenue code maps to
 <code>MR</code>, a station for <code>MR</code> will never be used, and
 the screen says so when you save</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>AE Title</strong></td>
 <td><strong>From the scanner, not from you.</strong> It is the name the
 device calls <em>itself</em> in its worklist query — read it off the
@@ -741,7 +742,7 @@ nothing</td>
 <p>Three buildings, one CT and one X-ray room in each:</p>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th>Location</th>
 <th>Modality</th>
 <th>AE Title</th>
@@ -750,42 +751,42 @@ nothing</td>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Site A</td>
 <td>CT</td>
 <td><code>SITEA_CT</code></td>
 <td>Site A CT</td>
 <td>Siemens, room 2</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Site A</td>
 <td>DX</td>
 <td><code>SITEA_DX</code></td>
 <td>Site A X-ray</td>
 <td></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Site B</td>
 <td>CT</td>
 <td><code>SITEB_CT</code></td>
 <td>Site B CT</td>
 <td></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Site B</td>
 <td>DX</td>
 <td><code>SITEB_DX</code></td>
 <td>Site B X-ray</td>
 <td></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Site C</td>
 <td>CT</td>
 <td><code>SITEC_CT</code></td>
 <td>Site C CT</td>
 <td></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Site C</td>
 <td>DX</td>
 <td><code>SITEC_DX</code></td>
@@ -875,32 +876,32 @@ server has its row, and type each AE title the way the machine sends it.
 <col style="width: 50%" />
 </colgroup>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Imaging stations</td>
 <td>Admin10 -&gt; Tables -&gt; <strong>Imaging Stations</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Worklist files</td>
 <td><code>C:\Mp10Mwl\worklists\&lt;order number&gt;.wl</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>AutoTasks log</td>
 <td><code>AutoTasks.out</code>, beside <code>AutoTasks.exe</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Orthanc logs</td>
 <td><code>C:\Program Files\Orthanc Server\Logs</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Orthanc configuration</td>
 <td><code>C:\Program Files\Orthanc Server\Configuration\orthanc.json</code>
 and <code>worklists.json</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Health check</td>
 <td><code>http://127.0.0.1:8042/system</code> on the server itself</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>What is published right now</td>
 <td><code>http://127.0.0.1:8042/worklists</code> — see <em>Seeing
 exactly what a scanner would get</em></td>
@@ -991,11 +992,11 @@ the server itself:</p>
 <col style="width: 50%" />
 </colgroup>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code>http://127.0.0.1:8042/worklists</code></td>
 <td>every published entry</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>http://127.0.0.1:8042/worklists/&lt;order number&gt;</code></td>
 <td>just that one, e.g. <code>.../worklists/OR26-00046110</code></td>
 </tr>
@@ -1060,13 +1061,13 @@ like an incompatibility rather than a configuration difference.</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>The device insists on</th>
 <th>What to do</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>A particular Called AE title</strong> it will not let you
 edit</td>
 <td>Install with <code>-AcceptAnyCalledAet</code>. The server then
@@ -1074,11 +1075,11 @@ answers whatever a device calls it. Verified against devices calling
 <code>PHILIPS_MWL</code>, <code>WORKLIST</code> and
 <code>HDI5000</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Port 104</strong>, the standard DICOM port</td>
 <td><code>-DicomPort 104</code>. Nothing else changes</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Querying with almost no filters</strong> — no date,
 sometimes not even a modality</td>
 <td>Already handled. This server answers a query with an empty Scheduled
@@ -1163,30 +1164,30 @@ in the warning below.</li>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Field</th>
 <th>Value</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Device Type</td>
 <td><strong>DICOM Worklist Server</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Device Name</td>
 <td>anything — an alias for the console’s own lists</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>AE Title</td>
 <td>the server’s called AE title, <code>MP10MWL</code> unless it was
 installed with another. Exact, or the association is refused</td>
 </tr>
-<tr class="even">
+<tr>
 <td>IP Address</td>
 <td>the worklist server</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Port</td>
 <td><code>104</code>, or whatever <code>-DicomPort</code> the server was
 installed with</td>
@@ -1231,27 +1232,27 @@ machine the steps land as:</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Do this</th>
 <th>It tells you</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code>Test-Mwl.ps1 -ExpectedSpoolPath &lt;dir&gt;</code></td>
 <td>the server is healthy and both halves agree on the directory</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Verify</strong> on the scanner’s new device entry</td>
 <td>network, port, called AE title</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>AutoTasks.exe --mwl-selftest &lt;dir&gt; US &lt;the scanner&#39;s own AE title&gt;</code>,
 then <strong>Update Worklist</strong></td>
 <td>expect <code>MP10 SELFTEST / DO NOT SCAN</code>. Proves the file
 format and station routing with no patient data involved</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>AutoTasks.exe --mwl-run</code>, then open
 <code>http://127.0.0.1:8042/worklists/&lt;a US order number&gt;</code>
 on the server</td>
@@ -1259,11 +1260,11 @@ on the server</td>
 absent, no Imaging Stations row matched, and nothing will appear on the
 scanner</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Update Worklist</strong> again</td>
 <td>real patients, right names, accession = encounter number</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Scan one patient from the list and find the study in the PACS</td>
 <td>the acceptance test. Mp10 issues the Study Instance UID now, so this
 is the step that proves the loop closes</td>
@@ -1325,7 +1326,7 @@ empty</h2>
 <col style="width: 25%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>#</th>
 <th>Check</th>
 <th>How</th>
@@ -1333,20 +1334,20 @@ empty</h2>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>1</td>
 <td>Are files being written?</td>
 <td>Look in the worklist directory</td>
 <td>Go to <em>Nothing is being published</em></td>
 </tr>
-<tr class="even">
+<tr>
 <td>2</td>
 <td>Do the two halves agree on the directory?</td>
 <td><code>Test-Mwl.ps1 -ExpectedSpoolPath &lt;the Mp10 setting&gt;</code></td>
 <td>Fix <code>MWL_SPOOL_PATH</code>, or re-run
 <code>Install-Mwl.ps1</code> with <code>-SpoolPath</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>3</td>
 <td>Is Orthanc actually serving?</td>
 <td><code>Test-Mwl.ps1</code> — “Worklist plugin is serving <em>n</em>
@@ -1354,13 +1355,13 @@ entries”, or open <code>http://127.0.0.1:8042/worklists</code> and read
 one</td>
 <td>Go to <em>The server is not answering</em></td>
 </tr>
-<tr class="even">
+<tr>
 <td>4</td>
 <td>Does the scanner reach it?</td>
 <td><code>--mwl-selftest</code>, then query from the scanner</td>
 <td>Go to <em>The scanner cannot connect</em></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>5</td>
 <td>Does the scanner filter by something we do not publish?</td>
 <td>Ask it to query with no filters, or by date only</td>
@@ -1375,38 +1376,38 @@ one</td>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Symptom in <code>AutoTasks.out</code></th>
 <th>Cause</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>No <code>WriteWorklistFiles</code> lines at all</td>
 <td><code>AUTOTASKS / EXPORT_MWL</code> is not <code>YES</code>, or the
 service was not restarted after it was set</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>no .wl written -- AUTOTASKS/MWL_SPOOL_PATH is empty</code></td>
 <td>The path setting is blank</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>ABORTED -- AUTOTASKS/MWL_SPOOL_PATH does not exist</code></td>
 <td>The path is wrong, or the directory was deleted. AutoTasks will not
 create it: a mistyped path that created itself would look like it was
 working</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>active set size 0</code> with orders on today’s schedule</td>
 <td>The encounters are closed or inactive, or the dates fall outside
 <code>MWL_WINDOW_DAYS</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>no modality (not emitted)</code> accounts for everything</td>
 <td>The revenue-code mapping is not filled in. Nothing at all can be
 published until at least one code maps</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>write failures</code> is not <code>0</code></td>
 <td>Permissions on the worklist directory, or the disk is full</td>
 </tr>
@@ -1432,34 +1433,34 @@ answers. When it does not:</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>What AutoTasks finds</th>
 <th>What it does</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>No answer, once</td>
 <td>Logs it and waits for the next cycle — the server may simply be
 starting</td>
 </tr>
-<tr class="even">
+<tr>
 <td>No answer, twice in a row</td>
 <td>Restarts the Orthanc service (ending its processes if it will not
 stop), waits for the port, and mails <strong>“worklist server stopped
 answering and was restarted”</strong> — or <strong>“worklist server is
 DOWN”</strong> if that did not bring it back</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Still no answer on later cycles</td>
 <td>Logs it. <strong>It does not restart again during the same
 outage.</strong> One reminder a day is mailed</td>
 </tr>
-<tr class="even">
+<tr>
 <td>It answers again</td>
 <td>Mails <strong>“worklist server is answering again”</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>A DICOM server answers but refuses the connection</td>
 <td><code>MWL_SCP_PORT</code> or <code>MWL_SCP_AET</code> does not match
 the server. Nothing is restarted; one notice a day says so. Correct the
@@ -1485,18 +1486,18 @@ how to read it.</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Symptom</th>
 <th>Cause</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code>Test-Mwl.ps1</code> says orthanc.json is <strong>not</strong>
 the Mp10 configuration</td>
 <td>Orthanc was upgraded. Re-run <code>Install-Mwl.ps1</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td>The service is “Running” but the HTTP port does not answer</td>
 <td>Orthanc itself died while its service wrapper stayed up — a healthy
 server shows two processes, <code>OrthancService</code> and
@@ -1505,7 +1506,7 @@ in the last lines of the newest file in
 <code>C:\Program Files\Orthanc Server\Logs</code>. Restart the service;
 if stopping hangs, end <code>OrthancService.exe</code> and start it</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>That log ends with <em>“The specified path does not point to a
 regular file: …&lt;order number&gt;.wl”</em></td>
 <td>The worklist plugin’s housekeeper met a file the generator had just
@@ -1515,24 +1516,24 @@ have the housekeeper on. <code>Test-Mwl.ps1</code> says so; re-running
 (<code>DeleteWorklistsOnStableStudy: false</code> in
 <code>worklists.json</code>)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>The log says a setting is <em>“defined in 2 different configuration
 files”</em></td>
 <td>An extra <code>.json</code> was added to Orthanc’s configuration
 directory. Orthanc refuses to start rather than guess. Remove it and
 re-run <code>Install-Mwl.ps1</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>Worklist server is disabled by the configuration file</code></td>
 <td><code>worklists.json</code> has <code>Enable: false</code> — again,
 usually an upgrade</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Service start type is not Automatic</td>
 <td>It will not come back after a reboot. <code>Install-Mwl.ps1</code>
 sets this</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>Test-Mwl.ps1</code> warns <strong>Orthanc cannot list the
 directory (HTTP 400)</strong></td>
 <td>Something in the worklist directory is not readable as DICOM —
@@ -1540,7 +1541,7 @@ usually a zero-length file, or something the generator did not write.
 <strong>Scanners are unaffected</strong>: a C-FIND skips the bad file
 and answers normally. Find it and delete it</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>Test-Mwl.ps1</code> says <em>n</em> files are <strong>not
 being served</strong></td>
 <td>Same cause, seen from the other side: Orthanc parsed fewer files
@@ -1556,35 +1557,35 @@ verbose logging, which names the file</td>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Symptom at the scanner</th>
 <th>Cause</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><em>Called AE Title Not Recognized</em></td>
 <td>The scanner is calling the wrong AE title. It must match exactly,
 including case</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Association rejected, or refused</td>
 <td>The server was installed with <code>-Modality</code> and this
 scanner is not on the list, or it is querying from a different IP than
 the one recorded</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Times out with no response</td>
 <td>Firewall, or the wrong port. <code>Test-Mwl.ps1</code> confirms the
 port is listening and the rule is enabled — from there it is the network
 between the two</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Connects, returns nothing, no error</td>
 <td>It is reaching the server. This is now a data or matching problem,
 not a connection one</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Returns nothing, and the device’s clock is wrong</td>
 <td>The scanner asks for <em>its</em> today. If its date differs from
 the server’s, the dates do not match and nothing comes back. Check the
@@ -1645,51 +1646,51 @@ faults and are not</h2>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>What you see</th>
 <th>Why it is correct</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Files vanish from the worklist directory</td>
 <td>AutoTasks owns that directory and sweeps it every cycle. That sweep
 is what withdraws cancelled studies</td>
 </tr>
-<tr class="even">
+<tr>
 <td>A file you copied in by hand disappears</td>
 <td>Same sweep. Use <code>--mwl-selftest</code>, which is meant for
 this</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>unchanged</code> is large and <code>written</code> is
 <code>0</code></td>
 <td>Correct on a quiet cycle. Files are rewritten only when something
 changed</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Laboratory and office-visit orders are counted as “no modality”</td>
 <td>They are not imaging, and belong in that count. It is not a number
 that must reach zero — only the imaging codes in it matter</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>The worklist directory contains a <code>.tmp</code> file for a
 moment</td>
 <td>Files are written under a temporary name and renamed, so a scanner
 can never read a half-written one</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Orthanc refuses a C-STORE</td>
 <td>Deliberate. This server serves worklists and must never become an
 image archive</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>The worklist directory was emptied by hand, or restored from
 backup</td>
 <td>Nothing to do. The generator compares what is on disk, not only what
 it remembers writing, so the files come back on the next cycle</td>
 </tr>
-<tr class="even">
+<tr>
 <td>A study that has already been scanned is still on the list</td>
 <td>Expected — see <em>A finished study stays on the list</em></td>
 </tr>
@@ -1705,7 +1706,7 @@ it remembers writing, so the files come back on the next cycle</td>
 <col style="width: 25%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Section</th>
 <th>Entry</th>
 <th>Default</th>
@@ -1713,59 +1714,59 @@ it remembers writing, so the files come back on the next cycle</td>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code>GENERAL</code></td>
 <td><code>MODALITY-WORKLIST</code></td>
 <td><code>NO</code></td>
 <td>Whether the <code>modalitywl</code> table exists. Read during a file
 check</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>AUTOTASKS</code></td>
 <td><code>EXPORT_MWL</code></td>
 <td><code>NO</code></td>
 <td>Runs the generator every cycle</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>AUTOTASKS</code></td>
 <td><code>MWL_SPOOL_PATH</code></td>
 <td><em>(blank)</em></td>
 <td>The worklist directory. Blank publishes nothing</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>AUTOTASKS</code></td>
 <td><code>MWL_WINDOW_DAYS</code></td>
 <td><code>1</code></td>
 <td>Today +/- this many days</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>AUTOTASKS</code></td>
 <td><code>MWL_UID_ROOT</code></td>
 <td><em>(blank)</em></td>
 <td>Leave blank unless your organisation owns a registered DICOM root.
 Never invent one</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>AUTOTASKS</code></td>
 <td><code>MWL_SCP_PORT</code></td>
 <td><code>4242</code></td>
 <td>The DICOM server’s port, for the watchdog. <code>0</code> switches
 the watchdog off</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>AUTOTASKS</code></td>
 <td><code>MWL_SCP_AET</code></td>
 <td><code>MP10MWL</code></td>
 <td>The DICOM server’s AE title, for the watchdog</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>AUTOTASKS</code></td>
 <td><code>MWL_SCP_RESTART</code></td>
 <td><code>YES</code></td>
 <td>Whether the watchdog restarts the Orthanc service. <code>NO</code> =
 notices only</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>ERRORREPORTS</code></td>
 <td><code>NOTIFY_EMAIL</code></td>
 <td><em>(blank)</em></td>
@@ -1781,56 +1782,56 @@ Mp10 program fails). Blank = nobody is mailed</td>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Command</th>
 <th>What it does</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code>AutoTasks.exe --mwl-run</code></td>
 <td>One worklist cycle, printed to the screen. Nothing else runs</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>AutoTasks.exe --mwl-selftest &lt;dir&gt; [modality] [station AE]</code></td>
 <td>Publishes one fake study, with no database connection. Give it a
 station AE title to prove a station-filtering scanner</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>AutoTasks.exe --mwl-probe [port] [AE title]</code></td>
 <td>Asks the DICOM server whether it is answering, with no database
 connection. Changes nothing</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>AutoTasks.exe --mwl-watchdog</code></td>
 <td>The service’s own server check, on demand: restarts the Orthanc
 service if it is not answering, and sends the notice</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>Test-Mwl.ps1</code></td>
 <td>Reads both halves and reports what is wrong. Changes nothing</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>Test-Mwl.ps1 -ExpectedSpoolPath &lt;dir&gt;</code></td>
 <td>Also confirms both halves use the same directory</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>Capture-MwlQuery.ps1</code></td>
 <td>Shows live what each scanner sends: its AE title, its query, how
 many entries it got. Ctrl+C to stop; the only thing it changes is the
 log level, and it puts that back</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>Install-Mwl.ps1</code></td>
 <td>Installs or repairs the DICOM server. Safe to re-run, including
 while it is running</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>Install-Mwl.ps1 -AcceptAnyCalledAet</code></td>
 <td>Answers whatever Called AE title a device uses — for legacy
 equipment whose worklist AE title is fixed</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>Install-Mwl.ps1 -FilterByCallingAet</code></td>
 <td>A query that names no station gets only its caller’s station — for
 scanners that cannot filter by their own AE title. Every scanner then
@@ -1846,60 +1847,60 @@ carries</h2>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>The machine shows</th>
 <th>Mp10 source</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Patient name</td>
 <td>Patient record, as <code>Family^Given</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Patient ID</td>
 <td>Medical record number, padded to 8 digits — the same one your
 imaging system already knows</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Date of birth, sex</td>
 <td>Patient record</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Accession number</td>
 <td>The <strong>encounter</strong> number</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Requested procedure ID</td>
 <td>The <strong>order</strong> number — one study per order</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Description</td>
 <td>The item’s description</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Modality</td>
 <td>The revenue code’s modality</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Scheduled date and time</td>
 <td>The order’s start date, else the encounter’s admission date and
 time</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Referring physician</td>
 <td>The order’s requesting physician, else the encounter’s doctor</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Scheduled station AE title</td>
 <td>The scanner it is booked on, from Imaging Stations. Absent when that
 (location, modality) is not mapped</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Station name and location</td>
 <td>The same row’s label and the encounter’s site, for display</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Study identifier</td>
 <td>Issued once by Mp10 and never changed</td>
 </tr>

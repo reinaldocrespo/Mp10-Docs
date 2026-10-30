@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <meta name="dcterms.date" content="2026-10-22" />
+  <meta name="dcterms.date" content="2026-10-30" />
   <title>shrink-image-tables</title>
   <style>
 code{white-space: pre-wrap;}
@@ -171,44 +171,44 @@ of a production parity snapshot (2026-08-04, walking every in-record
 9-byte memo reference) found:</p>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th></th>
 <th>patientsignatures</th>
 <th>patinsurances</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>records</td>
 <td>114,891</td>
 <td>259,130</td>
 </tr>
-<tr class="even">
+<tr>
 <td>blobs present</td>
 <td>114,731 (<code>image</code>)</td>
 <td>57,450 (<code>cardimage</code>)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>avg / max blob</td>
 <td>65.5 KB / 197 KB</td>
 <td>69.6 KB / 485 KB</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>.adm</code> size</td>
 <td>7,344 MB</td>
 <td>3,907 MB</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>orphaned + slack</td>
 <td>~0.0%</td>
 <td>~0.0%</td>
 </tr>
-<tr class="even">
+<tr>
 <td>memo block size</td>
 <td>8 bytes</td>
 <td>8 bytes</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>used of the 2³²-block cap (32 GB at block 8)</td>
 <td>22.4%</td>
 <td>11.9%</td>
@@ -275,34 +275,34 @@ second q75→q75 pass gains nothing and writes nothing).</p>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th></th>
 <th>ADS v11</th>
 <th>ADS v12+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Pack call issued</td>
 <td><code>sp_PackTable( name )</code></td>
 <td><code>sp_PackTable( name, 256 )</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Reclaims replaced memo chains</td>
 <td>yes</td>
 <td>yes</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Memo block size after pack</td>
 <td>unchanged (stays 8)</td>
 <td>changed to 256 bytes</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Blob-count cap after pack</td>
 <td>32 GB <code>.adm</code> (block 8)</td>
 <td>1 TB <code>.adm</code> (block 256)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Is that enough?</td>
 <td>yes — post-shrink usage is ~3% of the 32 GB cap</td>
 <td>yes</td>
@@ -376,7 +376,7 @@ this release.</li>
 <col style="width: 16%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Site / server</th>
 <th>ADS ver</th>
 <th>(a) probe default</th>
@@ -386,7 +386,7 @@ this release.</li>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td></td>
 <td></td>
 <td></td>

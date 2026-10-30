@@ -1021,19 +1021,72 @@ Right-click it, or press F9, to see the claim's status history.
 
 The *Filter* panel on the left narrows the grid by any combination of:
 
-- **Status** — one flag, or *Missing Flag* for claims with no status at all;
+- **Status** — one flag, or *Missing Flag* for claims with no status at all
+  (no flag, or the *Null* flag 0);
 - **Ins** — one payer;
 - **Srv From / Srv Thru** — dates of service;
 - **Bill From / Bill Thru** — billing dates;
 - **Wrk From / Wrk Thru** — the date the claim was created;
-- **Med Rec** — one patient.
+- **Med Rec** — one patient;
+- **Primary claims only** — leaves out complementary (secondary) claims.
 
 Switch the filter on with its LED. To jump to one claim, sort by *ClaimKey*
 and press F8.
 
-**Filter From File** shows exactly the claims on a list you have — a payer's
-rejection report, for instance. Paste the claim numbers into its grid, or
-point it at a text file with one per line, and click *Run Filter*.
+### Filter From File: claims from a list you have
+
+**Filter From File**, the last link in the side panel, shows exactly the
+claims on a list you have: a payer's rejection report, a spreadsheet from a
+collections review, an email with claim numbers in it. The window opens with
+an empty list; fill it, check it, and click *Run Filter*.
+
+**Filling the list:**
+
+- **From a file.** Click the magnifier beside *Filename* and pick the file.
+  Every claim number in it is listed, wherever it sits in the file: one per
+  line, several on a line, inside a sentence, in any column of a spreadsheet.
+  PDF, Excel (*.xlsx* and the older *.xls*), Word (*.docx*), text, CSV,
+  tab-delimited, XML, web pages and scanned images (TIFF, PNG, JPEG, read by
+  OCR) all work.
+- **PDF files.** A PDF from a payer portal or a clearinghouse holds real text
+  and is read at once. A **scanned** PDF is only pictures of pages: Mp10
+  reads each such page with OCR, the same reader that fills in insurance
+  cards, which takes a few seconds a page. A window shows which page it is
+  on; *Cancel* stops after that page and keeps the claims already found.
+  OCR can misread a smudged number, so compare the count with the report —
+  a number it cannot read whole is left out, never guessed.
+  If the window says the OCR files are missing, the workstation can still
+  read text PDFs; scanned pages need the card-reading files installed.
+- **By pasting.** Copy any text that holds claim numbers, click in the list,
+  and press Ctrl+V. Only the claim numbers are taken from it.
+- **By typing.** Press the down arrow on the last row to open an empty one,
+  type the claim number, and press Enter.
+
+A claim number is *CL*, two digits, a dash and eight digits —
+CL26-00012345. Lower case is fine; it is shown in capitals. Anything else is
+refused: a typed number that does not have that shape gets a message, and
+partial numbers in a file (seven or nine digits, say) are skipped rather than
+guessed. Each claim is listed once, however often the file repeats it, and
+picking a second file adds its claims to the ones already listed.
+
+**Checking the list.** The rows are numbered, and the count under the list
+(*37 ClaimKeys*) tells you how many claims the filter will show — compare it
+with the report you started from. Select a row and press Del to remove it.
+*Open File* opens the file you picked in its own program (Excel, Notepad), so
+you can see what was in it. *Run Filter* is available as soon as the list holds
+one claim.
+
+*Run Filter* shows only the listed claims; the *Filter* panel's other
+settings are ignored while it is on. *Cancel Filter* closes the window and
+shows every claim again. The window can be made larger by dragging its edge,
+and opens at that size next time.
+
+**For the administrator.** Files are read on the workstation; nothing is sent
+anywhere. PDFs need one file beside the program, `pdfium.dll`, which ships
+through the updates folder like the other DLLs — put it there before the
+first program that reads PDFs. Scanned pages also need the card-reading files
+(`tessdata\eng.traineddata` and its DLLs). A workstation missing either says
+so when a PDF is picked; every other kind of file still works.
 
 ## Doing things with claims
 
@@ -1206,8 +1259,9 @@ Click **Refresh** and corrected claims leave the list.
 **2. Claims with no answer.** A claim that has heard nothing at all after a
 couple of weeks may never have reached the payer. Filter the Claims grid by
 *Missing Flag* and a range of bill dates, and check those claims. The
-dashboard shows the count of primary claims with no status and the date of
-the oldest.
+dashboard shows the count of primary claims with no status served in the last
+90 days and the date of the oldest; click it and the grid opens with that
+filter set.
 
 **3. Claims stuck in received or partly paid.** *Reports → Claims Status*
 lists claims with an insurance balance by flag and payer, with **Days** —
@@ -1305,6 +1359,14 @@ until someone posts the remittance. Setting up both is described in the
 *Mp10 AutoTasks* guide, chapters *Electronic remittances: the two kinds*,
 *X12 835 electronic remittances* and *Electronic remittances (EOB / ERA
 PDFs)*.
+
+A PDF remittance that AutoTasks could not import safely (a possible repeat, a
+claim number it could not match, an amount that looks wrong) is not imported
+and not archived: it waits in the `review` sub-folder of the watched folder,
+with a short text file saying why. Staff enter it by hand, using the **EOB**
+tab of *Fetch Claims* (see *Entering a remittance by hand*): its
+**AutoTasks review folder...** button lists what is waiting there, and the
+EOB is read, previewed and loaded like any other. Or ask support.
 
 A paper EOB that arrives by mail can be entered by hand in the same window:
 see *Entering a remittance by hand*.
@@ -1500,9 +1562,26 @@ and remembered exactly like an electronic one.
 3. Add the claims on the EOB:
    - press Insert (or right-click → *Add New Line*) and type the claim number
      in *ClaimKey / Bill-Code*: the claim's lines load; or
-   - click **Fetch Claims Set** to load many claims at once — all the unpaid
-     claims of the ticked payers for a range of dates, or a list of claim
-     numbers you type in.
+   - click **Fetch Claims Set** to load many claims at once. Its window has
+     three sources, one per tab, and the choice at the bottom follows the tab
+     you work on and the file you pick:
+     - *Dates* (the default) — the unpaid claims of the ticked payers for a
+       range of service or billing dates;
+     - *EOB from Scanner* — pick the EOB's PDF or scanned image (TIFF, PNG,
+       JPEG), or click *Acquire EOB From Scanner* to scan it, or click
+       **AutoTasks review folder...** to pick one AutoTasks held back (see
+       *Loading an EOB's amounts*). Mp10 reads the EOB, scanned pages through
+       OCR, and shows a preview of its lines before anything is loaded. On a
+       new remit the check number and date are filled in when the EOB shows
+       them. If the layout is not recognised, only the claim numbers are read;
+     - *From list of ClaimKeys* — type claim numbers (down-arrow past the last
+       row opens a new one), paste them with Ctrl+V, or pick any other file
+       (Excel, text, CSV, Word) on the EOB tab: its claim numbers land here
+       and this tab comes forward.
+
+     **Run** loads the claims of the payer in *Insurance Co* that have no
+     insurance payment yet; the count of claims found and matched shows on
+     the EOB tab.
 4. On every line, **enter what the EOB says**. Mp10 fills *Paid* with the
    expected amount to save typing, so correct each one that differs. Enter
    *Adj*, *Deduct*, *CoIns*, and the *ICN* from the EOB.
@@ -1510,6 +1589,101 @@ and remembered exactly like an electronic one.
    by the description. Codes entered this way count toward the denial history,
    like the ones that come in electronically.
 6. When *Diff.* is zero, **Save Remit**, then **Post Remit**.
+
+## Loading an EOB's amounts
+
+On the *EOB from Scanner* tab, picking a PDF or scanned image (or typing its
+path) reads it. A progress bar shows the page being read, and **Cancel** on it
+stops the read: nothing is loaded. The file name stays in the field but is not
+read again when you click elsewhere; pick the file again, press **Run** or open
+it from the review folder to read it. While an EOB is being read, **Run**, the
+file picker, the scanner button and the review folder button do nothing. Enter
+*Insurance Co* first; it decides which claim receives the lines when a claim has
+a complementary insurance.
+
+The **EOB preview** window then lists every line the EOB prints, with the
+check number, date and payer on top, how many pages needed OCR, any warnings,
+and any remittance in Mp10 that already holds this check or this PDF. It opens
+at the size you last left it.
+
+- **Load** (the first column) is the tick. Click **Tick all** or **Untick all**,
+  or press the space bar or double-click on a line to tick or untick it.
+- A line starts **unticked** when something is wrong with it. Its *Reasons*
+  column says what, in words: the claim was not found, the code is not billed
+  on the claim, the claim was moved to the complementary claim, the line was
+  already paid by this payer on another check, or the paid amount is more than
+  allowed, billed, the check total or the ceiling. Lines that need attention
+  are red; lines moved to a complementary claim are blue. You may tick any of
+  them if you are sure.
+- **Load into remittance** loads the ticked lines. **Cancel** loads nothing.
+
+Only the lines the EOB prints are loaded, denied ones included. A line the
+claim has but the EOB does not print is left out, so the window holds the same
+rows AutoTasks would write for the same EOB. Per line, *Paid*, *Adj*,
+*Deduct*, *CoIns*, the reason codes and the *ICN* come from the EOB. The *ICN*
+is filled in only when no page of the EOB was read by OCR (a scanned number is
+shown in the preview but not stored, because a misread number would overwrite
+the claim's). A claim the EOB prints in two blocks is loaded as two groups of
+lines.
+
+After loading, *Claims Pd* is the total of the loaded lines and the box under
+the EOB tab's buttons says how many claims and lines were loaded and how many
+left out (scroll the box when it holds more lines than it shows). If the EOB
+prints a check total that differs from *Check Amt*, the tab says so
+(*missing lines or PLB*); this is a warning, not a block, so add the *PLB
+Adj* or the missing lines. Nothing is saved until **Save Remit**, and nothing
+is posted until **Post Remit**.
+
+Messages you may see instead of the preview:
+
+- *This EOB is already in Remits: Check ..., ... -- posted.* The check is
+  posted. Nothing is loaded; open it from the Remittances list.
+- *These claims are already paid by this payer on a posted check.* Most of the
+  EOB's lines were paid before. Nothing is loaded.
+- *Could not check Remits for this EOB; try again.* Mp10 could not read
+  whether the EOB is already in Remits, so it loads nothing rather than risk
+  entering it twice. Try again in a moment.
+- *This EOB is made out to another practice.*
+- *This EOB's layout was not recognised: only its claim numbers were read.*
+  The claims load as in the paragraph above, with *Paid* set to the expected
+  amount for you to correct.
+- *Save or clear the current remittance first.* A second EOB cannot be loaded
+  while the window holds changes that are not saved. The message comes before
+  the EOB is read, whatever its layout, so no time is spent on OCR. Save Remit
+  (or start a new one), then load the next EOB. A Save Remit that failed leaves
+  the window unsaved too, so its lines are not lost. Once the window is saved,
+  the next EOB starts a new remittance by itself (the saved one leaves the
+  window, *Insurance Co* stays).
+- *The EOB's file name is too long for the FileName column in Remits.* Rename
+  the PDF and pick it again. Save Remit checks the same thing again, because the
+  *Check #* is part of the name: if you lengthened the *Check #* after loading,
+  Save refuses and saves nothing. Shorten it, or clear the window, rename the
+  PDF and load it again.
+
+If the check is already in Remits but **not posted** (an earlier import got
+part of it), Mp10 opens that remittance and Load adds only the claims it does
+not have, including claims the check holds under another payer that the
+window does not show. A line the check already holds under the primary claim
+is not loaded again under the complementary claim. *Claims Pd* is then the total of every line in the
+window. **Cancel** leaves the remittance as it was opened.
+
+**Save Remit** records the EOB's file name (`835_<check>_<pdf name>`, the same
+name AutoTasks gives) on the rows it loaded from the EOB, so a later AutoTasks
+run sees the EOB as already imported. Every other row keeps its file name:
+remittances not loaded from an EOB, and the rows a check already had when an
+EOB was added to it. Such a check shows in the Remittances list as two file
+name groups, as when AutoTasks adds to a check. When the PDF is in the watched
+folder (`EOBIMAGESPATH`) or its `review` sub-folder, Save also moves it to the
+`history` sub-folder (creating it when it is missing), with the JSON and
+reason file `review` holds for it; a PDF picked from anywhere else
+(Downloads, the desktop) is never moved. The folder counts however you reached
+it: through a mapped drive letter or its network (`\\server\share`) path. If a file cannot be moved, Save says
+so; the remittance is saved all the same. If Save Remit could not write every
+line, the PDF stays where it is: run Save Remit again.
+
+**AutoTasks review folder...** lists the EOBs waiting in `review` (newest
+first, with the date, the refusal, the check, the PDF and where the PDF is).
+Pick one and it is read and previewed as above.
 
 # Other ways to enter a payment
 

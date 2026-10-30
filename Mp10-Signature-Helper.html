@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-10-22" />
+  <meta name="dcterms.date" content="2026-10-30" />
   <title>Mp10 — Signature Helper</title>
   <style>
 code{white-space: pre-wrap;}
@@ -23,8 +23,9 @@ vertical-align: middle;
 }
 .display.math{display: block; text-align: center; margin: 0.5rem auto;}
 
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -212,7 +213,7 @@ a { color: inherit; }
 <p class="subtitle">Signature capture and document scanning at the
 workstation, for Mp10 Web</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">22 October 2026</p>
+<p class="date">30 October 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -312,19 +313,19 @@ name when scanning was added to it. If you are here because a
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>It does</th>
 <th>Which is</th>
 <th>Covered in</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Patient signatures on a <strong>Topaz pad</strong></td>
 <td>the original job</td>
 <td><em>Installing it</em></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Scanning</strong> a document or a card</td>
 <td>added later, same program</td>
 <td><em>Scanning</em></td>
@@ -357,50 +358,50 @@ on the machine in front of you and use that.</p>
 <col style="width: 50%" />
 </colgroup>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Program</td>
 <td><code>MpSigSrv.exe</code>, in the Mp10 program folder
 (<code>C:\Mp10</code> on a typical install)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Runs on</td>
 <td>the workstation with the pad or the scanner, in the signed-in user’s
 session</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Started by</td>
 <td>the workstation installer’s logon task, for whoever signs in — see
 <a href="#it-is-not-a-service">It is not a service</a></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Restarted by</td>
 <td><strong>Restart Signature Pad</strong>, the shortcut on every
 desktop (<code>MpSigSrv.exe -restart</code>) — see <a href="#restarting-it">Restarting it</a></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Port</td>
 <td><strong>6266</strong> (MpPrintSrv is 6265; they coexist)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Is it running?</td>
 <td>open <a href="http://127.0.0.1:6266/ping" class="uri">http://127.0.0.1:6266/ping</a> in the browser on that
 PC</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>What can it scan?</td>
 <td>open <a href="http://127.0.0.1:6266/scanners" class="uri">http://127.0.0.1:6266/scanners</a> on that PC</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Settings</td>
 <td><code>[RDD]</code> and <code>[SIGN]</code> in <code>Mp10.ini</code>,
 beside the exe</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Written by it</td>
 <td><code>MpScanners.ini</code>, beside the exe — what this desk’s
 scanners can do</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Logs</td>
 <td><code>MpSigSrv.log</code> and <code>Topaz.log</code>, beside the
 exe</td>
@@ -496,14 +497,14 @@ hold one image, and a scan replaces what is there, exactly as
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>What you see</th>
 <th>What it means</th>
 <th>What to do</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><em>The signature helper is not answering on this
 workstation</em></td>
 <td>Either MpSigSrv is not running here, <strong>or</strong> its
@@ -513,32 +514,32 @@ tell those apart.</td>
 <code>ORIGIN</code> <strong>first</strong>; it is the more common of the
 two.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>No operator code for the signed-in user</em></td>
 <td>This Mp10 Web account has no Operator set. The signature would not
 record who witnessed it, so it is refused.</td>
 <td>Set an Operator on that account in the desktop <strong>Admin →
 Users</strong>.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>The consent text for this signature cannot be read</em></td>
 <td><code>sys_registry</code> points at a consent file the server cannot
 open.</td>
 <td>IT task — see <a href="#the-consent-text">The consent text</a>.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>The signature pad could not be activated</em></td>
 <td>MpSigSrv could not talk to the pad.</td>
 <td>Check the pad is plugged in and <code>[Tablet] TabletComPort</code>
 in <code>C:\Windows\SigPlus.ini</code> matches its COM port.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>The pad shows nothing, or the wrong size text</td>
 <td>The pad geometry is wrong.</td>
 <td>See <a href="#telling-mpsigsrv-which-pad">Telling MpSigSrv which
 pad</a>.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>The capture did not finish within 300 seconds</em></td>
 <td>Nobody completed the signature and the helper gave up.</td>
 <td><strong>Restart it</strong> — double-click <strong>Restart Signature
@@ -548,7 +549,7 @@ the same timeout puts the helper into a state where it refuses every
 capture <em>and every scan</em> until it is restarted, and it says
 so.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>The signature helper is busy with … and will not restart while
 it is</em> (409, from a Restart attempt)</td>
 <td>Deliberate, not a fault. A capture or scan was actually in progress
@@ -576,21 +577,21 @@ scanning, restart the helper before looking at the pad.</p>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>What you see</th>
 <th>What it means</th>
 <th>What to do</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>The <strong>Scan</strong> button is greyed out</td>
 <td>MpSigSrv is not answering at this desk — not running, or its
 <code>ORIGIN</code> does not list this site.</td>
 <td>The same fix as a pad that will not start: <a href="#check-it">Check
 it</a>.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>The signature helper is running on this workstation, but it can
 see no scanner</em></td>
 <td>The helper answered; Windows reports no scanner.</td>
@@ -598,45 +599,45 @@ see no scanner</em></td>
 again</strong>. If it is on and connected, see <a href="#when-a-scanner-is-not-found">When a scanner is not
 found</a>.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>The admin page says <em>this build predates scanning</em></td>
 <td>The helper at this desk is an older build. It has no scanning in it
 at all.</td>
 <td>Copy the current <code>MpSigSrv.exe</code> to that desk — <a href="#updating-a-workstation-later">Updating a workstation later</a>.
 Nothing else is wrong.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>A message naming the driver, after several seconds</td>
 <td>The scanner itself refused or failed — paper jam, lid, cable,
 driver.</td>
 <td>The text is the driver’s own. Fix what it names and scan again.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>That scan is N MB, over the 4 MB limit</em></td>
 <td>Too many pages in one document.</td>
 <td>Attach what you have and scan the rest as a second document, or
 choose a lower resolution.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>The scan works but the <strong>card is not cropped</strong></td>
 <td>The crop found nothing darker than the background, so it kept the
 whole page rather than fail.</td>
 <td>Usually a <strong>dark or open scanner lid</strong>. Close the lid.
 An uncropped card is still a usable card.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Scanning stops after one page from the feeder</td>
 <td>The device reported no more paper.</td>
 <td>See <a href="#what-has-never-been-tested">What has never been
 tested</a> — the feeder is the least-proven path here.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>A scan is slow</td>
 <td>Normal. A page takes several seconds, and the helper does one
 pad-or-scanner job at a time.</td>
 <td>Wait.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>/ping</code> or <code>/status</code> does <strong>not</strong>
 answer while a scan runs</td>
 <td><strong>Not normal.</strong> Those are answered on a separate thread
@@ -695,17 +696,17 @@ run:</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Command</th>
 <th>What it does</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code>MpSigSrv.exe -listen</code></td>
 <td>run normally — what the logon task uses</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>MpSigSrv.exe -restart</code></td>
 <td>replace a running helper, or start one if nothing answers</td>
 </tr>
@@ -809,36 +810,36 @@ scan stops answering after that — see <a href="#restarting-it">Restarting it</
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>File</th>
 <th>What it is</th>
 <th>Needed for</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code>MpSigSrv.exe</code></td>
 <td>the helper</td>
 <td>everything</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>Mp10.ini</code></td>
 <td>settings — copy <code>Mp10.ini.example</code> and edit</td>
 <td>everything</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>ace32.dll</code>, <code>axcws32.dll</code></td>
 <td>the <strong>32-bit</strong> Advantage client, already present on any
 PC running the Mp10 desktop apps</td>
 <td>everything</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>SigPlus.ocx</code></td>
 <td>Topaz’s control — installed and <strong>registered</strong> by
 Topaz’s own SigPlus installer, not copied by hand</td>
 <td>the pad</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>EZTW32.DLL</code></td>
 <td>the TWAIN layer, from the Mp10 desktop install set</td>
 <td>TWAIN scanners only</td>
@@ -1068,22 +1069,22 @@ meant to scan:</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Answer</th>
 <th>Meaning</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>A list with your scanner in it</td>
 <td>Working. What it reports is what the browser will offer.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>[]</code> — an empty list</td>
 <td>The helper is fine; Windows sees no scanner. <a href="#when-a-scanner-is-not-found">When a scanner is not
 found</a>.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>No such endpoint: GET /scanners</code></td>
 <td>This desk’s <code>MpSigSrv.exe</code> predates scanning. Copy the
 current one over.</td>
@@ -1228,21 +1229,21 @@ match:</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Keyed on</th>
 <th>So it re-probes when</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>the device’s id</td>
 <td>a different scanner is attached</td>
 </tr>
-<tr class="even">
+<tr>
 <td>the driver version</td>
 <td>the vendor’s driver is updated</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>the MpSigSrv build</td>
 <td>you deploy a new helper — a newer build may ask better
 questions</td>

@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-10-22" />
+  <meta name="dcterms.date" content="2026-10-30" />
   <title>Mp10 Web — Printing</title>
   <style>
 code{white-space: pre-wrap;}
@@ -23,8 +23,9 @@ vertical-align: middle;
 }
 .display.math{display: block; text-align: center; margin: 0.5rem auto;}
 
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -212,7 +213,7 @@ a { color: inherit; }
 <p class="subtitle">Encounter forms and labels from the browser, and the
 helper behind them</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">22 October 2026</p>
+<p class="date">30 October 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -396,14 +397,14 @@ cause. Nothing is ever printed silently or half-printed.</p>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>What it says</th>
 <th>What it means</th>
 <th>Who fixes it</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>No printer whose name contains <strong>LABELS</strong> <em>(or
 FORMS)</em> is installed on this workstation</td>
 <td>Mp10 Web now offers the printer list instead of stopping here — pick
@@ -412,18 +413,18 @@ missing, or the helper is a service that cannot see it: see <em>The
 session 0 trap</em></td>
 <td>Operator, then <strong>IT</strong> if the printer is absent</td>
 </tr>
-<tr class="even">
+<tr>
 <td>The print helper is not answering on this workstation</td>
 <td>MpPrintSrv is not running here, <strong>or</strong> its
 allowed-origins setting does not list this site</td>
 <td><strong>IT task</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Encounter not found</td>
 <td>The encounter number did not match a record</td>
 <td>Check the encounter</td>
 </tr>
-<tr class="even">
+<tr>
 <td>The print helper is restarting itself to clear it, and should accept
 work again within a minute. Choose a different printer when it
 does.</td>
@@ -432,7 +433,7 @@ restarts itself</strong> — nobody has to press anything.</td>
 <td>Wait about a minute, then print again, choosing a different
 printer.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>The print job did not finish within 60 seconds, and will not. End
 MpPrintSrv.exe on this workstation and start it again.</td>
 <td>The same wedge, on a copy that is <strong>not</strong> a service and
@@ -441,17 +442,17 @@ so cannot restart itself.</td>
 <strong>Admin → Print helper</strong>’s Restart button cannot help this
 copy** — it only works for a service.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Claim printing is not built yet</td>
 <td>Expected — see above</td>
 <td>—</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Report design is a desktop function</td>
 <td>Expected — see above</td>
 <td>—</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>An update was applied but nothing changed</em></td>
 <td>The service is still running the old program</td>
 <td><strong>Restart</strong> it, then check the <strong>Build</strong>
@@ -524,8 +525,8 @@ helpers in place — MpPrintSrv for printing and MpSigSrv for the
 signature pad and scanning — so the manual steps below are the fallback,
 and the explanation of what the installer is doing.</p>
 <p>At each desk, from an <strong>elevated</strong> PowerShell:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Expand<span class="op">-</span>Archive Mp10Web<span class="op">-</span>Workstation<span class="op">-</span>Install<span class="op">.</span><span class="fu">zip</span> <span class="op">-</span>DestinationPath C<span class="op">:</span>\Mp10Helpers</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>C<span class="op">:</span>\Mp10Helpers\Install<span class="op">-</span>Workstation<span class="op">.</span><span class="fu">ps1</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Expand-Archive Mp10Web-Workstation-Install<span class="op">.</span><span class="fu">zip</span> <span class="op">-</span>DestinationPath C<span class="op">:</span>\Mp10Helpers</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>C<span class="op">:</span>\Mp10Helpers\Install-Workstation<span class="op">.</span><span class="fu">ps1</span></span></code></pre></div>
 <p>It asks for the Mp10 program folder and the <strong>origin</strong> —
 the address staff open Mp10 Web at — and then:</p>
 <ul>
@@ -568,21 +569,21 @@ it cannot:</p>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th></th>
 <th>Why</th>
 <th>What to do instead</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code>ace32.dll</code>, <code>axcws32.dll</code></td>
 <td>SAP’s 32-bit ACE client. Redistribution is governed by your own ADS
 licence, and every PC running the Mp10 desktop already has it.</td>
 <td>Install the Mp10 desktop applications there. The installer checks
 for the files and names them if they are absent.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>SigPlus.ocx</code></td>
 <td>Topaz’s control is <strong>COM-registered</strong> by Topaz’s own
 SigPlus installer — copying the file would not work.</td>
@@ -600,25 +601,25 @@ and reports it.</td>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>File</th>
 <th>What it is</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code>MpPrintSrv.exe</code></td>
 <td>the helper itself</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>FrSystH.dll</code></td>
 <td>the report engine that renders the templates</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>ace32.dll</code> and <code>axcws32.dll</code></td>
 <td>the Advantage database client (both files)</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>Mp10.ini</code></td>
 <td>settings — copy <code>Mp10.ini.example</code> and edit it</td>
 </tr>
@@ -756,40 +757,40 @@ holding <code>MpPrintSrv.exe</code>:</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Command</th>
 <th>What it does</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code>MpPrintSrv.exe -i</code></td>
 <td>Install and start. In <code>services.msc</code> it appears as
 <strong>Structured Systems MpWeb Print Helper</strong>, not as
 <code>MpPrintSrv</code> — that is the service <em>name</em>, which is
 what <code>sc</code> and <code>Get-Service</code> want.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>MpPrintSrv.exe -u</code></td>
 <td>Stop and remove</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>MpPrintSrv.exe -start</code></td>
 <td>Start</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>MpPrintSrv.exe -stop</code></td>
 <td>Stop</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>MpPrintSrv.exe -restart</code></td>
 <td>Stop and start</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>MpPrintSrv.exe -status</code></td>
 <td>Report the service state</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>MpPrintSrv.exe -listen</code></td>
 <td>Run in the foreground instead, without installing</td>
 </tr>
@@ -889,17 +890,17 @@ is the normal case, and it is easy to end up testing the wrong one:</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Machine</th>
 <th>Needs MpPrintSrv?</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>The one serving Mp10 Web</td>
 <td><strong>No</strong> — unless somebody also uses a browser there</td>
 </tr>
-<tr class="even">
+<tr>
 <td>The one with the browser and the printer</td>
 <td><strong>Yes</strong></td>
 </tr>
@@ -946,19 +947,19 @@ Get-Service MpPrintSrv</code></pre>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>What you find</th>
 <th>What it means</th>
 <th>Fix</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>No such service</td>
 <td><code>-i</code> never ran, or ran without elevation</td>
 <td>Elevated prompt, <code>MpPrintSrv.exe -i</code></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Service exists, but <code>BINARY_PATH_NAME</code> names <strong>a
 different folder</strong> than the one you installed into</td>
 <td>A service was already registered on this desk. <code>-i</code>
@@ -969,12 +970,12 @@ installer never re-points one — so it is still running the
 <td><code>-stop</code> then <code>-u</code> using the
 <strong>old</strong> exe, then <code>-i</code> from the new folder</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Service exists, state <strong>Stopped</strong></td>
 <td>It started and died, or was never started</td>
 <td>Read the log, below</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Service <strong>Running</strong>, still nothing on the port</td>
 <td>The bind failed — something else holds 6265</td>
 <td>The log names it</td>
@@ -1046,7 +1047,7 @@ way:</p>
 <p>The connection is now proven and only the printer is left. Look at
 the <code>printers</code> block in <code>/status</code>, or the same
 thing formatted in <strong>Admin → Print helper</strong>:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="er">&quot;printers&quot;:</span><span class="fu">{</span><span class="dt">&quot;account&quot;</span><span class="fu">:</span><span class="st">&quot;SYSTEM&quot;</span><span class="fu">,</span><span class="dt">&quot;session0&quot;</span><span class="fu">:</span><span class="kw">true</span><span class="fu">,</span></span>
+<div class="sourceCode" id="cb15"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;printers&quot;</span><span class="er">:</span><span class="fu">{</span><span class="dt">&quot;account&quot;</span><span class="fu">:</span><span class="st">&quot;SYSTEM&quot;</span><span class="fu">,</span><span class="dt">&quot;session0&quot;</span><span class="fu">:</span><span class="kw">true</span><span class="fu">,</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;all&quot;</span><span class="fu">:</span><span class="ot">[</span><span class="st">&quot;Microsoft XPS Document Writer&quot;</span><span class="ot">,</span><span class="st">&quot;Microsoft Print to PDF&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;forms&quot;</span><span class="fu">:</span><span class="st">&quot;&quot;</span><span class="fu">,</span><span class="dt">&quot;labels&quot;</span><span class="fu">:</span><span class="st">&quot;&quot;</span><span class="fu">,</span><span class="dt">&quot;formsWhy&quot;</span><span class="fu">:</span><span class="st">&quot;none&quot;</span><span class="fu">,</span><span class="dt">&quot;labelsWhy&quot;</span><span class="fu">:</span><span class="st">&quot;none&quot;</span><span class="fu">,</span></span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;unusable&quot;</span><span class="fu">:</span><span class="ot">[</span><span class="er">...</span><span class="ot">]</span><span class="fu">}</span></span></code></pre></div>
@@ -1065,39 +1066,39 @@ table</h3>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th><code>/status</code></th>
 <th>Then</th>
 <th>Cause</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>No answer</td>
 <td><code>sc qc</code> shows another folder</td>
 <td>Old service still registered, running the old exe and old ini</td>
 </tr>
-<tr class="even">
+<tr>
 <td>No answer</td>
 <td>Service Stopped, log ends at <code>Service starting</code></td>
 <td>Dictionary unreachable, or ACE DLLs missing</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>No answer</td>
 <td>No such service</td>
 <td>Never installed, or <code>-i</code> ran unelevated</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Answers, wrong <code>origins</code></td>
 <td><code>started</code> is <strong>older</strong> than the ini</td>
 <td>Ini edited, helper not restarted</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Answers, wrong <code>origins</code></td>
 <td><code>started</code> is <strong>newer</strong> than the ini</td>
 <td>Wrong file edited — check the service’s folder</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Answers, right <code>origins</code></td>
 <td><code>forms</code> / <code>labels</code> empty</td>
 <td>Session 0 trap — printers, not networking</td>

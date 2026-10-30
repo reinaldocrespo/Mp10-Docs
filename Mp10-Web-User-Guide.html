@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-10-22" />
+  <meta name="dcterms.date" content="2026-10-30" />
   <title>Mp10 Web — User Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -148,7 +148,7 @@ a { color: inherit; }
 <p class="subtitle">Finding patients, working encounters, and everything
 the browser can do</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">22 October 2026</p>
+<p class="date">30 October 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -320,28 +320,28 @@ permission to ask for. As a rule of thumb:</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>If you are</th>
 <th>You see</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>admissions staff</td>
 <td>Patients and Encounters, and an encounter’s claims read-only —
 <strong>not</strong> the Claims page, Remittances, Submissions or
 Reports</td>
 </tr>
-<tr class="even">
+<tr>
 <td>billing staff</td>
 <td>Claims, Remittances, Submissions and Reports, with Patients and
 Encounters read-only</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>transcription</td>
 <td>the Modality worklist</td>
 </tr>
-<tr class="even">
+<tr>
 <td>an administrator</td>
 <td>Patients, Encounters, Claims, Reports, the worklist and the Admin
 screens — but posting a remittance, sending an 837 and entering an
@@ -619,17 +619,17 @@ It shows small marks telling you, at a glance, what an encounter already
 has:</p>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th>Mark</th>
 <th>Means</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>a pen nib</td>
 <td>a <strong>signature</strong> is on file for this encounter</td>
 </tr>
-<tr class="even">
+<tr>
 <td>a lined document</td>
 <td>this encounter has <strong>results</strong></td>
 </tr>
@@ -669,41 +669,41 @@ highlighted while a filter is on; Clear removes it.</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Flag</th>
 <th>Means</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>green</td>
 <td>paid in full — a payment is on file and the insurance balance is
 zero</td>
 </tr>
-<tr class="even">
+<tr>
 <td>yellow</td>
 <td>partially paid — a payment is on file and a balance is still
 owed</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>black</td>
 <td>overpaid — the insurance balance is below zero</td>
 </tr>
-<tr class="even">
+<tr>
 <td>red</td>
 <td>rejected — no payment, and the payer’s latest answer is a
 rejection</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>white</td>
 <td>no payment yet, but the payer has answered something else</td>
 </tr>
-<tr class="even">
+<tr>
 <td>blue, orange, pink, purple</td>
 <td>no payment, and the payer’s latest answer is one of the four
 statuses your site defines for itself</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>none</td>
 <td>no payment and no status yet</td>
 </tr>
@@ -814,21 +814,21 @@ at a glance:</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Dot</th>
 <th>Means</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>green</td>
 <td>every line of the check has been posted</td>
 </tr>
-<tr class="even">
+<tr>
 <td>red, “Unposted”</td>
 <td>none of it has been posted</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>red, “3 unposted”</td>
 <td>some of it posted and some did not — the count is how many lines are
 still out</td>
@@ -932,26 +932,26 @@ and a line is never separated from the explanation beneath it.</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>To</th>
 <th>You need</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>open Remittances and look</td>
 <td>the billing permission (<strong>BillingUsers</strong>)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>key, edit or delete an unposted remittance</td>
 <td>the same</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>post</strong> a remittance</td>
 <td><strong>remits.post</strong> as well — your administrator grants it
 in the desktop Admin module</td>
 </tr>
-<tr class="even">
+<tr>
 <td>print</td>
 <td>the billing permission</td>
 </tr>
@@ -1012,25 +1012,25 @@ file entirely:</p>
 <col style="width: 100%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Blocked because…</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>the claim has no CPT lines — nothing would be billed</td>
 </tr>
-<tr class="even">
+<tr>
 <td>the payer has no provider NPI on file — check the insurance
 definition</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>the claim has no insurance member number</td>
 </tr>
-<tr class="even">
+<tr>
 <td>the patient’s sex is not recorded as M or F</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>the patient’s date of birth is missing, or later than the service
 date</td>
 </tr>
@@ -1043,20 +1043,20 @@ the file, but you are told:</p>
 <col style="width: 100%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Warned because…</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>the patient-to-insured relationship on the claim is not one the 837
 accepts</td>
 </tr>
-<tr class="even">
+<tr>
 <td>the claim’s remarks are longer than 80 characters and will be
 truncated</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>the claim was already put in an earlier 837 file</td>
 </tr>
 </tbody>
@@ -1076,29 +1076,29 @@ first, and refreshes itself on its own while anything is still moving —
 you do not need to press anything to see a job’s status change.</p>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th>Status</th>
 <th>Means</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Queued</td>
 <td>waiting for AutoTasks to pick it up</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Building</td>
 <td>AutoTasks is building the file now</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Built</td>
 <td>the file exists; the Result column names it</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Failed</td>
 <td>AutoTasks could not build it; the Result column says why</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Cancelled</td>
 <td>you (or a colleague) cancelled it before it was built</td>
 </tr>

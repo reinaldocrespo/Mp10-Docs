@@ -156,11 +156,15 @@ This card covers the **last 90 days** of active encounters:
   an older encounter is work to do this week, so it is counted. Click the line
   to open the list.
 - **Paid claims** (green).
-- **Claims with no status** — primary claims sent but with no response
-  recorded yet. Secondary claims are not counted here.
-- **of N encounters · last 90 days** — the total the unbilled, paid and
-  no-status figures are counted from. The rejected figure has its own basis,
-  above.
+- **Claims with no status · served in the last 90 days** — primary claims
+  with no response recorded yet, counted by the claim's own date of service
+  (any encounter, active or not). Secondary claims are not counted here. Click
+  the line to open the Claims grid with its filter already set to exactly
+  these claims: *Missing Flag*, *Primary claims only* and *Srv From / Srv
+  Thru* on the same 90 days.
+- **of N encounters · last 90 days** — the total the unbilled and paid
+  figures are counted from. The rejected and no-status figures have their own
+  basis, above.
 - **Upcoming encounters pre-created** — encounters already entered for future
   dates. They are shown for information and are **not** counted as unbilled.
 
@@ -815,6 +819,7 @@ access to it.
 | Unbilled encounters above zero | Click the line; bill the visits that happened, inactivate the no-shows |
 | Old "Oldest unbilled since" date | Work that encounter first: its filing deadline is closest |
 | Rejected claims above zero | Click the line, read the reason, double-click to correct and resubmit |
+| Claims with no status above zero | Click the line; check the oldest first, and resubmit any claim the payer never received |
 | Possible duplicate patients | Click the line and review the records with whoever maintains patient records |
 | Unsigned encounters | Collect the signature before the claim goes out |
 | Red line in System health | Tell your server administrator the same day |

@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-10-22" />
+  <meta name="dcterms.date" content="2026-10-30" />
   <title>Mp10 Web — Installation</title>
   <style>
 code{white-space: pre-wrap;}
@@ -23,8 +23,9 @@ vertical-align: middle;
 }
 .display.math{display: block; text-align: center; margin: 0.5rem auto;}
 
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -211,7 +212,7 @@ a { color: inherit; }
 <h1 class="title">Mp10 Web — Installation</h1>
 <p class="subtitle">Installing and updating the browser application</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">22 October 2026</p>
+<p class="date">30 October 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -308,7 +309,7 @@ neither; a third goes to each desk that prints, signs or scans.</p>
 <col style="width: 25%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Bundle</th>
 <th>Runs on</th>
 <th>Installs</th>
@@ -316,20 +317,20 @@ neither; a third goes to each desk that prints, signs or scans.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code>mp10-prereqs-&lt;version&gt;.zip</code></td>
 <td>the server</td>
 <td>PHP 8.x ZTS x64 with <code>php_ads</code>, the 64-bit ACE client,
 Apache + <code>mod_fcgid</code></td>
 <td>only if the server lacks them</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>Mp10Web-Server-Installer.zip</code></td>
 <td>the server</td>
 <td>the web application, into that server’s Apache</td>
 <td>every install and update</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>Mp10Web-Workstation-Install.zip</code></td>
 <td>each workstation</td>
 <td>MpPrintSrv and MpSigSrv, pointed at the site</td>
@@ -398,7 +399,7 @@ sidecar beside it. <code>manifest.json</code> inside the zip verifies
 every file <em>once extracted</em>, but it cannot verify itself, or the
 zip that carries it — that is what the sidecar is for, and it has to be
 checked <strong>before</strong> you extract, not after:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Get<span class="op">-</span>FileHash <span class="op">.</span>\Mp10Web<span class="op">-</span>Server<span class="op">-</span>Installer<span class="op">.</span><span class="fu">zip</span> <span class="op">-</span>Algorithm SHA256</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Get-FileHash <span class="op">.</span>\Mp10Web-Server-Installer<span class="op">.</span><span class="fu">zip</span> <span class="op">-</span>Algorithm SHA256</span></code></pre></div>
 <p>Compare the <code>Hash</code> value against the contents of
 <code>Mp10Web-Server-Installer.zip.sha256</code> (a plain text file: the
 hash, two spaces, the filename). If they do not match, download again —
@@ -440,53 +441,53 @@ prompt:</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Parameter</th>
 <th>What it decides</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code>-InstallRoot &lt;path&gt;</code></td>
 <td>Where Mp10 Web is deployed. Default <code>C:\Mp10Web</code>.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>-PhpPath &lt;path to php.exe&gt;</code></td>
 <td>Which PHP serves it. Default: <code>php.exe</code> on
 <code>PATH</code>, else <code>C:\php\php.exe</code>.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>-ApacheService &lt;name&gt;</code></td>
 <td>Which Apache <strong>service</strong> it mounts into.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>-HttpdConf &lt;path&gt;</code></td>
 <td>The <code>httpd.conf</code> that service runs, if it is not the one
 derived from the service itself.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>-UrlPrefix &lt;path&gt;</code></td>
 <td>The URL path, e.g. <code>/mpweb</code>.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>-PublicOrigin &lt;scheme://host[:port]&gt;</code></td>
 <td>The address staff type.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>-DdPath</code> / <code>-AdsMode</code> /
 <code>-AdsUser</code></td>
 <td>The dictionary connection.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>-AnswersFile &lt;path&gt;</code></td>
 <td>Where remembered answers live. Default
 <code>%ProgramData%\Mp10Web\install-answers.json</code>.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>-NonInteractive</code></td>
 <td>Never prompt; use defaults and stop on anything that has none.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>-AdsPassword &lt;password&gt;</code></td>
 <td>For an unattended <strong>first</strong> install only — see the
 warning under “Remembered answers”.</td>
@@ -514,54 +515,54 @@ a refused one:</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Step</th>
 <th>What happens</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>0/8 Privileges</td>
 <td>Confirms you are elevated.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>1/8 Verify the bundle</td>
 <td>Hashes every file in <code>manifest.json</code> against what is
 actually on disk.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>2/8 Preflight</td>
 <td>Checks PHP’s version, bitness, thread-safety and the
 <code>ads</code> extension; finds the Apache service, its
 <code>httpd.conf</code> and its module files.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>3/8 Configuration</td>
 <td>Asks the questions below.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>4/8 Test the dictionary connection</td>
 <td>Connects to <code>mp.add</code> with what you just typed,
 <strong>before writing anything</strong>.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>5/8 Deploy files</td>
 <td>Copies the application into the install root, and sets the SPA’s
 <code>&lt;base href&gt;</code> to the URL path.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>6/8 Configuration file</td>
 <td>Writes <code>database.local.php</code> (fresh install only — see
 “Updating”).</td>
 </tr>
-<tr class="even">
+<tr>
 <td>7/8 Apache</td>
 <td>Renders <code>&lt;install root&gt;\apache\mp10web.conf</code>, adds
 one <code>Include</code> line to the site’s <code>httpd.conf</code>,
 validates it with <code>httpd -t</code>, and restarts Apache only if
 something changed.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>8/8 Database</td>
 <td>Runs the migration: creates the <code>web_users</code>,
 <code>web_groups</code>, <code>web_group_members</code> and
@@ -569,7 +570,7 @@ something changed.</td>
 creates no accounts and grants no permissions — see “Accounts” below —
 and reports how many active accounts the dictionary already has.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Smoke test</td>
 <td>Posts a login for a random username through the real URL and
 requires a 401 back.</td>
@@ -682,7 +683,7 @@ permissions key on:</p>
 <col style="width: 25%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>#</th>
 <th>What</th>
 <th>Where</th>
@@ -690,7 +691,7 @@ permissions key on:</p>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>1</td>
 <td><strong>MpWeb permissions on each dictionary group</strong> — the
 <code>web_groups</code> rows</td>
@@ -702,7 +703,7 @@ permissions</strong> — which reads as a broken application, not a
 missing setting. The update is additive and re-runs safely, so
 permissions added in a later release reach the site the same way.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>2</td>
 <td><strong>An MpWeb account for the operator</strong> — the
 <code>web_users</code> row</td>
@@ -711,7 +712,7 @@ permissions added in a later release reach the site the same way.</td>
 <code>is_active</code>. This is the credential itself; nothing else
 creates one.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>3</td>
 <td><strong>That operator’s membership of a dictionary
 group</strong></td>
@@ -742,37 +743,37 @@ role”; there is only dictionary group membership.</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Dictionary group</th>
 <th>Sees in Mp10 Web</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>Administrators</strong></td>
 <td>Patients and Encounters (edit), Claims (view and edit), Reports, the
 Modality worklist, and the Admin screens for the print and signature
 helpers</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Admission</strong></td>
 <td>Patients and Encounters (edit), and an encounter’s claims list
 read-only. <strong>No</strong> Claims page, Remittances, Submissions or
 Reports</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>BillingUsers</strong></td>
 <td>Patients and Encounters (read-only), Claims (view, edit, raise,
 print, payments), Remittances including <strong>Post</strong>,
 Submissions (Create 837 and Send), Reports</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>AdjustmentAuthUsers</strong></td>
 <td>Only the right to enter a non-zero adjustment on a payment line.
 Opens nothing on its own — it is granted <strong>in addition to</strong>
 BillingUsers, matching how the desktop authorises adjustments</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Transcription</strong></td>
 <td>The Modality worklist only</td>
 </tr>
@@ -841,21 +842,21 @@ do not live there, because the hardware they need is plugged into the
 operator’s own desk and a browser cannot reach it:</p>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th>Feature</th>
 <th>Needs, on each workstation</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Printing encounter forms, labels and results</td>
 <td><strong>MpPrintSrv</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Patient signatures on a Topaz pad</td>
 <td><strong>MpSigSrv</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Scanning documents and cards</td>
 <td><strong>MpSigSrv</strong> (same program)</td>
 </tr>
@@ -871,8 +872,8 @@ failed install.</strong></p>
 installer for this</h2>
 <p>The desk half has its own bundle, built alongside this one, which
 installs <strong>both</strong> helpers at a workstation:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>Expand<span class="op">-</span>Archive Mp10Web<span class="op">-</span>Workstation<span class="op">-</span>Install<span class="op">.</span><span class="fu">zip</span> <span class="op">-</span>DestinationPath C<span class="op">:</span>\Mp10Helpers</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>C<span class="op">:</span>\Mp10Helpers\Install<span class="op">-</span>Workstation<span class="op">.</span><span class="fu">ps1</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>Expand-Archive Mp10Web-Workstation-Install<span class="op">.</span><span class="fu">zip</span> <span class="op">-</span>DestinationPath C<span class="op">:</span>\Mp10Helpers</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>C<span class="op">:</span>\Mp10Helpers\Install-Workstation<span class="op">.</span><span class="fu">ps1</span></span></code></pre></div>
 <p>Run it elevated, at each desk that prints, signs or scans. It asks
 for the Mp10 program folder and the origin, copies
 <code>MpPrintSrv.exe</code>, <code>MpSigSrv.exe</code>,
@@ -1078,12 +1079,12 @@ and the web app was not given a second copy of any of them.</p>
 <col style="width: 50%" />
 </colgroup>
 <tbody>
-<tr class="odd">
+<tr>
 <td>AutoTasks is installed and running</td>
 <td>against the <strong>same dictionary</strong> the web app uses. See
 the <em>Mp10 AutoTasks</em> guide.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>AUTOTASKS</code> / <code>PROCESS_837_JOBS</code> is
 <code>YES</code></td>
 <td>in <code>sys_registry</code>. The default <strong>is</strong>
@@ -1091,13 +1092,13 @@ the <em>Mp10 AutoTasks</em> guide.</td>
 <code>NO</code>, and then nothing queued from the web is ever
 built.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>X12FILE_PATH</code> / <code>837</code> names a directory
 <strong>the service’s account can write</strong></td>
 <td>the built file is placed there. A path the desktop can reach but the
 service cannot fails the build, and the job says so.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>The clearinghouse settings the desktop already uses are in
 place</td>
 <td>sending reuses them; nothing is configured on the web side.</td>
@@ -1255,20 +1256,20 @@ workstation side</a>, and check the origin allowlist first.</p>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Message</th>
 <th>What it means</th>
 <th>What to do</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Run this from an elevated PowerShell. It writes to the Apache
 configuration and restarts the Apache service.</td>
 <td>PowerShell was not run as Administrator.</td>
 <td>Re-open PowerShell with “Run as administrator” and re-run.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>install.ps1</code> cannot be loaded because running scripts is
 disabled on this system / is not digitally signed.</td>
 <td>The server’s execution policy refuses unsigned scripts. The
@@ -1289,14 +1290,14 @@ first.</td>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Message</th>
 <th>What it means</th>
 <th>What to do</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>No manifest.json beside install.ps1 - is this an extracted Mp10 Web
 bundle?</td>
 <td><code>install.ps1</code> was run from somewhere other than the
@@ -1304,21 +1305,21 @@ extracted bundle.</td>
 <td>Run it from inside the extracted zip, next to
 <code>manifest.json</code>.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>&lt;n&gt;</code> file(s) missing or corrupt. Re-copy the
 bundle and extract it again.</td>
 <td>Extraction was incomplete, or a file changed after extracting.</td>
 <td>Delete the extracted folder and re-extract from a zip you have
 already checked against its <code>.sha256</code> sidecar.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>manifest.json claims <code>&lt;N&gt;</code> files but lists
 <code>&lt;M&gt;</code> - the manifest itself looks corrupt. Re-copy the
 bundle and extract it again.</td>
 <td><code>manifest.json</code> itself is damaged.</td>
 <td>Re-download the zip (checksum it first) and re-extract.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>This installer handles the ‘update’ flavour; this bundle says
 ‘<code>&lt;flavour&gt;</code>’.</td>
 <td>The extracted bundle is not an <code>update</code>-flavour
@@ -1336,21 +1337,21 @@ types.</td>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Message</th>
 <th>What it means</th>
 <th>What to do</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>PHP not found at ‘<code>&lt;path&gt;</code>’. Install PHP 8.x ZTS
 x64 with php_ads, or pass
 <code>-PhpPath &lt;path to php.exe&gt;</code>.</td>
 <td>No PHP at the default location or on <code>PATH</code>.</td>
 <td>Install PHP 8.x ZTS x64, or pass <code>-PhpPath</code>.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>The PHP probe produced no output. ‘<code>&lt;path&gt;</code>’ may
 not be a working PHP: <code>&lt;raw&gt;</code></td>
 <td>The file at that path is not a functioning
@@ -1358,12 +1359,12 @@ not be a working PHP: <code>&lt;raw&gt;</code></td>
 <td>Confirm the path is really <code>php.exe</code>; the quoted
 <code>&lt;raw&gt;</code> text is whatever it actually printed.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>PHP <code>&lt;version&gt;</code> found; Mp10 Web needs PHP 8.x.</td>
 <td>PHP is the wrong major version.</td>
 <td>Install PHP 8.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>PHP is <code>&lt;bits&gt;</code>-bit; Mp10 Web needs the x64 build.
 (The Mp10 DESKTOP applications are 32-bit - this is a different
 PHP.)</td>
@@ -1372,14 +1373,14 @@ because that is what happens to be on the machine already.</td>
 <td>Install a separate PHP 8 <strong>x64</strong> build for Mp10 Web; do
 not point it at whatever 32-bit PHP is already there.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>PHP is the NTS (non-thread-safe) build; php_ads.dll needs the ZTS
 build. Download the ‘Thread Safe’ x64 zip from windows.php.net.</td>
 <td>Wrong PHP thread-safety variant.</td>
 <td>Install the <em>Thread Safe</em> x64 zip, not the <em>Non Thread
 Safe</em> one.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>The Advantage PHP extension is not loaded - AdsConnection does not
 exist. Copy php_ads.dll into <code>&lt;ext_dir&gt;</code> and add
 extension=ads to <code>&lt;ini&gt;</code>. It also needs the 64-BIT ACE
@@ -1392,7 +1393,7 @@ with <code>php_ads.dll</code> in the named extension directory, and put
 the <strong>64-bit</strong> ACE DLLs on <code>PATH</code> — not the
 desktop’s 32-bit ones.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>php-cgi.exe not found beside ‘<code>&lt;path&gt;</code>’. Apache
 runs PHP through mod_fcgid, which needs the CGI build alongside the CLI
 one.</td>
@@ -1401,7 +1402,7 @@ one.</td>
 <td>Copy/install <code>php-cgi.exe</code> into the same folder — a PHP
 zip normally ships both.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>No Apache (httpd.exe) Windows service found on this machine. Mp10
 Web mounts into the site’s Apache; install Apache 2.4 as a service first
 (or, if it runs under another name, pass
@@ -1411,13 +1412,13 @@ Web mounts into the site’s Apache; install Apache 2.4 as a service first
 name it with <code>-ApacheService</code> if it exists under an
 unexpected name.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>No Apache service named ‘<code>&lt;name&gt;</code>’. Services found:
 <code>&lt;list&gt;</code></td>
 <td>The name given does not match any Apache service.</td>
 <td>Use one of the names listed in the message.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Service ‘<code>&lt;name&gt;</code>’ has no configuration file
 registered (no -f in its ConfigArgs), so its httpd.conf can only be
 guessed as ‘<code>&lt;path&gt;</code>’ …</td>
@@ -1430,7 +1431,7 @@ really uses, or re-register the service with <code>-f</code>. Do not
 accept the guess unless you know that service genuinely uses the default
 configuration.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>[WARN]</strong> <code>&lt;path&gt;</code> is also the
 configuration of: <code>&lt;names&gt;</code>. Adding Mp10 Web here
 affects those services too.</td>
@@ -1438,7 +1439,7 @@ affects those services too.</td>
 <td>Expected if the services deliberately share a config; otherwise stop
 and check which one should carry Mp10 Web.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Service ‘<code>&lt;name&gt;</code>’ points at
 ‘<code>&lt;exe&gt;</code>’, which does not exist.</td>
 <td>The service is registered against an <code>httpd.exe</code> that has
@@ -1446,13 +1447,13 @@ been moved or deleted.</td>
 <td>Repair or re-register that Apache installation before installing
 Mp10 Web.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>httpd.conf not found at ‘<code>&lt;path&gt;</code>’.</td>
 <td>The configuration path given (or derived from the service) is not
 there.</td>
 <td>Pass the right file with <code>-HttpdConf</code>.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Apache at ‘<code>&lt;server root&gt;</code>’ is missing:
 <code>&lt;mod_rewrite.so, mod_fcgid.so&gt;</code>. …</td>
 <td>That Apache’s <code>modules\</code> folder is missing one or both
@@ -1471,38 +1472,38 @@ trimmed-down build will not do.</td>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Message</th>
 <th>What it means</th>
 <th>What to do</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Install root must be a local path like <code>C:\Mp10Web</code>, not
 a UNC or relative path.</td>
 <td>A UNC or relative install root was given.</td>
 <td>Use a real local path.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>&lt;root&gt;</code> is on a mapped network drive
 (<code>&lt;target&gt;</code>). Apache cannot see it.</td>
 <td>The install root is a mapped drive; a service running as LocalSystem
 cannot resolve one.</td>
 <td>Install to a real local disk.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>A dictionary path is required (-DdPath, or run interactively).</td>
 <td>The “Path to mp.add” prompt was left blank, or
 <code>-NonInteractive</code> was used with nothing remembered.</td>
 <td>Supply the real path to <code>mp.add</code>.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>An ADS username is required.</td>
 <td>The username prompt was left blank.</td>
 <td>Supply an ADS username.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>ADS password is required and this session cannot prompt for one. Run
 interactively once; later runs reuse it.</td>
 <td>Running unattended with no saved password to fall back on.</td>
@@ -1510,21 +1511,21 @@ interactively once; later runs reuse it.</td>
 <code>database.local.php</code>, or pass <code>-AdsPassword</code> for
 that first run only.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>URL path ‘<code>&lt;path&gt;</code>’ is not usable. Use letters,
 digits, . _ - and / - e.g. /mpweb or /apps/mp10.</td>
 <td>The URL path answer contains characters that cannot be an Apache
 alias, or was bare <code>/</code>.</td>
 <td>Answer with a path like <code>/mpweb</code>.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Public origin must be scheme://host[:port] with no path - got
 ‘<code>&lt;origin&gt;</code>’.</td>
 <td>A full URL with a path or query was given.</td>
 <td>Answer with just the scheme and host,
 e.g. <code>https://mp10.clinic.local</code>.</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>[WARN]</strong> The origin’s port (<code>&lt;n&gt;</code>)
 is not among the ports this Apache listens on
 (<code>&lt;list&gt;</code>).</td>
@@ -1544,21 +1545,21 @@ dictionary connection</h2>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Message</th>
 <th>What it means</th>
 <th>What to do</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>The connection test produced no result. Check that php_ads is
 loadable.</td>
 <td>PHP failed to run the connection probe at all.</td>
 <td>Run <code>php -m</code> and confirm <code>ads</code> loads without
 error.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Could not open the dictionary: <code>&lt;ADS error&gt;</code></td>
 <td>The path, credentials, or network path to <code>mp.add</code> is
 wrong, or the server is unreachable.</td>
@@ -1576,14 +1577,14 @@ failure.</td>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Message</th>
 <th>What it means</th>
 <th>What to do</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>robocopy failed copying ‘<code>&lt;dir&gt;</code>’ to
 <code>&lt;root&gt;</code> (exit code <code>&lt;code&gt;</code>). Check
 permissions on the destination.</td>
@@ -1609,14 +1610,14 @@ no distinct failure message to catch — nothing was skipped.</p>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Message</th>
 <th>What it means</th>
 <th>What to do</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>httpd.conf already Includes an mp10web.conf outside the Mp10 Web
 markers. Remove that line and re-run, so the installer can manage
 it.</td>
@@ -1626,7 +1627,7 @@ would load the same aliases twice.</td>
 <td>Delete the hand-written <code>Include</code> line and re-run; the
 installer then adds and owns a marked one.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Apache rejected the configuration - see above. The site’s Apache is
 unchanged, but the application files under <code>&lt;root&gt;</code>
 were already updated. Fix the problem and re-run to a clean
@@ -1641,7 +1642,7 @@ may name a problem that was <em>already</em> in that
 restart — that is common, and it is not caused by Mp10 Web. Fix it, then
 re-run.</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Apache service ‘<code>&lt;name&gt;</code>’ would not
 <code>&lt;verb&gt;</code> with Mp10 Web’s Include, but started again
 once it was removed …</td>
@@ -1652,7 +1653,7 @@ the site is back up — without Mp10 Web.</strong></td>
 module, a path) is unacceptable to this Apache at runtime even though
 the syntax check passed.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Apache service ‘<code>&lt;name&gt;</code>’ is not running after
 <code>&lt;verb&gt;</code>, and did not start with Mp10 Web’s changes
 reverted either …</td>
@@ -1671,21 +1672,21 @@ reverted either …</td>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Message</th>
 <th>What it means</th>
 <th>What to do</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>The database step failed - see above.</td>
 <td><code>tools\migrate.php</code> exited with an error, or printed a
 real (uppercase) <code>FAILED</code> line.</td>
 <td>Read the migration output printed above — it names the specific step
 that failed.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>WARNING: sequence=<code>&lt;n&gt;</code>, but the next number
 (<code>&lt;recno&gt;</code>) is already taken…</td>
 <td><code>sequences.recno</code> has fallen behind the patient record
@@ -1717,14 +1718,14 @@ account table before it can refuse.</p>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Message</th>
 <th>What it means</th>
 <th>What to do</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Login probe at <code>&lt;url&gt;</code> returned
 <code>&lt;code&gt;</code>; 401 was expected. PHP or the Apache mount is
 not right - see above.</td>
@@ -1736,7 +1737,7 @@ succeeded, which is serious.</td>
 <td>The response body and the tail of Apache’s <code>ErrorLog</code> are
 printed just above the message — read those first.</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Nothing answered <code>&lt;prefix&gt;</code>/api/auth/login on
 127.0.0.1 ports <code>&lt;list&gt;</code> within 20s
 (<code>&lt;err&gt;</code>). Check the ‘<code>&lt;name&gt;</code>’

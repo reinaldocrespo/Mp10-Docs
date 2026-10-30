@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-10-22" />
+  <meta name="dcterms.date" content="2026-10-30" />
   <title>Mp10 Patients, Billing and Payments — User’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -149,7 +149,7 @@ Guide</h1>
 <p class="subtitle">From the patient at the front desk to the payment on
 the claim</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">22 October 2026</p>
+<p class="date">30 October 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -294,7 +294,11 @@ save</a></li>
 <li><a href="#the-columns" id="toc-the-columns">The columns</a></li>
 <li><a href="#the-row-colours" id="toc-the-row-colours">The row
 colours</a></li>
-<li><a href="#filtering" id="toc-filtering">Filtering</a></li>
+<li><a href="#filtering" id="toc-filtering">Filtering</a>
+<ul>
+<li><a href="#filter-from-file-claims-from-a-list-you-have" id="toc-filter-from-file-claims-from-a-list-you-have">Filter From File:
+claims from a list you have</a></li>
+</ul></li>
 <li><a href="#doing-things-with-claims" id="toc-doing-things-with-claims">Doing things with claims</a></li>
 </ul></li>
 <li><a href="#sending-claims" id="toc-sending-claims">Sending claims</a>
@@ -343,8 +347,10 @@ undo</a></li>
 claims</a></li>
 <li><a href="#when-a-claim-is-not-found" id="toc-when-a-claim-is-not-found">When a claim is not found</a></li>
 </ul></li>
-<li><a href="#entering-a-remittance-by-hand" id="toc-entering-a-remittance-by-hand">Entering a remittance by
-hand</a></li>
+<li><a href="#entering-a-remittance-by-hand" id="toc-entering-a-remittance-by-hand">Entering a remittance by hand</a>
+<ul>
+<li><a href="#loading-an-eobs-amounts" id="toc-loading-an-eobs-amounts">Loading an EOB’s amounts</a></li>
+</ul></li>
 <li><a href="#other-ways-to-enter-a-payment" id="toc-other-ways-to-enter-a-payment">Other ways to enter a payment</a>
 <ul>
 <li><a href="#a-payment-on-one-claim" id="toc-a-payment-on-one-claim">A
@@ -394,21 +400,21 @@ them.</p>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Your practice</th>
 <th>Patients and encounters</th>
 <th>Claims and payments</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>Professional</strong> (physician practice, clinic, imaging
 centre)</td>
 <td>The billing program <strong>PrBill10</strong>, or the appointment
 calendar <strong>MpXtrmCal10</strong></td>
 <td><strong>PrBill10</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Institutional</strong> (hospital, facility)</td>
 <td><strong>Patients10</strong></td>
 <td><strong>MpBill10</strong></td>
@@ -430,29 +436,29 @@ you when you need them rather than repeating them:</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Guide</th>
 <th>What it covers</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><em>Mp10 Orders — User’s Guide</em></td>
 <td>Setting up the order catalogue, order labels, HL7 orders and
 results</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Mp10 Dashboard — User’s Guide</em></td>
 <td>The dashboard cards, the full list of claim checks and their tags,
 unbilled encounters</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>Mp10 Web — Signature Pads</em> and <em>Mp10 — Signature
 Helper</em></td>
 <td>Installing the signature pad, and the text and options it shows the
 patient</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Mp10 AutoTasks — Administrator’s Guide</em></td>
 <td>Downloading claim responses and remittances, and reading remittance
 PDFs automatically</td>
@@ -468,35 +474,35 @@ Your administrator sets this up.</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Group</th>
 <th>What it opens</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>Admission</strong></td>
 <td>Patients and encounters. In PrBill10 it also shows the
 <em>Encounters Table</em> button on the toolbar</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>BillingUsers</strong></td>
 <td>Creating and opening claims, from encounters and from the patient
 record</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Supervisors</strong></td>
 <td>Deleting an insurance card, changing an encounter’s date after it is
 saved, moving charges between encounters, adjusting balances in bulk,
 collecting clearinghouse files by hand</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Administrators</strong></td>
 <td>The same billing work as BillingUsers, deleting an unposted
 remittance, adjusting balances in bulk, collecting clearinghouse files
 by hand</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>AdjustmentAuthUsers</strong></td>
 <td>Authorizing adjustments. On its own it opens nothing</td>
 </tr>
@@ -566,7 +572,7 @@ them:</p>
 <col style="width: 25%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Icon</th>
 <th>Where</th>
 <th>Means</th>
@@ -574,19 +580,19 @@ them:</p>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Paperclip or note</td>
 <td><em>MedRec</em></td>
 <td>The patient has attachments or notes</td>
 <td>Open the attachments</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Tag</td>
 <td><em>Name</em></td>
 <td>The patient has tags</td>
 <td>—</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>271 (green or red)</td>
 <td><em>Insurance</em></td>
 <td>An eligibility answer is on file, accepted or not</td>
@@ -691,29 +697,29 @@ patient on file.</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Button</th>
 <th>What it does</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Scanner (<em>Capture Image From Scanner</em>)</td>
 <td>Scans the card from the desk scanner</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Database (<em>Import id card image from file</em>)</td>
 <td>Loads a JPG file instead</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Magnifier (<em>Zoom IN</em>), or click the picture</td>
 <td>Shows the picture full size</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Delete (<em>Remove id image</em>)</td>
 <td>Removes the picture</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>OCR (<em>Read the names, sex and address off the ID</em>)</td>
 <td>Reads the ID on the screen into the fields</td>
 </tr>
@@ -824,53 +830,53 @@ that was in force then is still there, with its picture.</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Field</th>
 <th>What to enter</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><em>Member Number</em></td>
 <td>The member or subscriber ID, exactly as on the card</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Group</em></td>
 <td>The group number. <strong>Fill it in whenever the card shows
 one</strong> — see below</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>Insurance Co.</em></td>
 <td>The payer. Use the search button to pick from the payers your
 practice has set up</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Effective Date</em>, <em>Exp Date</em></td>
 <td>When the coverage starts and ends</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>Insured First, Last Names</em></td>
 <td>The subscriber — the person who holds the policy</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Relationship</em></td>
 <td>The patient’s relationship to the subscriber: Self, Spouse, Child,
 Other… Choosing <em>Self</em> fills in the subscriber’s name from the
 patient</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>DOB</em></td>
 <td>The subscriber’s date of birth, as the payer has it</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Name as on card</em>, <em>Last as on card</em></td>
 <td>The name printed on the card, if it differs</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>Coverage Codes</em>, <em>Ded Amt</em></td>
 <td>Deductible information</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Primary</em>, <em>Secondary</em></td>
 <td>Which payer is billed first and second</td>
 </tr>
@@ -1032,44 +1038,44 @@ Insert.</li>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Field</th>
 <th>What to enter</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><em>Encounter Number</em></td>
 <td>Filled in by Mp10 when you first save</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Encounter type (the list at the top)</td>
 <td>The kind of visit, from your practice’s list</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>From</em></td>
 <td>The date of the visit. <strong>Tick the box and pick the
 date</strong> — a new encounter starts with no date</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Thru</em></td>
 <td>The last day, for a visit that spans more than one</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>Referring Phys</em></td>
 <td>The referring doctor. Use the search button; only active doctors are
 offered</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Insurance</em></td>
 <td>The payer for this visit. It starts as the patient’s primary
 card</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>Inactive encounter</em></td>
 <td>Tick it for a no-show (below)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Accident</td>
 <td><em>Is Auto Accident</em>, <em>Work related Accident</em> or <em>Is
 Other Accident</em>, and the accident date, when the visit is the result
@@ -1357,56 +1363,56 @@ Summary and Procs; they are the same lines.</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Field</th>
 <th>What it is</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><em>Medical Record</em>, <em>Encounter</em></td>
 <td>The patient and the encounter. Fixed when the claim was started from
 the encounter</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Insurance</em></td>
 <td>The payer billed</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>Comp Ins</em></td>
 <td>The complementary (secondary) payer, billed after this one pays</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Card Number</em></td>
 <td>The member ID. The <strong>270</strong> button beside it asks the
 payer for eligibility now</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>Facility</em></td>
 <td>Where the service took place</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Pre-Auth Numb.</em></td>
 <td>The prior authorization number, sent on the claim</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>Perf Phys</em></td>
 <td>The performing (rendering) physician</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Referring Phys</em></td>
 <td>The referring physician</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>ICN</em></td>
 <td>The payer’s number for this claim, needed to correct it later — see
 <em>Correcting and resubmitting a claim</em></td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Serv/Date</em>, <em>Bill Date</em></td>
 <td>Date of service and the date billed</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>The money fields</td>
 <td>Payments, adjustments and balances. Worked out by Mp10; you cannot
 type in them</td>
@@ -1507,46 +1513,46 @@ pointers.</li>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Column</th>
 <th>What it holds</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><em>BillCode</em></td>
 <td>The procedure code, followed by its modifiers</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Unts</em></td>
 <td>Units (at least 1)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>Fee</em></td>
 <td>Your charge</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Expected</em></td>
 <td>What the payer is expected to allow — this is what the claim
 bills</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>Deduct</em></td>
 <td>The patient’s deductible share</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>From</em>, <em>Thru</em></td>
 <td>Dates of service</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>Diag</em></td>
 <td>The diagnosis pointers (above)</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Tos</em>, <em>Pos</em></td>
 <td>Type and place of service</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>Performing</em></td>
 <td>The performing physician for the line</td>
 </tr>
@@ -1657,29 +1663,29 @@ claim’s status history.</p>
 <h2 id="the-row-colours">The row colours</h2>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th>Colour</th>
 <th>Means</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Orange</td>
 <td>No bill date, no diagnoses, or the claim has tags</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Cyan</td>
 <td>Resubmitted: corrected, replacement or void</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Magenta</td>
 <td>Created by AutoTasks, Mp10’s automatic service</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Grey</td>
 <td>No charge or no service date</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Blue</td>
 <td>Everything else</td>
 </tr>
@@ -1690,20 +1696,79 @@ claim’s status history.</p>
 combination of:</p>
 <ul>
 <li><strong>Status</strong> — one flag, or <em>Missing Flag</em> for
-claims with no status at all;</li>
+claims with no status at all (no flag, or the <em>Null</em> flag
+0);</li>
 <li><strong>Ins</strong> — one payer;</li>
 <li><strong>Srv From / Srv Thru</strong> — dates of service;</li>
 <li><strong>Bill From / Bill Thru</strong> — billing dates;</li>
 <li><strong>Wrk From / Wrk Thru</strong> — the date the claim was
 created;</li>
-<li><strong>Med Rec</strong> — one patient.</li>
+<li><strong>Med Rec</strong> — one patient;</li>
+<li><strong>Primary claims only</strong> — leaves out complementary
+(secondary) claims.</li>
 </ul>
 <p>Switch the filter on with its LED. To jump to one claim, sort by
 <em>ClaimKey</em> and press F8.</p>
-<p><strong>Filter From File</strong> shows exactly the claims on a list
-you have — a payer’s rejection report, for instance. Paste the claim
-numbers into its grid, or point it at a text file with one per line, and
-click <em>Run Filter</em>.</p>
+<h3 id="filter-from-file-claims-from-a-list-you-have">Filter From File:
+claims from a list you have</h3>
+<p><strong>Filter From File</strong>, the last link in the side panel,
+shows exactly the claims on a list you have: a payer’s rejection report,
+a spreadsheet from a collections review, an email with claim numbers in
+it. The window opens with an empty list; fill it, check it, and click
+<em>Run Filter</em>.</p>
+<p><strong>Filling the list:</strong></p>
+<ul>
+<li><strong>From a file.</strong> Click the magnifier beside
+<em>Filename</em> and pick the file. Every claim number in it is listed,
+wherever it sits in the file: one per line, several on a line, inside a
+sentence, in any column of a spreadsheet. PDF, Excel (<em>.xlsx</em> and
+the older <em>.xls</em>), Word (<em>.docx</em>), text, CSV,
+tab-delimited, XML, web pages and scanned images (TIFF, PNG, JPEG, read
+by OCR) all work.</li>
+<li><strong>PDF files.</strong> A PDF from a payer portal or a
+clearinghouse holds real text and is read at once. A
+<strong>scanned</strong> PDF is only pictures of pages: Mp10 reads each
+such page with OCR, the same reader that fills in insurance cards, which
+takes a few seconds a page. A window shows which page it is on;
+<em>Cancel</em> stops after that page and keeps the claims already
+found. OCR can misread a smudged number, so compare the count with the
+report — a number it cannot read whole is left out, never guessed. If
+the window says the OCR files are missing, the workstation can still
+read text PDFs; scanned pages need the card-reading files
+installed.</li>
+<li><strong>By pasting.</strong> Copy any text that holds claim numbers,
+click in the list, and press Ctrl+V. Only the claim numbers are taken
+from it.</li>
+<li><strong>By typing.</strong> Press the down arrow on the last row to
+open an empty one, type the claim number, and press Enter.</li>
+</ul>
+<p>A claim number is <em>CL</em>, two digits, a dash and eight digits —
+CL26-00012345. Lower case is fine; it is shown in capitals. Anything
+else is refused: a typed number that does not have that shape gets a
+message, and partial numbers in a file (seven or nine digits, say) are
+skipped rather than guessed. Each claim is listed once, however often
+the file repeats it, and picking a second file adds its claims to the
+ones already listed.</p>
+<p><strong>Checking the list.</strong> The rows are numbered, and the
+count under the list (<em>37 ClaimKeys</em>) tells you how many claims
+the filter will show — compare it with the report you started from.
+Select a row and press Del to remove it. <em>Open File</em> opens the
+file you picked in its own program (Excel, Notepad), so you can see what
+was in it. <em>Run Filter</em> is available as soon as the list holds
+one claim.</p>
+<p><em>Run Filter</em> shows only the listed claims; the <em>Filter</em>
+panel’s other settings are ignored while it is on. <em>Cancel
+Filter</em> closes the window and shows every claim again. The window
+can be made larger by dragging its edge, and opens at that size next
+time.</p>
+<p><strong>For the administrator.</strong> Files are read on the
+workstation; nothing is sent anywhere. PDFs need one file beside the
+program, <code>pdfium.dll</code>, which ships through the updates folder
+like the other DLLs — put it there before the first program that reads
+PDFs. Scanned pages also need the card-reading files
+(<code>tessdata\eng.traineddata</code> and its DLLs). A workstation
+missing either says so when a PDF is picked; every other kind of file
+still works.</p>
 <h2 id="doing-things-with-claims">Doing things with claims</h2>
 <p>The side panel acts on the highlighted claim (or claims):</p>
 <table>
@@ -1712,47 +1777,47 @@ click <em>Run Filter</em>.</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Link</th>
 <th>Does</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>Open Claim</strong></td>
 <td>Opens it (also Enter or double-click)</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Print Claim</strong>, <strong>Preview Claim</strong></td>
 <td>The paper claim form, for every selected claim</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Post Payment</strong></td>
 <td>The payment window for the claim (Part III)</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Notes</strong>, <strong>Attachments</strong>,
 <strong>AuditLog</strong></td>
 <td>The claim’s notes, documents, and history of changes</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Claim Status</strong></td>
 <td>The status history; with several claims selected, change their flag
 together</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Eligibility</strong></td>
 <td>Asks the payer now; with several selected, asks for each</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Analyze 837</strong></td>
 <td>Reviews the selected claims before sending</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Outbound 837</strong></td>
 <td>Builds and sends the electronic claims file</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Pat Payment</strong></td>
 <td>A patient payment on this claim, with a receipt</td>
 </tr>
@@ -1808,30 +1873,30 @@ right change.</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Setting</th>
 <th>What it decides</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>Professional</strong> / <strong>Institutional</strong></td>
 <td>Whether this payer’s electronic claims go out as professional (837P,
 the CMS-1500 content) or institutional (837I, UB-04), and which NCCI
 tables the claim checks use for it</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Form #</strong></td>
 <td>Which paper form prints for this payer. A payer with no form number
 cannot print a paper claim (<em>Undefined Insurance Form</em>) and is
 left out of the professional Unbilled Report</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>In-active</strong></td>
 <td>The payer can no longer be put on a card or a claim: <em>Insurance
 is Inactive</em>. Old claims keep it</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Billing Fees From</strong></td>
 <td>Institutional only: whether the payer is billed by DRG/APC, private
 rates or the fee schedule</td>
@@ -1845,13 +1910,13 @@ rates or the fee schedule</td>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Setting</th>
 <th>What it decides</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>Receiver ID</strong>, <strong>Submitter</strong>,
 <strong>Sender</strong> and the ISA/GS fields</td>
 <td>The clearinghouse addressing on every electronic claim, eligibility
@@ -1859,18 +1924,18 @@ request and remittance match for this payer. Set once by the
 administrator with the clearinghouse’s instructions; a wrong value
 rejects every claim</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Auto-Fetch Patient Eligibilities</strong></td>
 <td>Whether AutoTasks asks this payer, by itself, for the eligibility of
 each upcoming encounter. Off, and eligibility is only checked when
 someone clicks <em>Eligibility</em></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Include PRV Taxonomy segment</strong></td>
 <td>Whether the electronic claim carries the provider taxonomy segments.
 Some payers demand them, some reject them</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Check NCCI PTP pairs</strong></td>
 <td><strong>Off by default.</strong> Tick it and the claim checks apply
 the NCCI procedure-to-procedure edits for this payer, placing the tags
@@ -1903,7 +1968,7 @@ list of claims that need you.</p>
 <col style="width: 25%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Flag</th>
 <th>Name</th>
 <th>Means</th>
@@ -1911,44 +1976,44 @@ list of claims that need you.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Green</td>
 <td>Fully Paid</td>
 <td>Nothing left for the insurance to pay</td>
 <td>Posting a payment or remittance</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Yellow</td>
 <td>Partially Paid (also <em>Pending</em>)</td>
 <td>Something paid, something still owed</td>
 <td>Posting; a payer status saying it is pending</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Red</td>
 <td>Rejected</td>
 <td>Refused, by the clearinghouse or the payer, or paid nothing on the
 remittance</td>
 <td>Claim status responses; posting a remittance that pays nothing</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Grey</td>
 <td>Received by Ins</td>
 <td>Accepted by the clearinghouse or payer, not paid yet</td>
 <td>Claim status responses and acknowledgements</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Black</td>
 <td>OverPaid</td>
 <td>More was paid than billed</td>
 <td>Posting; also a payer status saying the claim was not found</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Blue, checkered, pink, purple</td>
 <td>User Def 1–4</td>
 <td>Your practice’s own meanings</td>
 <td>You</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>None</td>
 <td>No status</td>
 <td>Nothing heard yet</td>
@@ -2022,7 +2087,8 @@ claim to open it, correct it, and resubmit (next chapter). Click
 nothing at all after a couple of weeks may never have reached the payer.
 Filter the Claims grid by <em>Missing Flag</em> and a range of bill
 dates, and check those claims. The dashboard shows the count of primary
-claims with no status and the date of the oldest.</p>
+claims with no status served in the last 90 days and the date of the
+oldest; click it and the grid opens with that filter set.</p>
 <p><strong>3. Claims stuck in received or partly paid.</strong>
 <em>Reports → Claims Status</em> lists claims with an insurance balance
 by flag and payer, with <strong>Days</strong> — how long each has sat on
@@ -2124,6 +2190,15 @@ remittance. Setting up both is described in the <em>Mp10 AutoTasks</em>
 guide, chapters <em>Electronic remittances: the two kinds</em>, <em>X12
 835 electronic remittances</em> and <em>Electronic remittances (EOB /
 ERA PDFs)</em>.</p>
+<p>A PDF remittance that AutoTasks could not import safely (a possible
+repeat, a claim number it could not match, an amount that looks wrong)
+is not imported and not archived: it waits in the <code>review</code>
+sub-folder of the watched folder, with a short text file saying why.
+Staff enter it by hand, using the <strong>EOB</strong> tab of <em>Fetch
+Claims</em> (see <em>Entering a remittance by hand</em>): its
+<strong>AutoTasks review folder…</strong> button lists what is waiting
+there, and the EOB is read, previewed and loaded like any other. Or ask
+support.</p>
 <p>A paper EOB that arrives by mail can be entered by hand in the same
 window: see <em>Entering a remittance by hand</em>.</p>
 <h1 id="finding-a-remittance">Finding a remittance</h1>
@@ -2166,39 +2241,39 @@ check:</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Field</th>
 <th>What it is</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><em>Chk Num</em>, <em>Ins</em>, <em>Chk Date</em></td>
 <td>The check (or transfer) number, the payer, the date</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Rcvd On</em>, <em>Dep On</em></td>
 <td>When it was received and deposited</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>Claims Pd</em></td>
 <td>The sum of everything paid on the claims</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>PLB Adj</em></td>
 <td>Money the payer added or withheld outside any claim — interest, a
 recovered overpayment</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>Check Amt</em></td>
 <td><em>Claims Pd</em> plus <em>PLB Adj</em>: what was actually
 deposited</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>PLB Rsn</em></td>
 <td>Why the payer made the <em>PLB Adj</em></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>Diff.</em></td>
 <td><em>Claims Pd</em> less what the lines below add up to. <strong>It
 should be zero before you post</strong></td>
@@ -2214,49 +2289,49 @@ are underneath. F9 opens every claim, F10 closes them.</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Column</th>
 <th>What it holds</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><em>ClaimKey / Bill-Code</em></td>
 <td>The claim, and the procedure code on each line</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Account</em>, <em>SrvDate</em>, <em>PatName</em></td>
 <td>The encounter, the date of service, the patient</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>Expected</em></td>
 <td>What the claim expected the payer to pay</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Paid</em></td>
 <td>What the payer paid</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>Adj</em></td>
 <td>The amount written off — the contractual adjustment</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Deduct</em></td>
 <td>The patient’s deductible or coinsurance on this line</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>CoIns</em></td>
 <td>The amount to bill to the complementary payer</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Pending</em></td>
 <td>What will still be owed after posting</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>AdjCodes</em></td>
 <td>The payer’s reason and remark codes, with their meaning</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>ICN</em></td>
 <td>The payer’s number for the claim</td>
 </tr>
@@ -2265,29 +2340,29 @@ are underneath. F9 opens every claim, F10 closes them.</p>
 <p>The dot on each row says, before you post, what posting will do:</p>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th>Dot</th>
 <th>Means</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Green</td>
 <td>Nothing will be left pending</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Yellow</td>
 <td>Paid, but something will still be owed</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Red</td>
 <td>Nothing paid — a denial</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Black</td>
 <td>Overpaid</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Grey</td>
 <td>The claim was not found in Mp10; this line cannot post</td>
 </tr>
@@ -2408,9 +2483,28 @@ money outside the claims.</li>
 <li>press Insert (or right-click → <em>Add New Line</em>) and type the
 claim number in <em>ClaimKey / Bill-Code</em>: the claim’s lines load;
 or</li>
-<li>click <strong>Fetch Claims Set</strong> to load many claims at once
-— all the unpaid claims of the ticked payers for a range of dates, or a
-list of claim numbers you type in.</li>
+<li>click <strong>Fetch Claims Set</strong> to load many claims at once.
+Its window has three sources, one per tab, and the choice at the bottom
+follows the tab you work on and the file you pick:
+<ul>
+<li><em>Dates</em> (the default) — the unpaid claims of the ticked
+payers for a range of service or billing dates;</li>
+<li><em>EOB from Scanner</em> — pick the EOB’s PDF or scanned image
+(TIFF, PNG, JPEG), or click <em>Acquire EOB From Scanner</em> to scan
+it, or click <strong>AutoTasks review folder…</strong> to pick one
+AutoTasks held back (see <em>Loading an EOB’s amounts</em>). Mp10 reads
+the EOB, scanned pages through OCR, and shows a preview of its lines
+before anything is loaded. On a new remit the check number and date are
+filled in when the EOB shows them. If the layout is not recognised, only
+the claim numbers are read;</li>
+<li><em>From list of ClaimKeys</em> — type claim numbers (down-arrow
+past the last row opens a new one), paste them with Ctrl+V, or pick any
+other file (Excel, text, CSV, Word) on the EOB tab: its claim numbers
+land here and this tab comes forward.</li>
+</ul>
+<strong>Run</strong> loads the claims of the payer in <em>Insurance
+Co</em> that have no insurance payment yet; the count of claims found
+and matched shows on the EOB tab.</li>
 </ul></li>
 <li>On every line, <strong>enter what the EOB says</strong>. Mp10 fills
 <em>Paid</em> with the expected amount to save typing, so correct each
@@ -2423,6 +2517,112 @@ electronically.</li>
 <li>When <em>Diff.</em> is zero, <strong>Save Remit</strong>, then
 <strong>Post Remit</strong>.</li>
 </ol>
+<h2 id="loading-an-eobs-amounts">Loading an EOB’s amounts</h2>
+<p>On the <em>EOB from Scanner</em> tab, picking a PDF or scanned image
+(or typing its path) reads it. A progress bar shows the page being read,
+and <strong>Cancel</strong> on it stops the read: nothing is loaded. The
+file name stays in the field but is not read again when you click
+elsewhere; pick the file again, press <strong>Run</strong> or open it
+from the review folder to read it. While an EOB is being read,
+<strong>Run</strong>, the file picker, the scanner button and the review
+folder button do nothing. Enter <em>Insurance Co</em> first; it decides
+which claim receives the lines when a claim has a complementary
+insurance.</p>
+<p>The <strong>EOB preview</strong> window then lists every line the EOB
+prints, with the check number, date and payer on top, how many pages
+needed OCR, any warnings, and any remittance in Mp10 that already holds
+this check or this PDF. It opens at the size you last left it.</p>
+<ul>
+<li><strong>Load</strong> (the first column) is the tick. Click
+<strong>Tick all</strong> or <strong>Untick all</strong>, or press the
+space bar or double-click on a line to tick or untick it.</li>
+<li>A line starts <strong>unticked</strong> when something is wrong with
+it. Its <em>Reasons</em> column says what, in words: the claim was not
+found, the code is not billed on the claim, the claim was moved to the
+complementary claim, the line was already paid by this payer on another
+check, or the paid amount is more than allowed, billed, the check total
+or the ceiling. Lines that need attention are red; lines moved to a
+complementary claim are blue. You may tick any of them if you are
+sure.</li>
+<li><strong>Load into remittance</strong> loads the ticked lines.
+<strong>Cancel</strong> loads nothing.</li>
+</ul>
+<p>Only the lines the EOB prints are loaded, denied ones included. A
+line the claim has but the EOB does not print is left out, so the window
+holds the same rows AutoTasks would write for the same EOB. Per line,
+<em>Paid</em>, <em>Adj</em>, <em>Deduct</em>, <em>CoIns</em>, the reason
+codes and the <em>ICN</em> come from the EOB. The <em>ICN</em> is filled
+in only when no page of the EOB was read by OCR (a scanned number is
+shown in the preview but not stored, because a misread number would
+overwrite the claim’s). A claim the EOB prints in two blocks is loaded
+as two groups of lines.</p>
+<p>After loading, <em>Claims Pd</em> is the total of the loaded lines
+and the box under the EOB tab’s buttons says how many claims and lines
+were loaded and how many left out (scroll the box when it holds more
+lines than it shows). If the EOB prints a check total that differs from
+<em>Check Amt</em>, the tab says so (<em>missing lines or PLB</em>);
+this is a warning, not a block, so add the <em>PLB Adj</em> or the
+missing lines. Nothing is saved until <strong>Save Remit</strong>, and
+nothing is posted until <strong>Post Remit</strong>.</p>
+<p>Messages you may see instead of the preview:</p>
+<ul>
+<li><em>This EOB is already in Remits: Check …, … – posted.</em> The
+check is posted. Nothing is loaded; open it from the Remittances
+list.</li>
+<li><em>These claims are already paid by this payer on a posted
+check.</em> Most of the EOB’s lines were paid before. Nothing is
+loaded.</li>
+<li><em>Could not check Remits for this EOB; try again.</em> Mp10 could
+not read whether the EOB is already in Remits, so it loads nothing
+rather than risk entering it twice. Try again in a moment.</li>
+<li><em>This EOB is made out to another practice.</em></li>
+<li><em>This EOB’s layout was not recognised: only its claim numbers
+were read.</em> The claims load as in the paragraph above, with
+<em>Paid</em> set to the expected amount for you to correct.</li>
+<li><em>Save or clear the current remittance first.</em> A second EOB
+cannot be loaded while the window holds changes that are not saved. The
+message comes before the EOB is read, whatever its layout, so no time is
+spent on OCR. Save Remit (or start a new one), then load the next EOB. A
+Save Remit that failed leaves the window unsaved too, so its lines are
+not lost. Once the window is saved, the next EOB starts a new remittance
+by itself (the saved one leaves the window, <em>Insurance Co</em>
+stays).</li>
+<li><em>The EOB’s file name is too long for the FileName column in
+Remits.</em> Rename the PDF and pick it again. Save Remit checks the
+same thing again, because the <em>Check #</em> is part of the name: if
+you lengthened the <em>Check #</em> after loading, Save refuses and
+saves nothing. Shorten it, or clear the window, rename the PDF and load
+it again.</li>
+</ul>
+<p>If the check is already in Remits but <strong>not posted</strong> (an
+earlier import got part of it), Mp10 opens that remittance and Load adds
+only the claims it does not have, including claims the check holds under
+another payer that the window does not show. A line the check already
+holds under the primary claim is not loaded again under the
+complementary claim. <em>Claims Pd</em> is then the total of every line
+in the window. <strong>Cancel</strong> leaves the remittance as it was
+opened.</p>
+<p><strong>Save Remit</strong> records the EOB’s file name
+(<code>835_&lt;check&gt;_&lt;pdf name&gt;</code>, the same name
+AutoTasks gives) on the rows it loaded from the EOB, so a later
+AutoTasks run sees the EOB as already imported. Every other row keeps
+its file name: remittances not loaded from an EOB, and the rows a check
+already had when an EOB was added to it. Such a check shows in the
+Remittances list as two file name groups, as when AutoTasks adds to a
+check. When the PDF is in the watched folder
+(<code>EOBIMAGESPATH</code>) or its <code>review</code> sub-folder, Save
+also moves it to the <code>history</code> sub-folder (creating it when
+it is missing), with the JSON and reason file <code>review</code> holds
+for it; a PDF picked from anywhere else (Downloads, the desktop) is
+never moved. The folder counts however you reached it: through a mapped
+drive letter or its network (<code>\\server\share</code>) path. If a
+file cannot be moved, Save says so; the remittance is saved all the
+same. If Save Remit could not write every line, the PDF stays where it
+is: run Save Remit again.</p>
+<p><strong>AutoTasks review folder…</strong> lists the EOBs waiting in
+<code>review</code> (newest first, with the date, the refusal, the
+check, the PDF and where the PDF is). Pick one and it is read and
+previewed as above.</p>
 <h1 id="other-ways-to-enter-a-payment">Other ways to enter a
 payment</h1>
 <h2 id="a-payment-on-one-claim">A payment on one claim</h2>
@@ -2435,33 +2635,33 @@ first.</p>
 the next claim), then, on each procedure line:</p>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th>Column</th>
 <th>Enter</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><em>InsPaid</em></td>
 <td>What the insurance paid</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Substract</em></td>
 <td>The insurance write-off for the line</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>PtePaid</em></td>
 <td>What the patient paid</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>PSubstct</em></td>
 <td>The patient write-off</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>CoIns</em></td>
 <td>What to bill to the complementary payer</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>AdjReason</em></td>
 <td>Why, from your list of adjustment reasons</td>
 </tr>
@@ -2534,39 +2734,39 @@ is not on a remittance.</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Report</th>
 <th>Shows</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><em>Print Remittance</em> (Remittances window)</td>
 <td>The open remittance, claim by claim</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>X12-835 Remittances Report</em> (right-click the Remittances
 list)</td>
 <td>The payer’s file itself; with several checks selected, totals by
 payer</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>Reports → Remittances Report</em></td>
 <td>Remittances by check date, by payer or check by check, with paid,
 adjusted, deductible and retained totals</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Reports → Payments + Adjustments</em></td>
 <td>Payments and adjustments for a period — by payment date, deposit
 date or the date posted — grouped by payer, check, user or referring
 physician</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><em>Reports → Claims Status</em></td>
 <td>Claims with an insurance balance, by flag, and how long each has
 waited</td>
 </tr>
-<tr class="even">
+<tr>
 <td><em>Reports → Aeging of Accounts</em></td>
 <td>What is owed, by age</td>
 </tr>
@@ -2583,63 +2783,63 @@ Administrators).</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>To</th>
 <th>Do</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Find a patient</td>
 <td>Patients Table, type the name, or F8</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Add a patient</td>
 <td>Insert; <strong>save before</strong> adding insurance or
 encounters</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Scan the ID</td>
 <td>Demographics → scanner button; the blank name, sex and address
 fields fill from the card (yellow) — check them, then Save. OCR re-reads
 and overwrites</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Take the HIPAA signature</td>
 <td>Demographics → pen → Accept</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Add a new insurance card</td>
 <td>Insurance → New → tick <strong>Primary</strong> → Save. The old card
 stays as history</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Scan the card</td>
 <td>While adding or modifying: Scan; a blank member number and group
 fill from the card (yellow) — check them, then Save. OCR re-reads and
 overwrites</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Check eligibility</td>
 <td>Patients grid → Eligibility → Fetch New Eligibility record</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Open an encounter</td>
 <td>Encounters tab → New → date, type, referring doctor → Save</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Order</td>
 <td>Encounter → Orders → New Order → Save</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Take the visit signature</td>
 <td>Encounters tab → highlight → pen → Accept</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Mark a no-show</td>
 <td>Open the encounter → Inactive encounter → Save</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Take a copay</td>
 <td>Pat Payment → encounter → lines → Save → Print</td>
 </tr>
@@ -2652,52 +2852,52 @@ overwrites</td>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>To</th>
 <th>Do</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>See what is unbilled</td>
 <td>Unbilled encounters (or the dashboard line)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Create a claim</td>
 <td>Unbilled list → New Claim. Confirm each line’s code so it
 prices</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Code</td>
 <td>ICD10 tab; the cell button opens the encoder. First code =
 principal</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Point lines at diagnoses</td>
 <td><em>Diag</em>: <code>1</code>, <code>1,2</code>… Recheck after
 reordering</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Read a tag</td>
 <td>Hover it; click for the full explanation</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Send</td>
 <td>Claims grid → select one payer’s claims → Outbound 837</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>See a claim’s history</td>
 <td>F9 on the claim</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Record a follow-up</td>
 <td>F9 → Add New → flag, date, <strong>note</strong> → Save</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Work rejections</td>
 <td>Dashboard → rejected claims → double-click, correct, resubmit</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Resubmit</td>
 <td>F4 → Corrected / Replacement / Void; check the ICN
 (<code>F8</code>…)</td>
@@ -2711,30 +2911,30 @@ reordering</td>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>To</th>
 <th>Do</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Find a check</td>
 <td>Remittances → Show Only Posting Pending → Reload Remits</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Write off contractuals</td>
 <td>Right-click <em>Adj</em>, or the <em>Adj</em> header for the whole
 check</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Post</td>
 <td><em>Diff.</em> = 0 → Save Remit → Post Remit</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Fix a grey line</td>
 <td>Type the claim number, or Re-Fetch Missing Claims</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Enter a paper EOB</td>
 <td>Start New Remit → claims → amounts and reason codes → Save →
 Post</td>

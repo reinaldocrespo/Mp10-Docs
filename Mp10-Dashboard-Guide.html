@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-10-22" />
+  <meta name="dcterms.date" content="2026-10-30" />
   <title>Mp10 Dashboard — User’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -148,7 +148,7 @@ a { color: inherit; }
 <p class="subtitle">The cards on the Billing and Patients main windows,
 and what to do about what they show</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">22 October 2026</p>
+<p class="date">30 October 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -342,25 +342,25 @@ message text to your administrator.</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Colour</th>
 <th>Meaning</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><strong>Grey</strong></td>
 <td>Zero, or nothing to do</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Green</strong></td>
 <td>All clear, or good news (paid claims, nothing outstanding)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><strong>Amber</strong></td>
 <td>Something is waiting for someone</td>
 </tr>
-<tr class="even">
+<tr>
 <td><strong>Red</strong></td>
 <td>Something has gone wrong and needs action</td>
 </tr>
@@ -420,12 +420,16 @@ rejection was recorded, not by the encounter’s date. A rejection that
 arrives this week on a claim from an older encounter is work to do this
 week, so it is counted. Click the line to open the list.</li>
 <li><strong>Paid claims</strong> (green).</li>
-<li><strong>Claims with no status</strong> — primary claims sent but
-with no response recorded yet. Secondary claims are not counted
-here.</li>
+<li><strong>Claims with no status · served in the last 90 days</strong>
+— primary claims with no response recorded yet, counted by the claim’s
+own date of service (any encounter, active or not). Secondary claims are
+not counted here. Click the line to open the Claims grid with its filter
+already set to exactly these claims: <em>Missing Flag</em>, <em>Primary
+claims only</em> and <em>Srv From / Srv Thru</em> on the same 90
+days.</li>
 <li><strong>of N encounters · last 90 days</strong> — the total the
-unbilled, paid and no-status figures are counted from. The rejected
-figure has its own basis, above.</li>
+unbilled and paid figures are counted from. The rejected and no-status
+figures have their own basis, above.</li>
 <li><strong>Upcoming encounters pre-created</strong> — encounters
 already entered for future dates. They are shown for information and are
 <strong>not</strong> counted as unbilled.</li>
@@ -515,44 +519,44 @@ first:</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Column</th>
 <th>Shows</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Claim</td>
 <td>The claim number, with the claim’s status flag in front of it — the
 same flags the Claims grid shows (green paid, red rejected, and so on).
 No flag means the claim has not been sent</td>
 </tr>
-<tr class="even">
+<tr>
 <td>MedRec</td>
 <td>The patient’s record number. <strong>Double-click it to open the
 patient</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Patient</td>
 <td>Last name, first name</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Service date</td>
 <td>The claim’s date of service</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Insurance</td>
 <td>The payer</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Tags</td>
 <td>Every tag on the claim, separated by semicolons</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Saved by</td>
 <td>The user who last saved the claim</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Saved</td>
 <td>When it was last saved</td>
 </tr>
@@ -652,87 +656,87 @@ payment are checked when someone opens and saves them.</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Tag</th>
 <th>The claim has…</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Missing ICD10s</td>
 <td>No diagnosis codes</td>
 </tr>
-<tr class="even">
+<tr>
 <td>ICD10 Relation</td>
 <td>A line pointing at a diagnosis that is not on the claim</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Wrong Side ICD10</td>
 <td>RT with a left-side diagnosis, or LT with a right-side one</td>
 </tr>
-<tr class="even">
+<tr>
 <td>ICD10 Side Unspecified</td>
 <td>RT or LT with a diagnosis that leaves the side unspecified</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Bilateral CPT, One-Side ICD10</td>
 <td>A surgical code with modifier 50 and diagnoses for one side
 only</td>
 </tr>
-<tr class="even">
+<tr>
 <td>ICD10 Excludes1 Conflict</td>
 <td>Two diagnoses ICD-10-CM says are never coded together</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>ICD10 Sequence</td>
 <td>Diagnoses in an order a “code first” instruction contradicts</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Modifier 50 Not Allowed</td>
 <td>Modifier 50 on a code the fee schedule does not allow it on</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Modifier 50, Units Over 1</td>
 <td>Modifier 50 on a line with more than one unit</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Modifier 50 With RT/LT</td>
 <td>Modifier 50 and RT or LT on the same line</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>RT/LT On Bilateral CPT</td>
 <td>RT or LT on a code that already means both sides</td>
 </tr>
-<tr class="even">
+<tr>
 <td>NCCI Pair, Never Together</td>
 <td>Two codes NCCI never pays together</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>NCCI Pair Needs Modifier</td>
 <td>Two codes NCCI bundles unless a modifier shows they were
 separate</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Units Over MUE</td>
 <td>More units of a code than the CMS limit allows</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Payer Not On Patient</td>
 <td>A payer that is not on the patient’s insurance record</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Insurance DOB Mismatch</td>
 <td>A date of birth different from the one the payer reported</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Insurance Sex Mismatch</td>
 <td>A sex different from the one the payer reported, or none at all</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Denied Before</td>
 <td>Codes this payer has refused often and recently</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Refused For This Patient</td>
 <td>A code this payer refused for this same patient, with nothing paid
 for it since</td>
@@ -915,30 +919,30 @@ true:</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Rule</th>
 <th>Default</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Refusals of the same payer, code and diagnosis</td>
 <td>2</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Refusals on at least this many different check dates</td>
 <td>3</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Refusals as a share of all this payer’s remittance lines for the
 code</td>
 <td>20%</td>
 </tr>
-<tr class="even">
+<tr>
 <td>The most recent refusal is no older than</td>
 <td>6 months</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Refusals counted from the last</td>
 <td>24 months</td>
 </tr>
@@ -1003,29 +1007,29 @@ nothing new, never sends mail.</p>
 <col style="width: 33%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Entry</th>
 <th>Default</th>
 <th>Meaning</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>AUTOTASKS / FETCH_CMS</td>
 <td>YES</td>
 <td>NO switches the daily CMS check off entirely</td>
 </tr>
-<tr class="even">
+<tr>
 <td>AUTOTASKS / CMSFETCH_CHECK_HOURS</td>
 <td>24</td>
 <td>Hours between checks</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>AUTOTASKS / CMSFETCH_PATH</td>
 <td>a cms folder beside AutoTasks.exe</td>
 <td>Where the downloaded files and the ICD-10 change reports land</td>
 </tr>
-<tr class="even">
+<tr>
 <td>CMSFETCH / NOTIFY_EMAIL</td>
 <td>empty</td>
 <td>Who gets the result email; commas between addresses</td>
@@ -1048,39 +1052,39 @@ or narrow it:</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Check</th>
 <th>How</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>NCCI Pair, Never Together / Needs Modifier</td>
 <td>Per payer, <strong>off by default</strong>: tick <strong>Check NCCI
 PTP pairs</strong> on the X12 tab of the insurance company’s record</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Units Over MUE, the modifier-50 checks</td>
 <td>No switch once the tables are loaded. <strong>AUTOTASKS / FETCH_CMS
 = NO</strong> stops future quarters from loading</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>The three side checks</td>
 <td><strong>BILLING / ICD10-LATERALITY-EXCLUDE</strong>: diagnosis-code
 prefixes to leave alone (claim window only)</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Denied Before</td>
 <td>The <strong>BILLING / DENIAL-…</strong> thresholds above; a very
 high DENIAL-MIN-DATES silences it, DENIAL-REASONCODES narrows it</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Refused For This Patient</td>
 <td>No switch. <strong>BILLING / DENIAL-MONTHS</strong> shortens how far
 back it looks; <strong>DENIAL-IGNORE-CODES</strong> names reasons that
 never count</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Everything else</td>
 <td>Always on. The DOB and sex checks only speak when an eligibility
 response exists to compare against</td>
@@ -1223,49 +1227,54 @@ users who have access to it.</p>
 <col style="width: 50%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>You see</th>
 <th>Do this</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Claims with error tags above zero</td>
 <td>Click the line, double-click each claim, hover or click each tag,
 correct, save</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Unbilled encounters above zero</td>
 <td>Click the line; bill the visits that happened, inactivate the
 no-shows</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Old “Oldest unbilled since” date</td>
 <td>Work that encounter first: its filing deadline is closest</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Rejected claims above zero</td>
 <td>Click the line, read the reason, double-click to correct and
 resubmit</td>
 </tr>
-<tr class="odd">
+<tr>
+<td>Claims with no status above zero</td>
+<td>Click the line; check the oldest first, and resubmit any claim the
+payer never received</td>
+</tr>
+<tr>
 <td>Possible duplicate patients</td>
 <td>Click the line and review the records with whoever maintains patient
 records</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Unsigned encounters</td>
 <td>Collect the signature before the claim goes out</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Red line in System health</td>
 <td>Tell your server administrator the same day</td>
 </tr>
-<tr class="even">
+<tr>
 <td>“The refresh has stopped”</td>
 <td>Close and reopen the module; report it if it recurs</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>A card you expected is missing</td>
 <td>Ask your administrator to check your permissions</td>
 </tr>
