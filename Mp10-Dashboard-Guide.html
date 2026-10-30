@@ -236,6 +236,8 @@ Not On Patient</a></li>
 <li><a href="#insurance-sex-mismatch" id="toc-insurance-sex-mismatch">Insurance Sex Mismatch</a></li>
 <li><a href="#denied-before" id="toc-denied-before">Denied
 Before</a></li>
+<li><a href="#missing-performing-physician" id="toc-missing-performing-physician">Missing Performing
+Physician</a></li>
 <li><a href="#refused-for-this-patient" id="toc-refused-for-this-patient">Refused For This Patient</a></li>
 </ul></li>
 <li><a href="#the-reference-data-keeps-itself-current" id="toc-the-reference-data-keeps-itself-current">The reference data
@@ -644,8 +646,13 @@ set, the CMS fee schedule, the NCCI tables, and the denial history. The
 first three keep themselves current – AutoTasks downloads each new
 release from CMS and imports it (see <strong>The reference data keeps
 itself current</strong> below). The denial history is built from your
-own remittances. Where data is missing, the check does nothing and
-places no tag. A missing tag is not proof that a claim is clean.</li>
+own remittances: each posted remittance adds to it, and the
+administration module’s <strong>Update Data Dictionary</strong> rebuilds
+it when a newer version of Mp10 learns something the history on file
+does not have yet, and skips it otherwise. <strong>File &gt; Rebuild
+Denial History</strong> always rebuilds, and takes a few minutes. Where
+data is missing, the check does nothing and places no tag. A missing tag
+is not proof that a claim is clean.</li>
 </ul>
 <p>Secondary claims that Mp10 creates automatically after a primary
 payment are checked when someone opens and saves them.</p>
@@ -735,6 +742,11 @@ separate</td>
 <tr>
 <td>Denied Before</td>
 <td>Codes this payer has refused often and recently</td>
+</tr>
+<tr>
+<td>Missing Performing Physician</td>
+<td>No performing physician, to a payer that has refused claims sent
+without one</td>
 </tr>
 <tr>
 <td>Refused For This Patient</td>
@@ -963,6 +975,29 @@ and <strong>DENIAL-IGNORE-CODES</strong>.
 <strong>DENIAL-REASONCODES</strong> narrows the warning to a list of
 denial reason codes; empty, the default, counts every reason. A site
 that has not built its denial history never sees this tag.</p>
+<h3 id="missing-performing-physician">Missing Performing Physician</h3>
+<p>The claim has no <strong>performing physician</strong>, and this
+payer has refused claims sent without one. Without it the claim goes out
+with no rendering provider, and whether that is accepted is up to the
+payer: many pay such claims, some refuse every one. So a blank field
+alone places no tag. Mp10 learns which payers refuse from the
+remittances you post: a claim with no performing physician that paid
+nothing with reason <strong>206</strong> (National Provider Identifier
+missing) or remark <strong>N290</strong> (missing rendering provider
+identifier).</p>
+<p>The tag is placed when the payer has refused at least
+<strong>DENIAL-MIN-COUNT</strong> such claims (2 by default) in the last
+<strong>DENIAL-MONTHS</strong> (24). Clicking it names the payer, how
+many claims it refused, the last one, and the reason. Fill in the
+performing physician and save; the tag clears.</p>
+<p>Auto-created claims never have a performing physician, so they carry
+this tag whenever their payer is one of these.</p>
+<p><strong>BILLING / DENIAL-PERFPHYS-CODES</strong> lists the reasons
+that count (<strong>206,N290</strong>); empty switches the check off. A
+claim refused for this and later corrected by filling in the physician
+no longer counts, so the payers are learned from the claims still left
+blank. A site that has not built its denial history never sees this
+tag.</p>
 <h3 id="refused-for-this-patient">Refused For This Patient</h3>
 <p>This payer has already refused one of the claim’s codes <strong>for
 this same patient</strong>, and has not paid that code for the patient
@@ -1083,6 +1118,12 @@ high DENIAL-MIN-DATES silences it, DENIAL-REASONCODES narrows it</td>
 <td>No switch. <strong>BILLING / DENIAL-MONTHS</strong> shortens how far
 back it looks; <strong>DENIAL-IGNORE-CODES</strong> names reasons that
 never count</td>
+</tr>
+<tr>
+<td>Missing Performing Physician</td>
+<td><strong>BILLING / DENIAL-PERFPHYS-CODES</strong> empty switches it
+off; DENIAL-MIN-COUNT and DENIAL-MONTHS set how many refusals it
+takes</td>
 </tr>
 <tr>
 <td>Everything else</td>

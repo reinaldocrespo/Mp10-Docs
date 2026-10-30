@@ -727,6 +727,14 @@ came for, from the orders.
   apply when you click Refresh.**
 - **Show Inactive Encounters** includes no-shows; **Show Only Unbilled**,
   unticked, shows billed encounters too.
+- **Click the *Date* or *Insurance* header to sort by it.** Those two headers
+  carry the sort image; the sorting one turns red. The list opens sorted by
+  date, and the order you pick is kept when you click Refresh. Sorted by
+  *Insurance*, typing in *Incremental Search* jumps to that payer; sorted by
+  date, typing does not search.
+- **Auto-claim** (PrBill10; its icon is a form with a lightning bolt) creates
+  claims for all the highlighted encounters at once from their orders and
+  reports (*Auto-claim* in Part II).
 - **New Claim** in the side panel creates the claim for the highlighted
   encounter (Part II). After you save the claim, click Refresh and the
   encounter leaves the list.
@@ -755,6 +763,8 @@ Claims are created from the encounter they bill:
 
 - **From the unbilled list** (the usual way): highlight the encounter and
   click **New Claim**.
+- **For many encounters at once** (PrBill10): highlight them in the unbilled
+  list and click **Auto-claim** — see *Auto-claim* below.
 - **From the Encounters grid** (*Tables → Encounters*): highlight the
   encounter, click **New Claim**.
 - **From the patient**: on the patient's **Claims** tab, click **Create New
@@ -782,6 +792,76 @@ claim's payer, as of the date of service: fee, expected amount, deductible,
 description, place and type of service. A code the schedule does not carry
 for that payer stays at 0.00 — look at the *Fee* total before saving, and
 price any such line by picking the code in its *BillCode* cell.
+
+## Auto-claim
+
+In PrBill10, the unbilled list can build the claims for you. Highlight the
+encounters (click, then Ctrl-click or Shift-click for more; with none
+highlighted it takes the current row) and click **Auto-claim** in the side
+panel. Only BillingUsers and Administrators see the button.
+
+For each encounter Mp10 builds the same claim you would, from what is already
+recorded: one line for each procedure code ordered (a second order with the
+same code adds no line), priced from the payer's fee schedule on the
+date of service; the payer your past claims for that insurance used; the
+patient's card number; the diagnoses already on the encounter, plus those the
+order's report confirms. Then it runs the checks that run when you save a
+claim, and saves it. The claim is saved whole or not at all.
+
+When the batch ends, a summary lists every encounter with its **Result** and
+the **Claim / Reason**. Double-click a created row (or select it and click
+**Open claim**, or press Enter) to open that claim; on a skipped or failed
+row, which has no claim, **Open claim** is greyed out. **Report** opens the
+encounter's report; it is greyed out on encounters without one, and an
+encounter with several opens its list of reports to pick from. **The summary
+stays open**, so you can open and check each created claim in turn; close it
+with **Close** when you are done. While you work in another browser the
+summary hides, and it comes back when you return to the unbilled list.
+Closing the unbilled list closes it too, and the next Auto-claim replaces
+it. The unbilled list is refreshed as soon as the batch
+ends: the encounters that got a claim leave it.
+
+An encounter is skipped, with nothing saved, when:
+
+| Reason | Meaning |
+|---|---|
+| `no orders` | The encounter has no orders to bill |
+| `claim exists` | The encounter already has a claim (primary or any other) |
+| `encounter inactive` | The encounter is marked inactive (a no-show) |
+| `no insurance` | The encounter has no insurance and the patient has no primary |
+| `payer unclear` | The recent claims of all patients for this encounter insurance do not show one payer to bill, or there are none |
+| `payer not on patient` | The payer is not among the patient's cards, so there is no member ID |
+| `no service date` | The encounter has no date |
+| `possible duplicate of <ClaimKey>` | The same patient, date and payer already have a claim with one of these procedures |
+| `no fee for <cpt>` | The payer's fee schedule has no price for that code on that date |
+
+A result of **Failed** means something went wrong while building the claim
+(a lock held by another user, for instance); the reason is shown, nothing was
+saved, and the encounter can be tried again.
+
+A missing report is not a reason to skip. The claim is created anyway:
+
+- If the encounter has no ICD10 at all, the result reads **Created - no
+  ICD10**. The claim carries the *Missing ICD10s* tag and its lines point at
+  no diagnosis; code it before sending.
+- A diagnosis the report does not confirm is simply left off.
+- So is a right, left or bilateral diagnosis whose side the line's RT/LT
+  modifier or the report's findings do not name: a right-knee report never
+  adds a left-knee or bilateral code.
+- Codes are added only while the claim has fewer than 12, the most an 837
+  claim carries.
+
+Every claim made this way carries the tag **Auto-created - review**. It
+means a person has not checked the claim yet. Open the claim, check the payer,
+the lines and the diagnoses, correct what is wrong, then remove the tag with
+its **x** and click **Save**. Removing the tag and saving is what records the
+claim as verified. Leave the tag on a claim you have not checked. The tag does
+not stop the claim from being sent; check it before you include it in an 837
+batch.
+
+An auto-created claim has no performing physician. When its payer is one that
+refuses claims without one, it also carries **Missing Performing Physician**:
+fill in *Perf Phys* before you send it.
 
 ## The claim window
 
@@ -976,10 +1056,11 @@ nothing unless you answer Yes:
   for. Yes adds it to the patient's insurances; check the member number and
   dates afterwards. Answer No if the claim is the one that is wrong.
 
-Two tags learn from the remittances you post (Part III): **Denied Before**,
-when this payer has refused these codes often and recently, and **Refused For
+Three tags learn from the remittances you post (Part III): **Denied Before**,
+when this payer has refused these codes often and recently; **Refused For
 This Patient**, when the payer refused these very codes for this patient and
-has paid nothing for them since.
+has paid nothing for them since; and **Missing Performing Physician**, when
+the claim has none and this payer has refused claims sent without one.
 
 You can also add your own tag with the **+** button beside the tags, to mark
 a claim for yourself or a colleague.
@@ -1761,6 +1842,9 @@ the payer already refused it for this patient. The dashboard's rejected
 claims list explains each remittance denial with its reason codes. **All of
 this reads the remittances only.** A denial typed into the payment window is
 invisible to it, and the next claim goes out with the same mistake.
+When a new version of Mp10 learns something new from the history, the
+administration module's **Update Data Dictionary** rebuilds it, with a
+progress bar, and skips the rebuild when there is nothing new to learn.
 
 **Reconciliation.** The remittance must add up to the check: *Diff.* shows
 you, before you post, whether every cent is accounted for, and *PLB Adj*

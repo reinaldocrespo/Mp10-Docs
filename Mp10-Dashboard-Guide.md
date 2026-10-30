@@ -345,7 +345,11 @@ what the tag means and what to do about it.
   schedule, the NCCI tables, and the denial history. The first three keep
   themselves current -- AutoTasks downloads each new release from CMS and
   imports it (see **The reference data keeps itself current** below). The
-  denial history is built from your own remittances. Where data is missing,
+  denial history is built from your own remittances: each posted remittance
+  adds to it, and the administration module's **Update Data Dictionary**
+  rebuilds it when a newer version of Mp10 learns something the history on
+  file does not have yet, and skips it otherwise. **File > Rebuild Denial
+  History** always rebuilds, and takes a few minutes. Where data is missing,
   the check does nothing and places no tag. A missing tag is not proof that
   a claim is clean.
 
@@ -374,6 +378,7 @@ checked when someone opens and saves them.
 | Insurance DOB Mismatch | A date of birth different from the one the payer reported |
 | Insurance Sex Mismatch | A sex different from the one the payer reported, or none at all |
 | Denied Before | Codes this payer has refused often and recently |
+| Missing Performing Physician | No performing physician, to a payer that has refused claims sent without one |
 | Refused For This Patient | A code this payer refused for this same patient, with nothing paid for it since |
 
 ## Diagnosis codes
@@ -606,6 +611,31 @@ The thresholds are System Registry settings under **BILLING**, named
 empty, the default, counts every reason. A site that has not built its
 denial history never sees this tag.
 
+### Missing Performing Physician
+
+The claim has no **performing physician**, and this payer has refused claims
+sent without one. Without it the claim goes out with no rendering provider,
+and whether that is accepted is up to the payer: many pay such claims, some
+refuse every one. So a blank field alone places no tag. Mp10 learns which
+payers refuse from the remittances you post: a claim with no performing
+physician that paid nothing with reason **206** (National Provider
+Identifier missing) or remark **N290** (missing rendering provider
+identifier).
+
+The tag is placed when the payer has refused at least **DENIAL-MIN-COUNT**
+such claims (2 by default) in the last **DENIAL-MONTHS** (24). Clicking it
+names the payer, how many claims it refused, the last one, and the reason.
+Fill in the performing physician and save; the tag clears.
+
+Auto-created claims never have a performing physician, so they carry this tag
+whenever their payer is one of these.
+
+**BILLING / DENIAL-PERFPHYS-CODES** lists the reasons that count
+(**206,N290**); empty switches the check off. A claim refused for this and
+later corrected by filling in the physician no longer counts, so the payers
+are learned from the claims still left blank. A site that has not built its
+denial history never sees this tag.
+
 ### Refused For This Patient
 
 This payer has already refused one of the claim's codes **for this same
@@ -674,6 +704,7 @@ nothing when the claim is right. Where a site can turn one off or narrow it:
 | The three side checks | **BILLING / ICD10-LATERALITY-EXCLUDE**: diagnosis-code prefixes to leave alone (claim window only) |
 | Denied Before | The **BILLING / DENIAL-...** thresholds above; a very high DENIAL-MIN-DATES silences it, DENIAL-REASONCODES narrows it |
 | Refused For This Patient | No switch. **BILLING / DENIAL-MONTHS** shortens how far back it looks; **DENIAL-IGNORE-CODES** names reasons that never count |
+| Missing Performing Physician | **BILLING / DENIAL-PERFPHYS-CODES** empty switches it off; DENIAL-MIN-COUNT and DENIAL-MONTHS set how many refusals it takes |
 | Everything else | Always on. The DOB and sex checks only speak when an eligibility response exists to compare against |
 
 ## Tags you may see on older claims
