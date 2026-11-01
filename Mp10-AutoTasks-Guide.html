@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-10-30" />
+  <meta name="dcterms.date" content="2026-11-01" />
   <title>Mp10 AutoTasks — Administrator’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -148,7 +148,7 @@ a { color: inherit; }
 <p class="subtitle">Backups, electronic remittances, modality worklist,
 and automated reports</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">30 October 2026</p>
+<p class="date">01 November 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -322,6 +322,10 @@ off</a></li>
 settings</a></li>
 <li><a href="#being-told-what-happened-1" id="toc-being-told-what-happened-1">Being told what happened</a></li>
 <li><a href="#the-yearly-icd-10-release" id="toc-the-yearly-icd-10-release">The yearly ICD-10 release</a></li>
+<li><a href="#the-index-to-diseases-searching-diagnoses-by-words" id="toc-the-index-to-diseases-searching-diagnoses-by-words">The Index to
+Diseases (searching diagnoses by words)</a></li>
+<li><a href="#diagnosis-suggestions-by-procedure" id="toc-diagnosis-suggestions-by-procedure">Diagnosis suggestions by
+procedure</a></li>
 <li><a href="#checking-it-is-working-2" id="toc-checking-it-is-working-2">Checking it is working</a></li>
 </ul></li>
 <li><a href="#automated-reports" id="toc-automated-reports">Automated
@@ -3006,6 +3010,61 @@ the downloaded <code>icd10cm_order_YYYY.txt</code>, then set
 <strong>CMSFETCH / ICD10_IMPORTED</strong> to that year so AutoTasks
 does not import it again. Clearing ICD10_IMPORTED makes AutoTasks import
 that year again at its next check.</p>
+<h2 id="the-index-to-diseases-searching-diagnoses-by-words">The Index to
+Diseases (searching diagnoses by words)</h2>
+<p>The Billing module’s ICD10 tab finds codes from plain words (“left
+kidney stone”). Besides the code descriptions, it searches the CMS
+<strong>Index to Diseases and Injuries</strong> and the Neoplasm Table.
+AutoTasks downloads them with the year’s code files, into the same
+<code>icd10-YYYY</code> folder, and loads them into your data on its
+own. <strong>CMSFETCH / ICD10_INDEX_IMPORTED</strong> records the year
+loaded.</p>
+<p>Until the Data Dictionary has been updated, the table the index goes
+into does not exist. AutoTasks then waits quietly and loads the index at
+the first check after the update. The search still works meanwhile, from
+the code descriptions alone.</p>
+<p>To load it sooner, use <strong>Admin10 → Load ICD10 Index</strong>
+and pick the folder that holds <code>icd10cm_index_YYYY.xml</code>.</p>
+<h2 id="diagnosis-suggestions-by-procedure">Diagnosis suggestions by
+procedure</h2>
+<p>The ICD10 tab also suggests the diagnoses most often billed with the
+claim’s procedure codes. AutoTasks recounts those every night, at its
+first check after 21:00, from the primary claims of the last 24 months.
+On a large practice this takes under a minute.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Section</th>
+<th>Entry</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BILLING</td>
+<td>ICD10-SUGGEST-MONTHS</td>
+<td>24</td>
+<td>How many months back a claim still counts</td>
+</tr>
+<tr>
+<td>BILLING</td>
+<td>ICD10-SUGGEST-BUILT</td>
+<td>—</td>
+<td>The day of the last recount, written by AutoTasks</td>
+</tr>
+</tbody>
+</table>
+<p>If a night’s recount fails, it is tried again an hour later. Clearing
+ICD10-SUGGEST-BUILT makes AutoTasks recount at its next check after
+21:00. <strong>Admin10 → Rebuild ICD10 Suggestions</strong> recounts
+right away, for example on the day the Data Dictionary is updated.</p>
 <h2 id="checking-it-is-working-2">Checking it is working</h2>
 <ul>
 <li>The log (<code>AutoTasks.out</code>) carries one

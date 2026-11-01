@@ -1645,6 +1645,40 @@ running), use **Admin10 → Add 20xx ICD10 Data** against the downloaded
 so AutoTasks does not import it again. Clearing ICD10_IMPORTED makes AutoTasks
 import that year again at its next check.
 
+## The Index to Diseases (searching diagnoses by words)
+
+The Billing module's ICD10 tab finds codes from plain words ("left kidney
+stone"). Besides the code descriptions, it searches the CMS **Index to
+Diseases and Injuries** and the Neoplasm Table. AutoTasks downloads them with
+the year's code files, into the same `icd10-YYYY` folder, and loads them into
+your data on its own. **CMSFETCH / ICD10_INDEX_IMPORTED** records the year
+loaded.
+
+Until the Data Dictionary has been updated, the table the index goes into does
+not exist. AutoTasks then waits quietly and loads the index at the first
+check after the update. The search still works meanwhile, from the code
+descriptions alone.
+
+To load it sooner, use **Admin10 → Load ICD10 Index** and pick the folder
+that holds `icd10cm_index_YYYY.xml`.
+
+## Diagnosis suggestions by procedure
+
+The ICD10 tab also suggests the diagnoses most often billed with the claim's
+procedure codes. AutoTasks recounts those every night, at its first check
+after 21:00, from the primary claims of the last 24 months. On a large
+practice this takes under a minute.
+
+| Section | Entry | Default | Meaning |
+|---|---|---|---|
+| BILLING | ICD10-SUGGEST-MONTHS | 24 | How many months back a claim still counts |
+| BILLING | ICD10-SUGGEST-BUILT | — | The day of the last recount, written by AutoTasks |
+
+If a night's recount fails, it is tried again an hour later. Clearing
+ICD10-SUGGEST-BUILT makes AutoTasks recount at its next check after 21:00.
+**Admin10 → Rebuild ICD10 Suggestions** recounts right away, for example on
+the day the Data Dictionary is updated.
+
 ## Checking it is working
 
 - The log (`AutoTasks.out`) carries one `CMSFETCH:`

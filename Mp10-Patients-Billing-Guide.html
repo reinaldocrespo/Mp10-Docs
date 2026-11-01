@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-10-30" />
+  <meta name="dcterms.date" content="2026-11-01" />
   <title>Mp10 Patients, Billing and Payments — User’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -149,7 +149,7 @@ Guide</h1>
 <p class="subtitle">From the patient at the front desk to the payment on
 the claim</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">30 October 2026</p>
+<p class="date">01 November 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -268,8 +268,10 @@ claims</a></li>
 <ul>
 <li><a href="#the-icd10-tab" id="toc-the-icd10-tab">The ICD10
 tab</a></li>
-<li><a href="#looking-codes-up" id="toc-looking-codes-up">Looking codes
-up</a></li>
+<li><a href="#suggestions-and-searching-by-words" id="toc-suggestions-and-searching-by-words">Suggestions and searching by
+words</a></li>
+<li><a href="#looking-codes-up-in-the-diagnosis-table" id="toc-looking-codes-up-in-the-diagnosis-table">Looking codes up in the
+Diagnosis Table</a></li>
 <li><a href="#pointing-lines-at-diagnoses" id="toc-pointing-lines-at-diagnoses">Pointing lines at
 diagnoses</a></li>
 </ul></li>
@@ -1586,7 +1588,41 @@ section).</li>
 claim: if an encounter has more than one claim, they share the list. Up
 to twelve are sent on the electronic professional claim; any after the
 twelfth are not.</p>
-<h2 id="looking-codes-up">Looking codes up</h2>
+<h2 id="suggestions-and-searching-by-words">Suggestions and searching by
+words</h2>
+<p>An empty row’s <em>Description</em> cell shows the gray text <em>Type
+keywords, e.g. left kidney stone</em>. That text is only a hint; it is
+never saved.</p>
+<p><strong>Suggestions.</strong> When you enter the ICD10 tab, or move
+to an empty row, a list opens under the grid: <em>Often billed with</em>
+the claim’s procedure codes, the diagnoses your practice has billed most
+often with those procedures. Each one shows how many claims carried it
+(<em>billed 12x</em>). Codes already on the claim are left out. If every
+row already has a code, Mp10 adds an empty row at the bottom and puts
+the cursor there; an empty row is never saved. The suggestions are only
+offered. Nothing is coded until you pick one.</p>
+<p><strong>Searching by words.</strong> Type words in the
+<em>Description</em> cell, such as <code>left kidney stone</code>. After
+three letters, the list switches to the codes that match and narrows as
+you type. Each match shows why it matched (the code’s description or an
+entry of the CMS Index to Diseases) and how often your practice has
+billed it. Typing the start of a code in the <em>IcdCode</em> cell
+(<code>N20</code>) lists the codes that start with it.</p>
+<ul>
+<li><strong>Down arrow</strong> moves from the cell into the list.</li>
+<li><strong>Enter</strong> or a <strong>double-click</strong> picks the
+highlighted code. It fills the row as if you had typed the code, the
+list closes, and the next empty row offers suggestions again.</li>
+<li><strong>Esc</strong> closes the list and keeps what you typed.</li>
+<li><strong>No matches:</strong> Enter offers to open the Diagnosis
+Table (next section).</li>
+</ul>
+<p>The same list works on the encounter coding screen.</p>
+<p>The suggestions are recounted every night, from the primary claims of
+the last 24 months. A new practice, or a procedure code that has never
+been billed, gets no suggestions; searching by words still works.</p>
+<h2 id="looking-codes-up-in-the-diagnosis-table">Looking codes up in the
+Diagnosis Table</h2>
 <p>Click the small button inside the <em>IcdCode</em> cell to open the
 <strong>Diagnosis Table</strong>, the ICD-10 encoder.</p>
 <ul>
@@ -3000,8 +3036,8 @@ prices</td>
 </tr>
 <tr>
 <td>Code</td>
-<td>ICD10 tab; the cell button opens the encoder. First code =
-principal</td>
+<td>ICD10 tab: pick a suggestion, or type words in <em>Description</em>.
+First code = principal</td>
 </tr>
 <tr>
 <td>Point lines at diagnoses</td>

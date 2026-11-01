@@ -923,7 +923,40 @@ The diagnoses belong to the **encounter**, not to one claim: if an encounter
 has more than one claim, they share the list. Up to twelve are sent on the
 electronic professional claim; any after the twelfth are not.
 
-## Looking codes up
+## Suggestions and searching by words
+
+An empty row's *Description* cell shows the gray text *Type keywords, e.g.
+left kidney stone*. That text is only a hint; it is never saved.
+
+**Suggestions.** When you enter the ICD10 tab, or move to an empty row, a
+list opens under the grid: *Often billed with* the claim's procedure codes,
+the diagnoses your practice has billed most often with those procedures.
+Each one shows how many claims carried it (*billed 12x*). Codes already on
+the claim are left out. If every row already has a code, Mp10 adds an empty
+row at the bottom and puts the cursor there; an empty row is never saved.
+The suggestions are only offered. Nothing is coded until you pick one.
+
+**Searching by words.** Type words in the *Description* cell, such as `left
+kidney stone`. After three letters, the list switches to the codes that match
+and narrows as you type. Each match shows why it matched (the code's
+description or an entry of the CMS Index to Diseases) and how often your
+practice has billed it. Typing the start of a code in the *IcdCode* cell
+(`N20`) lists the codes that start with it.
+
+- **Down arrow** moves from the cell into the list.
+- **Enter** or a **double-click** picks the highlighted code. It fills the row
+  as if you had typed the code, the list closes, and the next empty row
+  offers suggestions again.
+- **Esc** closes the list and keeps what you typed.
+- **No matches:** Enter offers to open the Diagnosis Table (next section).
+
+The same list works on the encounter coding screen.
+
+The suggestions are recounted every night, from the primary claims of the
+last 24 months. A new practice, or a procedure code that has never been
+billed, gets no suggestions; searching by words still works.
+
+## Looking codes up in the Diagnosis Table
 
 Click the small button inside the *IcdCode* cell to open the **Diagnosis
 Table**, the ICD-10 encoder.
@@ -1897,7 +1930,7 @@ automatically from its *Automate Report* tab (Supervisors and Administrators).
 |---|---|
 | See what is unbilled | Unbilled encounters (or the dashboard line) |
 | Create a claim | Unbilled list → New Claim. Confirm each line's code so it prices |
-| Code | ICD10 tab; the cell button opens the encoder. First code = principal |
+| Code | ICD10 tab: pick a suggestion, or type words in *Description*. First code = principal |
 | Point lines at diagnoses | *Diag*: `1`, `1,2`… Recheck after reordering |
 | Read a tag | Hover it; click for the full explanation |
 | Send | Claims grid → select one payer's claims → Outbound 837 |
