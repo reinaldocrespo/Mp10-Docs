@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-11-01" />
+  <meta name="dcterms.date" content="2026-11-02" />
   <title>Mp10 AutoTasks — Administrator’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -148,7 +148,7 @@ a { color: inherit; }
 <p class="subtitle">Backups, electronic remittances, modality worklist,
 and automated reports</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">01 November 2026</p>
+<p class="date">02 November 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -326,6 +326,8 @@ settings</a></li>
 Diseases (searching diagnoses by words)</a></li>
 <li><a href="#diagnosis-suggestions-by-procedure" id="toc-diagnosis-suggestions-by-procedure">Diagnosis suggestions by
 procedure</a></li>
+<li><a href="#procedure-code-search-counts" id="toc-procedure-code-search-counts">Procedure code search
+counts</a></li>
 <li><a href="#checking-it-is-working-2" id="toc-checking-it-is-working-2">Checking it is working</a></li>
 </ul></li>
 <li><a href="#automated-reports" id="toc-automated-reports">Automated
@@ -3065,6 +3067,56 @@ On a large practice this takes under a minute.</p>
 ICD10-SUGGEST-BUILT makes AutoTasks recount at its next check after
 21:00. <strong>Admin10 → Rebuild ICD10 Suggestions</strong> recounts
 right away, for example on the day the Data Dictionary is updated.</p>
+<h2 id="procedure-code-search-counts">Procedure code search counts</h2>
+<p>The claim’s <em>BillCode</em> cell finds procedure codes by words and
+puts the most billed codes first. It relies on two tables that AutoTasks
+rebuilds every night, at its first check after 21:00:</p>
+<ul>
+<li><strong>every description your practice has used for each
+code</strong>, from the fee schedules of all payers and from past claim
+lines;</li>
+<li><strong>how many claim lines billed each code</strong> in the last
+12 months, counted per fee schedule. Payers that share a fee schedule
+are counted together.</li>
+</ul>
+<p>On a large practice this takes a few seconds.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Section</th>
+<th>Entry</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BILLING</td>
+<td>CPT-SEARCH-MONTHS</td>
+<td>12</td>
+<td>How many months back a claim line still counts (1 to 60)</td>
+</tr>
+<tr>
+<td>BILLING</td>
+<td>CPT-SEARCH-BUILT</td>
+<td>—</td>
+<td>The day of the last rebuild, written by AutoTasks</td>
+</tr>
+</tbody>
+</table>
+<p>Until the Data Dictionary has been updated, the tables do not exist
+and AutoTasks waits quietly. If a night’s rebuild fails, it is tried
+again an hour later. Clearing CPT-SEARCH-BUILT makes AutoTasks rebuild
+at its next check after 21:00. <strong>Admin10 → Rebuild CPT
+Search</strong> rebuilds right away. Run it on the day the Data
+Dictionary is updated: until the first rebuild, the search uses each fee
+schedule’s own descriptions only and shows no counts.</p>
 <h2 id="checking-it-is-working-2">Checking it is working</h2>
 <ul>
 <li>The log (<code>AutoTasks.out</code>) carries one

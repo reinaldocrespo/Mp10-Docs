@@ -1679,6 +1679,31 @@ ICD10-SUGGEST-BUILT makes AutoTasks recount at its next check after 21:00.
 **Admin10 → Rebuild ICD10 Suggestions** recounts right away, for example on
 the day the Data Dictionary is updated.
 
+## Procedure code search counts
+
+The claim's *BillCode* cell finds procedure codes by words and puts the most
+billed codes first. It relies on two tables that AutoTasks rebuilds every
+night, at its first check after 21:00:
+
+- **every description your practice has used for each code**, from the fee
+  schedules of all payers and from past claim lines;
+- **how many claim lines billed each code** in the last 12 months, counted
+  per fee schedule. Payers that share a fee schedule are counted together.
+
+On a large practice this takes a few seconds.
+
+| Section | Entry | Default | Meaning |
+|---|---|---|---|
+| BILLING | CPT-SEARCH-MONTHS | 12 | How many months back a claim line still counts (1 to 60) |
+| BILLING | CPT-SEARCH-BUILT | — | The day of the last rebuild, written by AutoTasks |
+
+Until the Data Dictionary has been updated, the tables do not exist and
+AutoTasks waits quietly. If a night's rebuild fails, it is tried again an
+hour later. Clearing CPT-SEARCH-BUILT makes AutoTasks rebuild at its next
+check after 21:00. **Admin10 → Rebuild CPT Search** rebuilds right away. Run
+it on the day the Data Dictionary is updated: until the first rebuild, the
+search uses each fee schedule's own descriptions only and shows no counts.
+
 ## Checking it is working
 
 - The log (`AutoTasks.out`) carries one `CMSFETCH:`

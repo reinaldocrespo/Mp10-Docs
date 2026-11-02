@@ -865,10 +865,18 @@ fill in *Perf Phys* before you send it.
 
 ## The claim window
 
-Its tabs, in PrBill10, are **Summary**, **Procs** (procedures), **ICD9**,
-**ICD10**, **Rmrks** (remarks), **Pymnts** (payments), **EncReps** and
-**PaprWrk** (paperwork). The procedure lines appear on both Summary and Procs;
-they are the same lines.
+Its tabs, in PrBill10, are **Summary**, **Procs** (procedures), **ICD10**,
+**Rmrks** (remarks), **Pymnts** (payments), **EncReps** and **PaprWrk**
+(paperwork). The procedure lines appear on both Summary and Procs; they are
+the same lines.
+
+ICD-9 codes were deprecated when billing moved to ICD-10, so the old **ICD9**
+tab no longer shows. It appears only on a claim from before that change
+(date of service before 10/01/2015), or on a later claim that already has
+ICD-9 codes saved on it, so those codes stay visible.
+
+The ICD10 tab shows a check mark when the claim has diagnoses and a red **X**
+when it has none.
 
 The Summary tab holds the claim's header:
 
@@ -906,6 +914,12 @@ A secondary claim opens with the bar *Complementary Insurance Claim* and
 does not let you change its lines.
 
 # Coding the diagnoses (ICD-10)
+
+## Why ICD-10
+
+HIPAA has required ICD-10-CM diagnosis codes for services on or after
+**10/01/2015**. The **ICD10** tab is on every claim, and its codes are the
+diagnoses the payer receives on the electronic claim (837).
 
 ## The ICD10 tab
 
@@ -949,6 +963,10 @@ practice has billed it. Typing the start of a code in the *IcdCode* cell
   offers suggestions again.
 - **Esc** closes the list and keeps what you typed.
 - **No matches:** Enter offers to open the Diagnosis Table (next section).
+
+Rows are one line high unless some row in the list has a second line (why it
+matched, or an *Excludes1* warning); then every row is two lines. While the
+list is open the grid's totals row, if it has one, is hidden.
 
 The same list works on the encounter coding screen.
 
@@ -1026,12 +1044,81 @@ payer**, as of the date of service. When you pick or confirm a code, Mp10 fills
 in *Fee*, *Expected*, the description, the revenue code, the place and type of
 service, and the deductible.
 
+**Valid Billing Codes** opens only when you ask for it: the cell's button, or
+Enter on the *No matches* row of the list under the grid. It no longer opens
+by itself when you leave an empty cell or type a code the payer has no price
+for. It lists the codes billed most often on this payer's fee schedule at the
+top. Its *Billed* column shows how many claim
+lines used each code in the last 12 months. Typing a code still jumps to it,
+and clicking the *Cpt Code* header sorts the list by code.
+
 Prices come from your practice's billing codes table, kept by payer and by
-effective date in MpAdmin. If a code is not priced for the payer, the picker
-opens so you can choose; if it is not there at all, ask whoever keeps the
-fee schedule to add it.
+effective date in MpAdmin. If you type a code that is not priced for the
+payer and press Enter, the cell stays open and the list under the grid says
+*"76999" is not on the MCS fee schedule*, with the priced codes that start the
+same way, so you can correct it or pick one. If you leave the cell instead,
+the line keeps the code it had, and you hear a beep. If the code is not on the
+fee schedule at all, ask whoever keeps the fee schedule to add it.
+
+A code with a modifier the fee schedule does not list is still accepted and
+priced from its first five characters: `76881 XY` takes the price of 76881.
 
 Changing the units changes *Expected* and *Deduct* in proportion.
+
+## Finding a code by words
+
+You don't need to know the code. Type words in the *BillCode* cell, such as
+`ext sono` or `lap chole`. After three letters, a list opens under the grid
+with this payer's priced codes that match, best first. The list narrows as
+you type.
+
+The words are matched against every description your practice has used for
+a code: the fee schedules of all your payers and the descriptions on past
+claim lines. That is why abbreviations and Spanish wording that your office
+has used find the code. When a code matched through one of those other
+wordings, its row shows it on a second line: *as billed: EXTREMITY SONOGRAM
+LTD*.
+
+The list has four columns: *Code* (with its modifiers), *Description*,
+*Billed* (how many claim lines used the code on this fee schedule in the last
+12 months; blank if none) and *Fee* (this payer's price). Rows are one line
+high, unless some row has an *as billed* line; then every row is two lines.
+Codes whose modifier you typed rank first: `sono rt` puts the RT codes on top.
+
+Typing the start of a code (`7688`) lists the priced codes that start with
+it. A full code followed by Enter works exactly as before.
+
+- **Down arrow**, or **Enter** after words, moves from the cell into the list.
+- **Enter** or a **double-click** picks the highlighted code. It fills the
+  line as if you had typed the code, and the cursor moves to an empty line at
+  the bottom.
+- **Esc** closes the list. The cell keeps the code it had.
+- Words are never saved as a code. If you leave the cell without picking,
+  it goes back to the code it had.
+- Leaving an empty *BillCode* cell (up arrow, Tab, a click elsewhere) does
+  nothing. The line stays empty.
+- **No matches:** press Enter on the *No matches* row to open **Valid Billing
+  Codes**. That and the cell's button are the only ways it opens.
+
+**Suggestions.** On an empty procedure line, on either the *Summary* or the
+*Procs* tab, the list opens by itself with the codes most billed on this
+payer's fee schedule. It does not take the cursor. Press the down arrow to
+move into it, or type to search instead. Arriving on the *Procs* tab puts the
+cursor on an empty line at the bottom; an empty line is never saved.
+Returning to the *Summary* tab leaves the cursor in the claim's header.
+
+On a closed claim the *BillCode* cell works as before, with no list.
+
+**Where the list opens.** While the list is open, the grid's totals row is
+hidden to leave room for lines. On the *Procs* tab the list takes the bottom
+of the grid. On the *Summary* tab, where the grid is short, the grid shrinks
+to half its height and the list fills the rest of the page, over the
+balances, dates and facility fields. Those come back as soon as the list
+closes: after a pick, Esc, or a change of tab.
+
+The counts are refreshed every night. Until the first count after the Data
+Dictionary update, the list searches the fee schedule's own descriptions
+only, offers no suggestions, and *Billed* shows 0.
 
 ## Modifiers
 

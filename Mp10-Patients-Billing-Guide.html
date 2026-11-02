@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-11-01" />
+  <meta name="dcterms.date" content="2026-11-02" />
   <title>Mp10 Patients, Billing and Payments — User’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -149,7 +149,7 @@ Guide</h1>
 <p class="subtitle">From the patient at the front desk to the payment on
 the claim</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">01 November 2026</p>
+<p class="date">02 November 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -266,6 +266,7 @@ claims</a></li>
 </ul></li>
 <li><a href="#coding-the-diagnoses-icd-10" id="toc-coding-the-diagnoses-icd-10">Coding the diagnoses (ICD-10)</a>
 <ul>
+<li><a href="#why-icd-10" id="toc-why-icd-10">Why ICD-10</a></li>
 <li><a href="#the-icd10-tab" id="toc-the-icd10-tab">The ICD10
 tab</a></li>
 <li><a href="#suggestions-and-searching-by-words" id="toc-suggestions-and-searching-by-words">Suggestions and searching by
@@ -281,6 +282,7 @@ diagnoses</a></li>
 procedure lines</a></li>
 <li><a href="#codes-prices-and-the-fee-schedule" id="toc-codes-prices-and-the-fee-schedule">Codes, prices and the fee
 schedule</a></li>
+<li><a href="#finding-a-code-by-words" id="toc-finding-a-code-by-words">Finding a code by words</a></li>
 <li><a href="#modifiers" id="toc-modifiers">Modifiers</a></li>
 <li><a href="#checking-a-batch-of-claims-before-sending" id="toc-checking-a-batch-of-claims-before-sending">Checking a batch of
 claims before sending</a></li>
@@ -1480,11 +1482,18 @@ Performing Physician</strong>: fill in <em>Perf Phys</em> before you
 send it.</p>
 <h2 id="the-claim-window">The claim window</h2>
 <p>Its tabs, in PrBill10, are <strong>Summary</strong>,
-<strong>Procs</strong> (procedures), <strong>ICD9</strong>,
-<strong>ICD10</strong>, <strong>Rmrks</strong> (remarks),
-<strong>Pymnts</strong> (payments), <strong>EncReps</strong> and
-<strong>PaprWrk</strong> (paperwork). The procedure lines appear on both
-Summary and Procs; they are the same lines.</p>
+<strong>Procs</strong> (procedures), <strong>ICD10</strong>,
+<strong>Rmrks</strong> (remarks), <strong>Pymnts</strong> (payments),
+<strong>EncReps</strong> and <strong>PaprWrk</strong> (paperwork). The
+procedure lines appear on both Summary and Procs; they are the same
+lines.</p>
+<p>ICD-9 codes were deprecated when billing moved to ICD-10, so the old
+<strong>ICD9</strong> tab no longer shows. It appears only on a claim
+from before that change (date of service before 10/01/2015), or on a
+later claim that already has ICD-9 codes saved on it, so those codes
+stay visible.</p>
+<p>The ICD10 tab shows a check mark when the claim has diagnoses and a
+red <strong>X</strong> when it has none.</p>
 <p>The Summary tab holds the claim’s header:</p>
 <table>
 <colgroup>
@@ -1568,6 +1577,11 @@ automatically</strong>, billing exactly what was assigned. See
 <p>A secondary claim opens with the bar <em>Complementary Insurance
 Claim</em> and does not let you change its lines.</p>
 <h1 id="coding-the-diagnoses-icd-10">Coding the diagnoses (ICD-10)</h1>
+<h2 id="why-icd-10">Why ICD-10</h2>
+<p>HIPAA has required ICD-10-CM diagnosis codes for services on or after
+<strong>10/01/2015</strong>. The <strong>ICD10</strong> tab is on every
+claim, and its codes are the diagnoses the payer receives on the
+electronic claim (837).</p>
 <h2 id="the-icd10-tab">The ICD10 tab</h2>
 <p>The <strong>ICD10</strong> tab (Alt+C) lists the claim’s diagnoses in
 order. <strong>The first diagnosis is the principal one</strong> — the
@@ -1617,6 +1631,10 @@ list closes, and the next empty row offers suggestions again.</li>
 <li><strong>No matches:</strong> Enter offers to open the Diagnosis
 Table (next section).</li>
 </ul>
+<p>Rows are one line high unless some row in the list has a second line
+(why it matched, or an <em>Excludes1</em> warning); then every row is
+two lines. While the list is open the grid’s totals row, if it has one,
+is hidden.</p>
 <p>The same list works on the encounter coding screen.</p>
 <p>The suggestions are recounted every night, from the primary claims of
 the last 24 months. A new practice, or a procedure code that has never
@@ -1732,12 +1750,84 @@ practice has priced <strong>for this claim’s payer</strong>, as of the
 date of service. When you pick or confirm a code, Mp10 fills in
 <em>Fee</em>, <em>Expected</em>, the description, the revenue code, the
 place and type of service, and the deductible.</p>
+<p><strong>Valid Billing Codes</strong> opens only when you ask for it:
+the cell’s button, or Enter on the <em>No matches</em> row of the list
+under the grid. It no longer opens by itself when you leave an empty
+cell or type a code the payer has no price for. It lists the codes
+billed most often on this payer’s fee schedule at the top. Its
+<em>Billed</em> column shows how many claim lines used each code in the
+last 12 months. Typing a code still jumps to it, and clicking the
+<em>Cpt Code</em> header sorts the list by code.</p>
 <p>Prices come from your practice’s billing codes table, kept by payer
-and by effective date in MpAdmin. If a code is not priced for the payer,
-the picker opens so you can choose; if it is not there at all, ask
-whoever keeps the fee schedule to add it.</p>
+and by effective date in MpAdmin. If you type a code that is not priced
+for the payer and press Enter, the cell stays open and the list under
+the grid says <em>“76999” is not on the MCS fee schedule</em>, with the
+priced codes that start the same way, so you can correct it or pick one.
+If you leave the cell instead, the line keeps the code it had, and you
+hear a beep. If the code is not on the fee schedule at all, ask whoever
+keeps the fee schedule to add it.</p>
+<p>A code with a modifier the fee schedule does not list is still
+accepted and priced from its first five characters:
+<code>76881 XY</code> takes the price of 76881.</p>
 <p>Changing the units changes <em>Expected</em> and <em>Deduct</em> in
 proportion.</p>
+<h2 id="finding-a-code-by-words">Finding a code by words</h2>
+<p>You don’t need to know the code. Type words in the <em>BillCode</em>
+cell, such as <code>ext sono</code> or <code>lap chole</code>. After
+three letters, a list opens under the grid with this payer’s priced
+codes that match, best first. The list narrows as you type.</p>
+<p>The words are matched against every description your practice has
+used for a code: the fee schedules of all your payers and the
+descriptions on past claim lines. That is why abbreviations and Spanish
+wording that your office has used find the code. When a code matched
+through one of those other wordings, its row shows it on a second line:
+<em>as billed: EXTREMITY SONOGRAM LTD</em>.</p>
+<p>The list has four columns: <em>Code</em> (with its modifiers),
+<em>Description</em>, <em>Billed</em> (how many claim lines used the
+code on this fee schedule in the last 12 months; blank if none) and
+<em>Fee</em> (this payer’s price). Rows are one line high, unless some
+row has an <em>as billed</em> line; then every row is two lines. Codes
+whose modifier you typed rank first: <code>sono rt</code> puts the RT
+codes on top.</p>
+<p>Typing the start of a code (<code>7688</code>) lists the priced codes
+that start with it. A full code followed by Enter works exactly as
+before.</p>
+<ul>
+<li><strong>Down arrow</strong>, or <strong>Enter</strong> after words,
+moves from the cell into the list.</li>
+<li><strong>Enter</strong> or a <strong>double-click</strong> picks the
+highlighted code. It fills the line as if you had typed the code, and
+the cursor moves to an empty line at the bottom.</li>
+<li><strong>Esc</strong> closes the list. The cell keeps the code it
+had.</li>
+<li>Words are never saved as a code. If you leave the cell without
+picking, it goes back to the code it had.</li>
+<li>Leaving an empty <em>BillCode</em> cell (up arrow, Tab, a click
+elsewhere) does nothing. The line stays empty.</li>
+<li><strong>No matches:</strong> press Enter on the <em>No matches</em>
+row to open <strong>Valid Billing Codes</strong>. That and the cell’s
+button are the only ways it opens.</li>
+</ul>
+<p><strong>Suggestions.</strong> On an empty procedure line, on either
+the <em>Summary</em> or the <em>Procs</em> tab, the list opens by itself
+with the codes most billed on this payer’s fee schedule. It does not
+take the cursor. Press the down arrow to move into it, or type to search
+instead. Arriving on the <em>Procs</em> tab puts the cursor on an empty
+line at the bottom; an empty line is never saved. Returning to the
+<em>Summary</em> tab leaves the cursor in the claim’s header.</p>
+<p>On a closed claim the <em>BillCode</em> cell works as before, with no
+list.</p>
+<p><strong>Where the list opens.</strong> While the list is open, the
+grid’s totals row is hidden to leave room for lines. On the
+<em>Procs</em> tab the list takes the bottom of the grid. On the
+<em>Summary</em> tab, where the grid is short, the grid shrinks to half
+its height and the list fills the rest of the page, over the balances,
+dates and facility fields. Those come back as soon as the list closes:
+after a pick, Esc, or a change of tab.</p>
+<p>The counts are refreshed every night. Until the first count after the
+Data Dictionary update, the list searches the fee schedule’s own
+descriptions only, offers no suggestions, and <em>Billed</em> shows
+0.</p>
 <h2 id="modifiers">Modifiers</h2>
 <p>Type modifiers <strong>after the code, separated by spaces</strong>:
 <code>76881 TC RT</code>. Up to four are sent. If your fee schedule
