@@ -258,7 +258,7 @@ Two settings matter, both in `Mp10.ini` next to the program:
 ```ini
 [RDD]
 RDD-VERSION=REMOTE
-PATH=\\adsserver\adsdata\sfi\
+PATH=\\adsserver\adsdata\dictionary\
 
 [PRINT]
 PORT=6265

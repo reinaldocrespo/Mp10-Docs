@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-11-02" />
+  <meta name="dcterms.date" content="2026-11-03" />
   <title>Mp10 — Signature Helper</title>
   <style>
 code{white-space: pre-wrap;}
@@ -213,7 +213,7 @@ a { color: inherit; }
 <p class="subtitle">Signature capture and document scanning at the
 workstation, for Mp10 Web</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">02 November 2026</p>
+<p class="date">03 November 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -872,7 +872,7 @@ control and writes <code>C:\Windows\SigPlus.ini</code>.</p>
 <p><code>Mp10.ini</code>, beside the exe. Two sections matter.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode ini"><code class="sourceCode ini"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[RDD]</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">RDD-VERSION</span><span class="ot">=</span><span class="st">REMOTE</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">PATH</span><span class="ot">=</span><span class="st">\\adsserver\adsdata\sfi\</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">PATH</span><span class="ot">=</span><span class="st">\\adsserver\adsdata\dictionary\</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="dt">user</span><span class="ot">=</span><span class="st">AutoTasks</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="dt">password</span><span class="ot">=</span><span class="st">mp10</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
@@ -1016,7 +1016,7 @@ Signature Pad</strong> on the desktop, or run
 <p><strong>2. Is it configured the way you think?</strong></p>
 <pre><code>http://127.0.0.1:6266/status</code></pre>
 <div class="sourceCode" id="cb10"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span><span class="dt">&quot;ok&quot;</span><span class="fu">:</span><span class="kw">true</span><span class="fu">,</span><span class="dt">&quot;app&quot;</span><span class="fu">:</span><span class="st">&quot;MpSigSrv&quot;</span><span class="fu">,</span><span class="dt">&quot;build&quot;</span><span class="fu">:</span><span class="st">&quot;2026-08-11 20:11:26&quot;</span><span class="fu">,</span><span class="dt">&quot;started&quot;</span><span class="fu">:</span><span class="st">&quot;08/23/26 09:12:03&quot;</span><span class="fu">,</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a> <span class="dt">&quot;service&quot;</span><span class="fu">:</span><span class="st">&quot;not a service - runs in the operator&#39;s session&quot;</span><span class="fu">,</span><span class="dt">&quot;account&quot;</span><span class="fu">:</span><span class="st">&quot;RCB&quot;</span><span class="fu">,</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a> <span class="dt">&quot;service&quot;</span><span class="fu">:</span><span class="st">&quot;not a service - runs in the operator&#39;s session&quot;</span><span class="fu">,</span><span class="dt">&quot;account&quot;</span><span class="fu">:</span><span class="st">&quot;&lt;operator&gt;&quot;</span><span class="fu">,</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a> <span class="dt">&quot;port&quot;</span><span class="fu">:</span><span class="dv">6266</span><span class="fu">,</span><span class="dt">&quot;origins&quot;</span><span class="fu">:</span><span class="ot">[</span><span class="st">&quot;https://mp10web.example.org&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a> <span class="dt">&quot;captured&quot;</span><span class="fu">:</span><span class="dv">0</span><span class="fu">,</span><span class="dt">&quot;failed&quot;</span><span class="fu">:</span><span class="dv">0</span><span class="fu">,</span><span class="dt">&quot;lastError&quot;</span><span class="fu">:</span><span class="st">&quot;&quot;</span><span class="fu">,</span><span class="dt">&quot;wedged&quot;</span><span class="fu">:</span><span class="kw">false</span><span class="fu">,</span><span class="dt">&quot;busy&quot;</span><span class="fu">:</span><span class="kw">false</span><span class="fu">}</span></span></code></pre></div>
 <p><strong><code>&quot;origins&quot;:[]</code> is the failure to look
@@ -1030,7 +1030,7 @@ right now — if you have just edited <code>ORIGIN</code>, compare
 <a href="#settings">Settings</a>).</p>
 <p><strong>3. Does the pad actually work?</strong> Without a browser in
 the way, from a command prompt in the Mp10 program folder:</p>
-<pre><code>MpSigSrv.exe -enc=EN26-00000123 -operator=RCB</code></pre>
+<pre><code>MpSigSrv.exe -enc=EN26-00000123 -operator=&lt;operator&gt;</code></pre>
 <p>Use a real encounter number and a real operator code. The pad should
 show the consent; sign it and press the pen button. This is the check to
 run when the browser says something vague, because it takes the browser,

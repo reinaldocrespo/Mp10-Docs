@@ -358,7 +358,7 @@ browser component and is not used here) from
 ```ini
 [RDD]
 RDD-VERSION=REMOTE
-PATH=\\adsserver\adsdata\sfi\
+PATH=\\adsserver\adsdata\dictionary\
 user=AutoTasks
 password=mp10
 
@@ -533,7 +533,7 @@ http://127.0.0.1:6266/status
 
 ```json
 {"ok":true,"app":"MpSigSrv","build":"2026-08-11 20:11:26","started":"08/23/26 09:12:03",
- "service":"not a service - runs in the operator's session","account":"RCB",
+ "service":"not a service - runs in the operator's session","account":"<operator>",
  "port":6266,"origins":["https://mp10web.example.org"],
  "captured":0,"failed":0,"lastError":"","wedged":false,"busy":false}
 ```
@@ -550,7 +550,7 @@ actually running with right now — if you have just edited `ORIGIN`, compare
 command prompt in the Mp10 program folder:
 
 ```
-MpSigSrv.exe -enc=EN26-00000123 -operator=RCB
+MpSigSrv.exe -enc=EN26-00000123 -operator=<operator>
 ```
 
 Use a real encounter number and a real operator code. The pad should show the

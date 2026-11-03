@@ -931,7 +931,7 @@ diagnosis is the principal one** — the reason for the visit.
   row turns **red** and the description of its category is shown instead.
 - **New** adds a row. Delete removes the highlighted one.
 - **Move up** and **Move Down** change the order.
-- **Run Analizer** checks every code on the claim (next section).
+- **Run Analizer** checks every code on the claim (see *Run Analizer* below).
 
 The diagnoses belong to the **encounter**, not to one claim: if an encounter
 has more than one claim, they share the list. Up to twelve are sent on the
@@ -977,28 +977,267 @@ billed, gets no suggestions; searching by words still works.
 ## Looking codes up in the Diagnosis Table
 
 Click the small button inside the *IcdCode* cell to open the **Diagnosis
-Table**, the ICD-10 encoder.
+Table**, the ICD-10 encoder. It is one window: a search box over the code tree
+on the left, the selected code's card on the right with a list of codes under
+it, and the codes *On this claim* along the bottom.
 
-- **Search by words:** type them in *Filter Keys* on the left and click *Run
-  Filter*. Tick *Left*, *Right* or *Bilateral* to narrow to one side.
-- **Search by code:** on the *ICD10 Diagnosis* tab, sort by the *Icd10*
-  column and type, or press F8.
-- **Browse:** open the chapters and sections in the *Icd10 Chapters +
-  Sections* tab. Opening a subsection lists its codes.
-- **Pick:** double-click a code. It is added to the *Coding* box on the
-  left. Pick as many as you need, then **Close Encoder**.
+Nothing you do here reaches the claim until you press **Done**.
 
-When the encoder closes, Mp10 checks the codes you picked and adds them to
-the claim. Along the way it may ask you:
+![The Diagnosis Table with two new codes on the claim. The first has no warning; the second has a reminder, and the code it offers is in the list under the card](images/icd10-coder-window.png)
 
-- **A code is not billable** — *ICD10 Code seems invalid*, with the reason:
-  not an ICD-10-CM code, a header code that has more specific codes under it,
-  retired, or not yet valid. Choose the more specific code.
-- **An additional code may apply** — ICD-10-CM says "use additional code";
-  tick the ones that apply.
+### Step by step
+
+Try these on a claim. Press **Cancel** at the end and nothing changes. The results
+are ordered by how often your practice bills each code, so your list may be in a
+different order from the one described here.
+
+**Open the window**
+
+1. Open the claim and click the **ICD10** tab (Alt+C).
+2. Click the *IcdCode* cell on the empty row. If the small **...** button does not
+   show inside the cell, press Enter on the cell.
+3. Click **...**.
+
+The window opens with the cursor in the *Search* box. It starts on the claim's
+first code; on a claim with no codes yet, it starts at the top of the tree with an
+empty *On this claim* list.
+
+**Type and add**
+
+1. In *Search*, type `low back pain`. Press nothing else: after a short pause the
+   list changes by itself.
+2. Click `M54.50  Low back pain, unspecified`. The card on the right shows that
+   code. Read it.
+3. Click **Add to claim**.
+
+`M54.50` appears under *On this claim*, marked *(new)*, with an **[x]** beside it.
+The cursor goes back to *Search*, so you can replace the text there with your next
+search.
+
+**Paste words from a note**
+
+1. In the report or note, select a few words, such as `pain in knee`, and copy them
+   with Ctrl+C.
+2. Clear the *Search* box and click in it.
+3. Press Ctrl+V, or right-click and choose **Paste**.
+
+The list follows, the same as when you type.
+
+**Put one side first**
+
+1. With `pain in knee` still in the box, click **R**. `M25.561  Pain in right knee`
+   and the other right-side codes move to the top. Nothing is hidden.
+2. Click **R** again to turn it off.
+
+**Use only the keyboard**
+
+1. In *Search*, type the code you already know: `E11.65`.
+2. Press Enter, or the Down arrow. The cursor moves to the list.
+3. Press Enter on the code. It is added.
+
+**Double-click**
+
+1. In *Search*, type `hypertension`.
+2. Double-click `I10`. It has nothing under it, so it is added.
+
+A double-click does different things depending on the row:
+
+| You double-click | What happens |
+|---|---|
+| A billable code with nothing under it | It is added |
+| A row with a **+** in the tree | It opens. Nothing is added |
+| A gray code with nothing under it | Nothing is added. The line beside the buttons says why |
+
+**Find a code in the tree**
+
+1. Clear the *Search* box. The tree comes back.
+2. Double-click `E00-E89`, then `E08-E13`, then `E11`, then `E11.6`. Each one opens.
+3. Click `E11.65` to read its card, then click **Add to claim**.
+
+**Choose from the list under the card**
+
+1. In the tree, click a gray code that has codes under it, such as `E11.6`. The
+   **More specific** list shows the codes you can bill.
+2. Click one of them. The card changes to that code.
+3. Click **Add to claim**. The code you clicked in the list is the one added.
+
+A code that needs a seventh character works the same way. In the tree `S72.001` is
+one row: **Add to claim** refuses it and says why, and the list under the card has
+`S72.001A` and the other finished codes. If you search for `S72.001` instead, the
+results list the finished codes directly.
+
+**Take back a code you just added**
+
+- Click its **[x]**.
+- Or click its row in *On this claim* and press Delete.
+
+Only codes marked *(new)* can be taken back here. A code that was already on the
+claim has no **[x]**.
+
+**Follow a warning**
+
+Add `E11.65`. The *Warnings* column says *additional code?*, in black with no **!**.
+That is a reminder:
+
+1. Click the `E11.65` row in *On this claim*. The list under the card is now headed
+   *Offered*, and shows `Z79.4  Long term (current) use of insulin`.
+2. If the patient uses insulin long term, click `Z79.4` and click **Add to claim**.
+   If not, leave it.
+
+Now search for `E10.9`. Its row in the results starts with **!**, and it says that
+`E10.9` and `E11.65` are never coded together. You can still add it, and both rows
+then say *Excludes1 with...* in red. If that was a mistake, click the **[x]** on
+`E10.9`.
+
+Add `M25.569`, and the column says *side not specified*. Click its row, click
+`M25.561` or `M25.562` in the *Offered* list, and click **Add to claim**. The new
+code goes on as another row, so remove `M25.569` with its **[x]**. If `M25.569` was
+already on the claim, delete it on the ICD10 tab after **Done**, and check the
+*Diag* on each line.
+
+**Finish**
+
+1. Click **Done**. The window closes with no questions.
+2. On the ICD10 tab, the first new code fills the empty row at the bottom, and any
+   others follow it.
+3. Click **Save** on the claim. Each code has the number the window showed beside
+   it. That is the number to use in a line's *Diag*.
+
+To leave without changing anything, click **Cancel**, click the window's close box,
+or press Esc.
+
+**Pick one code for an encounter**
+
+1. On the encounter, click the search button beside the diagnosis field.
+2. Type your search, and click the code.
+3. Click **Use this code**. The field fills in and the window closes.
+
+An encounter dated before October 2015 opens the old ICD-9 list instead.
+
+**Keys**
+
+| Where | Key | What it does |
+|---|---|---|
+| *Search* box | Enter or Down arrow | Moves to the list |
+| List or tree | Enter on a code with nothing under it | Adds the code |
+| Tree | Enter on a row with a **+** | Opens the row |
+| *On this claim* | Delete | Takes back a new code |
+| Anywhere | Tab | Moves to the next part of the window |
+| Anywhere | Esc | Closes the window without changing the claim |
+
+### Finding a code
+
+- **Search:** type words, or the start of a code, in the box. The list changes
+  by itself after a short pause, from three characters on. It shows codes that
+  can be billed on the claim's date of service, the likeliest first. Clear the
+  box and the tree comes back, open where you left it.
+- **Nothing found:** the list shows the codes that only mention your words,
+  under a heading that says so. Some of them cannot be billed.
+- **L, R, Bilateral:** puts that side's codes first in the search results and
+  hides nothing. Click it again to turn it off.
+- **Browse:** the tree goes chapter, section, category, then each code. A row
+  with a **+** opens with Enter or a double-click. Gray rows cannot be billed
+  on the date of service. *Billable only*, on when the window opens, hides the
+  gray rows with nothing billable under them; it applies to the tree, not to
+  search results.
+
+A code that takes a seventh character is one row. Its finished codes are in the
+list under the card.
+
+### The code's card
+
+The card follows the row you select. It says whether the code can be billed on
+the date of service, and why not if it cannot; where the code sits in ICD-10;
+and its notes in full, saying which code each one comes from (*from E11*). It
+also shows the entries of the CMS Index that lead to the code, how often your
+practice has coded it, and the procedures it is billed with.
+
+When the claim's payer has refused this code with one of the claim's procedure
+codes, *Payer history for this claim's lines* comes before the rest of the card,
+after any warnings. A part with nothing to say is left out.
+
+The **More specific** list has the billable codes under the selected one, or
+the other choices for an unspecified code, most used first. Click one to read
+its card.
+
+### Adding codes
+
+**Add to claim** adds the code on the card. Enter or a double-click does the
+same on a code with nothing under it. A code that cannot be billed on the date
+of service, or that is already there, is not added; the line beside the buttons
+says why.
+
+*On this claim* lists the claim's codes in order, then the ones you added,
+marked *(new)*. The number on each row is the one it will have once saved, which
+is the number a line's *Diag* uses:
+
+- **New codes** can be removed: click their **[x]** or press Delete.
+- **Codes already on the claim** cannot be moved or removed here. A procedure
+  line points at a diagnosis by its position, so that is done on the diagnosis
+  list: the ICD10 tab on a claim.
+
+### Warnings
+
+The *Warnings* column says what to look at on each code, judged over the whole
+claim for its date of service. It follows every code you add or remove.
+
+Click a row and its card lists the warnings in full. Codes you can add go to
+the top of the list under the card, headed *Offered*: click one, then **Add to
+claim**. A code named by a warning that is already on the claim, such as the
+other half of an Excludes1 pair, says *Related, on this claim*. Click it to read
+its card; it cannot be added again.
+
+A warning informs. It never stops you adding a code or pressing **Done**.
+
+**Adding a code does not replace another.** The code you add goes on as a new
+row at the bottom. A code already on the claim stays where it is, and each
+line's *Diag* still points at its position. To be rid of it, press **Done** and
+delete it on the diagnosis list: the ICD10 tab on a claim, the screen's own list
+on an encounter. On a claim, then check every line's pointers: see [Pointing
+lines at diagnoses](#pointing-lines-at-diagnoses).
+
+| The column says | What it means |
+|---|---|
+| *not billable* | The code cannot go on a claim for this date: a header code that has more specific codes under it, retired, not yet valid, or not an ICD-10-CM code. Add the right code, then delete this one. |
+| *needs 7th character* | The code is not finished. Add the finished code from the list, then delete this one. |
+| *additional code?* | ICD-10-CM says "use additional code". Add one only if it applies. Some common codes say this every time, so on its own it is in plain black with no **!**: a reminder, not a fault. |
+| *Excludes1 with...* | ICD-10-CM says the two codes are never coded together. It shows on both. Keep both only if the two conditions are unrelated. |
+| *order with...* | A "code first" instruction asks for the two codes the other way round. It shows on both. Change the order on the diagnosis list. |
+| *side not specified* | The code leaves the side open, and codes for the side exist. Add the right one, then delete this one. |
+| *patient sex* | The code does not fit the sex on the patient's record. Shown when you open the window from the *IcdCode* cell's button. |
+| *? checks did not run* | The checks could not be read, and the line beside the buttons says so too. An empty column would not mean a clean claim here; close and reopen the window. |
+
+Every warning but that reminder is in red, with a **!**. A code you just added
+and no longer want goes with its **[x]**, with nothing else to do.
+
+Old problems show too. A pair saved on the claim long ago has its warning on
+both rows, though you added neither.
+
+### Closing
+
+**Done** adds the new codes to the bottom of the claim's list, with no questions.
+The first one fills the empty row there, if there is one. An empty row between two
+codes stays as it is, because filling it would renumber the codes under it. Then
+press **Save** on the claim as usual. **Cancel**, Esc and the window's close
+box leave the claim as it was.
+
+The encounter coding screen uses the window the same way. The diagnosis button
+on an encounter or a discharge opens it to pick one code: there is no claim list
+and no warnings column, and **Use this code** fills the field and closes.
+**Tables > ICD10** opens it only to read: no adding, and Esc closes it.
+
+### Run Analizer
+
+**Run Analizer**, on the ICD10 tab, does not open this window. It checks every
+code on the claim and asks you, one message at a time:
+
+- **A code is not billable** — *ICD10 Code seems invalid*, with the reason.
+  Choose the more specific code.
+- **An additional code may apply** — tick the ones that apply.
 - **A seventh character is needed** — pick it from the list.
-- **Excludes1** — two codes ICD-10-CM says are never coded together. Keep
-  both only if the two conditions are unrelated.
+- **Patient sex** — the patient's sex does not fit a code.
+- **Excludes1** — two codes are never coded together. Keep both only if the two
+  conditions are unrelated.
 - **Diagnosis sequence** — a "code first" instruction asks for the codes the
   other way round. Move them.
 
@@ -1012,8 +1251,8 @@ Two things to watch:
 
 - **Picking a code on a line resets its Diag to 1.** Set the pointers after
   the codes.
-- **Reordering the diagnoses changes what the numbers mean.** After moving a
-  code up or down, check every line's pointers.
+- **Reordering or deleting diagnoses changes what the numbers mean.** After
+  moving or deleting a code, check every line's pointers.
 
 # Coding the procedures
 
@@ -1432,8 +1671,24 @@ reprocess:
    which tells the next person nothing; write the note.
 5. Click **Save**.
 
-The new row becomes the claim's flag. Earlier rows cannot be changed, so the
-history is a true record of what happened when.
+The new row becomes the claim's flag. The flag always follows the row with
+the latest date, and of rows with the same date, the one recorded last — so
+a row you date earlier than the latest one already there does not move it.
+A row you add and leave at *Null* with no note is not saved.
+
+Saved rows cannot be edited, so the history is a true record of what
+happened when. A row entered by mistake can be removed by the person who
+entered it:
+
+1. Select the row.
+2. Click **Delete** (the button under *Add New*), or press **Del**.
+3. Click **Save**. **Exit** instead keeps every row.
+
+You can delete only rows you entered yourself, in this window or with
+*Change Flags*. Rows from status responses, acknowledgements, payments and
+remittances, and rows other people entered, stay. After a delete, the flag
+goes back to the latest row left. A row you added and have not saved yet can
+always be removed the same way.
 
 To change the flag of many claims at once, select them in the grid and click
 **Claim Status**. The *Change Claim Status* window lists the flags; tick one
