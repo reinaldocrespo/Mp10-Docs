@@ -1204,7 +1204,7 @@ lines at diagnoses](#pointing-lines-at-diagnoses).
 | *Excludes1 with...* | ICD-10-CM says the two codes are never coded together. It shows on both. Keep both only if the two conditions are unrelated. |
 | *order with...* | A "code first" instruction asks for the two codes the other way round. It shows on both. Change the order on the diagnosis list. |
 | *side not specified* | The code leaves the side open, and codes for the side exist. Add the right one, then delete this one. |
-| *patient sex* | The code does not fit the sex on the patient's record. Shown when you open the window from the *IcdCode* cell's button. |
+| *patient sex* | The code does not fit the sex on the patient's record. Shown when you open the window from the code cell's button. |
 | *? checks did not run* | The checks could not be read, and the line beside the buttons says so too. An empty column would not mean a clean claim here; close and reopen the window. |
 
 Every warning but that reminder is in red, with a **!**. A code you just added
@@ -1253,6 +1253,44 @@ Two things to watch:
   the codes.
 - **Reordering or deleting diagnoses changes what the numbers mean.** After
   moving or deleting a code, check every line's pointers.
+
+## Warnings on the encounter coding screen
+
+When one person codes in Patients10 and another bills, a coding problem used to
+surface only when the biller saw an error tag on the claim and went back to the
+coder. The **Coding** screen of an encounter now shows the problem to the coder,
+in its own *Warnings* column, while the case is open. The codes here are the
+ones the claim uses, so a correction here is a correction on the claim.
+
+The column uses the same words as the [Warnings](#warnings) column of the
+Diagnosis Table, in red with a **!** for anything but a reminder. It is judged
+when the screen opens, and again after every code you type or pick, delete or
+move, and after the Diagnosis Table or the AI coding button adds codes.
+
+**To read a warning in full,** double-click its cell, or move to it with the
+arrow keys and press Enter.
+
+**A pair.** Type `E11.65`, press Enter, then type `E10.9` on the next empty row
+and press Enter. Both rows turn red: *! Excludes1 with E10.9* and *! Excludes1
+with E11.65*. Delete the code that does not belong and the other row clears at
+once. If the two conditions are truly unrelated, keep both.
+
+**An order.** With `N18.6` above `I12.0`, both rows say *! order with...*. Click
+the `I12.0` row and press **Move Up**, and the warning clears.
+
+**Save.** If something is still in red, **Save** saves your codes and then lists
+what to check. It never refuses. It does not repeat the same list while nothing
+has changed, and the column keeps showing it.
+
+Two limits:
+
+- **Checks that need the claim's lines stay on the claim.** *Wrong Side ICD10*,
+  *Bilateral CPT, One-Side ICD10*, *ICD10 Relation* and *Denied Before* judge the
+  codes against procedure lines and a payer, which the coding screen does not
+  have.
+- **A tag already on a claim stays until the claim is saved again.** After the
+  coder corrects the codes, the biller opens the claim and presses **Save**. The
+  tag then clears by itself if the problem is gone.
 
 # Coding the procedures
 

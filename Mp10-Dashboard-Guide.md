@@ -444,6 +444,9 @@ Clicking the tag names the two codes and the note that forbids them. Since
 unrelated, so this is the coder's decision. Remove the code that does not
 belong, or leave both if they are unrelated.
 
+The coder sees the same pair earlier, in the *Warnings* column of the encounter's
+**Coding** screen: see the Patients and Billing guide.
+
 ### ICD10 Sequence
 
 A diagnosis carries a **"code first"** instruction naming another diagnosis

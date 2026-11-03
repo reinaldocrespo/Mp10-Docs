@@ -286,6 +286,8 @@ card</a></li>
 </ul></li>
 <li><a href="#pointing-lines-at-diagnoses" id="toc-pointing-lines-at-diagnoses">Pointing lines at
 diagnoses</a></li>
+<li><a href="#warnings-on-the-encounter-coding-screen" id="toc-warnings-on-the-encounter-coding-screen">Warnings on the
+encounter coding screen</a></li>
 </ul></li>
 <li><a href="#coding-the-procedures" id="toc-coding-the-procedures">Coding the procedures</a>
 <ul>
@@ -1984,7 +1986,7 @@ right one, then delete this one.</td>
 <tr>
 <td><em>patient sex</em></td>
 <td>The code does not fit the sex on the patient’s record. Shown when
-you open the window from the <em>IcdCode</em> cell’s button.</td>
+you open the window from the code cell’s button.</td>
 </tr>
 <tr>
 <td><em>? checks did not run</em></td>
@@ -2041,6 +2043,48 @@ the pointers after the codes.</li>
 <li><strong>Reordering or deleting diagnoses changes what the numbers
 mean.</strong> After moving or deleting a code, check every line’s
 pointers.</li>
+</ul>
+<h2 id="warnings-on-the-encounter-coding-screen">Warnings on the
+encounter coding screen</h2>
+<p>When one person codes in Patients10 and another bills, a coding
+problem used to surface only when the biller saw an error tag on the
+claim and went back to the coder. The <strong>Coding</strong> screen of
+an encounter now shows the problem to the coder, in its own
+<em>Warnings</em> column, while the case is open. The codes here are the
+ones the claim uses, so a correction here is a correction on the
+claim.</p>
+<p>The column uses the same words as the <a href="#warnings">Warnings</a> column of the Diagnosis Table, in red with
+a <strong>!</strong> for anything but a reminder. It is judged when the
+screen opens, and again after every code you type or pick, delete or
+move, and after the Diagnosis Table or the AI coding button adds
+codes.</p>
+<p><strong>To read a warning in full,</strong> double-click its cell, or
+move to it with the arrow keys and press Enter.</p>
+<p><strong>A pair.</strong> Type <code>E11.65</code>, press Enter, then
+type <code>E10.9</code> on the next empty row and press Enter. Both rows
+turn red: <em>! Excludes1 with E10.9</em> and <em>! Excludes1 with
+E11.65</em>. Delete the code that does not belong and the other row
+clears at once. If the two conditions are truly unrelated, keep
+both.</p>
+<p><strong>An order.</strong> With <code>N18.6</code> above
+<code>I12.0</code>, both rows say <em>! order with…</em>. Click the
+<code>I12.0</code> row and press <strong>Move Up</strong>, and the
+warning clears.</p>
+<p><strong>Save.</strong> If something is still in red,
+<strong>Save</strong> saves your codes and then lists what to check. It
+never refuses. It does not repeat the same list while nothing has
+changed, and the column keeps showing it.</p>
+<p>Two limits:</p>
+<ul>
+<li><strong>Checks that need the claim’s lines stay on the
+claim.</strong> <em>Wrong Side ICD10</em>, <em>Bilateral CPT, One-Side
+ICD10</em>, <em>ICD10 Relation</em> and <em>Denied Before</em> judge the
+codes against procedure lines and a payer, which the coding screen does
+not have.</li>
+<li><strong>A tag already on a claim stays until the claim is saved
+again.</strong> After the coder corrects the codes, the biller opens the
+claim and presses <strong>Save</strong>. The tag then clears by itself
+if the problem is gone.</li>
 </ul>
 <h1 id="coding-the-procedures">Coding the procedures</h1>
 <h2 id="the-procedure-lines">The procedure lines</h2>
