@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-11-03" />
+  <meta name="dcterms.date" content="2026-11-04" />
   <title>Mp10 Patients, Billing and Payments — User’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -149,7 +149,7 @@ Guide</h1>
 <p class="subtitle">From the patient at the front desk to the payment on
 the claim</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">03 November 2026</p>
+<p class="date">04 November 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -306,6 +306,22 @@ tags</a>
 <li><a href="#when-you-save" id="toc-when-you-save">When you
 save</a></li>
 <li><a href="#error-tags" id="toc-error-tags">Error tags</a></li>
+</ul></li>
+<li><a href="#prior-authorizations" id="toc-prior-authorizations">Prior
+authorizations</a>
+<ul>
+<li><a href="#where-the-number-goes" id="toc-where-the-number-goes">Where the number goes</a></li>
+<li><a href="#the-prior-auth-rules-table" id="toc-the-prior-auth-rules-table">The Prior Auth Rules table</a>
+<ul>
+<li><a href="#adding-a-rule" id="toc-adding-a-rule">Adding a
+rule</a></li>
+<li><a href="#changing-and-deleting" id="toc-changing-and-deleting">Changing and deleting</a></li>
+</ul></li>
+<li><a href="#what-happens-on-a-claim" id="toc-what-happens-on-a-claim">What happens on a claim</a></li>
+<li><a href="#finding-the-claims-a-rule-matches" id="toc-finding-the-claims-a-rule-matches">Finding the claims a rule
+matches</a></li>
+<li><a href="#deciding-what-goes-in-the-table" id="toc-deciding-what-goes-in-the-table">Deciding what goes in the
+table</a></li>
 </ul></li>
 <li><a href="#finding-claims" id="toc-finding-claims">Finding claims</a>
 <ul>
@@ -512,13 +528,14 @@ record</td>
 <td><strong>Supervisors</strong></td>
 <td>Deleting an insurance card, changing an encounter’s date after it is
 saved, moving charges between encounters, adjusting balances in bulk,
-collecting clearinghouse files by hand</td>
+collecting clearinghouse files by hand, keeping the Prior Auth Rules
+table</td>
 </tr>
 <tr>
 <td><strong>Administrators</strong></td>
 <td>The same billing work as BillingUsers, deleting an unposted
 remittance, adjusting balances in bulk, collecting clearinghouse files
-by hand</td>
+by hand, keeping the Prior Auth Rules table</td>
 </tr>
 <tr>
 <td><strong>AdjustmentAuthUsers</strong></td>
@@ -1090,6 +1107,11 @@ offered</td>
 card</td>
 </tr>
 <tr>
+<td><em>Prior Auth</em></td>
+<td>The prior authorization number for this visit, if the payer gave
+one. New claims take it</td>
+</tr>
+<tr>
 <td><em>Inactive encounter</em></td>
 <td>Tick it for a no-show (below)</td>
 </tr>
@@ -1493,6 +1515,10 @@ it in an 837 batch.</p>
 one that refuses claims without one, it also carries <strong>Missing
 Performing Physician</strong>: fill in <em>Perf Phys</em> before you
 send it.</p>
+<p>An auto-created claim takes the encounter’s prior authorization
+number. If your <strong>Prior Auth Rules</strong> say the payer wants
+one and the encounter has none, the claim is still created, and it
+carries <strong>Prior Auth Missing</strong>.</p>
 <h2 id="the-claim-window">The claim window</h2>
 <p>Its tabs, in PrBill10, are <strong>Summary</strong>,
 <strong>Procs</strong> (procedures), <strong>ICD10</strong>,
@@ -1544,7 +1570,9 @@ payer for eligibility now</td>
 </tr>
 <tr>
 <td><em>Pre-Auth Numb.</em></td>
-<td>The prior authorization number, sent on the claim</td>
+<td>The prior authorization number, sent on the claim. A blank one takes
+the encounter’s when you save; a number already here is never
+replaced</td>
 </tr>
 <tr>
 <td><em>Perf Phys</em></td>
@@ -2293,6 +2321,9 @@ often and recently; <strong>Refused For This Patient</strong>, when the
 payer refused these very codes for this patient and has paid nothing for
 them since; and <strong>Missing Performing Physician</strong>, when the
 claim has none and this payer has refused claims sent without one.</p>
+<p><strong>Prior Auth Missing</strong> does not learn anything: it
+follows the <strong>Prior Auth Rules</strong> table your supervisors
+keep. See the chapter <em>Prior authorizations</em>.</p>
 <p>You can also add your own tag with the <strong>+</strong> button
 beside the tags, to mark a claim for yourself or a colleague.</p>
 <p>The full list of checks, what each looks for and how to switch one
@@ -2301,6 +2332,209 @@ error tags</em> and <em>The claim checks</em>. The dashboard’s <em>Needs
 attention</em> card lists every claim tagged in the last seven days.</p>
 <p>In the Claims grid, a claim with tags shows a tag icon in
 <em>SrvDate</em> and its row is coloured orange.</p>
+<h1 id="prior-authorizations">Prior authorizations</h1>
+<p>Some payers refuse a service unless the claim carries a prior
+authorization number. A payer can start asking for one at any time, and
+its refusal does not always say so: the reason may name something else
+entirely. By the time the refusals arrive, weeks of claims may already
+have gone out without a number.</p>
+<p>Mp10 cannot know what each payer requires, so your practice keeps a
+list of it, the <strong>Prior Auth Rules</strong> table. When a claim
+for one of those services has no number, it gets the <strong>Prior Auth
+Missing</strong> tag, and the biller sees that before sending the
+claim.</p>
+<p>The table starts empty, and <strong>with no rules this tag is never
+placed</strong>.</p>
+<h2 id="where-the-number-goes">Where the number goes</h2>
+<p>There is one number per visit. It can be entered in two places:</p>
+<ul>
+<li>On the encounter, in <em>Prior Auth</em>. This is the natural place
+when the front desk has the number before the visit.</li>
+<li>On the claim, in <em>Pre-Auth Numb.</em></li>
+</ul>
+<p>A new claim takes the encounter’s number, including one made by
+auto-claim. If the number arrives later, enter it on the encounter and
+save the claim: a blank claim takes the encounter’s number when you
+save. A number already on the claim stays as it is.</p>
+<p>The number goes to the payer on the claim. A value containing
+<strong>ACC:</strong> in the claim’s field is not sent as an
+authorization, so it counts as no number.</p>
+<p><strong>Institutional:</strong> the encounter window has its own
+prior authorization field, and it works the same way.</p>
+<h2 id="the-prior-auth-rules-table">The Prior Auth Rules table</h2>
+<p>Open it from any of these:</p>
+<ul>
+<li>In PrBill10 or MpBill10: <em>Tables → Prior Auth Rules</em>, or the
+<strong>Prior Auth</strong> button on the toolbar, after the ICD10
+button.</li>
+<li>In PrAdmin10 or MpAdmin10: <em>File → Prior Auth Rules</em>.</li>
+</ul>
+<p>Supervisors and administrators can add, change and delete rules.
+Anyone else who can open the table can read it and can list the claims a
+rule matches.</p>
+<p>It works like Insurance Companies: the rules are listed on top, and
+the highlighted rule’s details show below. You can leave it open and
+work elsewhere. When you go to another browser it hides, and when you
+open it again it is as you left it.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Field</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>Insurance</em></td>
+<td>The payer, as it appears in your insurance list. Type it, or use the
+magnifying glass to pick it. <strong>Leave it blank for every
+payer</strong>: the rule then shows as <em>All payers</em></td>
+</tr>
+<tr>
+<td><em>From code</em>, <em>To code</em></td>
+<td>The range of billing codes, five characters each. For one code,
+enter it in both. Modifiers do not matter: a rule for 72148 also covers
+72148 TC</td>
+</tr>
+<tr>
+<td><em>From date</em>, <em>To date</em></td>
+<td>The dates of service the rule covers. A blank date is an open
+end</td>
+</tr>
+<tr>
+<td><em>Notes</em></td>
+<td>Anything worth keeping: who at the payer said so, or the notice it
+came from</td>
+</tr>
+<tr>
+<td><em>Changed by</em></td>
+<td>Filled in by Mp10 with the user who last saved the rule</td>
+</tr>
+</tbody>
+</table>
+<h3 id="adding-a-rule">Adding a rule</h3>
+<ol type="1">
+<li>Press <strong>New</strong> (or Insert). The fields below the list
+open for typing.</li>
+<li>Pick the payer, or leave <em>Insurance</em> blank for every
+payer.</li>
+<li>Enter <em>From code</em> and <em>To code</em>.</li>
+<li>Enter <em>From date</em>: the day the payer began requiring the
+number. Leave <em>To date</em> blank unless the requirement has
+ended.</li>
+<li>Press <strong>Save</strong>. <strong>Cancel</strong> discards what
+you typed.</li>
+</ol>
+<p>A payer that requires a number for several separate groups of codes
+needs one rule per group. For example, a payer that asks for a number on
+head and spine MRI, starting February 1, would have two rules:</p>
+<table>
+<thead>
+<tr>
+<th>Insurance</th>
+<th>From code</th>
+<th>To code</th>
+<th>From date</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>the payer</em></td>
+<td>70551</td>
+<td>70553</td>
+<td>02/01/2026</td>
+<td>Head MRI</td>
+</tr>
+<tr>
+<td><em>the payer</em></td>
+<td>72141</td>
+<td>72158</td>
+<td>02/01/2026</td>
+<td>Spine MRI</td>
+</tr>
+</tbody>
+</table>
+<p>Set <em>From date</em> to the real start. Without it, the rule also
+matches every older claim for those codes when that claim is next
+saved.</p>
+<p>Use a blank <em>Insurance</em> with care. It tags those codes for
+every payer, including the ones that have never asked for a number.</p>
+<h3 id="changing-and-deleting">Changing and deleting</h3>
+<ul>
+<li><strong>Edit</strong>, Enter or a double-click opens the highlighted
+rule for changes.</li>
+<li><strong>Delete</strong> (or the Del key) removes it, after asking
+once.</li>
+<li><strong>Print</strong> previews all the rules, grouped by
+payer.</li>
+</ul>
+<p>Renaming a payer carries over to its rules. A payer that still has
+rules cannot be deleted until they are.</p>
+<h2 id="what-happens-on-a-claim">What happens on a claim</h2>
+<p>Mp10 checks each time a claim is saved. The claim gets <strong>Prior
+Auth Missing</strong> when all of these are true:</p>
+<ul>
+<li>The claim has no number.</li>
+<li>A rule names the claim’s payer, or names no payer.</li>
+<li>The date of service falls within the rule’s dates.</li>
+<li>A code on one of the claim’s lines falls within the rule’s
+codes.</li>
+</ul>
+<p>Click the tag to see which payer, code and start date caused it. To
+clear it, enter the number on the encounter or on the claim, then save
+the claim.</p>
+<p>A few things to expect:</p>
+<ul>
+<li><strong>The tag warns and never blocks.</strong> It does not stop
+you saving the claim, and it can sit beside <em>Denied Before</em> on
+the same claim.</li>
+<li><strong>Auto-claim still creates the claim.</strong> It does not
+skip the encounter; the new claim simply carries the tag.</li>
+<li><strong>A complementary claim you save is checked against its own
+payer</strong>, not the primary’s.</li>
+<li><strong>A claim with no payer is never tagged.</strong></li>
+<li><strong>Mp10 Web follows the same rules</strong> when it saves a
+claim, but the table is kept only in the Windows programs.</li>
+</ul>
+<h2 id="finding-the-claims-a-rule-matches">Finding the claims a rule
+matches</h2>
+<p>A claim only gets the tag when it is next saved, so a new rule
+changes nothing on claims already saved. To see those claims, highlight
+the rule and press <strong>Show Matching Claims</strong>. This is also a
+good check on a rule you have just added. The list only reads: it
+changes nothing.</p>
+<p>It opens a little lower and to the right of the rules window, with
+one line per claim line: the status flag and claim number, the record
+number, the date of service, the code, the payer, and whether the claim
+is closed.</p>
+<ul>
+<li><strong>Only claims still worth acting on are listed.</strong> Fully
+paid and overpaid claims are left out. Tick <strong>Include paid
+claims</strong> to see them too.</li>
+<li><strong>Double-click a line, or press Open Claim,</strong> to work
+on the claim. In the Admin programs the list only shows the claims and
+cannot open them.</li>
+<li><strong>Double-click the record number</strong> to open the
+patient.</li>
+<li><strong>Print</strong> previews the list as a report, grouped by
+code, with a total.</li>
+</ul>
+<p>Claims that get their number drop off the list when you close them.
+The list, and any claim or patient opened from it, hide and come back
+with the rules window, and close with it. Changing or deleting a rule
+closes that rule’s list.</p>
+<h2 id="deciding-what-goes-in-the-table">Deciding what goes in the
+table</h2>
+<p>Mp10 does not work these rules out for you. A person adds one when a
+payer says it requires a number, because a refusal alone does not prove
+it. If a payer starts refusing a service it used to pay, and claims with
+a number are the ones getting paid, ask the payer; then add the rule
+from what it tells you.</p>
 <h1 id="finding-claims">Finding claims</h1>
 <p>Open the <strong>Claims table</strong> from the toolbar (or
 <em>Tables → Claims</em>). The <em>Claims Data Grid</em> lists every
@@ -3556,6 +3790,16 @@ reordering</td>
 <tr>
 <td>Read a tag</td>
 <td>Hover it; click for the full explanation</td>
+</tr>
+<tr>
+<td>Say a payer wants a prior auth</td>
+<td>Tables → Prior Auth Rules → New → payer, codes, start date →
+Save</td>
+</tr>
+<tr>
+<td>Find the claims missing one</td>
+<td>Tables → Prior Auth Rules → highlight the rule → Show Matching
+Claims</td>
 </tr>
 <tr>
 <td>Send</td>

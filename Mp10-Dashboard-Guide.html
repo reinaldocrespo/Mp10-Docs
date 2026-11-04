@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-11-03" />
+  <meta name="dcterms.date" content="2026-11-04" />
   <title>Mp10 Dashboard — User’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -148,7 +148,7 @@ a { color: inherit; }
 <p class="subtitle">The cards on the Billing and Patients main windows,
 and what to do about what they show</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">03 November 2026</p>
+<p class="date">04 November 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -238,6 +238,8 @@ Not On Patient</a></li>
 Before</a></li>
 <li><a href="#missing-performing-physician" id="toc-missing-performing-physician">Missing Performing
 Physician</a></li>
+<li><a href="#prior-auth-missing" id="toc-prior-auth-missing">Prior Auth
+Missing</a></li>
 <li><a href="#refused-for-this-patient" id="toc-refused-for-this-patient">Refused For This Patient</a></li>
 </ul></li>
 <li><a href="#the-reference-data-keeps-itself-current" id="toc-the-reference-data-keeps-itself-current">The reference data
@@ -753,6 +755,11 @@ without one</td>
 <td>A code this payer refused for this same patient, with nothing paid
 for it since</td>
 </tr>
+<tr>
+<td>Prior Auth Missing</td>
+<td>A code your rules say this payer wants a prior authorization for,
+and no authorization on the claim</td>
+</tr>
 </tbody>
 </table>
 <h2 id="diagnosis-codes">Diagnosis codes</h2>
@@ -995,6 +1002,49 @@ many claims it refused, the last one, and the reason. Fill in the
 performing physician and save; the tag clears.</p>
 <p>Auto-created claims never have a performing physician, so they carry
 this tag whenever their payer is one of these.</p>
+<h3 id="prior-auth-missing">Prior Auth Missing</h3>
+<p>Your own rules say this payer wants a prior authorization for a code
+on the claim, on its date of service, and the claim has none. Clicking
+the tag names the payer, the code and the date the rule starts. Enter
+the number on the encounter or on the claim and save; the tag
+clears.</p>
+<p>The rules are a table you keep, <strong>Prior Auth Rules</strong>,
+under <strong>Tables</strong> and on the ribbon in Billing, and under
+<strong>File</strong> in Admin. The <em>Patients, Billing and
+Payments</em> guide, chapter <em>Prior authorizations</em>, shows how to
+keep it. It works like Insurance Companies: the browser on top, the
+highlighted rule’s details below it, and you can leave it open while you
+work elsewhere. Each row is a payer, a range of codes, and optional
+first and last dates of service. For one code, enter it in both code
+fields. Modifiers do not matter: a rule for 72148 also covers 72148
+TC.</p>
+<ul>
+<li>The table starts empty, and <strong>with no rows this tag is never
+placed</strong>.</li>
+<li>Supervisors and administrators can change it. Anyone who can open it
+can read it.</li>
+<li>Leave <strong>Insurance</strong> blank for a code range every payer
+requires an authorization for.</li>
+<li>Mp10 does not work these rules out for you. Add one when a payer
+says it requires an authorization. Refusals for a missing authorization
+often do not say so: the reason may name something else entirely.</li>
+<li>A value starting <strong>ACC:</strong> in the claim’s authorization
+field is not sent as an authorization, so it counts as none.</li>
+<li>The tag warns and never blocks. It can sit beside <em>Denied
+Before</em> on the same claim.</li>
+</ul>
+<p>A claim only gets the tag when it is next saved, so adding a rule
+changes nothing on claims already saved. <strong>Show Matching
+Claims</strong> on the rules screen lists the claims a rule matches that
+have no authorization and are still worth acting on, and writes nothing.
+It opens beside the rules window, and it hides and comes back with it
+when you go to another browser and return, as do the claims and patients
+you open from it. Fully paid and overpaid claims are left out unless you
+tick <strong>Include paid claims</strong>. In Billing, double-click a
+line or press <strong>Open Claim</strong> to work on the claim, and
+double-click the record number to open the patient. Claims that get
+their number drop off the list. <strong>Print</strong> previews the list
+as a report, by code, with a total.</p>
 <p><strong>BILLING / DENIAL-PERFPHYS-CODES</strong> lists the reasons
 that count (<strong>206,N290</strong>); empty switches the check off. A
 claim refused for this and later corrected by filling in the physician
@@ -1127,6 +1177,11 @@ never count</td>
 <td><strong>BILLING / DENIAL-PERFPHYS-CODES</strong> empty switches it
 off; DENIAL-MIN-COUNT and DENIAL-MONTHS set how many refusals it
 takes</td>
+</tr>
+<tr>
+<td>Prior Auth Missing</td>
+<td>Only what your <strong>Prior Auth Rules</strong> table says: no
+rows, no tag</td>
 </tr>
 <tr>
 <td>Everything else</td>

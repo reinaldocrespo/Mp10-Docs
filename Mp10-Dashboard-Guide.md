@@ -380,6 +380,7 @@ checked when someone opens and saves them.
 | Denied Before | Codes this payer has refused often and recently |
 | Missing Performing Physician | No performing physician, to a payer that has refused claims sent without one |
 | Refused For This Patient | A code this payer refused for this same patient, with nothing paid for it since |
+| Prior Auth Missing | A code your rules say this payer wants a prior authorization for, and no authorization on the claim |
 
 ## Diagnosis codes
 
@@ -633,6 +634,41 @@ Fill in the performing physician and save; the tag clears.
 Auto-created claims never have a performing physician, so they carry this tag
 whenever their payer is one of these.
 
+### Prior Auth Missing
+
+Your own rules say this payer wants a prior authorization for a code on the
+claim, on its date of service, and the claim has none. Clicking the tag names
+the payer, the code and the date the rule starts. Enter the number on the
+encounter or on the claim and save; the tag clears.
+
+The rules are a table you keep, **Prior Auth Rules**, under **Tables** and on the
+ribbon in Billing, and under **File** in Admin. The *Patients, Billing and Payments*
+guide, chapter *Prior authorizations*, shows how to keep it. It works like Insurance Companies: the
+browser on top, the highlighted rule's details below it, and you can leave it open while
+you work elsewhere. Each row is a payer, a range of codes, and optional first
+and last dates of service. For one code, enter it in both code fields. Modifiers
+do not matter: a rule for 72148 also covers 72148 TC.
+
+- The table starts empty, and **with no rows this tag is never placed**.
+- Supervisors and administrators can change it. Anyone who can open it can read it.
+- Leave **Insurance** blank for a code range every payer requires an authorization for.
+- Mp10 does not work these rules out for you. Add one when a payer says it requires
+  an authorization. Refusals for a missing authorization often do not say so: the
+  reason may name something else entirely.
+- A value starting **ACC:** in the claim's authorization field is not sent as an
+  authorization, so it counts as none.
+- The tag warns and never blocks. It can sit beside *Denied Before* on the same claim.
+
+A claim only gets the tag when it is next saved, so adding a rule changes nothing on
+claims already saved. **Show Matching Claims** on the rules screen lists the claims a
+rule matches that have no authorization and are still worth acting on, and writes
+nothing. It opens beside the rules window, and it hides and comes back with it when you
+go to another browser and return, as do the claims and patients you open from it. Fully
+paid and overpaid claims are left out unless you tick **Include paid claims**. In Billing, double-click a
+line or press **Open Claim** to work on the claim, and double-click the record number to
+open the patient. Claims that get their number drop off the list. **Print** previews the
+list as a report, by code, with a total.
+
 **BILLING / DENIAL-PERFPHYS-CODES** lists the reasons that count
 (**206,N290**); empty switches the check off. A claim refused for this and
 later corrected by filling in the physician no longer counts, so the payers
@@ -708,6 +744,7 @@ nothing when the claim is right. Where a site can turn one off or narrow it:
 | Denied Before | The **BILLING / DENIAL-...** thresholds above; a very high DENIAL-MIN-DATES silences it, DENIAL-REASONCODES narrows it |
 | Refused For This Patient | No switch. **BILLING / DENIAL-MONTHS** shortens how far back it looks; **DENIAL-IGNORE-CODES** names reasons that never count |
 | Missing Performing Physician | **BILLING / DENIAL-PERFPHYS-CODES** empty switches it off; DENIAL-MIN-COUNT and DENIAL-MONTHS set how many refusals it takes |
+| Prior Auth Missing | Only what your **Prior Auth Rules** table says: no rows, no tag |
 | Everything else | Always on. The DOB and sex checks only speak when an eligibility response exists to compare against |
 
 ## Tags you may see on older claims

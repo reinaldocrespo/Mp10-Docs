@@ -76,8 +76,8 @@ administrator sets this up.
 |---|---|
 | **Admission** | Patients and encounters. In PrBill10 it also shows the *Encounters Table* button on the toolbar |
 | **BillingUsers** | Creating and opening claims, from encounters and from the patient record |
-| **Supervisors** | Deleting an insurance card, changing an encounter's date after it is saved, moving charges between encounters, adjusting balances in bulk, collecting clearinghouse files by hand |
-| **Administrators** | The same billing work as BillingUsers, deleting an unposted remittance, adjusting balances in bulk, collecting clearinghouse files by hand |
+| **Supervisors** | Deleting an insurance card, changing an encounter's date after it is saved, moving charges between encounters, adjusting balances in bulk, collecting clearinghouse files by hand, keeping the Prior Auth Rules table |
+| **Administrators** | The same billing work as BillingUsers, deleting an unposted remittance, adjusting balances in bulk, collecting clearinghouse files by hand, keeping the Prior Auth Rules table |
 | **AdjustmentAuthUsers** | Authorizing adjustments. On its own it opens nothing |
 
 If a button is missing for you, or a screen says **Check user permissions**,
@@ -521,6 +521,7 @@ On **Encounter Data**:
 | *Thru* | The last day, for a visit that spans more than one |
 | *Referring Phys* | The referring doctor. Use the search button; only active doctors are offered |
 | *Insurance* | The payer for this visit. It starts as the patient's primary card |
+| *Prior Auth* | The prior authorization number for this visit, if the payer gave one. New claims take it |
 | *Inactive encounter* | Tick it for a no-show (below) |
 | Accident | *Is Auto Accident*, *Work related Accident* or *Is Other Accident*, and the accident date, when the visit is the result of one |
 
@@ -863,6 +864,10 @@ An auto-created claim has no performing physician. When its payer is one that
 refuses claims without one, it also carries **Missing Performing Physician**:
 fill in *Perf Phys* before you send it.
 
+An auto-created claim takes the encounter's prior authorization number. If your
+**Prior Auth Rules** say the payer wants one and the encounter has none, the claim
+is still created, and it carries **Prior Auth Missing**.
+
 ## The claim window
 
 Its tabs, in PrBill10, are **Summary**, **Procs** (procedures), **ICD10**,
@@ -887,7 +892,7 @@ The Summary tab holds the claim's header:
 | *Comp Ins* | The complementary (secondary) payer, billed after this one pays |
 | *Card Number* | The member ID. The **270** button beside it asks the payer for eligibility now |
 | *Facility* | Where the service took place |
-| *Pre-Auth Numb.* | The prior authorization number, sent on the claim |
+| *Pre-Auth Numb.* | The prior authorization number, sent on the claim. A blank one takes the encounter's when you save; a number already here is never replaced |
 | *Perf Phys* | The performing (rendering) physician |
 | *Referring Phys* | The referring physician |
 | *ICN* | The payer's number for this claim, needed to correct it later — see *Correcting and resubmitting a claim* |
@@ -1459,6 +1464,9 @@ This Patient**, when the payer refused these very codes for this patient and
 has paid nothing for them since; and **Missing Performing Physician**, when
 the claim has none and this payer has refused claims sent without one.
 
+**Prior Auth Missing** does not learn anything: it follows the **Prior Auth Rules**
+table your supervisors keep. See the chapter *Prior authorizations*.
+
 You can also add your own tag with the **+** button beside the tags, to mark
 a claim for yourself or a colleague.
 
@@ -1469,6 +1477,150 @@ the last seven days.
 
 In the Claims grid, a claim with tags shows a tag icon in *SrvDate* and its
 row is coloured orange.
+
+# Prior authorizations
+
+Some payers refuse a service unless the claim carries a prior authorization
+number. A payer can start asking for one at any time, and its refusal does not
+always say so: the reason may name something else entirely. By the time the
+refusals arrive, weeks of claims may already have gone out without a number.
+
+Mp10 cannot know what each payer requires, so your practice keeps a list of it,
+the **Prior Auth Rules** table. When a claim for one of those services has no
+number, it gets the **Prior Auth Missing** tag, and the biller sees that before
+sending the claim.
+
+The table starts empty, and **with no rules this tag is never placed**.
+
+## Where the number goes
+
+There is one number per visit. It can be entered in two places:
+
+- On the encounter, in *Prior Auth*. This is the natural place when the front
+  desk has the number before the visit.
+- On the claim, in *Pre-Auth Numb.*
+
+A new claim takes the encounter's number, including one made by auto-claim. If
+the number arrives later, enter it on the encounter and save the claim: a blank
+claim takes the encounter's number when you save. A number already on the claim
+stays as it is.
+
+The number goes to the payer on the claim. A value containing **ACC:** in the
+claim's field is not sent as an authorization, so it counts as no number.
+
+**Institutional:** the encounter window has its own prior authorization field,
+and it works the same way.
+
+## The Prior Auth Rules table
+
+Open it from any of these:
+
+- In PrBill10 or MpBill10: *Tables → Prior Auth Rules*, or the **Prior Auth**
+  button on the toolbar, after the ICD10 button.
+- In PrAdmin10 or MpAdmin10: *File → Prior Auth Rules*.
+
+Supervisors and administrators can add, change and delete rules. Anyone else who
+can open the table can read it and can list the claims a rule matches.
+
+It works like Insurance Companies: the rules are listed on top, and the
+highlighted rule's details show below. You can leave it open and work elsewhere.
+When you go to another browser it hides, and when you open it again it is as you
+left it.
+
+| Field | What it means |
+|---|---|
+| *Insurance* | The payer, as it appears in your insurance list. Type it, or use the magnifying glass to pick it. **Leave it blank for every payer**: the rule then shows as *All payers* |
+| *From code*, *To code* | The range of billing codes, five characters each. For one code, enter it in both. Modifiers do not matter: a rule for 72148 also covers 72148 TC |
+| *From date*, *To date* | The dates of service the rule covers. A blank date is an open end |
+| *Notes* | Anything worth keeping: who at the payer said so, or the notice it came from |
+| *Changed by* | Filled in by Mp10 with the user who last saved the rule |
+
+### Adding a rule
+
+1. Press **New** (or Insert). The fields below the list open for typing.
+2. Pick the payer, or leave *Insurance* blank for every payer.
+3. Enter *From code* and *To code*.
+4. Enter *From date*: the day the payer began requiring the number. Leave *To
+   date* blank unless the requirement has ended.
+5. Press **Save**. **Cancel** discards what you typed.
+
+A payer that requires a number for several separate groups of codes needs one
+rule per group. For example, a payer that asks for a number on head and spine
+MRI, starting February 1, would have two rules:
+
+| Insurance | From code | To code | From date | Notes |
+|---|---|---|---|---|
+| *the payer* | 70551 | 70553 | 02/01/2026 | Head MRI |
+| *the payer* | 72141 | 72158 | 02/01/2026 | Spine MRI |
+
+Set *From date* to the real start. Without it, the rule also matches every older
+claim for those codes when that claim is next saved.
+
+Use a blank *Insurance* with care. It tags those codes for every payer, including
+the ones that have never asked for a number.
+
+### Changing and deleting
+
+- **Edit**, Enter or a double-click opens the highlighted rule for changes.
+- **Delete** (or the Del key) removes it, after asking once.
+- **Print** previews all the rules, grouped by payer.
+
+Renaming a payer carries over to its rules. A payer that still has rules cannot
+be deleted until they are.
+
+## What happens on a claim
+
+Mp10 checks each time a claim is saved. The claim gets **Prior Auth Missing** when
+all of these are true:
+
+- The claim has no number.
+- A rule names the claim's payer, or names no payer.
+- The date of service falls within the rule's dates.
+- A code on one of the claim's lines falls within the rule's codes.
+
+Click the tag to see which payer, code and start date caused it. To clear it,
+enter the number on the encounter or on the claim, then save the claim.
+
+A few things to expect:
+
+- **The tag warns and never blocks.** It does not stop you saving the claim, and
+  it can sit beside *Denied Before* on the same claim.
+- **Auto-claim still creates the claim.** It does not skip the encounter; the
+  new claim simply carries the tag.
+- **A complementary claim you save is checked against its own payer**, not the
+  primary's.
+- **A claim with no payer is never tagged.**
+- **Mp10 Web follows the same rules** when it saves a claim, but the table is kept
+  only in the Windows programs.
+
+## Finding the claims a rule matches
+
+A claim only gets the tag when it is next saved, so a new rule changes nothing on
+claims already saved. To see those claims, highlight the rule and press **Show
+Matching Claims**. This is also a good check on a rule you have just added. The
+list only reads: it changes nothing.
+
+It opens a little lower and to the right of the rules window, with one line per
+claim line: the status flag and claim number, the record number, the date of
+service, the code, the payer, and whether the claim is closed.
+
+- **Only claims still worth acting on are listed.** Fully paid and overpaid
+  claims are left out. Tick **Include paid claims** to see them too.
+- **Double-click a line, or press Open Claim,** to work on the claim. In the
+  Admin programs the list only shows the claims and cannot open them.
+- **Double-click the record number** to open the patient.
+- **Print** previews the list as a report, grouped by code, with a total.
+
+Claims that get their number drop off the list when you close them. The list, and
+any claim or patient opened from it, hide and come back with the rules window, and
+close with it. Changing or deleting a rule closes that rule's list.
+
+## Deciding what goes in the table
+
+Mp10 does not work these rules out for you. A person adds one when a payer says it
+requires a number, because a refusal alone does not prove it. If a payer starts
+refusing a service it used to pay, and claims with a number are the ones getting
+paid, ask the payer; then add the rule from what it tells you.
 
 # Finding claims
 
@@ -2313,6 +2465,8 @@ automatically from its *Automate Report* tab (Supervisors and Administrators).
 | Code | ICD10 tab: pick a suggestion, or type words in *Description*. First code = principal |
 | Point lines at diagnoses | *Diag*: `1`, `1,2`… Recheck after reordering |
 | Read a tag | Hover it; click for the full explanation |
+| Say a payer wants a prior auth | Tables → Prior Auth Rules → New → payer, codes, start date → Save |
+| Find the claims missing one | Tables → Prior Auth Rules → highlight the rule → Show Matching Claims |
 | Send | Claims grid → select one payer's claims → Outbound 837 |
 | See a claim's history | F9 on the claim |
 | Record a follow-up | F9 → Add New → flag, date, **note** → Save |
