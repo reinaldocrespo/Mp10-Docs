@@ -813,13 +813,15 @@ When the batch ends, a summary lists every encounter with its **Result** and
 the **Claim / Reason**. Double-click a created row (or select it and click
 **Open claim**, or press Enter) to open that claim; on a skipped or failed
 row, which has no claim, **Open claim** is greyed out. **Report** opens the
-encounter's report; it is greyed out on encounters without one, and an
-encounter with several opens its list of reports to pick from. **The summary
+encounter's list of medical reports, the same one the report icon on the unbilled
+list opens; it is greyed out on encounters without a report. **The summary
 stays open**, so you can open and check each created claim in turn; close it
-with **Close** when you are done. While you work in another browser the
-summary hides, and it comes back when you return to the unbilled list.
+with **Close** when you are done. The summary belongs to the unbilled list:
+when you open another browser, a table or the dashboard it hides, along with any
+claim opened from it, and it comes back when you return to the unbilled list.
 Closing the unbilled list closes it too, and the next Auto-claim replaces
-it. The unbilled list is refreshed as soon as the batch
+it. **Print** previews the summary as a report, grouped by result, with the
+failed and skipped encounters first and a total. The unbilled list is refreshed as soon as the batch
 ends: the encounters that got a claim leave it.
 
 An encounter is skipped, with nothing saved, when:
