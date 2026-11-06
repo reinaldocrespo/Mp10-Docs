@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-11-04" />
+  <meta name="dcterms.date" content="2026-11-06" />
   <title>Mp10 Patients, Billing and Payments — User’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -149,7 +149,7 @@ Guide</h1>
 <p class="subtitle">From the patient at the front desk to the payment on
 the claim</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">04 November 2026</p>
+<p class="date">06 November 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -259,6 +259,7 @@ claim</a>
 start</a></li>
 <li><a href="#what-is-filled-in-for-you" id="toc-what-is-filled-in-for-you">What is filled in for you</a></li>
 <li><a href="#auto-claim" id="toc-auto-claim">Auto-claim</a></li>
+<li><a href="#auto-claims-to-review" id="toc-auto-claims-to-review">Auto-claims to review</a></li>
 <li><a href="#the-claim-window" id="toc-the-claim-window">The claim
 window</a></li>
 <li><a href="#primary-and-secondary-claims" id="toc-primary-and-secondary-claims">Primary and secondary
@@ -1416,6 +1417,19 @@ insurance used; the patient’s card number; the diagnoses already on the
 encounter, plus those the order’s report confirms. Then it runs the
 checks that run when you save a claim, and saves it. The claim is saved
 whole or not at all.</p>
+<p>Auto-claim learns from claims already billed: the diagnoses suggested
+come from similar claims, and the payer from what past claims for that
+insurance used. <strong>Only claims a person has reviewed in the claim
+window teach it.</strong> A claim still carrying <em>Auto-created -
+review</em> is never used to suggest anything: not diagnoses, not the
+payer, and not the <em>Often billed with</em> codes in the ICD10
+suggestions. Neither is a claim cleared with <strong>Mark
+reviewed</strong> (see <em>Auto-claims to review</em> below), ever, even
+if someone opens and saves it later. An auto-created claim starts
+counting once someone opens it, removes the tag with its
+<strong>x</strong> and saves it.</p>
+<p>Auto-claim builds a claim in well under a second per encounter on a
+test copy of a large practice.</p>
 <p>When the batch ends, a summary lists every encounter with its
 <strong>Result</strong> and the <strong>Claim / Reason</strong>.
 Double-click a created row (or select it and click <strong>Open
@@ -1514,7 +1528,8 @@ wrong, then remove the tag with its <strong>x</strong> and click
 <strong>Save</strong>. Removing the tag and saving is what records the
 claim as verified. Leave the tag on a claim you have not checked. The
 tag does not stop the claim from being sent; check it before you include
-it in an 837 batch.</p>
+it in an 837 batch. Every claim still waiting for that check is listed
+in <strong>Auto-claims to review</strong>, below.</p>
 <p>An auto-created claim has no performing physician. When its payer is
 one that refuses claims without one, it also carries <strong>Missing
 Performing Physician</strong>: fill in <em>Perf Phys</em> before you
@@ -1523,6 +1538,114 @@ send it.</p>
 number. If your <strong>Prior Auth Rules</strong> say the payer wants
 one and the encounter has none, the claim is still created, and it
 carries <strong>Prior Auth Missing</strong>.</p>
+<h2 id="auto-claims-to-review">Auto-claims to review</h2>
+<p>The Auto-claim summary lists only the batch just run.
+<strong>Auto-claims to review</strong> lists every auto-created claim
+that nobody has reviewed yet, however old, so nothing is forgotten.</p>
+<p>In PrBill10, open it with the toolbar button right after
+<strong>Unbilled encounters</strong> (reading glasses resting on a claim
+form), or <em>Tables → Auto-claims to review</em>. Anyone who can open
+PrBill10 can open the list.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Column</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>ClaimKey</em></td>
+<td>The claim</td>
+</tr>
+<tr>
+<td><em>Insurance</em></td>
+<td>The payer billed</td>
+</tr>
+<tr>
+<td><em>SrvDate</em></td>
+<td>The date of service. A tag icon shows here when the claim has
+tags</td>
+</tr>
+<tr>
+<td><em>User</em></td>
+<td>Who pressed Auto-claim</td>
+</tr>
+<tr>
+<td><em>MedRec</em>, <em>PteName</em></td>
+<td>The patient</td>
+</tr>
+<tr>
+<td><em>EncNumber</em></td>
+<td>The encounter</td>
+</tr>
+<tr>
+<td><em>Created</em></td>
+<td>When the claim was auto-created</td>
+</tr>
+<tr>
+<td><em>OtherTags</em></td>
+<td>The claim’s other tags, such as <em>Missing ICD10s</em>. These are
+the claims <strong>Mark reviewed</strong> leaves alone</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sorting and searching.</strong> Click the <em>ClaimKey</em>,
+<em>Insurance</em>, <em>SrvDate</em>, <em>User</em>, <em>MedRec</em> or
+<em>PteName</em> header to sort by it; the list opens sorted by date of
+service. Sorted by any of them but the date, typing jumps to what you
+type, as on the other grids. <strong>F8</strong> opens a search box for
+the sorted column (a calendar when sorted by date) and goes to the
+nearest match.</p>
+<p><strong>Seeing a claim’s tags.</strong> Click the tag icon in the
+<em>SrvDate</em> cell: a small note beside it lists all the claim’s
+tags, read at that moment, without opening the claim. On a row that is
+not selected, the first click selects it and a second click shows the
+tags.</p>
+<p><strong>Reviewing a claim.</strong> Double-click the row (or press
+Enter or F7, or click <strong>Open claim</strong>). Check the claim as
+described above, remove <em>Auto-created - review</em> with its
+<strong>x</strong>, and save. When you close the claim the list is read
+again: the claim drops off, and the cursor stays where it was in the
+list. A claim closed without saving, or saved with the tag still on,
+stays.</p>
+<p>The side panel also has <strong>View report</strong> (the encounter’s
+medical reports), <strong>Patient record</strong>, <strong>Print
+list</strong> (the list as it is sorted, with its total),
+<strong>Refresh</strong> and <strong>Select all</strong>.</p>
+<p><strong>Mark reviewed</strong> removes the review tag from many
+claims at once, without opening them. Only BillingUsers and
+Administrators see it. It acts on the highlighted rows (Ctrl-click or
+Shift-click, or <strong>Select all</strong>); with none highlighted, on
+the current row. It asks first, giving the count.</p>
+<ul>
+<li>A claim whose <strong>only</strong> tag is <em>Auto-created -
+review</em> is cleared and leaves the list.</li>
+<li>A claim that still carries <em>Auto-created - review</em>
+<strong>and any other tag</strong> (<em>Missing ICD10s</em>, another
+error tag, a tag a person added) is left on the list for someone to
+open. So is a claim you have open in a claim window from this list.</li>
+<li>A listed claim whose review tag someone already removed elsewhere,
+without it being recorded, is recorded now and leaves the list.</li>
+</ul>
+<p>The result says how many were cleared and how many were left. A
+cleared claim is recorded as cleared in bulk, by you, and not as
+checked: it never teaches Auto-claim (see above), even if someone opens
+it later. Use Mark reviewed for claims you are satisfied with as they
+stand, not as a way to skip checking.</p>
+<p>One case it cannot catch: Mark reviewed only skips claims opened from
+this list. If the same claim is open anywhere else (on another
+workstation, or on yours from the Auto-claim summary or the Claims grid)
+and is saved there afterwards, the tag comes back on the claim, but the
+claim does not return to this list. Close claims you opened elsewhere
+before you mark them.</p>
+<p>The list does not send claims. Send them from the Claims grid
+(<em>Sending claims</em>); its <strong>Hide unreviewed</strong> box
+leaves out the claims still on this list.</p>
 <h2 id="the-claim-window">The claim window</h2>
 <p>Its tabs, in PrBill10, are <strong>Summary</strong>,
 <strong>Procs</strong> (procedures), <strong>ICD10</strong>,
@@ -2335,7 +2458,10 @@ off is in the <em>Mp10 Dashboard</em> guide, chapters <em>Claims with
 error tags</em> and <em>The claim checks</em>. The dashboard’s <em>Needs
 attention</em> card lists every claim tagged in the last seven days.</p>
 <p>In the Claims grid, a claim with tags shows a tag icon in
-<em>SrvDate</em> and its row is coloured orange.</p>
+<em>SrvDate</em> and its row is coloured orange. Click the icon to see
+all the claim’s tags in a small note beside it, without opening the
+claim. The click works on the selected row; on another row, the first
+click selects it and a second click shows the tags.</p>
 <h1 id="prior-authorizations">Prior authorizations</h1>
 <p>Some payers refuse a service unless the claim carries a prior
 authorization number. A payer can start asking for one at any time, and
@@ -2548,11 +2674,15 @@ claim.</p>
 <em>Encounter</em>, <em>SrvDate</em>, <em>Contract</em> (the member ID),
 <em>Insurance</em>, <em>BillDate</em>, <em>Name</em>, the charge
 (<em>Real Amt</em>), insurance paid, adjusted and balance, the
-deductible, patient paid, balance and adjustments, the user who created
-the claim and the performing physician.</p>
+deductible, patient paid, balance and adjustments, the user who last
+saved the claim and the performing physician.</p>
 <p>The <em>ClaimKey</em> column shows the claim’s <strong>status
 flag</strong> (next chapter). Right-click it, or press F9, to see the
 claim’s status history.</p>
+<p>The <em>SrvDate</em> column shows a tag icon when the claim has tags.
+Click it to see all of them in a small note beside it, without opening
+the claim; on a row that is not selected, the first click selects it and
+a second shows the tags.</p>
 <h2 id="the-row-colours">The row colours</h2>
 <table>
 <thead>
@@ -2597,11 +2727,31 @@ claims with no status at all (no flag, or the <em>Null</em> flag
 <li><strong>Wrk From / Wrk Thru</strong> — the date the claim was
 created;</li>
 <li><strong>Med Rec</strong> — one patient;</li>
+<li><strong>User</strong> — the user who <strong>last saved</strong> the
+claim, the grid’s <em>User</em> column. Type the whole user code;
+capitals or not does not matter, and <code>AM</code> does not also find
+<code>AMX</code>. On an auto-created claim this is the person who
+reviewed it in the claim window, or, if nobody has, or it was cleared
+with <strong>Mark reviewed</strong>, the person who pressed
+Auto-claim;</li>
 <li><strong>Primary claims only</strong> — leaves out complementary
-(secondary) claims.</li>
+(secondary) claims;</li>
+<li><strong>Hide unreviewed</strong> (PrBill10) — leaves out
+auto-created claims that nobody has reviewed yet: the claims listed in
+<em>Auto-claims to review</em>. Claims cleared with Mark reviewed count
+as reviewed here. It is off when the grid opens; ticking it also
+switches the filter on, if it was off. Like the rest of the filter, it
+also governs <strong>Select All</strong>, <strong>Outbound 837</strong>
+and printing, so a reviewed group can be found and sent from here.
+Outbound 837 honours a ticked box even with the filter switched off. It
+does not stop anything: with the box unticked, unreviewed claims can
+still be sent.</li>
 </ul>
 <p>Switch the filter on with its LED. To jump to one claim, sort by
 <em>ClaimKey</em> and press F8.</p>
+<p>Any number of the options can be set at once. If the database ever
+refuses a filter, a message says so, the filter is switched off and
+every claim shows: clear one or more options and switch it on again.</p>
 <h3 id="filter-from-file-claims-from-a-list-you-have">Filter From File:
 claims from a list you have</h3>
 <p><strong>Filter From File</strong>, the last link in the side panel,
@@ -2649,11 +2799,15 @@ Select a row and press Del to remove it. <em>Open File</em> opens the
 file you picked in its own program (Excel, Notepad), so you can see what
 was in it. <em>Run Filter</em> is available as soon as the list holds
 one claim.</p>
-<p><em>Run Filter</em> shows only the listed claims; the <em>Filter</em>
-panel’s other settings are ignored while it is on. <em>Cancel
-Filter</em> closes the window and shows every claim again. The window
-can be made larger by dragging its edge, and opens at that size next
-time.</p>
+<p><em>Run Filter</em> shows only the listed claims, matched on the
+whole claim number, however many the list holds: a list of 500 claims
+works the same as a list of five. The <em>Filter</em> panel’s other
+settings are ignored while it is on, except <strong>Hide
+unreviewed</strong>, which still leaves out the listed claims nobody has
+reviewed. If the claims cannot be looked up, a message says so and the
+grid shows none. <em>Cancel Filter</em> closes the window and shows
+every claim again. The window can be made larger by dragging its edge,
+and opens at that size next time.</p>
 <p><strong>For the administrator.</strong> Files are read on the
 workstation; nothing is sent anywhere. PDFs need one file beside the
 program, <code>pdfium.dll</code>, which ships through the updates folder
@@ -2724,7 +2878,14 @@ zero balance.</p>
 <h2 id="electronically-837">Electronically (837)</h2>
 <ol type="1">
 <li>In the Claims grid, select the claims to send. <strong>They must all
-be for the same payer</strong>; filter by <em>Ins</em> first.</li>
+be for the same payer</strong>; filter by <em>Ins</em> first. Only the
+highlighted claims go into the file: a claim you Ctrl-click off is left
+out. The claim under the cursor is sent on its own only when no claim is
+highlighted. In PrBill10, tick <strong>Hide unreviewed</strong> first to
+keep out auto-created claims nobody has checked. Outbound 837 checks
+again when it runs: a highlighted claim still waiting for review (one
+auto-created after you ticked the box, say) is left out of the file, and
+Mp10 says how many.</li>
 <li>Optionally, run <strong>Analyze 837</strong> and correct what it
 finds.</li>
 <li>Click <strong>Outbound 837</strong>. Mp10 writes the claims file and

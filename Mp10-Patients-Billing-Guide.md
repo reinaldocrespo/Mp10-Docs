@@ -809,6 +809,19 @@ patient's card number; the diagnoses already on the encounter, plus those the
 order's report confirms. Then it runs the checks that run when you save a
 claim, and saves it. The claim is saved whole or not at all.
 
+Auto-claim learns from claims already billed: the diagnoses suggested come
+from similar claims, and the payer from what past claims for that insurance
+used. **Only claims a person has reviewed in the claim window teach it.** A
+claim still carrying *Auto-created - review* is never used to suggest
+anything: not diagnoses, not the payer, and not the *Often billed with* codes
+in the ICD10 suggestions. Neither is a claim cleared with **Mark reviewed**
+(see *Auto-claims to review* below), ever, even if someone opens and saves it
+later. An auto-created claim starts counting once someone opens it, removes
+the tag with its **x** and saves it.
+
+Auto-claim builds a claim in well under a second per encounter on a test copy
+of a large practice.
+
 When the batch ends, a summary lists every encounter with its **Result** and
 the **Claim / Reason**. Double-click a created row (or select it and click
 **Open claim**, or press Enter) to open that claim; on a skipped or failed
@@ -860,7 +873,8 @@ the lines and the diagnoses, correct what is wrong, then remove the tag with
 its **x** and click **Save**. Removing the tag and saving is what records the
 claim as verified. Leave the tag on a claim you have not checked. The tag does
 not stop the claim from being sent; check it before you include it in an 837
-batch.
+batch. Every claim still waiting for that check is listed in **Auto-claims to
+review**, below.
 
 An auto-created claim has no performing physician. When its payer is one that
 refuses claims without one, it also carries **Missing Performing Physician**:
@@ -869,6 +883,77 @@ fill in *Perf Phys* before you send it.
 An auto-created claim takes the encounter's prior authorization number. If your
 **Prior Auth Rules** say the payer wants one and the encounter has none, the claim
 is still created, and it carries **Prior Auth Missing**.
+
+## Auto-claims to review
+
+The Auto-claim summary lists only the batch just run. **Auto-claims to
+review** lists every auto-created claim that nobody has reviewed yet, however
+old, so nothing is forgotten.
+
+In PrBill10, open it with the toolbar button right after **Unbilled
+encounters** (reading glasses resting on a claim form), or *Tables →
+Auto-claims to review*. Anyone who can open PrBill10 can open the list.
+
+| Column | What it is |
+|---|---|
+| *ClaimKey* | The claim |
+| *Insurance* | The payer billed |
+| *SrvDate* | The date of service. A tag icon shows here when the claim has tags |
+| *User* | Who pressed Auto-claim |
+| *MedRec*, *PteName* | The patient |
+| *EncNumber* | The encounter |
+| *Created* | When the claim was auto-created |
+| *OtherTags* | The claim's other tags, such as *Missing ICD10s*. These are the claims **Mark reviewed** leaves alone |
+
+**Sorting and searching.** Click the *ClaimKey*, *Insurance*, *SrvDate*,
+*User*, *MedRec* or *PteName* header to sort by it; the list opens sorted by
+date of service. Sorted by any of them but the date, typing jumps to what you
+type, as on the other grids. **F8** opens a search box for the sorted column
+(a calendar when sorted by date) and goes to the nearest match.
+
+**Seeing a claim's tags.** Click the tag icon in the *SrvDate* cell: a small
+note beside it lists all the claim's tags, read at that moment, without
+opening the claim. On a row that is not selected, the first click selects it
+and a second click shows the tags.
+
+**Reviewing a claim.** Double-click the row (or press Enter or F7, or click
+**Open claim**). Check the claim as described above, remove *Auto-created -
+review* with its **x**, and save. When you close the claim the list is read
+again: the claim drops off, and the cursor stays where it was in the list.
+A claim closed without saving, or saved with the tag still on, stays.
+
+The side panel also has **View report** (the encounter's medical reports),
+**Patient record**, **Print list** (the list as it is sorted, with its total),
+**Refresh** and **Select all**.
+
+**Mark reviewed** removes the review tag from many claims at once, without
+opening them. Only BillingUsers and Administrators see it. It acts on the
+highlighted rows (Ctrl-click or Shift-click, or **Select all**); with none
+highlighted, on the current row. It asks first, giving the count.
+
+- A claim whose **only** tag is *Auto-created - review* is cleared and leaves
+  the list.
+- A claim that still carries *Auto-created - review* **and any other tag**
+  (*Missing ICD10s*, another error tag, a tag a person added) is left on the
+  list for someone to open. So is a claim you have open in a claim window from
+  this list.
+- A listed claim whose review tag someone already removed elsewhere, without
+  it being recorded, is recorded now and leaves the list.
+
+The result says how many were cleared and how many were left. A cleared claim
+is recorded as cleared in bulk, by you, and not as checked: it never teaches
+Auto-claim (see above), even if someone opens it later. Use Mark reviewed for
+claims you are satisfied with as they stand, not as a way to skip checking.
+
+One case it cannot catch: Mark reviewed only skips claims opened from this
+list. If the same claim is open anywhere else (on another workstation, or on
+yours from the Auto-claim summary or the Claims grid) and is saved there
+afterwards, the tag comes back on the claim, but the claim does not return to
+this list. Close claims you opened elsewhere before you mark them.
+
+The list does not send claims. Send them from the Claims grid (*Sending
+claims*); its **Hide unreviewed** box leaves out the claims still on this
+list.
 
 ## The claim window
 
@@ -1478,7 +1563,10 @@ checks*. The dashboard's *Needs attention* card lists every claim tagged in
 the last seven days.
 
 In the Claims grid, a claim with tags shows a tag icon in *SrvDate* and its
-row is coloured orange.
+row is coloured orange. Click the icon to see all the claim's tags in a small
+note beside it, without opening the claim. The click works on the selected
+row; on another row, the first click selects it and a second click shows the
+tags.
 
 # Prior authorizations
 
@@ -1634,10 +1722,14 @@ Data Grid* lists every claim.
 *ClaimKey*, *Creation*, *MedRec*, *Encounter*, *SrvDate*, *Contract* (the member
 ID), *Insurance*, *BillDate*, *Name*, the charge (*Real Amt*), insurance paid,
 adjusted and balance, the deductible, patient paid, balance and adjustments,
-the user who created the claim and the performing physician.
+the user who last saved the claim and the performing physician.
 
 The *ClaimKey* column shows the claim's **status flag** (next chapter).
 Right-click it, or press F9, to see the claim's status history.
+
+The *SrvDate* column shows a tag icon when the claim has tags. Click it to see
+all of them in a small note beside it, without opening the claim; on a row that
+is not selected, the first click selects it and a second shows the tags.
 
 ## The row colours
 
@@ -1660,10 +1752,28 @@ The *Filter* panel on the left narrows the grid by any combination of:
 - **Bill From / Bill Thru** — billing dates;
 - **Wrk From / Wrk Thru** — the date the claim was created;
 - **Med Rec** — one patient;
-- **Primary claims only** — leaves out complementary (secondary) claims.
+- **User** — the user who **last saved** the claim, the grid's *User* column.
+  Type the whole user code; capitals or not does not matter, and `AM` does not
+  also find `AMX`. On an auto-created claim this is the person who reviewed it
+  in the claim window, or, if nobody has, or it was cleared with **Mark
+  reviewed**, the person who pressed Auto-claim;
+- **Primary claims only** — leaves out complementary (secondary) claims;
+- **Hide unreviewed** (PrBill10) — leaves out auto-created claims that nobody
+  has reviewed yet: the claims listed in *Auto-claims to review*. Claims
+  cleared with Mark reviewed count as reviewed here. It is off when the grid
+  opens; ticking it also switches the filter on, if it was off. Like the rest
+  of the filter, it also governs **Select All**, **Outbound
+  837** and printing, so a reviewed group can be found and sent from here.
+  Outbound 837 honours a ticked box even with the filter switched off. It
+  does not stop anything: with the box unticked, unreviewed claims can still be
+  sent.
 
 Switch the filter on with its LED. To jump to one claim, sort by *ClaimKey*
 and press F8.
+
+Any number of the options can be set at once. If the database ever refuses a
+filter, a message says so, the filter is switched off and every claim shows:
+clear one or more options and switch it on again.
 
 ### Filter From File: claims from a list you have
 
@@ -1708,10 +1818,14 @@ with the report you started from. Select a row and press Del to remove it.
 you can see what was in it. *Run Filter* is available as soon as the list holds
 one claim.
 
-*Run Filter* shows only the listed claims; the *Filter* panel's other
-settings are ignored while it is on. *Cancel Filter* closes the window and
-shows every claim again. The window can be made larger by dragging its edge,
-and opens at that size next time.
+*Run Filter* shows only the listed claims, matched on the whole claim number,
+however many the list holds: a list of 500 claims works the same as a list of
+five. The *Filter* panel's other settings are ignored while it is on, except
+**Hide unreviewed**, which still leaves out the listed claims nobody has
+reviewed. If the claims cannot be looked up, a message says so and the grid
+shows none. *Cancel Filter* closes the window and shows every claim again.
+The window can be made larger by dragging its edge, and opens at that size
+next time.
 
 **For the administrator.** Files are read on the workstation; nothing is sent
 anywhere. PDFs need one file beside the program, `pdfium.dll`, which ships
@@ -1745,7 +1859,13 @@ deleted: to cancel one, adjust it to a zero balance.
 ## Electronically (837)
 
 1. In the Claims grid, select the claims to send. **They must all be for the
-   same payer**; filter by *Ins* first.
+   same payer**; filter by *Ins* first. Only the highlighted claims go into
+   the file: a claim you Ctrl-click off is left out. The claim under the
+   cursor is sent on its own only when no claim is highlighted. In PrBill10,
+   tick **Hide unreviewed** first to keep out auto-created claims nobody has
+   checked. Outbound 837 checks again when it runs: a highlighted claim still
+   waiting for review (one auto-created after you ticked the box, say) is left
+   out of the file, and Mp10 says how many.
 2. Optionally, run **Analyze 837** and correct what it finds.
 3. Click **Outbound 837**. Mp10 writes the claims file and shows a report of
    every claim in it, with the file name and any warnings at the end.
