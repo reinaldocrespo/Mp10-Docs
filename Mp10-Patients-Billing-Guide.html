@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-11-06" />
+  <meta name="dcterms.date" content="2026-11-07" />
   <title>Mp10 Patients, Billing and Payments — User’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -149,7 +149,7 @@ Guide</h1>
 <p class="subtitle">From the patient at the front desk to the payment on
 the claim</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">06 November 2026</p>
+<p class="date">07 November 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -168,8 +168,14 @@ encounters</a></li>
 <li><a href="#finding-a-patient" id="toc-finding-a-patient">Finding a
 patient</a>
 <ul>
-<li><a href="#possible-duplicate-patients" id="toc-possible-duplicate-patients">Possible duplicate
-patients</a></li>
+<li><a href="#possible-duplicate-patients" id="toc-possible-duplicate-patients">Possible duplicate patients</a>
+<ul>
+<li><a href="#what-a-merge-moves" id="toc-what-a-merge-moves">What a
+merge moves</a></li>
+<li><a href="#this-dictionary-holds-a-patient-key-this-version-does-not-know-about" id="toc-this-dictionary-holds-a-patient-key-this-version-does-not-know-about">“This
+dictionary holds a patient key this version does not know
+about”</a></li>
+</ul></li>
 </ul></li>
 <li><a href="#adding-and-editing-a-patient" id="toc-adding-and-editing-a-patient">Adding and editing a patient</a>
 <ul>
@@ -296,6 +302,8 @@ encounter coding screen</a></li>
 procedure lines</a></li>
 <li><a href="#codes-prices-and-the-fee-schedule" id="toc-codes-prices-and-the-fee-schedule">Codes, prices and the fee
 schedule</a></li>
+<li><a href="#fee-schedule-dates" id="toc-fee-schedule-dates">Fee
+schedule dates</a></li>
 <li><a href="#finding-a-code-by-words" id="toc-finding-a-code-by-words">Finding a code by words</a></li>
 <li><a href="#modifiers" id="toc-modifiers">Modifiers</a></li>
 <li><a href="#checking-a-batch-of-claims-before-sending" id="toc-checking-a-batch-of-claims-before-sending">Checking a batch of
@@ -323,6 +331,20 @@ rule</a></li>
 matches</a></li>
 <li><a href="#deciding-what-goes-in-the-table" id="toc-deciding-what-goes-in-the-table">Deciding what goes in the
 table</a></li>
+</ul></li>
+<li><a href="#quoting-a-service-to-a-patient" id="toc-quoting-a-service-to-a-patient">Quoting a service to a
+patient</a>
+<ul>
+<li><a href="#opening-it" id="toc-opening-it">Opening it</a></li>
+<li><a href="#making-a-quote-step-by-step" id="toc-making-a-quote-step-by-step">Making a quote, step by
+step</a></li>
+<li><a href="#filling-it-in" id="toc-filling-it-in">Filling it in</a>
+<ul>
+<li><a href="#surgery-center-plans" id="toc-surgery-center-plans">Surgery center plans</a></li>
+</ul></li>
+<li><a href="#printing-and-when-a-quote-is-saved" id="toc-printing-and-when-a-quote-is-saved">Printing, and when a quote
+is saved</a></li>
+<li><a href="#saved-quotes" id="toc-saved-quotes">Saved Quotes</a></li>
 </ul></li>
 <li><a href="#finding-claims" id="toc-finding-claims">Finding claims</a>
 <ul>
@@ -396,8 +418,18 @@ payments</a></li>
 <li><a href="#refunds" id="toc-refunds">Refunds</a></li>
 </ul></li>
 <li><a href="#why-post-whole-remittances" id="toc-why-post-whole-remittances">Why post whole remittances</a></li>
-<li><a href="#reports-for-payment-posting" id="toc-reports-for-payment-posting">Reports for payment
-posting</a></li>
+<li><a href="#reports-for-payment-posting" id="toc-reports-for-payment-posting">Reports for payment posting</a>
+<ul>
+<li><a href="#asc-payment-differences" id="toc-asc-payment-differences">ASC Payment Differences</a>
+<ul>
+<li><a href="#does-it-apply-to-your-practice" id="toc-does-it-apply-to-your-practice">Does it apply to your
+practice?</a></li>
+<li><a href="#turning-it-on-or-off" id="toc-turning-it-on-or-off">Turning it on or off</a></li>
+<li><a href="#running-it" id="toc-running-it">Running it</a></li>
+<li><a href="#sending-it-automatically" id="toc-sending-it-automatically">Sending it automatically</a></li>
+<li><a href="#reading-it" id="toc-reading-it">Reading it</a></li>
+</ul></li>
+</ul></li>
 <li><a href="#quick-reference" id="toc-quick-reference">Quick
 reference</a></li>
 </ul>
@@ -649,6 +681,26 @@ date and city. From that list, highlight the record to keep and press
 <strong>Chng Record</strong> in the patients grid’s side panel. Mp10
 merges two records only when the name, date of birth and SSN all match;
 otherwise it refuses.</p>
+<h3 id="what-a-merge-moves">What a merge moves</h3>
+<p>A merge moves everything filed under the old record number to the
+record you keep: encounters, charges, claims and payments, insurance,
+notes, attachments and scans, tags, letters, pre-authorizations,
+eligibility answers, consulting physicians, appointments and the other
+tables that hold a patient’s number. It then deletes the old record and
+writes the merge to the audit log. Old snapshot copies left by a
+conversion from Mp10 version 8 (the legacy
+<code>patients_old</code>-style tables) are left alone, and so are
+legacy tables that can no longer be opened.</p>
+<p>If anything fails part-way, nothing moves.</p>
+<h3 id="this-dictionary-holds-a-patient-key-this-version-does-not-know-about">“This
+dictionary holds a patient key this version does not know about”</h3>
+<p>Before it moves anything, Mp10 checks the database for any table with
+a patient-number column that the merge does not know. If it finds one,
+it refuses and lists the table and column. Merging would leave those
+rows pointing at a patient that no longer exists, so nothing is changed.
+Report the table to your Mp10 support contact: a developer has to add it
+to the merge before that database can merge records. The details are in
+<code>patientmerge.log</code>.</p>
 <h1 id="adding-and-editing-a-patient">Adding and editing a patient</h1>
 <h2 id="opening-the-patient-window">Opening the patient window</h2>
 <ul>
@@ -2327,6 +2379,32 @@ accepted and priced from its first five characters:
 <code>76881 XY</code> takes the price of 76881.</p>
 <p>Changing the units changes <em>Expected</em> and <em>Deduct</em> in
 proportion.</p>
+<h2 id="fee-schedule-dates">Fee schedule dates</h2>
+<p>A price in the billing codes table has an <strong>effective
+date</strong> and, once it is replaced, an <strong>expiry date</strong>.
+The claim is priced with the row in force on the date shown in its
+<em>From</em> column (the admission date on most plans, or the charge’s
+date on a plan that is set to use it), so a claim for an old service
+date still gets the old price after a new one is entered. A code with no
+dated row on the payer’s schedule is priced as it always was.</p>
+<p>In the <strong>Fee Schedule</strong> screen in Admin (the <em>Fee
+Schedule</em> link) the grid shows only the rows that are <strong>not
+expired</strong> on the date in the <strong>In force</strong> box, which
+opens on today. Rows with a future effective date are listed too; only
+closed history is hidden. Pick a payer in <em>Filter Only</em> and the
+list follows; change the date to hide or show rows by their expiry. Tick
+<strong>Show all</strong> to list every row of the payer, expired ones
+too (the date goes grey). A row you add with a future effective date
+shows at once.</p>
+<p>Most rows have <strong>no dates at all</strong>, and that is normal:
+a row with no effective date has always been in force, and one with no
+expiry date still is. Dates appear only on rows that have been replaced
+(the old row gets an expiry date, its replacement an effective date),
+whether a person replaced them or the quarterly ASC update did.</p>
+<p>Where the practice bills Medicare as a surgery center, AutoTasks can
+add the dated rows itself every quarter; see <em>Surgery center (ASC)
+fee schedule</em> in the <em>Mp10 AutoTasks — Administrator’s
+Guide</em>.</p>
 <h2 id="finding-a-code-by-words">Finding a code by words</h2>
 <p>You don’t need to know the code. Type words in the <em>BillCode</em>
 cell, such as <code>ext sono</code> or <code>lap chole</code>. After
@@ -2665,6 +2743,185 @@ payer says it requires a number, because a refusal alone does not prove
 it. If a payer starts refusing a service it used to pay, and claims with
 a number are the ones getting paid, ask the payer; then add the rule
 from what it tells you.</p>
+<h1 id="quoting-a-service-to-a-patient">Quoting a service to a
+patient</h1>
+<p>Before the visit, the front desk can answer “what will I owe?” with a
+<strong>patient quote</strong>: an estimate that adds up the services,
+prices them on the patient’s plan and applies the deductible and the
+patient’s share.</p>
+<h2 id="opening-it">Opening it</h2>
+<ul>
+<li><strong>With a patient:</strong> in the patient browser, the side
+panel has <strong>Quote Serv</strong>. It opens with the patient’s name
+(greyed), the patient’s plan picked, and the coverage on file (the
+insurance’s deductible string) shown as a hint. Patients10, MpBill10 and
+PrBill10 all have it.</li>
+<li><strong>Without a patient:</strong> in the billing program,
+<strong>Tables → Patient Quote</strong>; in Patients10, <strong>Actions
+→ Patient Quote</strong>. The name is typed. Use this for someone who
+has no record yet.</li>
+</ul>
+<h2 id="making-a-quote-step-by-step">Making a quote, step by step</h2>
+<ol type="1">
+<li>Open the quote (above).</li>
+<li>Pick the <strong>Plan</strong>, and the <strong>Anesthesia
+plan</strong> if anesthesia is to be quoted too.</li>
+<li>Type the patient’s name if it is not filled in, then the
+<strong>Patient share</strong> and the <strong>Deductible
+remaining</strong> from the patient’s card.</li>
+<li>In the grid’s <strong>Code</strong> cell, type a code or words from
+its description and pick the service from the list. Press Enter (or
+<strong>Add line</strong>) for the next one. Use <strong>Anesthesia
+line</strong> for the anesthesia.</li>
+<li>Check each line’s price and <em>Priced from</em>, and type a price
+where a line asks for one. The totals under the grid show what the
+services add up to and what the patient owes.</li>
+<li>Press <strong>Print</strong>. This <strong>saves</strong> the quote
+and opens the estimate, which you print, or export and e-mail, from the
+preview.</li>
+<li>Press <strong>Close</strong>.</li>
+</ol>
+<p>There is no Save button: <strong>Print is what saves a
+quote</strong>. Closing without pressing Print saves nothing, and a
+saved quote cannot be changed. To correct one, change the quote and
+press Print again: that saves a new quote with a new number.</p>
+<h2 id="filling-it-in">Filling it in</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Plan</strong></td>
+<td>The patient’s insurance, chosen from the active plans</td>
+</tr>
+<tr>
+<td><strong>Anesthesia plan</strong></td>
+<td>Optional. Anesthesia is billed on its own plan, so pick it here to
+quote the anesthesia too; with <em>None</em> the Anesthesia line button
+stays off</td>
+</tr>
+<tr>
+<td><strong>Patient</strong></td>
+<td>The name, typed when there is no record</td>
+</tr>
+<tr>
+<td><strong>Patient share</strong></td>
+<td>The choice <strong>%</strong> or <strong>$</strong> and the amount,
+from the patient’s card. A percentage cannot be over 100. A flat amount
+is capped at what the line costs after the deductible</td>
+</tr>
+<tr>
+<td><strong>Deductible remaining</strong></td>
+<td>What the patient still has to meet. It comes off the dearest lines
+first, and the patient owes it</td>
+</tr>
+</tbody>
+</table>
+<p>Add each service in the grid’s <strong>Code</strong> cell: type the
+code or words from its description and pick it from the list. On the
+empty row the list opens with the plan’s most billed codes. The button
+at the right of the cell opens the full list of the plan’s billing codes
+(<em>Valid Billing Codes</em>, the same list as the claim’s), most
+billed first. Press <strong>Add line</strong> (or Enter) for the next.
+<strong>Anesthesia line</strong> puts the cursor on a new row that is
+priced on the anesthesia plan; its <em>Plan</em> column says so.
+<strong>Delete line</strong> removes one. A line’s <em>Share</em> and
+<em>Share value</em> can be changed on that line, which overrides the
+top.</p>
+<p>A code the plan has no price for is accepted too. It is priced from
+the CMS rate when the practice uses the ASC fee schedule (the <em>Priced
+from</em> column says <em>CMS rate</em>); otherwise it says <em>No
+price: type one</em> and you type one in <em>Price</em>. Pressing
+<strong>Print</strong> with lines still unpriced asks <em>Print
+anyway?</em>, and they print as $0.</p>
+<p><em>Priced from</em> says where each price came from: <em>Fee
+schedule</em>, <em>CMS rate</em> or <em>Typed</em>.</p>
+<h3 id="surgery-center-plans">Surgery center plans</h3>
+<p>Where the practice bills Medicare as a surgery center and the ASC fee
+schedule is on, the quote follows Medicare’s rules for the plan that
+uses it:</p>
+<ul>
+<li>when there are two or more surgical services, the dearest is full
+price and each other that takes the multiple-procedure reduction is
+<strong>half</strong>;</li>
+<li>a service that Medicare packages with another (indicator N1) is
+shown as <em>Included (packaged), $0</em>, and its price cannot be
+typed;</li>
+<li>a device, lens or tissue that Medicare’s contractor prices by
+invoice (indicators F4, J7, K7 and L6) says <em>Priced by invoice
+(Medicare’s contractor): type one</em>, and prints <em>Precio por
+factura</em> until a price is typed;</li>
+<li>a code Medicare may not pay for shows a <strong>warning</strong> in
+red.</li>
+</ul>
+<h2 id="printing-and-when-a-quote-is-saved">Printing, and when a quote
+is saved</h2>
+<p>Press <strong>Print</strong>. This is also what
+<strong>saves</strong> the quote: closing without pressing Print saves
+nothing. The estimate that opens is in <strong>Spanish</strong>, carries
+the quote’s number and says that it is an estimate and does not include
+the surgeon’s fees. Pressing Print again without changing anything shows
+the same quote again (<em>Unchanged: quote N again, not saved
+twice</em>); any change makes a new quote. If the practice’s data
+dictionary has not been updated, the quote still prices and prints, but
+is not saved, and says so.</p>
+<h2 id="saved-quotes">Saved Quotes</h2>
+<p><strong>Saved Quotes</strong> in the quote window, in the patient
+browser’s side panel, or in Patients10’s <strong>Actions → Saved
+Quotes</strong> lists the quotes that were printed, newest first. It
+opens on the last 90 days (change <em>From</em> and <em>To</em> and
+press <strong>Show</strong>). From a patient’s browser <strong>This
+patient only</strong> is ticked; untick it to see everyone’s.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Column</th>
+<th>Shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Date</td>
+<td>When it was printed</td>
+</tr>
+<tr>
+<td>Patient</td>
+<td>The patient’s name now (for a linked patient), or the typed
+name</td>
+</tr>
+<tr>
+<td>Plan</td>
+<td>The insurance</td>
+</tr>
+<tr>
+<td>Total</td>
+<td>The services added up</td>
+</tr>
+<tr>
+<td>Patient owes</td>
+<td>After deductible and share</td>
+</tr>
+<tr>
+<td>User</td>
+<td>Who printed it</td>
+</tr>
+</tbody>
+</table>
+<p><strong>View</strong> lists a quote’s lines. <strong>Reprint</strong>
+shows the same estimate with the same number and saves nothing. Quotes
+cannot be edited or deleted.</p>
 <h1 id="finding-claims">Finding claims</h1>
 <p>Open the <strong>Claims table</strong> from the toolbar (or
 <em>Tables → Claims</em>). The <em>Claims Data Grid</em> lists every
@@ -3845,11 +4102,176 @@ waited</td>
 <td><em>Reports → Aeging of Accounts</em></td>
 <td>What is owed, by age</td>
 </tr>
+<tr>
+<td><em>Reports → ASC Payment Differences</em></td>
+<td>Surgery center claims paid more or less than Medicare’s rate says
+(only where the ASC fee schedule is on)</td>
+</tr>
 </tbody>
 </table>
 <p>Every report can be printed, exported, or scheduled to be e-mailed
 automatically from its <em>Automate Report</em> tab (Supervisors and
 Administrators).</p>
+<h2 id="asc-payment-differences">ASC Payment Differences</h2>
+<p><strong>Reports → ASC Payment Differences</strong> lists the surgery
+center claims that Medicare and the Medicare Advantage plans paid more
+or less than Medicare’s rate says they should. It is the last item in
+the Reports menu.</p>
+<h3 id="does-it-apply-to-your-practice">Does it apply to your
+practice?</h3>
+<p>Only if the practice is an <strong>ambulatory surgery center
+(ASC)</strong> that bills Medicare, or Medicare Advantage plans that pay
+as Medicare does, and its plans are priced from <strong>Medicare’s ASC
+fee schedule</strong>. The report needs what that feature loads: the CMS
+rates (AutoTasks downloads them every quarter) and the year’s conversion
+factor (entered in <strong>CMS ASC Setup</strong> in the admin module).
+See <em>Surgery center (ASC) fee schedule</em> in the <em>Mp10 AutoTasks
+— Administrator’s Guide</em>. Any other practice leaves the feature off,
+and the report does not appear.</p>
+<h3 id="turning-it-on-or-off">Turning it on or off</h3>
+<p>The report has no switch of its own: it comes with the ASC fee
+schedule feature. In the admin module’s <strong>System
+Registry</strong>:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Section / Entry</th>
+<th>Value</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CMS_ASC</code> / <code>DOWNLOAD</code></td>
+<td><code>YES</code></td>
+<td>The report appears in Reports (and AutoTasks updates the ASC fee
+schedule every quarter)</td>
+</tr>
+<tr>
+<td></td>
+<td><code>NO</code> (the default)</td>
+<td>The report is not in the menu, and nothing is downloaded or
+repriced</td>
+</tr>
+<tr>
+<td><code>CMS_ASC</code> / <code>INS_ID</code></td>
+<td>the fee schedule’s code, <code>MEDICARE</code> by default</td>
+<td>Which fee schedule’s plans the report compares. Its <em>Plan</em>
+list shows the active plans with that code</td>
+</tr>
+</tbody>
+</table>
+<p>The menu is built when the billing program starts: close and reopen
+it after changing <code>DOWNLOAD</code>. An automated run set up earlier
+keeps running while the feature is off; remove it as in <em>Stopping a
+report</em> in the AutoTasks guide.</p>
+<h3 id="running-it">Running it</h3>
+<p>The report window works like the other reports’: three tabs and
+<strong>Run</strong>.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Tab</th>
+<th>What to set</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Dates</strong></td>
+<td>The service dates to compare. Tick a period (<strong>Last
+Month</strong>, <strong>Current Month</strong>, <strong>Previous
+Quarter</strong>, <strong>Year To Date</strong>, <strong>Last 12
+Months</strong>, <strong>Last Year</strong> and the others) and the
+dates fill in, or type the dates yourself. It opens on last month
+through today</td>
+</tr>
+<tr>
+<td><strong>Plan and tolerance</strong></td>
+<td><strong>Plan</strong>: <em>(all plans)</em> or one.
+<strong>Tolerance ($)</strong>: differences smaller than this count as
+matching (default 0.05). <strong>Include claims paid $0</strong>: off by
+default, because a claim paid $0 is usually a denial</td>
+</tr>
+<tr>
+<td><strong>Automate Report</strong></td>
+<td>Sends the report by e-mail on a schedule (below)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Run</strong> opens the preview, which prints or exports it
+like any other report. If nothing in the dates can be compared, a
+message says why (with the counts by reason) instead of an empty
+report.</p>
+<h3 id="sending-it-automatically">Sending it automatically</h3>
+<p>Like every report with an <strong>Automate Report</strong> tab, it
+can be run by AutoTasks on a schedule and e-mailed (Supervisors and
+Administrators set this up). Set the <strong>Plan and tolerance</strong>
+tab first: what it holds is saved with the automation and used every
+time. The dates come from the schedule (yesterday for a daily report,
+the last 7 days for a weekly one, the last month for a monthly one).
+When a run finds nothing to compare, nothing is sent. Setting up the
+schedule, the recipients and the attachments is described in
+<em>Automated reports</em> in the <em>Mp10 AutoTasks — Administrator’s
+Guide</em>.</p>
+<p>The report prints from the template <code>AscPayDiff.fr3</code>,
+which must be in the report templates folder (the System Registry’s
+<code>REPORTS</code> / <code>DIRECTORY</code>) or saved in the templates
+table, like the other reports’ templates.</p>
+<h3 id="reading-it">Reading it</h3>
+<p>For each surgical line the report works out what the payer should
+have paid: the rate for the service date’s quarter, times that year’s
+factor, times the plan’s share of it. A bilateral line (modifier 50) is
+expected at 150% of the rate (a bilateral line that is not the highest
+of a claim with several procedures is then halved to 75%, which has not
+been checked against real payments). It prints what differs by more than
+the tolerance: claim, patient, service date, code, expected, paid and
+difference (<strong>negative means paid short</strong>). Each plan’s
+footer gives the claims and lines compared, matching, short and over,
+with the totals.</p>
+<p>Things to know when you read it:</p>
+<ul>
+<li><strong>Claims with several procedures are compared by their
+total.</strong> When a claim has more than one surgical line, the
+highest one is expected in full and the others at half (where the rate
+allows the reduction), and the report compares the claim’s total paid
+with that total, because payers often split the right total differently
+across the lines. Such a claim prints as one row, its codes joined by
+“+” (a long list ends with “+2”, “+3”… for the codes that did not fit),
+and counts once in the footer.</li>
+<li><strong>What is not compared</strong> is counted on the report’s
+last line, by reason: for example a line that is not surgical, a
+modifier 52, 53, 73, 74, FB or FC (on the claim, or on the payer’s
+posting for the line), or a claim paid $0. When one surgical line of a
+claim with several procedures is left out, its other surgical lines are
+left out with it (<em>another line not compared</em>): without every
+line there is no total to check.</li>
+<li><strong>A claim with a line outside the dates is left out.</strong>
+If any line of a claim is dated before the first or after the last
+service date you asked for, the whole claim is counted as <em>claim
+crosses the date range</em>: its total would be missing lines. Widen the
+dates to include it.</li>
+<li><strong>A plan’s share is learned from its own payments.</strong>
+The plan needs at least <strong>20</strong> single-line payments in the
+last 12 months before its share is known. Until then its heading says
+<em>share unknown, not compared</em> and its lines are counted, not
+listed.</li>
+<li><strong>January.</strong> If the dates take in a January, the
+report’s heading says so: payers often pay the previous year’s rate for
+a while, so January lines may differ.</li>
+<li>When nothing can be compared (for example no rates are loaded for
+those dates) a message says <em>Nothing to report</em> with the counts
+by reason.</li>
+</ul>
+<p>Print or export it from the preview, like any report.</p>
 <h1 class="unnumbered" id="quick-reference">Quick reference</h1>
 <p><strong>At the front desk</strong></p>
 <table>
@@ -3965,6 +4387,17 @@ Save</td>
 <td>Find the claims missing one</td>
 <td>Tables → Prior Auth Rules → highlight the rule → Show Matching
 Claims</td>
+</tr>
+<tr>
+<td>Quote a patient</td>
+<td>Patient browser → Quote Serv (or Tables → Patient Quote; Patients10:
+Actions → Patient Quote) → plan, share, deductible, codes → Print (Print
+saves it)</td>
+</tr>
+<tr>
+<td>Find a printed quote</td>
+<td>Saved Quotes (in the quote, the patient browser, or Patients10’s
+Actions menu)</td>
 </tr>
 <tr>
 <td>Send</td>

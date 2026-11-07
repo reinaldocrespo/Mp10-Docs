@@ -150,6 +150,28 @@ A record number can also be changed or merged by hand with **Chng Record** in
 the patients grid's side panel. Mp10 merges two records only when the name,
 date of birth and SSN all match; otherwise it refuses.
 
+### What a merge moves
+
+A merge moves everything filed under the old record number to the record you
+keep: encounters, charges, claims and payments, insurance, notes, attachments
+and scans, tags, letters, pre-authorizations, eligibility answers, consulting
+physicians, appointments and the other tables that hold a patient's number. It
+then deletes the old record and writes the merge to the audit log. Old
+snapshot copies left by a conversion from Mp10 version 8 (the legacy
+`patients_old`-style tables) are left alone, and so are legacy tables that can
+no longer be opened.
+
+If anything fails part-way, nothing moves.
+
+### "This dictionary holds a patient key this version does not know about"
+
+Before it moves anything, Mp10 checks the database for any table with a
+patient-number column that the merge does not know. If it finds one, it
+refuses and lists the table and column. Merging would leave those rows
+pointing at a patient that no longer exists, so nothing is changed. Report the
+table to your Mp10 support contact: a developer has to add it to the merge
+before that database can merge records. The details are in `patientmerge.log`.
+
 # Adding and editing a patient
 
 ## Opening the patient window
@@ -1434,6 +1456,33 @@ priced from its first five characters: `76881 XY` takes the price of 76881.
 
 Changing the units changes *Expected* and *Deduct* in proportion.
 
+## Fee schedule dates
+
+A price in the billing codes table has an **effective date** and, once it is
+replaced, an **expiry date**. The claim is priced with the row in force on the
+date shown in its *From* column (the admission date on most plans, or the
+charge's date on a plan that is set to use it), so a claim for an old service
+date still gets the old price after a new one is entered. A code with no dated
+row on the payer's schedule is priced as it always was.
+
+In the **Fee Schedule** screen in Admin (the *Fee Schedule* link) the grid shows
+only the rows that are **not expired** on the date in the **In force** box,
+which opens on today. Rows with a future effective date are listed too; only
+closed history is hidden. Pick a payer in *Filter Only* and the list follows;
+change the date to hide or show rows by their expiry. Tick **Show all** to list
+every row of the payer, expired ones too (the date goes grey). A row you add
+with a future effective date shows at once.
+
+Most rows have **no dates at all**, and that is normal: a row with no
+effective date has always been in force, and one with no expiry date still is.
+Dates appear only on rows that have been replaced (the old row gets an expiry
+date, its replacement an effective date), whether a person replaced them or the
+quarterly ASC update did.
+
+Where the practice bills Medicare as a surgery center, AutoTasks can add the
+dated rows itself every quarter; see *Surgery center (ASC) fee schedule* in the
+*Mp10 AutoTasks — Administrator's Guide*.
+
 ## Finding a code by words
 
 You don't need to know the code. Type words in the *BillCode* cell, such as
@@ -1711,6 +1760,118 @@ Mp10 does not work these rules out for you. A person adds one when a payer says 
 requires a number, because a refusal alone does not prove it. If a payer starts
 refusing a service it used to pay, and claims with a number are the ones getting
 paid, ask the payer; then add the rule from what it tells you.
+
+# Quoting a service to a patient
+
+Before the visit, the front desk can answer "what will I owe?" with a
+**patient quote**: an estimate that adds up the services, prices them on the
+patient's plan and applies the deductible and the patient's share.
+
+## Opening it
+
+- **With a patient:** in the patient browser, the side panel has **Quote
+  Serv**. It opens with the patient's name (greyed), the patient's plan picked,
+  and the coverage on file (the insurance's deductible string) shown as a
+  hint. Patients10, MpBill10 and PrBill10 all have it.
+- **Without a patient:** in the billing program, **Tables → Patient Quote**;
+  in Patients10, **Actions → Patient Quote**. The name is typed. Use this for
+  someone who has no record yet.
+
+## Making a quote, step by step
+
+1. Open the quote (above).
+2. Pick the **Plan**, and the **Anesthesia plan** if anesthesia is to be
+   quoted too.
+3. Type the patient's name if it is not filled in, then the **Patient share**
+   and the **Deductible remaining** from the patient's card.
+4. In the grid's **Code** cell, type a code or words from its description and
+   pick the service from the list. Press Enter (or **Add line**) for the next
+   one. Use **Anesthesia line** for the anesthesia.
+5. Check each line's price and *Priced from*, and type a price where a line
+   asks for one. The totals under the grid show what the services add up to
+   and what the patient owes.
+6. Press **Print**. This **saves** the quote and opens the estimate, which you
+   print, or export and e-mail, from the preview.
+7. Press **Close**.
+
+There is no Save button: **Print is what saves a quote**. Closing without
+pressing Print saves nothing, and a saved quote cannot be changed. To correct
+one, change the quote and press Print again: that saves a new quote with a new
+number.
+
+## Filling it in
+
+| Field | What to enter |
+|---|---|
+| **Plan** | The patient's insurance, chosen from the active plans |
+| **Anesthesia plan** | Optional. Anesthesia is billed on its own plan, so pick it here to quote the anesthesia too; with *None* the Anesthesia line button stays off |
+| **Patient** | The name, typed when there is no record |
+| **Patient share** | The choice **%** or **$** and the amount, from the patient's card. A percentage cannot be over 100. A flat amount is capped at what the line costs after the deductible |
+| **Deductible remaining** | What the patient still has to meet. It comes off the dearest lines first, and the patient owes it |
+
+Add each service in the grid's **Code** cell: type the code or words from its
+description and pick it from the list. On the empty row the list opens with the
+plan's most billed codes. The button at the right of the cell opens the full
+list of the plan's billing codes (*Valid Billing Codes*, the same list as the
+claim's), most billed first. Press **Add line** (or Enter) for the
+next. **Anesthesia line** puts the cursor on a new row that is priced on the
+anesthesia plan; its *Plan* column says so. **Delete line** removes one. A
+line's *Share* and *Share value* can be changed on that line, which overrides
+the top.
+
+A code the plan has no price for is accepted too. It is priced from the CMS
+rate when the practice uses the ASC fee schedule (the *Priced from* column
+says *CMS rate*); otherwise it says *No price: type one* and you type one in
+*Price*. Pressing **Print** with lines still unpriced asks *Print anyway?*, and
+they print as $0.
+
+*Priced from* says where each price came from: *Fee schedule*, *CMS rate* or
+*Typed*.
+
+### Surgery center plans
+
+Where the practice bills Medicare as a surgery center and the ASC fee schedule
+is on, the quote follows Medicare's rules for the plan that uses it:
+
+- when there are two or more surgical services, the dearest is full price and
+  each other that takes the multiple-procedure reduction is **half**;
+- a service that Medicare packages with another (indicator N1) is shown as
+  *Included (packaged), $0*, and its price cannot be typed;
+- a device, lens or tissue that Medicare's contractor prices by invoice
+  (indicators F4, J7, K7 and L6) says *Priced by invoice (Medicare's
+  contractor): type one*, and prints *Precio por factura* until a price is
+  typed;
+- a code Medicare may not pay for shows a **warning** in red.
+
+## Printing, and when a quote is saved
+
+Press **Print**. This is also what **saves** the quote: closing without
+pressing Print saves nothing. The estimate that opens is in **Spanish**, carries
+the quote's number and says that it is an estimate and does not include the
+surgeon's fees. Pressing Print again without changing anything shows the same
+quote again (*Unchanged: quote N again, not saved twice*); any change makes a
+new quote. If the practice's data dictionary has not been updated, the quote
+still prices and prints, but is not saved, and says so.
+
+## Saved Quotes
+
+**Saved Quotes** in the quote window, in the patient browser's side panel, or
+in Patients10's **Actions → Saved Quotes** lists the quotes that were printed,
+newest first. It opens on the last 90 days
+(change *From* and *To* and press **Show**). From a patient's browser **This
+patient only** is ticked; untick it to see everyone's.
+
+| Column | Shows |
+|---|---|
+| Date | When it was printed |
+| Patient | The patient's name now (for a linked patient), or the typed name |
+| Plan | The insurance |
+| Total | The services added up |
+| Patient owes | After deductible and share |
+| User | Who printed it |
+
+**View** lists a quote's lines. **Reprint** shows the same estimate with the
+same number and saves nothing. Quotes cannot be edited or deleted.
 
 # Finding claims
 
@@ -2555,9 +2716,115 @@ on a remittance.
 | *Reports → Payments + Adjustments* | Payments and adjustments for a period — by payment date, deposit date or the date posted — grouped by payer, check, user or referring physician |
 | *Reports → Claims Status* | Claims with an insurance balance, by flag, and how long each has waited |
 | *Reports → Aeging of Accounts* | What is owed, by age |
+| *Reports → ASC Payment Differences* | Surgery center claims paid more or less than Medicare's rate says (only where the ASC fee schedule is on) |
 
 Every report can be printed, exported, or scheduled to be e-mailed
 automatically from its *Automate Report* tab (Supervisors and Administrators).
+
+## ASC Payment Differences
+
+**Reports → ASC Payment Differences** lists the surgery center claims that
+Medicare and the Medicare Advantage plans paid more or less than Medicare's rate
+says they should. It is the last item in the Reports menu.
+
+### Does it apply to your practice?
+
+Only if the practice is an **ambulatory surgery center (ASC)** that bills
+Medicare, or Medicare Advantage plans that pay as Medicare does, and its plans
+are priced from **Medicare's ASC fee schedule**. The report needs what that
+feature loads: the CMS rates (AutoTasks downloads them every quarter) and the
+year's conversion factor (entered in **CMS ASC Setup** in the admin module).
+See *Surgery center (ASC) fee schedule* in the *Mp10 AutoTasks —
+Administrator's Guide*. Any other practice leaves the feature off, and the
+report does not appear.
+
+### Turning it on or off
+
+The report has no switch of its own: it comes with the ASC fee schedule
+feature. In the admin module's **System Registry**:
+
+| Section / Entry | Value | Effect |
+|---|---|---|
+| `CMS_ASC` / `DOWNLOAD` | `YES` | The report appears in Reports (and AutoTasks updates the ASC fee schedule every quarter) |
+| | `NO` (the default) | The report is not in the menu, and nothing is downloaded or repriced |
+| `CMS_ASC` / `INS_ID` | the fee schedule's code, `MEDICARE` by default | Which fee schedule's plans the report compares. Its *Plan* list shows the active plans with that code |
+
+The menu is built when the billing program starts: close and reopen it after
+changing `DOWNLOAD`. An automated run set up earlier keeps running while the
+feature is off; remove it as in *Stopping a report* in the AutoTasks guide.
+
+### Running it
+
+The report window works like the other reports': three tabs and **Run**.
+
+| Tab | What to set |
+|---|---|
+| **Dates** | The service dates to compare. Tick a period (**Last Month**, **Current Month**, **Previous Quarter**, **Year To Date**, **Last 12 Months**, **Last Year** and the others) and the dates fill in, or type the dates yourself. It opens on last month through today |
+| **Plan and tolerance** | **Plan**: *(all plans)* or one. **Tolerance ($)**: differences smaller than this count as matching (default 0.05). **Include claims paid $0**: off by default, because a claim paid $0 is usually a denial |
+| **Automate Report** | Sends the report by e-mail on a schedule (below) |
+
+**Run** opens the preview, which prints or exports it like any other report. If
+nothing in the dates can be compared, a message says why (with the counts by
+reason) instead of an empty report.
+
+### Sending it automatically
+
+Like every report with an **Automate Report** tab, it can be run by AutoTasks on
+a schedule and e-mailed (Supervisors and Administrators set this up). Set the
+**Plan and tolerance** tab first: what it holds is saved with the automation and
+used every time. The dates come from the schedule (yesterday for a daily
+report, the last 7 days for a weekly one, the last month for a monthly one).
+When a run finds nothing to compare, nothing is sent. Setting up the schedule,
+the recipients and the attachments is described in *Automated reports* in the
+*Mp10 AutoTasks — Administrator's Guide*.
+
+The report prints from the template `AscPayDiff.fr3`, which must be in the
+report templates folder (the System Registry's `REPORTS` / `DIRECTORY`) or
+saved in the templates table, like the other reports' templates.
+
+### Reading it
+
+For each surgical line the report works out what the payer should have paid: the
+rate for the service date's quarter, times that year's factor, times the plan's
+share of it. A bilateral line (modifier 50) is expected at 150% of the rate (a
+bilateral line that is not the highest of a claim with several procedures is
+then halved to 75%, which has not been checked against real payments). It
+prints what differs by more than the tolerance: claim, patient, service date,
+code, expected, paid and difference (**negative means paid short**). Each plan's
+footer gives the claims and lines compared, matching, short and over, with the
+totals.
+
+Things to know when you read it:
+
+- **Claims with several procedures are compared by their total.** When a claim
+  has more than one surgical line, the highest one is expected in full and the
+  others at half (where the rate allows the reduction), and the report compares
+  the claim's total paid with that total, because payers often split the right
+  total differently across the lines. Such a claim prints as one row, its codes
+  joined by "+" (a long list ends with "+2", "+3"... for the codes that did not
+  fit), and counts once in the footer.
+- **What is not compared** is counted on the report's last line, by reason: for
+  example a line that is not surgical, a modifier 52, 53, 73, 74, FB or FC (on the
+  claim, or on the payer's posting for the line), or a claim paid $0. When one
+  surgical line of a claim with several procedures is left out, its other surgical
+  lines are left out with it (*another line not compared*): without every line
+  there is no total to check.
+- **A claim with a line outside the dates is left out.** If any line of a claim is
+  dated before the first or after the last service date you asked for, the whole
+  claim is counted as *claim crosses the date range*: its total would be missing
+  lines. Widen the dates to include it.
+- **A plan's share is learned from its own payments.** The plan needs at least
+  **20** single-line payments in the last 12 months before its share is known.
+  Until then its heading says *share unknown, not compared* and its lines are
+  counted, not listed.
+- **January.** If the dates take in a January, the report's heading says so:
+  payers often pay the previous year's rate for a while, so January lines may
+  differ.
+- When nothing can be compared (for example no rates are loaded for those
+  dates) a message says *Nothing to report* with the counts by reason.
+
+Print or export it from the preview, like any report.
+
 
 # Quick reference {.unnumbered}
 
@@ -2589,6 +2856,8 @@ automatically from its *Automate Report* tab (Supervisors and Administrators).
 | Read a tag | Hover it; click for the full explanation |
 | Say a payer wants a prior auth | Tables → Prior Auth Rules → New → payer, codes, start date → Save |
 | Find the claims missing one | Tables → Prior Auth Rules → highlight the rule → Show Matching Claims |
+| Quote a patient | Patient browser → Quote Serv (or Tables → Patient Quote; Patients10: Actions → Patient Quote) → plan, share, deductible, codes → Print (Print saves it) |
+| Find a printed quote | Saved Quotes (in the quote, the patient browser, or Patients10's Actions menu) |
 | Send | Claims grid → select one payer's claims → Outbound 837 |
 | See a claim's history | F9 on the claim |
 | Record a follow-up | F9 → Add New → flag, date, **note** → Save |

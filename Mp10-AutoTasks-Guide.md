@@ -35,7 +35,9 @@ every day:
   equipment can be told who its next patient is,
 - keeping the **CMS reference data** behind the claim checks current — the
   Medicare fee schedule and NCCI tables each quarter, the ICD-10-CM code set
-  each year — and e-mailing what it did, and
+  each year — and e-mailing what it did,
+- keeping a surgery center's **Medicare ASC fee schedule** in step with the rates CMS
+  publishes, and e-mailing every price change, and
 - running **reports** on a schedule and e-mailing them to whoever needs them.
 
 Each of those is turned on separately. Nothing in this list happens until you
@@ -1715,6 +1717,288 @@ search uses each fee schedule's own descriptions only and shows no counts.
   data (the modifier-50, NCCI and MUE tags) only work where the data has
   been loaded.
 
+# Surgery center (ASC) fee schedule
+
+Medicare pays an ambulatory surgery center from a fee schedule that CMS
+publishes every quarter: a **rate** for each procedure code. What the center is
+paid is that rate times a **conversion factor**, which CMS sets once a year and
+which is different for each area (a **CBSA**, the core-based statistical area
+of the practice's city). AutoTasks can keep the center's Medicare fee schedule
+in Mp10 in step with those rates, so the prices on claims and on patient
+quotes are the ones Medicare pays.
+
+Everything in this chapter is **off** until it is switched on. It is meant for
+a practice that bills Medicare as a surgery center; any other practice has
+nothing to do.
+
+## What it does
+
+- Once a day AutoTasks looks at the CMS website. When the current quarter's
+  rates have been posted and are not loaded yet, it downloads and loads them.
+  The first time, it also loads the earlier quarters of the year as *history*.
+  History is read by the *ASC Payment Differences* report and never changes a
+  price.
+- It then **reprices the fee schedule** named by the setting `INS_ID`: for each
+  procedure code that Medicare pays a surgery center for, the new price is the
+  rate times the year's factor (brachytherapy sources, indicator H2, are paid
+  the rate itself). Skin substitutes (S2) and drugs (K2) are not repriced: the
+  contractor's own schedule does not price them from the rate this way. A price
+  already within 50 cents (or 0.1%) of the
+  new one is left alone. An old price is not overwritten: its row is closed the
+  day before the quarter starts, and a new row is dated the quarter's first
+  day, so a claim for an earlier service date still gets the earlier price. The
+  new row keeps the expiry date the old one had before it was closed, so a row
+  somebody retired stays retired. A row with the modifier **FB** (device given
+  to the center at no cost) is priced at the rate less CMS's device amount,
+  times the factor; **FC** (partial credit) less half of it. CMS publishes the
+  device amounts with the rates. A quarter that came without them leaves the FB
+  and FC rows as they are.
+- Once a month it fetches the current quarter's file again, because CMS
+  sometimes reissues it, and loads it if it changed.
+- Once a month it also compares the factor you entered with what the payers
+  actually paid (see *The factor alert*).
+- It e-mails every price change and every problem.
+
+Nobody has to approve a quarterly update. Instead, an update can be
+**undone** (see *Undo last update, and Apply again*).
+
+## When it runs
+
+There is no fixed day. The step is part of AutoTasks' look at the CMS site,
+every `AUTOTASKS` / `CMSFETCH_CHECK_HOURS` hours (24 by default), and it runs
+only while `CMS_ASC` / `DOWNLOAD` and `AUTOTASKS` / `FETCH_CMS` are both `YES`.
+
+- **A new quarter** (January, April, July, October): each look checks whether
+  CMS has posted the current quarter's rates. The first look after they appear
+  downloads, loads and applies them, and the e-mail goes out at the same cycle.
+  CMS often posts a quarter shortly before it starts or in its first weeks;
+  until then the log says *not posted yet*, and only after 21 days is that
+  e-mailed (once, then weekly).
+- **A reissue:** once a calendar month the current quarter's file is fetched
+  again. It is loaded and applied only if it differs from the one loaded.
+- **Waiting to apply:** a quarter that loaded but could not change prices
+  (no factor for the year, no e-mail address, or no mail server) is tried again
+  at every look until it applies.
+- **The factor check:** once a calendar month (see *The factor alert*).
+
+**By hand:** there is no command that makes AutoTasks look at CMS now; a smaller
+`CMSFETCH_CHECK_HOURS` makes it look more often. What can be done by hand is in
+**CMS ASC Setup**: saving a different factor reprices that year's loaded
+quarters at once, **Undo last update** reverses the newest update and **Apply
+again** puts it back.
+
+**A quarter that changes no price** still loads and is recorded (*Last update*
+shows it), nothing is written to the fee schedule, and the e-mail's subject is
+*Mp10 CMS ASC: update*. That is common outside January: most rates do not
+move from one quarter to the next, and a price within 50 cents (or 0.1%) of the
+new one is left alone.
+
+## The factor is per CBSA and per year
+
+CMS publishes the rates without a factor. The factor is different for each
+CBSA and changes every January, so Mp10 keeps one factor, and one CBSA, **for
+each year**. You enter the year's factor in **CMS ASC Setup** (below), or let
+Mp10 read it from the fee schedule spreadsheet Medicare's contractor (the MAC)
+sends the center: see *Reading the factor from the contractor's sheet*. Until
+you do:
+
+- with no factor at all, the rates load but **no price changes**, and the
+  e-mail says so; and
+- from the second year on, Mp10 **carries last year's factor forward as an
+  estimate** when it first needs the new year's, so prices keep working in
+  January. The dialog shows its source as *ESTIMATED*. The estimate stays an
+  estimate until you **confirm** it (the *Confirm this estimate* box) or enter
+  the real factor, or until the monthly check finds that the payments agree
+  with it, which marks it *CONFIRMED*.
+
+The CBSA is taken, the first time a year is read, from the practice's city. You
+can change it in the same dialog.
+
+## Turning it on
+
+> **Before anything is switched on, ask the practice owner which addresses
+> receive the e-mails.** Nothing changes a price unless somebody can be told
+> about it, and the owner decides who that is.
+
+1. **Update the Data Dictionary** first. The feature needs tables that older
+   dictionaries lack; without them everything in this chapter stays silent.
+2. Ask the owner for the **addresses** that go in `CMS_ASC` / `NOTIFY_EMAIL`.
+3. Make sure the server can send e-mail (see *E-mail has to be set up first* in
+   the backups chapter) and that `AUTOTASKS` / `FETCH_CMS` is `YES` (it is by
+   default; the ASC step runs as part of the CMS reference data job).
+4. Set `CMS_ASC` / `DOWNLOAD` to `YES`. AutoTasks acts at its next cycle.
+5. Close and reopen Admin, open **CMS ASC Setup** (below; its menu item
+   appears only while `DOWNLOAD` is `YES`) and enter the CBSA, the year's
+   factor and the notification address.
+
+The factor, the flag and the address can be done in any order; technically it
+does not matter. With the flag on and no factor, the rates load and nothing is
+repriced until a factor is saved; with no address, nothing is repriced either.
+Settle the addresses with the owner first anyway, because the first update
+that changes a price is mailed to them.
+
+### The settings
+
+| Section | Entry | Default | Meaning |
+|---|---|---|---|
+| CMS_ASC | DOWNLOAD | NO | `YES` switches the whole feature on. `AUTOTASKS` / `FETCH_CMS` must be `YES` too |
+| CMS_ASC | INS_ID | MEDICARE | The fee schedule (the plans' *ins_id*) that is repriced and compared |
+| CMS_ASC | NOTIFY_EMAIL | empty | Who is e-mailed; commas between addresses. Empty means `CMSFETCH` / `NOTIFY_EMAIL`, then `ERRORREPORTS` / `NOTIFY_EMAIL` |
+| CMS_ASC | SEQUESTER | 0.98 | What the payer pays of the allowed amount. A number above 0 and below 1. Change it only when the law does |
+
+AutoTasks also writes `LAST_HASH_CHECK`, `LAST_FACTOR_CHECK` and
+`PROBLEM_MAILED` in the same section: when it last checked the file, when it
+last checked the factor, and when it last mailed each problem. Leave them
+alone.
+
+Reading the settings creates any that are missing, with the defaults above, so
+the entries appear in the System Registry the first time Admin or AutoTasks
+looks.
+
+## No price changes unless somebody can be told
+
+AutoTasks **does not change a price unless it can send the e-mail about it**:
+there must be an address (in `CMS_ASC`, or the fallbacks above) and an outgoing
+mail server set up. If either is missing, the rates still load, no price
+changes, and the log says why. Once both are in place, the next check applies
+the quarter.
+
+This holds for changes made from the dialog too: **every price change is
+mailed**, whoever made it. AutoTasks sends the e-mail at its next cycle, and a
+change whose mail could not go is mailed later.
+
+## CMS ASC Setup
+
+In **MpAdmin10** and **PrAdmin10**: **File → CMS ASC Setup**. It appears only
+while `CMS_ASC` / `DOWNLOAD` is `YES`, and only to Administrators and
+Supervisors. The menu is built when the program starts, so close and reopen
+the program after changing the flag.
+
+| Field | Meaning |
+|---|---|
+| **Year** | Opens on this year. Type another year and press Tab to look at it |
+| **CBSA** | The area's code. Filled from the practice's city when the year has none |
+| **Conversion factor** | The year's factor, between 0.1 and 2. A value outside the range is refused |
+| **Source** | Read only: *ENTERED* (somebody typed it), *ESTIMATED* (carried from the year before), *CONFIRMED* (the payments agree). A year nobody has saved shows *(none yet)*, or *estimated, not saved* when a factor is carried from the year before |
+| **Confirm this estimate** | Shown for an estimated year. Tick it and Save to say the carried factor is right; the year is then stored as *ENTERED* at that factor |
+| **Notification e-mail** | Saved in `CMS_ASC` / `NOTIFY_EMAIL`. Several addresses are allowed, with commas or semicolons between them; Save refuses an entry that is not an address and names it. A red note says so when no address is set anywhere |
+| **From the MAC's sheet...** | Reads the factor from the contractor's fee schedule spreadsheet into the field (below). Press Save to store it |
+
+### Reading the factor from the contractor's sheet
+
+The contractor's fee schedule for the year (an Excel file with the procedure
+code, the effective date and the price, and the CBSA in its title) is CMS's
+rate times the factor for every procedure, to the cent. Mp10 can work the
+factor out from it:
+
+1. Wait until the year's January rates are loaded (AutoTasks loads them early
+   in January; the dialog says so if they are not).
+2. In **CMS ASC Setup**, with the year shown, press **From the MAC's sheet...**
+   and choose the file: the `.xlsx` as received, or a `.csv` saved from it.
+3. The factor appears in the field with how many of the sheet's prices it
+   matches. It is accepted only when at least 99% match. A sheet for another
+   year, or for another CBSA than the one shown, is refused.
+4. Press **Save**. The factor is stored and the year is repriced as for a typed
+   factor.
+
+**Save** stores what you changed:
+
+- a changed **factor** is stored and **reprices the year**: the rows of every
+  loaded quarter of that year are recalculated. The message says how many rows
+  were added, updated and closed;
+- changing only the CBSA says the factor is unchanged and nothing was repriced;
+- saving with nothing changed says *Nothing changed.*;
+- looking at a year, or at the next year's estimate, stores nothing.
+
+The **Last update** box describes the newest update, whoever made it: a quarter
+or a factor change, when it ran, the factor and where it came from, and the row
+counts.
+
+### Undo last update, and Apply again
+
+**Undo last update** reverses the newest update that has not been undone. It
+asks once. Prices the update changed go back to what they were, and a row it
+closed is reopened. A price somebody has **edited since** is left as edited,
+and the message names it. The rates stay loaded, since the report needs them.
+The daily job does not apply an undone file again; a reissued file applies
+normally.
+
+Undoing a factor change also puts the factor back, so prices and factor agree.
+
+**Apply again** appears after an undo and puts the update back: for a quarter,
+that quarter; for a factor change, the same factor. It acts on the year of that
+update even when the **Year** field shows another.
+
+## What the e-mails say
+
+The subject is `Mp10 CMS ASC: ` followed by the most serious thing the message
+carries, a dash and the date (AutoTasks puts the practice's site name in front,
+as in its other notices):
+
+| Subject | Meaning |
+|---|---|
+| `Mp10 CMS ASC: problem` | Something failed and needs attention |
+| `Mp10 CMS ASC: prices changed` | An update changed prices. The body lists each code with its old and new price and the date it applies from |
+| `Mp10 CMS ASC: factor check` | The monthly check found the factor disagrees with the payments |
+| `Mp10 CMS ASC: update` | Rates were loaded or reissued and no price changed |
+
+Every message that changed prices ends with how to reverse it: **CMS ASC Setup,
+Undo last update.**
+
+**A repeated problem is mailed once, and then at most weekly.** The same problem
+for the same quarter does not fill the mailbox, but the log (`AutoTasks.out`)
+still records it at every check.
+
+**"CMS has not posted that quarter yet" is not mailed at first.** It is normal
+for the first weeks of a quarter, so for the first 21 days it is only in the
+log. A quarter whose file is still not on the CMS page 21 days or more after the
+quarter started is mailed as a **problem** (*the CMS addenda page has no file
+recognised for that quarter*), then weekly, and says that prices stay at the
+previous quarter's. If it arrives, check that the quarter's file really is on the
+CMS addenda page: if it is, the page's file name is one Mp10 does not recognise
+yet, and Mp10 support needs to know. A CMS page that cannot be reached at all is
+only logged, never mailed.
+
+**A price change whose mail cannot go is mailed later.** If the mail server is
+not set up when an update has changed prices, the update stays owed and the log
+says so at every cycle (*CMS ASC notice not mailed: SMTP is not configured*)
+until the mail goes out.
+
+### The factor alert
+
+Once a month AutoTasks reads the claims already paid this year (from
+February on; primary claims on the plans that use `INS_ID`, with one surgical
+line, no 50, 51, 52, 53, 73, 74, FB or FC modifier, and a payment) and works
+out the factor the payments imply. When there are enough lines (at least 20,
+on at least 5 codes, with 80% of them agreeing) and the implied factor differs
+from the stored one by more than 0.1%, it mails:
+
+- the stored factor and the factor the payments point to, and
+- how many lines and codes that rests on.
+
+It **never changes anything by itself**. Open CMS ASC Setup and enter the right
+factor; saving it reprices. The alert repeats monthly until the factor agrees.
+When the year's factor is an estimate and the payments agree with it, it is
+marked *CONFIRMED* without a mail.
+
+Payers often go on paying last year's rate for part of January, so an alert
+early in the year does not always mean your factor is wrong.
+
+## Checking it is working
+
+- The log has a `CMSFETCH:` line for every decision, including *not posted yet*
+  and *factor check agrees*.
+- **CMS ASC Setup → Last update** shows what the latest run did.
+- On the fee schedule in Admin (see *Fee schedule dates* in the Patients and
+  Billing guide), the repriced codes have rows dated the first day of the
+  quarter, and the row each replaced has an expiry date. The screen opens
+  showing every row that is **not expired** on the date in its *In force* box,
+  which is today, so a row with a future effective date shows too and only
+  closed history is hidden. Tick **Show all** to see the expired rows.
+- No e-mails and no price changes usually mean `DOWNLOAD` is not `YES`,
+  `FETCH_CMS` is `NO`, no address is set, the mail server is not set up, or the
+  Data Dictionary has not been updated.
+
 # Automated reports
 
 Every Billing and Patients report with an **Automate Report** tab can run by themselves on a schedule and be
@@ -1733,6 +2017,10 @@ server. If it isn't, nothing is sent.
   administrator to.
 - **Outgoing e-mail must work.** See *Making sure e-mail actually goes out*
   below. Without it, reports run and nobody receives them.
+
+The **ASC Payment Differences** report (Billing, where the surgery center fee
+schedule is on) is automated the same way; its *Plan and tolerance* tab is
+saved with the automation.
 
 ## Setting up a report
 
@@ -2306,6 +2594,21 @@ are missing; it needs permission to create folders in the remittance folder.
 > do not assume the setting is wrong — the check can fail silently on a
 > structure problem. Report it rather than re-running it repeatedly. *(IT
 > task.)*
+
+## The ASC fee schedule is not updating
+
+Work down the list; the first thing that is wrong is usually the whole answer.
+
+1. `CMS_ASC` / `DOWNLOAD` is `YES`, and `AUTOTASKS` / `FETCH_CMS` is not `NO`.
+2. The Data Dictionary has been updated. Before that, the feature is silent.
+3. An address is set (`CMS_ASC` / `NOTIFY_EMAIL`, or `CMSFETCH` or
+   `ERRORREPORTS` as fallbacks) and the server's outgoing mail is set up. With
+   either missing the rates load but **no price changes**; the log says so.
+4. The year has a factor in **CMS ASC Setup**. With none, the rates load and
+   nothing is repriced.
+5. `CMSFETCH:` lines in the log say whether CMS has posted the quarter yet. A
+   quarter that is more than 3 weeks old and still not found is also mailed as a
+   problem (see *What the e-mails say*).
 
 ## Appointment reminders are not going out
 
