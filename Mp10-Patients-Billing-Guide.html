@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-11-07" />
+  <meta name="dcterms.date" content="2026-11-12" />
   <title>Mp10 Patients, Billing and Payments — User’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -149,7 +149,7 @@ Guide</h1>
 <p class="subtitle">From the patient at the front desk to the payment on
 the claim</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">07 November 2026</p>
+<p class="date">12 November 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -161,6 +161,8 @@ guide</a>
 to</a></li>
 <li><a href="#who-can-do-what" id="toc-who-can-do-what">Who can do
 what</a></li>
+<li><a href="#for-the-administrator-updating-the-data-dictionary" id="toc-for-the-administrator-updating-the-data-dictionary">For the
+administrator: updating the data dictionary</a></li>
 <li><a href="#how-the-screens-behave" id="toc-how-the-screens-behave">How the screens behave</a></li>
 </ul></li>
 <li><a href="#part-i-patients-and-encounters" id="toc-part-i-patients-and-encounters">Part I — Patients and
@@ -580,6 +582,29 @@ by hand, keeping the Prior Auth Rules table</td>
 permissions</strong>, your account is not in the group that screen
 needs. That is usually correct; ask your administrator if you think it
 is not.</p>
+<h2 id="for-the-administrator-updating-the-data-dictionary">For the
+administrator: updating the data dictionary</h2>
+<p>A new version of Mp10 often needs new tables or columns. Run
+<strong>Update Data Dictionary</strong> from the administration module’s
+<strong>Actions</strong> panel before the new programs are opened, after
+hours, with nobody else in Mp10. Until it has run, the new programs warn
+<em>Check Data Dictionary</em> when they start. An older program works
+on an updated dictionary.</p>
+<p>Things it takes care of, besides adding what is new:</p>
+<ul>
+<li><strong>A column your site made wider stays wider.</strong> If a
+text column holds more characters at your site than Mp10’s own
+definition (a long second address line, for example), the update leaves
+it as it is instead of cutting it back.</li>
+<li><strong>The ReadOnlyUser login can only read.</strong> The update
+creates it when it is missing, keeps it out of every other group, and
+gives it read-only access to every table. Your support contact uses it
+to look at your data without being able to change anything. Its password
+is not changed if it already exists.</li>
+<li><strong>Tables already set up are not touched again.</strong> A
+setting a table already has is not re-applied, so the update no longer
+stops on a table that someone else has open only because of that.</li>
+</ul>
 <h2 id="how-the-screens-behave">How the screens behave</h2>
 <p>A few habits are the same on every grid in Mp10:</p>
 <ul>
@@ -2231,6 +2256,11 @@ invalid</em>, with the reason. Choose the more specific code.</li>
 apply.</li>
 <li><strong>A seventh character is needed</strong> — pick it from the
 list.</li>
+<li><strong>A side is needed</strong> — codes for the right and the left
+side exist under this code; pick one. Only codes valid on the claim’s
+date of service are offered, so a code that is complete as it is (I60.2,
+for one) is not asked about. <strong>Analyze 837</strong> reports the
+same thing as <em>Lateral digit needed</em>.</li>
 <li><strong>Patient sex</strong> — the patient’s sex does not fit a
 code.</li>
 <li><strong>Excludes1</strong> — two codes are never coded together.
@@ -2314,7 +2344,7 @@ if the problem is gone.</li>
 </tr>
 <tr>
 <td><em>Unts</em></td>
-<td>Units (at least 1)</td>
+<td>Units, 1 to 9,999</td>
 </tr>
 <tr>
 <td><em>Fee</em></td>
@@ -2485,6 +2515,12 @@ tags</h1>
 patient (<em>Billing Codes, dates, and insurance seems to be
 duplicated</em>) — answer No if it is a duplicate;</li>
 <li>refuses a payer that is not set up in your insurance list;</li>
+<li>refuses a line with more than 9,999 units, with negative units, or
+with an amount too large to store, and names the line. A billing code
+typed into <em>Unts</em> by mistake is the usual cause;</li>
+<li>asks before saving a line with more than 999 units, or with an
+<em>Expected</em> more than ten times <em>Fee</em> × units. The answer
+is No unless you choose Yes;</li>
 <li>gives a new claim its number;</li>
 <li>runs the <strong>claim checks</strong> and tags the claim with what
 they find.</li>
@@ -3102,7 +3138,9 @@ still works.</p>
 <tr>
 <td><strong>Notes</strong>, <strong>Attachments</strong>,
 <strong>AuditLog</strong></td>
-<td>The claim’s notes, documents, and history of changes</td>
+<td>The claim’s notes, documents, and history of changes. The notes
+window’s <strong>Print</strong> prints every note with your practice’s
+logo and address</td>
 </tr>
 <tr>
 <td><strong>Claim Status</strong></td>

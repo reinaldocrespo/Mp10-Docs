@@ -84,6 +84,27 @@ If a button is missing for you, or a screen says **Check user permissions**,
 your account is not in the group that screen needs. That is usually correct;
 ask your administrator if you think it is not.
 
+## For the administrator: updating the data dictionary
+
+A new version of Mp10 often needs new tables or columns. Run **Update Data
+Dictionary** from the administration module's **Actions** panel before the new
+programs are opened, after hours, with nobody else in Mp10. Until it has run,
+the new programs warn *Check Data Dictionary* when they start. An older
+program works on an updated dictionary.
+
+Things it takes care of, besides adding what is new:
+
+- **A column your site made wider stays wider.** If a text column holds more
+  characters at your site than Mp10's own definition (a long second address
+  line, for example), the update leaves it as it is instead of cutting it back.
+- **The ReadOnlyUser login can only read.** The update creates it when it is
+  missing, keeps it out of every other group, and gives it read-only access to
+  every table. Your support contact uses it to look at your data without being
+  able to change anything. Its password is not changed if it already exists.
+- **Tables already set up are not touched again.** A setting a table already
+  has is not re-applied, so the update no longer stops on a table that someone
+  else has open only because of that.
+
 ## How the screens behave
 
 A few habits are the same on every grid in Mp10:
@@ -1349,6 +1370,10 @@ code on the claim and asks you, one message at a time:
   Choose the more specific code.
 - **An additional code may apply** — tick the ones that apply.
 - **A seventh character is needed** — pick it from the list.
+- **A side is needed** — codes for the right and the left side exist under
+  this code; pick one. Only codes valid on the claim's date of service are
+  offered, so a code that is complete as it is (I60.2, for one) is not asked
+  about. **Analyze 837** reports the same thing as *Lateral digit needed*.
 - **Patient sex** — the patient's sex does not fit a code.
 - **Excludes1** — two codes are never coded together. Keep both only if the two
   conditions are unrelated.
@@ -1415,7 +1440,7 @@ Each line is one service:
 | Column | What it holds |
 |---|---|
 | *BillCode* | The procedure code, followed by its modifiers |
-| *Unts* | Units (at least 1) |
+| *Unts* | Units, 1 to 9,999 |
 | *Fee* | Your charge |
 | *Expected* | What the payer is expected to allow — this is what the claim bills |
 | *Deduct* | The patient's deductible share |
@@ -1564,6 +1589,11 @@ Click **Save**. Mp10:
   patient (*Billing Codes, dates, and insurance seems to be duplicated*) —
   answer No if it is a duplicate;
 - refuses a payer that is not set up in your insurance list;
+- refuses a line with more than 9,999 units, with negative units, or with an
+  amount too large to store, and names the line. A billing code typed into
+  *Unts* by mistake is the usual cause;
+- asks before saving a line with more than 999 units, or with an *Expected*
+  more than ten times *Fee* × units. The answer is No unless you choose Yes;
 - gives a new claim its number;
 - runs the **claim checks** and tags the claim with what they find.
 
@@ -2004,7 +2034,7 @@ The side panel acts on the highlighted claim (or claims):
 | **Open Claim** | Opens it (also Enter or double-click) |
 | **Print Claim**, **Preview Claim** | The paper claim form, for every selected claim |
 | **Post Payment** | The payment window for the claim (Part III) |
-| **Notes**, **Attachments**, **AuditLog** | The claim's notes, documents, and history of changes |
+| **Notes**, **Attachments**, **AuditLog** | The claim's notes, documents, and history of changes. The notes window's **Print** prints every note with your practice's logo and address |
 | **Claim Status** | The status history; with several claims selected, change their flag together |
 | **Eligibility** | Asks the payer now; with several selected, asks for each |
 | **Analyze 837** | Reviews the selected claims before sending |
