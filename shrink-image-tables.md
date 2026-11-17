@@ -145,6 +145,13 @@ from documentation:
 - The shrink itself is re-runnable and cancel-safe by design: the ≥10% gain
   gate skips everything already small, so an interrupted run is simply run
   again.
+- A block-size migration builds a new table and gives it the old name; the old
+  one stays as `<table>_preblk`. The new table gets the old table's user and
+  group rights, and the migration refuses to start when it cannot read them.
+  Builds before November 2026 did not carry the rights over, and a table
+  migrated by one of them answers *ADS error 7079 — the user does not have read
+  rights* to everyone but administrators. Run **Update Data Dictionary** to grant
+  the standard rights again.
 - The `.adm` file does **not** shrink until the table is packed — a large
   "orphaned" percentage in `adm_bloat_scan.ps1` between shrink and pack is
   expected, not a fault.

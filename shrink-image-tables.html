@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <meta name="dcterms.date" content="2026-11-12" />
+  <meta name="dcterms.date" content="2026-11-17" />
   <title>shrink-image-tables</title>
   <style>
 code{white-space: pre-wrap;}
@@ -407,6 +407,14 @@ recommendation.</li>
 <li>The shrink itself is re-runnable and cancel-safe by design: the ≥10%
 gain gate skips everything already small, so an interrupted run is
 simply run again.</li>
+<li>A block-size migration builds a new table and gives it the old name;
+the old one stays as <code>&lt;table&gt;_preblk</code>. The new table
+gets the old table’s user and group rights, and the migration refuses to
+start when it cannot read them. Builds before November 2026 did not
+carry the rights over, and a table migrated by one of them answers
+<em>ADS error 7079 — the user does not have read rights</em> to everyone
+but administrators. Run <strong>Update Data Dictionary</strong> to grant
+the standard rights again.</li>
 <li>The <code>.adm</code> file does <strong>not</strong> shrink until
 the table is packed — a large “orphaned” percentage in
 <code>adm_bloat_scan.ps1</code> between shrink and pack is expected, not

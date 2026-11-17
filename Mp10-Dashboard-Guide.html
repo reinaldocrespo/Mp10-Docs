@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-11-12" />
+  <meta name="dcterms.date" content="2026-11-17" />
   <title>Mp10 Dashboard — User’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -148,7 +148,7 @@ a { color: inherit; }
 <p class="subtitle">The cards on the Billing and Patients main windows,
 and what to do about what they show</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">12 November 2026</p>
+<p class="date">17 November 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -234,12 +234,14 @@ patient</a>
 Not On Patient</a></li>
 <li><a href="#insurance-dob-mismatch" id="toc-insurance-dob-mismatch">Insurance DOB Mismatch</a></li>
 <li><a href="#insurance-sex-mismatch" id="toc-insurance-sex-mismatch">Insurance Sex Mismatch</a></li>
+<li><a href="#medicare-part-b-inactive" id="toc-medicare-part-b-inactive">Medicare Part B Inactive</a></li>
 <li><a href="#denied-before" id="toc-denied-before">Denied
 Before</a></li>
 <li><a href="#missing-performing-physician" id="toc-missing-performing-physician">Missing Performing
 Physician</a></li>
 <li><a href="#prior-auth-missing" id="toc-prior-auth-missing">Prior Auth
 Missing</a></li>
+<li><a href="#physical-status-missing" id="toc-physical-status-missing">Physical Status Missing</a></li>
 <li><a href="#refused-for-this-patient" id="toc-refused-for-this-patient">Refused For This Patient</a></li>
 </ul></li>
 <li><a href="#the-reference-data-keeps-itself-current" id="toc-the-reference-data-keeps-itself-current">The reference data
@@ -742,6 +744,11 @@ separate</td>
 <td>A sex different from the one the payer reported, or none at all</td>
 </tr>
 <tr>
+<td>Medicare Part B Inactive</td>
+<td>A claim to Medicare Part B for a patient whose last Medicare
+eligibility says Part B is not active</td>
+</tr>
+<tr>
 <td>Denied Before</td>
 <td>Codes this payer has refused often and recently</td>
 </tr>
@@ -759,6 +766,11 @@ for it since</td>
 <td>Prior Auth Missing</td>
 <td>A code your rules say this payer wants a prior authorization for,
 and no authorization on the claim</td>
+</tr>
+<tr>
+<td>Physical Status Missing</td>
+<td>An anesthesia-code line with no P1-P6 modifier, for a payer that
+usually bills one</td>
 </tr>
 </tbody>
 </table>
@@ -928,6 +940,30 @@ patient’s date of birth too.</p>
 <p>When you save, Mp10 asks whether to use the payer’s answer. If you
 answer <strong>Yes</strong>, the patient record is updated, because both
 claims and eligibility requests take the sex from there.</p>
+<h3 id="medicare-part-b-inactive">Medicare Part B Inactive</h3>
+<p>The claim goes to <strong>Medicare Part B</strong>, and the patient’s
+latest Medicare eligibility response says Part B is <strong>not
+active</strong>. Medicare refuses such a claim with reason 27 and remark
+MA01, “expenses incurred after coverage terminated”. It usually happens
+to a patient who has Medicare Part A only and is covered by another
+plan: a Medicare Advantage, Platino or government plan. That other plan
+is the one that pays.</p>
+<p>Clicking the tag gives the date of that eligibility response and
+names the patient’s other insurance. Change the claim’s payer to it and
+save; the tag clears. If the patient has started Part B since then,
+check Medicare eligibility again and save the claim.</p>
+<ul>
+<li>Only the newest Medicare response counts. A newer answer that says
+Part B is active removes the tag.</li>
+<li>A patient with no Medicare eligibility response on file is never
+tagged.</li>
+<li>Which plans are Medicare Part B: those whose payer id is in
+<strong>BILLING / MEDICARE-PARTB-PAYERIDS</strong>, a comma list,
+<code>00973</code> unless your site changes it. Medicare Advantage plans
+carry their own payer ids and are never tagged.</li>
+<li>It runs on every claim save and on Auto-claim, and counts in the
+dashboard’s claims with error tags.</li>
+</ul>
 <h3 id="denied-before">Denied Before</h3>
 <p>This payer has refused these codes before, <strong>often and
 recently</strong>. Mp10 learns this from remittances that paid nothing
@@ -1051,6 +1087,21 @@ claim refused for this and later corrected by filling in the physician
 no longer counts, so the payers are learned from the claims still left
 blank. A site that has not built its denial history never sees this
 tag.</p>
+<h3 id="physical-status-missing">Physical Status Missing</h3>
+<p>An anesthesia-code line (00100-01999) has no physical status
+modifier, P1 to P6, and this payer carries one on at least
+<strong>20%</strong> of its anesthesia-code lines in the claim history.
+Clicking the tag names the line and the payer’s share. Add the modifier
+and save; the tag clears.</p>
+<ul>
+<li>It runs on every claim save, at every site, whether the claim was
+made by hand or by Auto-claim. Auto-claim never guesses the physical
+status, so its anesthesia claims carry this tag until a biller adds
+it.</li>
+<li>A site whose payers never bill P1-P6 never sees it, and there is no
+table to keep.</li>
+<li>It counts in the dashboard’s claims with error tags.</li>
+</ul>
 <h3 id="refused-for-this-patient">Refused For This Patient</h3>
 <p>This payer has already refused one of the claim’s codes <strong>for
 this same patient</strong>, and has not paid that code for the patient
@@ -1182,6 +1233,17 @@ takes</td>
 <td>Prior Auth Missing</td>
 <td>Only what your <strong>Prior Auth Rules</strong> table says: no
 rows, no tag</td>
+</tr>
+<tr>
+<td>Physical Status Missing</td>
+<td>No switch. It only speaks for a payer whose anesthesia lines carry
+P1-P6 at least 20% of the time</td>
+</tr>
+<tr>
+<td>Medicare Part B Inactive</td>
+<td><strong>BILLING / MEDICARE-PARTB-PAYERIDS</strong> names the
+Medicare Part B payer ids (default 00973); empty switches it off. It
+only speaks when a Medicare eligibility response exists</td>
 </tr>
 <tr>
 <td>Everything else</td>

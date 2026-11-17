@@ -927,6 +927,118 @@ An auto-created claim takes the encounter's prior authorization number. If your
 **Prior Auth Rules** say the payer wants one and the encounter has none, the claim
 is still created, and it carries **Prior Auth Missing**.
 
+### Whether Auto-claim is offered
+
+The setting **BILLING / AUTOCLAIM-CODE-SOURCE** decides which billing codes
+Auto-claim builds and whether it is shown at all:
+
+| Value | Effect |
+|---|---|
+| `NO` | Auto-claim is not used: the **Auto-claim** link and the *Auto-claims to review* button are hidden |
+| `ITEM` | The code of each ordered item is billed as it is. This is Auto-claim as described above |
+| `PAYER-HISTORY` | The code billed is the one the payer's own past claims used for that procedure. See *Anesthesia practices*, below |
+
+A practice that has never set it keeps `ITEM` if it already has auto-created
+claims, and gets `NO` otherwise. Two more settings tune `PAYER-HISTORY`:
+**AUTOCLAIM-HISTORY-MONTHS** (default 24) is how far back past claims count, and
+**AUTOCLAIM-ICD10-HISTORY-MIN** (default 0, off) is explained under *A diagnosis
+from history*. As everywhere else, only claims a person has reviewed teach.
+
+### Anesthesia practices
+
+In an anesthesia practice the same procedure is billed with a different code
+depending on the payer: the anesthesia code with a modifier for one payer, the
+surgical code with the modifier for another, the surgical code alone for a
+third. Setting the item list up for each variant would be unworkable, so with
+**PAYER-HISTORY** the front desk orders the **procedure** once, and Auto-claim
+works out the code to bill for the claim's payer from that payer's reviewed
+claims. Two orders that end up with the same code give one line, as before.
+
+- **Lines the payer is never billed are left off.** On a claim with a
+  procedure order, a consult or an EKG order is left off when the payer was
+  billed it on fewer than half of its anesthesia claims in the history. This
+  happens before any code or price is looked up, and the claim's evidence says
+  what was left off.
+- **No price, no line.** If the code resolved has no price for the payer, the
+  encounter is skipped with `no fee for <cpt>`. Auto-claim never bills a
+  different code just to find one that has a price.
+- **The physical status is not guessed.** A code the payer usually bills with
+  a P1-P6 modifier is built without it, and **Physical Status Missing** asks the
+  biller for it.
+
+Every claim built this way still carries **Auto-created - review**, and the
+evidence behind each line (the code chosen, the claims it came from, what was
+left off) is kept with the claim.
+
+#### Units and price
+
+Anesthesia is priced from units, not from the fee row. For a line billed with
+an anesthesia code, Mp10 estimates the **units** from the units the payer's past
+claims used for the same anesthesia code (with no history for the payer, all
+payers'), and prices the line with the payer's **anesthesia rate**, see
+*Anesthesia price*, under *Codes, prices and the fee schedule*. Such a claim
+carries the tag **Anesthesia Units Estimated**. Hover over the tag or click it
+to see, for each anesthesia line:
+
+- the units Mp10 estimated, and the range seen in the payer's history;
+- where the price came from: the formula, with how it was made up; the history
+  (the most common price for that code and units), when the payer has no rate;
+  or the fee row times the units.
+
+Correct the units from the anesthesia record. When the payer has an anesthesia
+rate, the formula prices the line again: Fee and Expected both follow the new
+units. When the price came from the history or the fee row, changing the units
+scales Expected (and the deductible) in proportion, as on any other line, and
+leaves Fee as it was; check Fee yourself. Remove the tag with its **x** and save
+once the units are right.
+
+#### A diagnosis from history
+
+For a practice with no reports, set **AUTOCLAIM-ICD10-HISTORY-MIN** to a
+percentage, for example 70. An order with no report then gets one diagnosis, the
+primary diagnosis most often billed for that procedure, when it accounts for at
+least that share of at least 20 claims and the encounter has no diagnoses of its
+own. Only procedure orders count. The claim carries **ICD10 From History**;
+click the tag for the code and "from history, *n* of *total* claims". It is a
+suggestion: check it against the chart, remove the tag with its **x** and save.
+When no code qualifies, the claim is created as always with *Missing ICD10s*.
+
+#### MpBill10: the anesthesia claim from the facility claim
+
+In MpBill10 an encounter has a facility claim, and the anesthesia is a second
+primary claim on the same encounter. The **Auto-claim** link appears in
+**PAYER-HISTORY** mode only, and it builds the anesthesia claim from the
+facility claim, not from orders:
+
+- **Which encounters.** Those with a facility claim and no anesthesia claim
+  yet. **Show Only Unbilled** hides encounters that already have their
+  facility claim: untick it to see them.
+- **Lines.** Each facility line that maps to an anesthesia code is taken to it:
+  the item's own anesthesia code, the code of the base-code item, or the code
+  most often paired with that procedure in history. When several lines map,
+  there is **one** anesthesia line, the code with the most CMS base units.
+  Lines that do not map are listed in the claim's evidence.
+- **Payer.** The encounter's insurance, mapped to its anesthesia payer through
+  the history. With fewer than 5 anesthesia claims of history for it the
+  encounter is skipped as `payer unclear`: Mp10 never bills the facility payer
+  for anesthesia.
+- **Diagnoses.** The encounter's, as they are.
+
+#### Setting it up
+
+Four options in PrAdmin10 and MpAdmin10 (administrators only) prepare the data:
+
+| Option | What it does |
+|---|---|
+| **Load Anesthesia Base Units** | Loads the CMS table of anesthesia base units by code. AutoTasks also loads a newer CMS file each week when one is posted |
+| **Build Procedure Catalogue** | Adds one item for each procedure (and each side) from your fee schedule. It states the counts and asks first. Existing items are never deleted: the ones replaced are marked inactive, and orders that point at them keep working. Run again, it adds only what is new |
+| **Anesthesia Codes** | Lists the surgical items by how often they were billed, with a suggested anesthesia code for each. Accept, edit or clear each row and **Save**. It is a suggestion only |
+| **Anesthesia Rates** | One row per billed payer and effective date: dollars per unit, whether the claim's units already include the base units, and whether P3-P5 add units. Mp10 suggests the rate that reproduces most of the payer's past prices; confirm or change it. A payer with no row is not priced by the formula |
+
+A rate you enter is seen by PrBill10 and MpBill10 after they are restarted.
+Rates are matched on the **payer's name** as the claim bills it, not on the
+fee schedule.
+
 ## Auto-claims to review
 
 The Auto-claim summary lists only the batch just run. **Auto-claims to
@@ -1481,6 +1593,28 @@ priced from its first five characters: `76881 XY` takes the price of 76881.
 
 Changing the units changes *Expected* and *Deduct* in proportion.
 
+### Anesthesia price
+
+Anesthesia is paid by units, and the fee row is not the rate. For a payer that
+has an **Anesthesia Rate** (see *Setting it up*, under Auto-claim), a line
+billed with an anesthesia code (00100-01999) is priced by formula when you
+type or change its code, units or modifiers, in PrBill10 and MpBill10:
+
+> price = (units + base units + P units) × rate
+
+- **Base units** are the CMS base units of the code, in force on the date of
+  service. A payer whose claims already include them in *Unts* has base units
+  counted as 0.
+- **P units** are added only for a payer set to add them: P3 adds 1, P4 adds 2
+  and P5 adds 3, as in the ASA convention.
+- **Rate** is the payer's dollars per unit on the date of service.
+
+Hover over the line to see how its price was made. You can still overwrite it.
+A payer with no rate is priced as other lines are, from the fee row.
+
+The **patient quote** prices its anesthesia line the same way, with the units
+the payer usually bills for that code.
+
 ## Fee schedule dates
 
 A price in the billing codes table has an **effective date** and, once it is
@@ -1632,6 +1766,11 @@ the claim has none and this payer has refused claims sent without one.
 
 **Prior Auth Missing** does not learn anything: it follows the **Prior Auth Rules**
 table your supervisors keep. See the chapter *Prior authorizations*.
+
+**Physical Status Missing** is placed on an anesthesia-code line with no P1-P6
+modifier, for a payer whose anesthesia lines carry one at least 20% of the
+time. It runs on every claim you save, hand-made or auto-created. Add the
+modifier and save.
 
 You can also add your own tag with the **+** button beside the tags, to mark
 a claim for yourself or a colleague.

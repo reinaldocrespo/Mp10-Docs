@@ -377,10 +377,12 @@ checked when someone opens and saves them.
 | Payer Not On Patient | A payer that is not on the patient's insurance record |
 | Insurance DOB Mismatch | A date of birth different from the one the payer reported |
 | Insurance Sex Mismatch | A sex different from the one the payer reported, or none at all |
+| Medicare Part B Inactive | A claim to Medicare Part B for a patient whose last Medicare eligibility says Part B is not active |
 | Denied Before | Codes this payer has refused often and recently |
 | Missing Performing Physician | No performing physician, to a payer that has refused claims sent without one |
 | Refused For This Patient | A code this payer refused for this same patient, with nothing paid for it since |
 | Prior Auth Missing | A code your rules say this payer wants a prior authorization for, and no authorization on the claim |
+| Physical Status Missing | An anesthesia-code line with no P1-P6 modifier, for a payer that usually bills one |
 
 ## Diagnosis codes
 
@@ -583,6 +585,30 @@ When you save, Mp10 asks whether to use the payer's answer. If you answer
 **Yes**, the patient record is updated, because both claims and eligibility
 requests take the sex from there.
 
+### Medicare Part B Inactive
+
+The claim goes to **Medicare Part B**, and the patient's latest Medicare
+eligibility response says Part B is **not active**. Medicare refuses such a
+claim with reason 27 and remark MA01, "expenses incurred after coverage
+terminated". It usually happens to a patient who has Medicare Part A only
+and is covered by another plan: a Medicare Advantage, Platino or
+government plan. That other plan is the one that pays.
+
+Clicking the tag gives the date of that eligibility response and names the
+patient's other insurance. Change the claim's payer to it and save; the tag
+clears. If the patient has started Part B since then, check Medicare
+eligibility again and save the claim.
+
+- Only the newest Medicare response counts. A newer answer that says Part B
+  is active removes the tag.
+- A patient with no Medicare eligibility response on file is never tagged.
+- Which plans are Medicare Part B: those whose payer id is in
+  **BILLING / MEDICARE-PARTB-PAYERIDS**, a comma list, `00973` unless your
+  site changes it. Medicare Advantage plans carry their own payer ids and are
+  never tagged.
+- It runs on every claim save and on Auto-claim, and counts in the dashboard's
+  claims with error tags.
+
 ### Denied Before
 
 This payer has refused these codes before, **often and recently**. Mp10 learns
@@ -675,6 +701,19 @@ later corrected by filling in the physician no longer counts, so the payers
 are learned from the claims still left blank. A site that has not built its
 denial history never sees this tag.
 
+### Physical Status Missing
+
+An anesthesia-code line (00100-01999) has no physical status modifier, P1 to P6,
+and this payer carries one on at least **20%** of its anesthesia-code lines in
+the claim history. Clicking the tag names the line and the payer's share. Add
+the modifier and save; the tag clears.
+
+- It runs on every claim save, at every site, whether the claim was made by hand
+  or by Auto-claim. Auto-claim never guesses the physical status, so its anesthesia
+  claims carry this tag until a biller adds it.
+- A site whose payers never bill P1-P6 never sees it, and there is no table to keep.
+- It counts in the dashboard's claims with error tags.
+
 ### Refused For This Patient
 
 This payer has already refused one of the claim's codes **for this same
@@ -745,6 +784,8 @@ nothing when the claim is right. Where a site can turn one off or narrow it:
 | Refused For This Patient | No switch. **BILLING / DENIAL-MONTHS** shortens how far back it looks; **DENIAL-IGNORE-CODES** names reasons that never count |
 | Missing Performing Physician | **BILLING / DENIAL-PERFPHYS-CODES** empty switches it off; DENIAL-MIN-COUNT and DENIAL-MONTHS set how many refusals it takes |
 | Prior Auth Missing | Only what your **Prior Auth Rules** table says: no rows, no tag |
+| Physical Status Missing | No switch. It only speaks for a payer whose anesthesia lines carry P1-P6 at least 20% of the time |
+| Medicare Part B Inactive | **BILLING / MEDICARE-PARTB-PAYERIDS** names the Medicare Part B payer ids (default 00973); empty switches it off. It only speaks when a Medicare eligibility response exists |
 | Everything else | Always on. The DOB and sex checks only speak when an eligibility response exists to compare against |
 
 ## Tags you may see on older claims
