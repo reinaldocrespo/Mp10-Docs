@@ -898,9 +898,22 @@ Nothing is saved until you choose **Save orders**. Until then you are only
 building up the list, and **Close** discards the lot. After saving you'll see a
 short summary of what happened — for example "Saved: 2 added, 1 removed".
 
-To find something in a long catalogue, type part of the description or the CPT
-code in the search box above the left-hand list and select **Search**. Clearing
-the box and searching again brings the whole catalogue back.
+To find something in a long catalogue, type in the search box above the
+left-hand list. The list narrows as you type, a moment after you stop. Type
+several words in any order: "knee mri" and "mri knee" find the same items, and
+each word may be the start of a word ("esoph" finds ESOPHAGOSCOPY). The one
+exception is "w" and "with": they are matched as whole words, so that "with
+contrast" does not list the without-contrast items. A number
+finds the CPT codes that start with it, and the usual abbreviations work as
+their long forms ("w" and "with", "w/o" and "without", "left" and "lt"). The
+items you order most often, and the ones that start with the code you typed,
+come first. With the box empty the list shows the most used items first, up to
+the first 200; type to narrow it.
+
+The list shows the **CPT** and the body part of each item, and an **Also**
+column with the Medicare short description of the code when it says something
+the item's own description does not. Items that are no longer in use are hidden;
+tick **Show inactive** to list them too (they are shown in grey).
 
 **An order that has been transcribed cannot be removed.** Once a transcription
 has been written against an order, that order is part of the patient's clinical

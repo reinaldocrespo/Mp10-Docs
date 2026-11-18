@@ -37,7 +37,7 @@ The measurement tool is in the repo: `tools\adm_bloat_scan.ps1`
 ## Per-customer procedure
 
 Everything below runs from the Admin module logged in as **ADSSYS**
-(File → Shrink Image Tables). Record the numbers at each step in the findings
+(File → Database → Memo Tables (shrink / pack / block size)). Record the numbers at each step in the findings
 table at the end of this guide.
 
 1. **Backup.** A verified backup (`sp_BackupDatabase` or file copy) must exist

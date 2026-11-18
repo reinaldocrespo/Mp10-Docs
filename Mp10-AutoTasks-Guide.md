@@ -91,7 +91,14 @@ The log is capped so it cannot fill the disk:
 
 | Setting | Section | Default | What it does |
 |---|---|---|---|
-| `MAXIMUM_LOG_FILE_SIZE` | `GENERAL` | `8192` | Largest log size in KB before it is trimmed |
+| `MAXIMUM_LOG_FILE_SIZE` | `GENERAL` | `8192` | Largest log size, in bytes (`8192` is 8 KB), before it is rotated |
+
+When the log reaches that size it is renamed to the same name with `.1` added
+(`AutoTasks.out.1`), replacing the previous `.1`, and a new log is started. So
+the last two logs are always there, between one and two times the cap in all:
+look in the `.1` file for what happened just before the current log began. A
+larger cap costs nothing extra, so set it large enough to cover the period you
+want to look back on.
 
 # Where settings live: the System Registry
 
@@ -571,7 +578,7 @@ the menu for anyone else.
 > change it.** Anyone holding it can do everything described here, including
 > overwriting a database.
 
-Then pick **File → Restore DB From Backup**. It asks for three things:
+Then pick **File → Database → Restore DB From Backup**. It asks for three things:
 
 | Field | What to enter |
 |---|---|
@@ -625,7 +632,7 @@ done by changing the `PATH` entry in `mp10.ini`, but the command line leaves
 the file alone, which is one less thing to put back afterwards.)
 
 Log in as `adssys` using **the ADSSYS password as it was when that backup was
-taken**, then use **File → Restore DB From Backup** exactly as described
+taken**, then use **File → Database → Restore DB From Backup** exactly as described
 above. You are now connected to the backup, but you still restore *from* it,
 naming its `.add` as the source and a fresh folder as the destination.
 
@@ -1642,7 +1649,7 @@ quietly. The first check after the Data Dictionary update imports the year
 on its own; nothing has to be run by hand.
 
 To load a year by hand instead (or on a machine where AutoTasks is not
-running), use **Admin10 → Add 20xx ICD10 Data** against the downloaded
+running), use **Admin10 → File → Code Sets → Add 20xx ICD10 Data** against the downloaded
 `icd10cm_order_YYYY.txt`, then set **CMSFETCH / ICD10_IMPORTED** to that year
 so AutoTasks does not import it again. Clearing ICD10_IMPORTED makes AutoTasks
 import that year again at its next check.
@@ -1661,7 +1668,7 @@ not exist. AutoTasks then waits quietly and loads the index at the first
 check after the update. The search still works meanwhile, from the code
 descriptions alone.
 
-To load it sooner, use **Admin10 → Load ICD10 Index** and pick the folder
+To load it sooner, use **Admin10 → File → Code Sets → Load ICD10 Index** and pick the folder
 that holds `icd10cm_index_YYYY.xml`.
 
 ## Diagnosis suggestions by procedure
@@ -1678,7 +1685,7 @@ practice this takes under a minute.
 
 If a night's recount fails, it is tried again an hour later. Clearing
 ICD10-SUGGEST-BUILT makes AutoTasks recount at its next check after 21:00.
-**Admin10 → Rebuild ICD10 Suggestions** recounts right away, for example on
+**Admin10 → File → Rebuild → Rebuild ICD10 Suggestions** recounts right away, for example on
 the day the Data Dictionary is updated.
 
 ## Procedure code search counts
@@ -1702,9 +1709,39 @@ On a large practice this takes a few seconds.
 Until the Data Dictionary has been updated, the tables do not exist and
 AutoTasks waits quietly. If a night's rebuild fails, it is tried again an
 hour later. Clearing CPT-SEARCH-BUILT makes AutoTasks rebuild at its next
-check after 21:00. **Admin10 → Rebuild CPT Search** rebuilds right away. Run
+check after 21:00. **Admin10 → File → Rebuild → Rebuild CPT Search** rebuilds right away. Run
 it on the day the Data Dictionary is updated: until the first rebuild, the
 search uses each fee schedule's own descriptions only and shows no counts.
+
+## Order item search
+
+The order screen finds order items by words and puts the most used items
+first. It relies on one table that AutoTasks rebuilds every night, at its
+first check after 21:00. For each order item it holds:
+
+- **the words the item can be found by**: its description, procedure code and
+  body part, the CMS short description of the code, the descriptions your
+  practice has billed the code under (those above, under *Procedure code
+  search counts*), and the search synonyms set up in Admin10;
+- **how many times the item was ordered** in the last 12 months, and **how
+  many claim lines billed its code** (the procedure code search counts).
+
+On a large practice this takes a few seconds. Only that table is written: no
+item, order or claim is changed.
+
+| Section | Entry | Default | Meaning |
+|---|---|---|---|
+| BILLING | ITEM-SEARCH-BUILT | — | The day of the last rebuild, written by AutoTasks |
+
+Until the Data Dictionary has been updated, the table does not exist:
+AutoTasks writes one `ITEMSEARCH:` line a day to its log saying it is waiting,
+and builds nothing. Each rebuild writes one `ITEMSEARCH:` line with the number
+of items and how long it took. If a night's rebuild fails, it is tried again
+an hour later. Clearing ITEM-SEARCH-BUILT makes AutoTasks rebuild at its next
+check after 21:00. **Admin10 → File → Rebuild → Rebuild Item Search** rebuilds right away: run
+it on the day the Data Dictionary is updated, and after changing the search
+synonyms. An item added since the last rebuild is still found, by its own
+description, procedure code and body part, with no counts.
 
 ## Checking it is working
 

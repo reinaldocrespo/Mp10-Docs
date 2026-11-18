@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-11-17" />
+  <meta name="dcterms.date" content="2026-11-18" />
   <title>Mp10 Dashboard — User’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -148,7 +148,7 @@ a { color: inherit; }
 <p class="subtitle">The cards on the Billing and Patients main windows,
 and what to do about what they show</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">17 November 2026</p>
+<p class="date">18 November 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -402,7 +402,7 @@ never looking at a bare zero wondering whether something is broken.</p>
 that have no patient signature</strong>. It is amber while anything is
 outstanding and green at zero. The bottom line shows the date of the
 oldest one still waiting.</p>
-<p>Below it, depending on your permissions, two more lines:</p>
+<p>Below it, depending on your permissions, up to three more lines:</p>
 <ul>
 <li><strong>Possible duplicate patients · new in 90 days.</strong>
 Groups of patient records that look like the same person (same last
@@ -411,6 +411,13 @@ created in the last 90 days. Click the line to see the list. Nothing is
 merged or changed from that list; it tells you who to look at.</li>
 <li><strong>Claims with error tags · last 7 days.</strong> See the next
 chapter.</li>
+<li><strong>Auto-created claims to review.</strong> The claims
+Auto-claim created when <strong>you</strong> ran it, that nobody has
+reviewed yet. Click the line to open <em>Auto-claims to review</em> on
+just those claims (its title adds <em>created by</em> and your user
+name). At zero the line is plain and does nothing. The <em>Patients,
+Billing and Payments</em> guide, section <em>Auto-claims to review</em>,
+explains how to review them.</li>
 </ul>
 <p>Clicking the card itself opens the Encounters grid.</p>
 <h2 id="billing">Billing</h2>
@@ -653,10 +660,10 @@ itself current</strong> below). The denial history is built from your
 own remittances: each posted remittance adds to it, and the
 administration module’s <strong>Update Data Dictionary</strong> rebuilds
 it when a newer version of Mp10 learns something the history on file
-does not have yet, and skips it otherwise. <strong>File &gt; Rebuild
-Denial History</strong> always rebuilds, and takes a few minutes. Where
-data is missing, the check does nothing and places no tag. A missing tag
-is not proof that a claim is clean.</li>
+does not have yet, and skips it otherwise. <strong>File → Rebuild →
+Rebuild Denial History</strong> always rebuilds, and takes a few
+minutes. Where data is missing, the check does nothing and places no
+tag. A missing tag is not proof that a claim is clean.</li>
 </ul>
 <p>Secondary claims that Mp10 creates automatically after a primary
 payment are checked when someone opens and saves them.</p>
@@ -902,6 +909,15 @@ runs for every payer.</p>
 code, or 2 units of a code whose fee-schedule indicator says it may be
 billed bilaterally. Correct the units, or check whether the service was
 entered twice.</p>
+<p><strong>Facility payers add up per code and revenue code.</strong>
+Where the limit applies to the claim’s total, a claim to a payer checked
+against the facility table (one not set up as professional) counts the
+units of each code <strong>on each revenue code</strong> separately. A
+surgery billed once on 490 for the operating room and once on 272 for
+the materials is not tagged; the same code twice on 490 still is. The
+tag’s explanation then gives the revenue code, for example <em>47562 rev
+490 (units 2, MUE 1, MAI 2)</em>. A professional payer’s claims add up
+per code, whatever the revenue code.</p>
 <h2 id="payer-and-patient">Payer and patient</h2>
 <h3 id="payer-not-on-patient">Payer Not On Patient</h3>
 <p>The claim’s insurance, or its secondary insurance, is a payer that
@@ -1095,8 +1111,15 @@ Clicking the tag names the line and the payer’s share. Add the modifier
 and save; the tag clears.</p>
 <ul>
 <li>It runs on every claim save, at every site, whether the claim was
-made by hand or by Auto-claim. Auto-claim never guesses the physical
-status, so its anesthesia claims carry this tag until a biller adds
+made by hand or by Auto-claim. Neither guesses the physical status from
+history. Where the encounter’s <strong>Anesthesia</strong> tab records
+it (setting <strong>BILLING / ANESTHESIA-TIME</strong>), an anesthesia
+line added afterwards, by hand or by Auto-claim, gets it and the tag
+does not appear; the tag’s explanation then adds <em>Record it on the
+encounter’s Anesthesia tab: anesthesia lines added after that get
+it.</em> Lines already on the claim are not changed when the status is
+recorded later: add the modifier yourself. Without a recorded status,
+Auto-claim’s anesthesia claims carry this tag until a biller adds
 it.</li>
 <li>A site whose payers never bill P1-P6 never sees it, and there is no
 table to keep.</li>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <meta name="dcterms.date" content="2026-11-17" />
+  <meta name="dcterms.date" content="2026-11-18" />
   <title>shrink-image-tables</title>
   <style>
 code{white-space: pre-wrap;}
@@ -231,8 +231,9 @@ which is why ADS v11 sites need no block-size change at all.</p>
 exclusively.</p>
 <h2 id="per-customer-procedure">Per-customer procedure</h2>
 <p>Everything below runs from the Admin module logged in as
-<strong>ADSSYS</strong> (File → Shrink Image Tables). Record the numbers
-at each step in the findings table at the end of this guide.</p>
+<strong>ADSSYS</strong> (File → Database → Memo Tables (shrink / pack /
+block size)). Record the numbers at each step in the findings table at
+the end of this guide.</p>
 <ol type="1">
 <li><strong>Backup.</strong> A verified backup
 (<code>sp_BackupDatabase</code> or file copy) must exist before anything

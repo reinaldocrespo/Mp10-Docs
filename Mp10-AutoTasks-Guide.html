@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-11-17" />
+  <meta name="dcterms.date" content="2026-11-18" />
   <title>Mp10 AutoTasks — Administrator’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -148,7 +148,7 @@ a { color: inherit; }
 <p class="subtitle">Backups, electronic remittances, modality worklist,
 and automated reports</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">17 November 2026</p>
+<p class="date">18 November 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -328,6 +328,8 @@ Diseases (searching diagnoses by words)</a></li>
 procedure</a></li>
 <li><a href="#procedure-code-search-counts" id="toc-procedure-code-search-counts">Procedure code search
 counts</a></li>
+<li><a href="#order-item-search" id="toc-order-item-search">Order item
+search</a></li>
 <li><a href="#checking-it-is-working-2" id="toc-checking-it-is-working-2">Checking it is working</a></li>
 </ul></li>
 <li><a href="#surgery-center-asc-fee-schedule" id="toc-surgery-center-asc-fee-schedule">Surgery center (ASC) fee
@@ -562,10 +564,18 @@ stamped with the date and time.</p>
 <td><code>MAXIMUM_LOG_FILE_SIZE</code></td>
 <td><code>GENERAL</code></td>
 <td><code>8192</code></td>
-<td>Largest log size in KB before it is trimmed</td>
+<td>Largest log size, in bytes (<code>8192</code> is 8 KB), before it is
+rotated</td>
 </tr>
 </tbody>
 </table>
+<p>When the log reaches that size it is renamed to the same name with
+<code>.1</code> added (<code>AutoTasks.out.1</code>), replacing the
+previous <code>.1</code>, and a new log is started. So the last two logs
+are always there, between one and two times the cap in all: look in the
+<code>.1</code> file for what happened just before the current log
+began. A larger cap costs nothing extra, so set it large enough to cover
+the period you want to look back on.</p>
 <h1 id="where-settings-live-the-system-registry">Where settings live:
 the System Registry</h1>
 <p>All three capabilities in this guide are switched on and configured
@@ -1265,8 +1275,8 @@ option does not appear on the menu for anyone else.</p>
 installation day, change it.</strong> Anyone holding it can do
 everything described here, including overwriting a database.</p>
 </blockquote>
-<p>Then pick <strong>File → Restore DB From Backup</strong>. It asks for
-three things:</p>
+<p>Then pick <strong>File → Database → Restore DB From Backup</strong>.
+It asks for three things:</p>
 <table>
 <colgroup>
 <col style="width: 50%" />
@@ -1341,10 +1351,10 @@ dictionary name itself. (The same thing can be done by changing the
 leaves the file alone, which is one less thing to put back
 afterwards.)</p>
 <p>Log in as <code>adssys</code> using <strong>the ADSSYS password as it
-was when that backup was taken</strong>, then use <strong>File → Restore
-DB From Backup</strong> exactly as described above. You are now
-connected to the backup, but you still restore <em>from</em> it, naming
-its <code>.add</code> as the source and a fresh folder as the
+was when that backup was taken</strong>, then use <strong>File →
+Database → Restore DB From Backup</strong> exactly as described above.
+You are now connected to the backup, but you still restore <em>from</em>
+it, naming its <code>.add</code> as the source and a fresh folder as the
 destination.</p>
 <blockquote>
 <p><strong>Use that session for the restore and nothing else.</strong>
@@ -3043,11 +3053,12 @@ There, AutoTasks downloads the files, says so in one e-mail, and then
 waits quietly. The first check after the Data Dictionary update imports
 the year on its own; nothing has to be run by hand.</p>
 <p>To load a year by hand instead (or on a machine where AutoTasks is
-not running), use <strong>Admin10 → Add 20xx ICD10 Data</strong> against
-the downloaded <code>icd10cm_order_YYYY.txt</code>, then set
-<strong>CMSFETCH / ICD10_IMPORTED</strong> to that year so AutoTasks
-does not import it again. Clearing ICD10_IMPORTED makes AutoTasks import
-that year again at its next check.</p>
+not running), use <strong>Admin10 → File → Code Sets → Add 20xx ICD10
+Data</strong> against the downloaded
+<code>icd10cm_order_YYYY.txt</code>, then set <strong>CMSFETCH /
+ICD10_IMPORTED</strong> to that year so AutoTasks does not import it
+again. Clearing ICD10_IMPORTED makes AutoTasks import that year again at
+its next check.</p>
 <h2 id="the-index-to-diseases-searching-diagnoses-by-words">The Index to
 Diseases (searching diagnoses by words)</h2>
 <p>The Billing module’s ICD10 tab finds codes from plain words (“left
@@ -3061,8 +3072,9 @@ loaded.</p>
 into does not exist. AutoTasks then waits quietly and loads the index at
 the first check after the update. The search still works meanwhile, from
 the code descriptions alone.</p>
-<p>To load it sooner, use <strong>Admin10 → Load ICD10 Index</strong>
-and pick the folder that holds <code>icd10cm_index_YYYY.xml</code>.</p>
+<p>To load it sooner, use <strong>Admin10 → File → Code Sets → Load
+ICD10 Index</strong> and pick the folder that holds
+<code>icd10cm_index_YYYY.xml</code>.</p>
 <h2 id="diagnosis-suggestions-by-procedure">Diagnosis suggestions by
 procedure</h2>
 <p>The ICD10 tab also suggests the diagnoses most often billed with the
@@ -3101,8 +3113,9 @@ On a large practice this takes under a minute.</p>
 </table>
 <p>If a night’s recount fails, it is tried again an hour later. Clearing
 ICD10-SUGGEST-BUILT makes AutoTasks recount at its next check after
-21:00. <strong>Admin10 → Rebuild ICD10 Suggestions</strong> recounts
-right away, for example on the day the Data Dictionary is updated.</p>
+21:00. <strong>Admin10 → File → Rebuild → Rebuild ICD10
+Suggestions</strong> recounts right away, for example on the day the
+Data Dictionary is updated.</p>
 <h2 id="procedure-code-search-counts">Procedure code search counts</h2>
 <p>The claim’s <em>BillCode</em> cell finds procedure codes by words and
 puts the most billed codes first. It relies on two tables that AutoTasks
@@ -3149,10 +3162,61 @@ are counted together.</li>
 <p>Until the Data Dictionary has been updated, the tables do not exist
 and AutoTasks waits quietly. If a night’s rebuild fails, it is tried
 again an hour later. Clearing CPT-SEARCH-BUILT makes AutoTasks rebuild
-at its next check after 21:00. <strong>Admin10 → Rebuild CPT
-Search</strong> rebuilds right away. Run it on the day the Data
-Dictionary is updated: until the first rebuild, the search uses each fee
-schedule’s own descriptions only and shows no counts.</p>
+at its next check after 21:00. <strong>Admin10 → File → Rebuild →
+Rebuild CPT Search</strong> rebuilds right away. Run it on the day the
+Data Dictionary is updated: until the first rebuild, the search uses
+each fee schedule’s own descriptions only and shows no counts.</p>
+<h2 id="order-item-search">Order item search</h2>
+<p>The order screen finds order items by words and puts the most used
+items first. It relies on one table that AutoTasks rebuilds every night,
+at its first check after 21:00. For each order item it holds:</p>
+<ul>
+<li><strong>the words the item can be found by</strong>: its
+description, procedure code and body part, the CMS short description of
+the code, the descriptions your practice has billed the code under
+(those above, under <em>Procedure code search counts</em>), and the
+search synonyms set up in Admin10;</li>
+<li><strong>how many times the item was ordered</strong> in the last 12
+months, and <strong>how many claim lines billed its code</strong> (the
+procedure code search counts).</li>
+</ul>
+<p>On a large practice this takes a few seconds. Only that table is
+written: no item, order or claim is changed.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Section</th>
+<th>Entry</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BILLING</td>
+<td>ITEM-SEARCH-BUILT</td>
+<td>—</td>
+<td>The day of the last rebuild, written by AutoTasks</td>
+</tr>
+</tbody>
+</table>
+<p>Until the Data Dictionary has been updated, the table does not exist:
+AutoTasks writes one <code>ITEMSEARCH:</code> line a day to its log
+saying it is waiting, and builds nothing. Each rebuild writes one
+<code>ITEMSEARCH:</code> line with the number of items and how long it
+took. If a night’s rebuild fails, it is tried again an hour later.
+Clearing ITEM-SEARCH-BUILT makes AutoTasks rebuild at its next check
+after 21:00. <strong>Admin10 → File → Rebuild → Rebuild Item
+Search</strong> rebuilds right away: run it on the day the Data
+Dictionary is updated, and after changing the search synonyms. An item
+added since the last rebuild is still found, by its own description,
+procedure code and body part, with no counts.</p>
 <h2 id="checking-it-is-working-2">Checking it is working</h2>
 <ul>
 <li>The log (<code>AutoTasks.out</code>) carries one

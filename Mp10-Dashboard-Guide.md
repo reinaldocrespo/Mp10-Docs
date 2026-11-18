@@ -132,7 +132,7 @@ The big number is the count of **encounters in the last 7 days that have no
 patient signature**. It is amber while anything is outstanding and green at
 zero. The bottom line shows the date of the oldest one still waiting.
 
-Below it, depending on your permissions, two more lines:
+Below it, depending on your permissions, up to three more lines:
 
 - **Possible duplicate patients · new in 90 days.** Groups of patient records
   that look like the same person (same last name, first name, birth date and
@@ -140,6 +140,12 @@ Below it, depending on your permissions, two more lines:
   line to see the list. Nothing is merged or changed from that list; it tells
   you who to look at.
 - **Claims with error tags · last 7 days.** See the next chapter.
+- **Auto-created claims to review.** The claims Auto-claim created when **you**
+  ran it, that nobody has reviewed yet. Click the line to open *Auto-claims to
+  review* on just those claims (its title adds *created by* and your user
+  name). At zero the line is plain and does nothing. The *Patients, Billing
+  and Payments* guide, section *Auto-claims to review*, explains how to review
+  them.
 
 Clicking the card itself opens the Encounters grid.
 
@@ -348,8 +354,8 @@ what the tag means and what to do about it.
   denial history is built from your own remittances: each posted remittance
   adds to it, and the administration module's **Update Data Dictionary**
   rebuilds it when a newer version of Mp10 learns something the history on
-  file does not have yet, and skips it otherwise. **File > Rebuild Denial
-  History** always rebuilds, and takes a few minutes. Where data is missing,
+  file does not have yet, and skips it otherwise. **File → Rebuild → Rebuild
+  Denial History** always rebuilds, and takes a few minutes. Where data is missing,
   the check does nothing and places no tag. A missing tag is not proof that
   a claim is clean.
 
@@ -544,6 +550,15 @@ Bilateral billing is allowed for: one RT line and one LT line of the code, or
 bilaterally. Correct the units, or check whether the service was entered
 twice.
 
+**Facility payers add up per code and revenue code.** Where the limit applies
+to the claim's total, a claim to a payer checked against the facility table
+(one not set up as professional) counts the units of each code **on each
+revenue code** separately. A surgery billed once on 490 for the operating room
+and once on 272 for the materials is not tagged; the same code twice on 490
+still is. The tag's explanation then gives the revenue code, for example
+*47562 rev 490 (units 2, MUE 1, MAI 2)*. A professional payer's claims add up
+per code, whatever the revenue code.
+
 ## Payer and patient
 
 ### Payer Not On Patient
@@ -709,8 +724,14 @@ the claim history. Clicking the tag names the line and the payer's share. Add
 the modifier and save; the tag clears.
 
 - It runs on every claim save, at every site, whether the claim was made by hand
-  or by Auto-claim. Auto-claim never guesses the physical status, so its anesthesia
-  claims carry this tag until a biller adds it.
+  or by Auto-claim. Neither guesses the physical status from history. Where the
+  encounter's **Anesthesia** tab records it (setting **BILLING /
+  ANESTHESIA-TIME**), an anesthesia line added afterwards, by hand or by
+  Auto-claim, gets it and the tag does not appear; the tag's explanation then
+  adds *Record it on the encounter's Anesthesia tab: anesthesia lines added
+  after that get it.* Lines already on the claim are not changed when the
+  status is recorded later: add the modifier yourself. Without a recorded
+  status, Auto-claim's anesthesia claims carry this tag until a biller adds it.
 - A site whose payers never bill P1-P6 never sees it, and there is no table to keep.
 - It counts in the dashboard's claims with error tags.
 

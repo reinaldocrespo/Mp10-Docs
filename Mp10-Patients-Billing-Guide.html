@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-11-17" />
+  <meta name="dcterms.date" content="2026-11-18" />
   <title>Mp10 Patients, Billing and Payments — User’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -149,7 +149,7 @@ Guide</h1>
 <p class="subtitle">From the patient at the front desk to the payment on
 the claim</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">17 November 2026</p>
+<p class="date">18 November 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -237,6 +237,8 @@ future</a></li>
 <li><a href="#no-shows-inactivating-an-encounter" id="toc-no-shows-inactivating-an-encounter">No-shows: inactivating an
 encounter</a></li>
 <li><a href="#the-questionnaires-tab" id="toc-the-questionnaires-tab">The Questionnaires tab</a></li>
+<li><a href="#anesthesia-time-and-physical-status" id="toc-anesthesia-time-and-physical-status">Anesthesia time and
+physical status</a></li>
 </ul></li>
 <li><a href="#orders-what-the-patient-came-for" id="toc-orders-what-the-patient-came-for">Orders: what the patient came
 for</a>
@@ -540,6 +542,12 @@ patient</td>
 <td><em>Mp10 AutoTasks — Administrator’s Guide</em></td>
 <td>Downloading claim responses and remittances, and reading remittance
 PDFs automatically</td>
+</tr>
+<tr>
+<td><em>Mp10 for Anesthesia Practices — User’s Guide</em></td>
+<td>For anesthesia billers: the anesthesia times and physical status on
+the encounter, the units, modifier and price they fill on the claim, the
+anesthesia auto-claim, and the setup it needs</td>
 </tr>
 </tbody>
 </table>
@@ -1152,7 +1160,9 @@ Insert.</li>
 </ol>
 <p>The encounter window opens over the patient. Its tabs are
 <strong>Encounter Data</strong>, <strong>Remarks</strong>,
-<strong>Orders</strong> and <strong>Questionnaires</strong>.</p>
+<strong>Orders</strong> and <strong>Questionnaires</strong>, and
+<strong>Anesthesia</strong> where the practice has it turned on (see
+<em>Anesthesia time and physical status</em>, below).</p>
 <p>On <strong>Encounter Data</strong>:</p>
 <table>
 <colgroup>
@@ -1270,6 +1280,29 @@ linked to the encounter when you save it, by the patient’s record number
 or cell phone and the appointment date. The tab lists them;
 <strong>Open</strong> shows one. You can also send the patient a text
 message asking them to fill one in.</p>
+<h2 id="anesthesia-time-and-physical-status">Anesthesia time and
+physical status</h2>
+<p>With the setting <strong>BILLING / ANESTHESIA-TIME</strong> at
+<code>YES</code>, the encounter window has an
+<strong>Anesthesia</strong> tab, after the others, in PrBill10 and in
+the institutional window of Patients10 and MpBill10:</p>
+<ul>
+<li><em>Anesthesia start</em> and <em>Anesthesia stop</em>: a date and a
+time each, typed in 24-hour form (<code>07:42</code>). Leave the stop
+date empty for a stop on the start’s day; a stop earlier than the start
+is then the next day. A line under them shows the minutes and the time
+units, for example <em>49 minutes = 4 time units (15 min, rounded
+up)</em>. <strong>Clear</strong> empties both times.</li>
+<li><em>Physical status</em>: <em>Not recorded</em>, or P1 to P6.</li>
+</ul>
+<p>Save refuses one time without the other (<em>Enter both the
+anesthesia start and stop, or neither.</em>) and a stop that is not
+after the start, and asks before saving more than 12 hours or a start on
+another day than the encounter.</p>
+<p>The claim then fills an anesthesia line’s units and physical-status
+modifier from them, and the auto-claim uses them. The <em>Mp10 for
+Anesthesia Practices</em> guide explains the tab and what the claim does
+with it.</p>
 <h1 id="orders-what-the-patient-came-for">Orders: what the patient came
 for</h1>
 <p>An <strong>order</strong> records what the patient is in for — the
@@ -1685,29 +1718,39 @@ claim’s evidence says what was left off.</li>
 price for the payer, the encounter is skipped with
 <code>no fee for &lt;cpt&gt;</code>. Auto-claim never bills a different
 code just to find one that has a price.</li>
-<li><strong>The physical status is not guessed.</strong> A code the
-payer usually bills with a P1-P6 modifier is built without it, and
-<strong>Physical Status Missing</strong> asks the biller for it.</li>
+<li><strong>The physical status comes from the encounter, never from
+history.</strong> When the encounter’s Anesthesia tab records one
+(P1-P6) and the payer bills a physical status on at least 20% of its
+anesthesia lines, the anesthesia code is built with it, replacing any
+status the payer’s history suggested. With no status recorded, the code
+is built without one, and <strong>Physical Status Missing</strong> asks
+the biller for it.</li>
 </ul>
 <p>Every claim built this way still carries <strong>Auto-created -
 review</strong>, and the evidence behind each line (the code chosen, the
 claims it came from, what was left off) is kept with the claim.</p>
 <h4 id="units-and-price">Units and price</h4>
 <p>Anesthesia is priced from units, not from the fee row. For a line
-billed with an anesthesia code, Mp10 estimates the
-<strong>units</strong> from the units the payer’s past claims used for
-the same anesthesia code (with no history for the payer, all payers’),
-and prices the line with the payer’s <strong>anesthesia rate</strong>,
-see <em>Anesthesia price</em>, under <em>Codes, prices and the fee
-schedule</em>. Such a claim carries the tag <strong>Anesthesia Units
-Estimated</strong>. Hover over the tag or click it to see, for each
-anesthesia line:</p>
+billed with an anesthesia code, the <strong>units</strong> come from the
+encounter’s anesthesia start and stop when they are recorded (see
+<em>Anesthesia price</em>, under <em>Codes, prices and the fee
+schedule</em>); such a line is not estimated and gets no tag. Only one
+anesthesia line of a claim takes its units from the time; a second one
+is estimated. Without the times, Mp10 estimates the units from the units
+the payer’s past claims used for the same anesthesia code (with no
+history for the payer, all payers’). Either way the line is priced with
+the payer’s <strong>anesthesia rate</strong>. A claim with an estimated
+line carries the tag <strong>Anesthesia Units Estimated</strong>. Hover
+over the tag or click it to see, for each estimated line:</p>
 <ul>
 <li>the units Mp10 estimated, and the range seen in the payer’s
 history;</li>
 <li>where the price came from: the formula, with how it was made up; the
 history (the most common price for that code and units), when the payer
-has no rate; or the fee row times the units.</li>
+has no rate; or the fee row times the units;</li>
+<li>when the encounter had times the line could not use, why
+(<em>anesthesia time not used: …</em>), and the physical status taken
+from the encounter, if any.</li>
 </ul>
 <p>Correct the units from the anesthesia record. When the payer has an
 anesthesia rate, the formula prices the line again: Fee and Expected
@@ -1754,8 +1797,10 @@ anesthesia.</li>
 <li><strong>Diagnoses.</strong> The encounter’s, as they are.</li>
 </ul>
 <h4 id="setting-it-up">Setting it up</h4>
-<p>Four options in PrAdmin10 and MpAdmin10 (administrators only) prepare
-the data:</p>
+<p>Four options in PrAdmin10 and MpAdmin10 prepare the data. They are in
+the <strong>File</strong> menu, open to members of the
+<strong>Supervisors</strong> and <strong>Administrators</strong> groups
+and to the ADSSYS login:</p>
 <table>
 <colgroup>
 <col style="width: 50%" />
@@ -1769,25 +1814,27 @@ the data:</p>
 </thead>
 <tbody>
 <tr>
-<td><strong>Load Anesthesia Base Units</strong></td>
+<td><strong>File → Anesthesia → Load Anesthesia Base Units</strong></td>
 <td>Loads the CMS table of anesthesia base units by code. AutoTasks also
 loads a newer CMS file each week when one is posted</td>
 </tr>
 <tr>
-<td><strong>Build Procedure Catalogue</strong></td>
+<td><strong>File → Build Procedure Catalogue</strong></td>
 <td>Adds one item for each procedure (and each side) from your fee
 schedule. It states the counts and asks first. Existing items are never
 deleted: the ones replaced are marked inactive, and orders that point at
 them keep working. Run again, it adds only what is new</td>
 </tr>
 <tr>
-<td><strong>Anesthesia Codes</strong></td>
+<td><strong>File → Anesthesia → Anesthesia Codes</strong></td>
 <td>Lists the surgical items by how often they were billed, with a
-suggested anesthesia code for each. Accept, edit or clear each row and
+suggested anesthesia code for each. Accept, edit or clear each row, or
+<strong>Accept all</strong> the suggestions scoring at least the
+percentage you give (70 by default) on items that have no code yet, then
 <strong>Save</strong>. It is a suggestion only</td>
 </tr>
 <tr>
-<td><strong>Anesthesia Rates</strong></td>
+<td><strong>File → Anesthesia → Anesthesia Rates</strong></td>
 <td>One row per billed payer and effective date: dollars per unit,
 whether the claim’s units already include the base units, and whether
 P3-P5 add units. Mp10 suggests the rate that reproduces most of the
@@ -1796,6 +1843,12 @@ priced by the formula</td>
 </tr>
 </tbody>
 </table>
+<p>The setting <strong>BILLING / ANESTHESIA-TIME</strong>
+(<code>YES</code>; default <code>NO</code>) adds the encounter’s
+Anesthesia tab and lets the claim window fill units and the physical
+status from it. The <em>Mp10 for Anesthesia Practices</em> guide walks
+through the whole setup, and how to review each screen’s
+suggestions.</p>
 <p>A rate you enter is seen by PrBill10 and MpBill10 after they are
 restarted. Rates are matched on the <strong>payer’s name</strong> as the
 claim bills it, not on the fee schedule.</p>
@@ -1807,6 +1860,12 @@ that nobody has reviewed yet, however old, so nothing is forgotten.</p>
 <strong>Unbilled encounters</strong> (reading glasses resting on a claim
 form), or <em>Tables → Auto-claims to review</em>. Anyone who can open
 PrBill10 can open the list.</p>
+<p>The Billing dashboard’s <em>Needs attention</em> card also has a line
+<em>N auto-created claims to review</em>: the ones <strong>you</strong>
+created that nobody has reviewed yet. Click it to open the list on just
+those claims; its title then reads <em>Auto-claims to review - created
+by</em> followed by your user name. The toolbar button and the menu open
+everybody’s.</p>
 <table>
 <colgroup>
 <col style="width: 50%" />
@@ -2611,9 +2670,24 @@ P3 adds 1, P4 adds 2 and P5 adds 3, as in the ASA convention.</li>
 <li><strong>Rate</strong> is the payer’s dollars per unit on the date of
 service.</li>
 </ul>
-<p>Hover over the line to see how its price was made. You can still
-overwrite it. A payer with no rate is priced as other lines are, from
-the fee row.</p>
+<p>Hover over the <em>Fee</em> cell to see how its price was made. You
+can still overwrite it. A payer with no rate is priced as other lines
+are, from the fee row.</p>
+<p><strong>Units and physical status from the encounter.</strong> Where
+the practice records anesthesia times on the encounter (<strong>BILLING
+/ ANESTHESIA-TIME</strong> at <code>YES</code>), adding an anesthesia
+code fills <em>Unts</em> from them instead of 1: the minutes divided by
+15, rounded up, plus the CMS base units for a payer whose rate says its
+units include them. Hovering the <em>Unts</em> cell shows how, for
+example <em>anesthesia 07:42-08:31, 49 min = 4 time units + 5 base</em>,
+and the button in the cell recalculates the line from the encounter’s
+times. When the encounter records a physical status and the payer bills
+one on at least 20% of its anesthesia lines, the code gets it as its
+last modifier (<code>00731AA</code> becomes <code>00731AAP2</code>); a
+status you type on the line is kept. Lines already on the claim do not
+change when the encounter is corrected later: use the button, or type
+the code again. The <em>Mp10 for Anesthesia Practices</em> guide,
+chapter <em>On the claim</em>, has worked examples.</p>
 <p>The <strong>patient quote</strong> prices its anesthesia line the
 same way, with the units the payer usually bills for that code.</p>
 <h2 id="fee-schedule-dates">Fee schedule dates</h2>
@@ -2653,16 +2727,29 @@ descriptions on past claim lines. That is why abbreviations and Spanish
 wording that your office has used find the code. When a code matched
 through one of those other wordings, its row shows it on a second line:
 <em>as billed: EXTREMITY SONOGRAM LTD</em>.</p>
-<p>The list has four columns: <em>Code</em> (with its modifiers),
-<em>Description</em>, <em>Billed</em> (how many claim lines used the
-code on this fee schedule in the last 12 months; blank if none) and
-<em>Fee</em> (this payer’s price). Rows are one line high, unless some
-row has an <em>as billed</em> line; then every row is two lines. Codes
-whose modifier you typed rank first: <code>sono rt</code> puts the RT
-codes on top.</p>
+<p>The list has five columns: <em>Code</em> (with its modifiers),
+<em>RevCd</em> (the revenue code of the fee schedule row; blank when it
+has none), <em>Description</em>, <em>Billed</em> (how many claim lines
+used the code on this fee schedule in the last 12 months; blank if none)
+and <em>Fee</em> (this payer’s price). Rows are one line high, unless
+some row has an <em>as billed</em> line; then every row is two lines.
+Codes whose modifier you typed rank first: <code>sono rt</code> puts the
+RT codes on top.</p>
+<p><strong>One row per code and revenue code.</strong> When the payer’s
+fee schedule prices a code on more than one revenue code (a surgery on
+490 for the operating room and on 272 for the materials, say), the list
+shows each one as its own row, with that row’s own description and fee.
+Picking a row gives the line that revenue code, description and fee.
+Both rows show the code’s one <em>Billed</em> count.</p>
+<p><strong>What is already on the claim is not offered again.</strong> A
+code and revenue code that another line of the claim already has is left
+out of the list. On an empty line, the other revenue codes of a code
+already on the claim come first: after 47562 on 490, the next line’s
+list opens on 47562 on 272.</p>
 <p>Typing the start of a code (<code>7688</code>) lists the priced codes
 that start with it. A full code followed by Enter works exactly as
-before.</p>
+before, even if the code is already on the claim: it is priced from the
+same fee schedule row a typed code has always been priced from.</p>
 <ul>
 <li><strong>Down arrow</strong>, or <strong>Enter</strong> after words,
 moves from the cell into the list.</li>
@@ -2775,8 +2862,10 @@ keep. See the chapter <em>Prior authorizations</em>.</p>
 <p><strong>Physical Status Missing</strong> is placed on an
 anesthesia-code line with no P1-P6 modifier, for a payer whose
 anesthesia lines carry one at least 20% of the time. It runs on every
-claim you save, hand-made or auto-created. Add the modifier and
-save.</p>
+claim you save, hand-made or auto-created. Add the modifier and save.
+Where the encounter’s Anesthesia tab records the physical status,
+anesthesia lines added after that get it, by hand or by Auto-claim, and
+do not raise the tag.</p>
 <p>You can also add your own tag with the <strong>+</strong> button
 beside the tags, to mark a claim for yourself or a colleague.</p>
 <p>The full list of checks, what each looks for and how to switch one
@@ -3403,6 +3492,30 @@ clearinghouse</em>.</li>
 </ol>
 <p>Each claim records, in its notes, the name of the file it went out
 in. That file name is your batch number.</p>
+<p><strong>The transmission receipt.</strong> When the files have been
+sent, Mp10 shows a receipt headed <em>CLAIMS TRANSMISSION RECEIPT</em>,
+to print or export to PDF from the preview. It lists every file sent,
+what the clearinghouse answered, and every claim in it (claim, patient,
+insured ID, payer, service date, charge), with totals. Each file is
+marked:</p>
+<ul>
+<li><strong>RECEIVED</strong> — the clearinghouse has the file. This is
+not acceptance of the claims: each claim is accepted or rejected in the
+acknowledgements that come back later, and that answer shows in the
+claim’s status history.</li>
+<li><strong>NOT CONFIRMED</strong> — no receipt came back, with the
+reason. Check with the clearinghouse <strong>before sending the file
+again</strong>: a second copy bills every claim in it twice.</li>
+</ul>
+<p>Receipts are kept. <em>Actions → 837 Transmission Receipts</em> lists
+them, newest first, with who sent them, to whom, the result, the claims
+and the charges. Narrow it with <em>Sent since</em> and <em>Claim #</em>
+and click <strong>Show</strong>; double-click a receipt, or click
+<strong>Reprint</strong>, to show it again. Anyone who can open the
+billing program can open the list. (The receipts are kept in the folder
+set in the system registry under <strong>X12 /
+SendReceipt_Path</strong>; if none can be found, the window says
+so.)</p>
 <p>Outbound 837 also collects whatever the clearinghouse has waiting —
 acknowledgements, claim statuses and remittances — and processes it, so
 the flags in the grid are up to date afterwards.</p>
@@ -4004,6 +4117,17 @@ again posts nothing: <em>Already posted</em>. If Mp10 answers
 <em>Nothing posted</em>, the check number, payer or date on the left do
 not match the ones the remittance was saved with — correct them and post
 again.</p>
+<p><strong>A line that would pay twice is refused.</strong> Before
+posting, Mp10 looks for unposted lines that would pay again what is
+already paid: a line typed or re-saved by hand that repeats a line the
+835 or EOB brought in on the same check, or a line whose claim, code and
+amount are already posted under this check number (whatever payer it was
+posted under). If it finds any, <strong>nothing is posted</strong>:
+<em>Nothing was posted: N line(s) of this remittance would pay again
+what is already paid.</em>, followed by the lines it found. Remove those
+lines from the remittance, then post again. A payer that reverses a
+claim and pays it again on the same check is not caught by this: those
+lines have different amounts, and post as always.</p>
 <h2 id="there-is-no-undo">There is no undo</h2>
 <p>A posted remittance cannot be unposted. Check <em>Diff.</em> and the
 dots before you post. A mistake found afterwards is corrected on the
@@ -4579,6 +4703,11 @@ overwrites</td>
 <td>Encounter → Orders → New Order → Save</td>
 </tr>
 <tr>
+<td>Record anesthesia times</td>
+<td>Encounter → Anesthesia → start and stop (hh:mm, 24 h), physical
+status → Save</td>
+</tr>
+<tr>
 <td>Take the visit signature</td>
 <td>Encounters tab → highlight → pen → Accept</td>
 </tr>
@@ -4652,6 +4781,10 @@ Actions menu)</td>
 <tr>
 <td>Send</td>
 <td>Claims grid → select one payer’s claims → Outbound 837</td>
+</tr>
+<tr>
+<td>Reprint a transmission receipt</td>
+<td>Actions → 837 Transmission Receipts → Show → Reprint</td>
 </tr>
 <tr>
 <td>See a claim’s history</td>

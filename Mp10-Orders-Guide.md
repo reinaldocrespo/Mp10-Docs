@@ -88,6 +88,89 @@ a thyroid sonogram are both 76536, and a wrist, elbow and biceps ultrasound
 are all 76881 RT. Give each its own body part, and Mp10 will not mistake
 them for duplicates.
 
+## Search synonyms
+
+When an order item is picked, the words typed are looked up in the items'
+descriptions, codes and body parts, and in the other ways the same procedure
+has been worded on claims. **Search synonyms** add the abbreviations staff
+actually type: a group lists terms that mean the same thing, so with the
+group `BX, BIOPSY` typing *bx* finds the biopsy items and typing *biopsy*
+finds an item described as `BX`. A term may be several words (`FOREIGN
+BODY`).
+
+The groups are kept by the administrator in **Admin10 → Tables → Search
+Synonyms**, next to Order Items:
+
+- Each line of the grid is one group, its terms separated by commas.
+  Double-click a line, or press Enter on it, to change it. **Add** opens a
+  new line to type in, **Delete** removes the line the grid is on. A line
+  being typed is kept when you click a button, Save included.
+- Nothing is stored until **Save**. Save stores the terms in capitals without
+  punctuation (`x-ray` becomes `X RAY`) and replaces the stored list with what
+  the grid shows. **Exit** with unsaved changes asks before dropping them.
+- Save refuses a term that is in two groups, and names the term and the two
+  lines it is on, by their terms: a term belongs to one group only, so merge
+  the two lines or take the term out of one. It also refuses a term longer than 60 characters.
+- After a save Mp10 offers to rebuild the order item search at once. The new
+  groups take effect when it is rebuilt; if you answer No, AutoTasks rebuilds
+  it tonight.
+
+A first set of groups is put in when the dictionary is updated (`W, WITH`,
+`W O, W OUT, WITHOUT, WO`, `BX, BIOPSY`, `LT, LEFT` and others). Leave the
+**WITH** and **WITHOUT** groups in place: they are what let *w* find the
+items described WITH, and *w/o* the ones described WITHOUT. *w* and *with*
+are always matched as whole words, so *with* never finds the *without*
+studies and *w* does not find every word that starts with W; a one-word term
+you add to the WITH group is matched as a whole word too. Every other word
+you type, abbreviation or not, only has to be the start of a word.
+
+## Same item descriptions
+
+Two active items with the same description look the same in the pick list,
+and no search can tell them apart: the front desk sees `CARPAL TUNNEL RELEASE`
+three times and has to guess which is the left one. **Admin10 → Tables → Same
+Item Descriptions**, next to Order Items, lists every group of active items
+that share a description, one row per item, with its CPT and a proposed new
+description:
+
+- **Side variants** (one procedure code, with and without RT, LT or 50): the
+  item without a side keeps its description, the others get `, RIGHT`,
+  `, LEFT` or `, BILATERAL` added (`CARPAL TUNNEL RELEASE, LEFT`). An item
+  whose description already names a side (RIGHT, RT, LEFT, LT or BILATERAL)
+  gets no proposal, even when it names the other side: type the right one.
+- **Different codes**: each item gets the short description CMS publishes for
+  its code, in capitals, when it differs from the others' (`ANKLE
+  DISARTICULATION`). When two codes have the same CMS description, or the
+  dictionary has none yet (they arrive with the data dictionary update and the
+  next CMS load), there is no proposal: type one. The CPT is shown beside it.
+- A proposal longer than 50 characters is cut at a word boundary (the side
+  word is kept) and marked **Cut to fit**. **Keeps it** marks the one item of
+  a group that can keep its description; **Type one** marks items that still
+  need one.
+
+Nothing is ticked at first. Double-click a proposal, or press Enter on it, to
+change it; typing one ticks the row. Tick the rows you want and press **Apply
+ticked**. Before anything changes, Mp10 reminds you that a description is also
+what the imaging scanners see for an order (the modality worklist), what HL7
+order messages to other systems carry, and what order labels print; orders
+already sent keep the description they were sent with.
+
+Apply changes the descriptions only, all of them or none: an item that someone
+changed while the screen was open, a blank description, one longer than 50
+characters or one the item already has stops the whole apply, and the message
+says which item. Each change
+is written to the audit log (before and after), and the order item search
+learns the new words at once. A new description that another active item
+already has is applied, and the message names that item; so does a search
+entry that could not be updated (AutoTasks updates it tonight, or run **File →
+Rebuild → Rebuild Item Search**). The list is then
+read again, so the groups now told apart drop out. **Exit** with ticked rows
+not applied asks first.
+
+**Build Procedure Catalogue** names the side items it creates the same way
+(`KNEE SCOPE, LEFT`), unless the fee schedule's description already names a
+side; it never renames an item that already exists.
+
 # Creating orders
 
 Orders can be entered in three places. All three write to the same place, so
@@ -146,10 +229,50 @@ icon beside its date; choose the icon, or **Orders** in the task panel, to
 open the encounter's orders.
 
 The window lists the catalogue on the left and the encounter's orders on the
-right. Select an item and choose the right arrow to add it, or select an
-order and choose the left arrow to remove it, then save. The filter button
-narrows a long catalogue. Saving gives the same duplicate-order and
-refused-for-this-patient messages as the encounter's Orders tab.
+right. To find an item, type in the **Search (words or CPT)** box above the
+catalogue:
+
+- **Words**, in any order, and the start of a word is enough: *esoph rig*
+  finds ESOPHAGOSCOPY RIGID, and so does *rig esoph*. Every word typed must
+  be found. One exception: *w* and *with* are matched as whole words, so that
+  *with contrast* does not list the without-contrast items.
+- **A CPT**, or its start: *43215* finds the item billed as 43215, *432*
+  lists every 432xx item. Items whose CPT starts with what you typed come
+  before items that only mention it.
+- **Abbreviations** work both ways through the search synonyms: *bx* finds
+  the BIOPSY items and *biopsy* finds an item described as BX (see *Search
+  synonyms* above).
+
+The list follows as you type, after a short pause. With the box empty it
+lists the whole catalogue. Either way **the items this practice orders most
+come first**, then the ones it has billed most, then the rest
+alphabetically. The **Also** column shows Medicare's short description of
+the CPT when it says something the item's own description does not. When
+nothing matches, the list says *No items match* followed by what you typed;
+if the catalogue cannot be read at all, it says why instead.
+
+- **Down** (or Enter) moves from the box into the list. **Esc** clears the box;
+  Esc in an empty box closes the window, and order lines not yet saved are
+  dropped.
+- Inactive items are hidden. Tick **Show inactive** to list them too, in grey.
+- **Enter** on an item, or a double-click on it, adds it to the orders and
+  ticks it; ticking its box does the same. An item already on the orders is
+  not added twice. The right arrow adds every ticked item not yet on the
+  orders. Taking a line off the orders with the left arrow also
+  clears its item's tick, so it does not come back with the next item you
+  add. Ticks are kept while you search for the next item.
+- Administrators, who can correct the list's cells (below), use the tick box
+  or a double-click on it to add: for them Enter edits the cell.
+
+Select an order and choose the left arrow to remove it, then save. Saving
+gives the same duplicate-order and refused-for-this-patient messages as the
+encounter's Orders tab.
+
+Administrators can also correct an item in the list itself (description,
+CPT, body part, revenue code). The search finds the item by its new words at
+once. If another active item already has the same description, Mp10 says so
+after saving, because the two would look the same in this list; the change
+is kept either way. Order Items in Admin10 gives the same warning.
 
 ## In MpWeb
 
@@ -348,8 +471,11 @@ Worklist** guide, and its AutoTasks settings in the **Mp10 AutoTasks** guide.
 |---|---|
 | Add an order at registration | Encounter → **Orders** tab → **New Order** → pick the item → save the encounter |
 | Add an order while billing | Unbilled Encounters → orders icon or **Orders** → move the item across → save |
+| Find an item in that window | Type words or a CPT in the **Search** box (*esoph rig*, *432*); most-ordered items come first; **Down**, then **Enter** adds the item |
 | Add an order remotely | MpWeb → encounter → **Manage orders** |
 | Remove an order | Select it → **Delete Order** → save. An order with a result cannot be removed |
+| Teach the item search an abbreviation | Admin10 → Tables → **Search Synonyms** → **Add** → `BX, BIOPSY` → **Save** |
+| Tell apart items that share a description | Admin10 → Tables → **Same Item Descriptions** → tick the proposals → **Apply ticked** |
 | Print what the patient is having done | **Print Label** on the Orders tab, or **Print label with encounter** |
 | Get a claim pre-filled | Enter orders before the claim is created (PrBill10 and MpWeb) |
 | Send orders to another system | Set ACTIVATE and FILEPATH, run Update Data Dictionary, install and start the HL7 client service |

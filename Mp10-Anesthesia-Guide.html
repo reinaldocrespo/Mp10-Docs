@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Structured Systems · www.structuredsystems.com" />
+  <meta name="dcterms.date" content="2026-11-18" />
+  <title>Mp10 for Anesthesia Practices — User’s Guide</title>
+  <style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+  <style type="text/css">
+:root {
+color-scheme: light dark;
+--fg: #1a1a1a;
+--bg: #ffffff;
+--muted: #5a5a5a;
+--rule: #d8d8d8;
+--accent: #0b5cad;
+--code-bg: #f4f4f6;
+--note-bg: #f7f7f9;
+}
+@media (prefers-color-scheme: dark) {
+:root {
+--fg: #e6e6e6;
+--bg: #16181d;
+--muted: #a2a2a8;
+--rule: #33363d;
+--accent: #6cb0f5;
+--code-bg: #22252c;
+--note-bg: #1d2027;
+}
+}
+html { -webkit-text-size-adjust: 100%; }
+body {
+font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+color: var(--fg);
+background: var(--bg);
+max-width: 52rem;
+margin: 0 auto;
+padding: 2.5rem 1.25rem 5rem;
+line-height: 1.65;
+font-size: 1.02rem;
+}
+
+header#title-block-header { border-bottom: 2px solid var(--rule); margin-bottom: 2rem; }
+h1.title { margin-bottom: .2rem; font-size: 2rem; line-height: 1.2; }
+p.subtitle { margin-top: 0; color: var(--muted); font-size: 1.1rem; }
+p.author, p.date { margin: .2rem 0; color: var(--muted); font-size: .92rem; }
+h1, h2, h3, h4 { line-height: 1.25; margin-top: 2.2rem; }
+h1 { font-size: 1.7rem; padding-bottom: .3rem; border-bottom: 1px solid var(--rule); }
+h2 { font-size: 1.3rem; }
+h3 { font-size: 1.1rem; }
+a { color: var(--accent); }
+
+nav#TOC {
+background: var(--note-bg);
+border: 1px solid var(--rule);
+border-radius: .5rem;
+padding: 1rem 1.25rem;
+margin-bottom: 2.5rem;
+}
+nav#TOC > ul { margin: 0; padding-left: 1.1rem; }
+nav#TOC ul { list-style: none; padding-left: 1.1rem; }
+nav#TOC li { margin: .18rem 0; }
+nav#TOC a { text-decoration: none; }
+nav#TOC a:hover { text-decoration: underline; }
+
+table {
+border-collapse: collapse;
+width: 100%;
+margin: 1.25rem 0;
+font-size: .94rem;
+display: block;
+overflow-x: auto; 
+}
+th, td {
+border-bottom: 1px solid var(--rule);
+padding: .5rem .6rem;
+text-align: left;
+vertical-align: top;
+}
+thead th { border-bottom: 2px solid var(--rule); white-space: nowrap; }
+tbody tr:hover { background: var(--note-bg); }
+code, pre {
+font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
+font-size: .9em;
+}
+code { background: var(--code-bg); padding: .12em .35em; border-radius: .25rem; }
+pre {
+background: var(--code-bg);
+padding: .9rem 1rem;
+border-radius: .4rem;
+overflow-x: auto;
+}
+pre code { background: none; padding: 0; }
+
+blockquote {
+margin: 1.25rem 0;
+padding: .75rem 1.1rem;
+background: var(--note-bg);
+border-left: 4px solid var(--accent);
+border-radius: 0 .35rem .35rem 0;
+}
+blockquote p { margin: .35rem 0; }
+
+img {
+max-width: 100%;
+height: auto;
+display: block;
+margin: 1.25rem auto;
+border: 1px solid var(--rule);
+border-radius: .35rem;
+}
+figcaption {
+text-align: center;
+color: var(--muted);
+font-size: .9rem;
+margin-top: -.6rem;
+}
+@media print {
+body { max-width: none; font-size: 11pt; }
+nav#TOC { break-after: page; }
+h1 { break-before: page; }
+h1:first-of-type { break-before: avoid; }
+a { color: inherit; }
+}
+</style>
+  
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Mp10 for Anesthesia Practices — User’s Guide</h1>
+<p class="subtitle">Recording the case once, and letting the claim build
+itself from it</p>
+<p class="author">Structured Systems · www.structuredsystems.com</p>
+<p class="date">18 November 2026</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#about-this-guide" id="toc-about-this-guide">About this
+guide</a>
+<ul>
+<li><a href="#which-program-you-use" id="toc-which-program-you-use">Which program you use</a></li>
+<li><a href="#other-guides-this-one-points-to" id="toc-other-guides-this-one-points-to">Other guides this one points
+to</a></li>
+</ul></li>
+<li><a href="#why-record-the-case-in-mp10" id="toc-why-record-the-case-in-mp10">Why record the case in Mp10</a>
+<ul>
+<li><a href="#what-mp10-can-do-for-you" id="toc-what-mp10-can-do-for-you">What Mp10 can do for you</a></li>
+<li><a href="#what-it-needs-and-what-happens-without-it" id="toc-what-it-needs-and-what-happens-without-it">What it needs, and
+what happens without it</a></li>
+<li><a href="#what-you-still-check" id="toc-what-you-still-check">What
+you still check</a></li>
+</ul></li>
+<li><a href="#one-time-setup" id="toc-one-time-setup">One-time setup</a>
+<ul>
+<li><a href="#who-does-it" id="toc-who-does-it">Who does it</a></li>
+<li><a href="#step-1-update-the-data-dictionary" id="toc-step-1-update-the-data-dictionary">Step 1: update the data
+dictionary</a></li>
+<li><a href="#step-2-turn-the-settings-on" id="toc-step-2-turn-the-settings-on">Step 2: turn the settings
+on</a></li>
+<li><a href="#step-3-load-the-cms-base-units" id="toc-step-3-load-the-cms-base-units">Step 3: load the CMS base
+units</a></li>
+<li><a href="#step-4-the-procedure-catalogue" id="toc-step-4-the-procedure-catalogue">Step 4: the procedure
+catalogue</a></li>
+<li><a href="#step-5-review-and-approve-the-anesthesia-codes" id="toc-step-5-review-and-approve-the-anesthesia-codes">Step 5: review
+and approve the anesthesia codes</a></li>
+<li><a href="#step-6-review-and-approve-the-anesthesia-rates" id="toc-step-6-review-and-approve-the-anesthesia-rates">Step 6: review
+and approve the anesthesia rates</a></li>
+<li><a href="#step-7-check-the-fee-schedules" id="toc-step-7-check-the-fee-schedules">Step 7: check the fee
+schedules</a></li>
+</ul></li>
+<li><a href="#at-the-encounter" id="toc-at-the-encounter">At the
+encounter</a>
+<ul>
+<li><a href="#orders-the-procedure" id="toc-orders-the-procedure">Orders: the procedure</a></li>
+<li><a href="#the-anesthesia-tab" id="toc-the-anesthesia-tab">The
+Anesthesia tab</a>
+<ul>
+<li><a href="#start-and-stop" id="toc-start-and-stop">Start and
+stop</a></li>
+<li><a href="#what-save-refuses-and-what-it-asks" id="toc-what-save-refuses-and-what-it-asks">What Save refuses and what
+it asks</a></li>
+<li><a href="#physical-status" id="toc-physical-status">Physical
+status</a></li>
+<li><a href="#when-to-fill-it-in" id="toc-when-to-fill-it-in">When to
+fill it in</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#on-the-claim" id="toc-on-the-claim">On the claim</a>
+<ul>
+<li><a href="#units-from-the-time" id="toc-units-from-the-time">Units
+from the time</a></li>
+<li><a href="#the-physical-status-on-the-code" id="toc-the-physical-status-on-the-code">The physical status on the
+code</a></li>
+<li><a href="#the-price" id="toc-the-price">The price</a></li>
+<li><a href="#worked-examples" id="toc-worked-examples">Worked
+examples</a></li>
+<li><a href="#lines-already-on-a-claim" id="toc-lines-already-on-a-claim">Lines already on a claim</a></li>
+</ul></li>
+<li><a href="#the-auto-claim-for-anesthesia" id="toc-the-auto-claim-for-anesthesia">The auto-claim for anesthesia</a>
+<ul>
+<li><a href="#what-it-does" id="toc-what-it-does">What it does</a></li>
+<li><a href="#reviewing-what-it-built" id="toc-reviewing-what-it-built">Reviewing what it built</a></li>
+</ul></li>
+<li><a href="#the-tags-you-will-meet" id="toc-the-tags-you-will-meet">The tags you will meet</a>
+<ul>
+<li><a href="#anesthesia-units-estimated" id="toc-anesthesia-units-estimated">Anesthesia Units Estimated</a></li>
+<li><a href="#physical-status-missing" id="toc-physical-status-missing">Physical Status Missing</a></li>
+<li><a href="#icd10-from-history" id="toc-icd10-from-history">ICD10 From
+History</a></li>
+<li><a href="#auto-created---review" id="toc-auto-created---review">Auto-created - review</a></li>
+</ul></li>
+<li><a href="#daily-checklist" id="toc-daily-checklist">Daily
+checklist</a></li>
+</ul>
+</nav>
+<h1 id="about-this-guide">About this guide</h1>
+<p>This guide is for the billers and billing supervisors of anesthesia
+practices. It explains a set of Mp10 features that build most of an
+anesthesia claim for you: the code to bill for each payer, the units,
+the physical-status modifier and the price.</p>
+<p>You already know how anesthesia is billed: base units, time units,
+the physical status, the AA, QX and QZ modifiers, and the way each payer
+wants them. This guide does not explain anesthesia billing. It explains
+what Mp10 needs to know about each case, where that is recorded, and
+what Mp10 then does with it, so that you check claims instead of
+building them.</p>
+<p>It follows the order in which the work happens:</p>
+<ol type="1">
+<li>why it is worth recording the case in Mp10;</li>
+<li>the one-time setup, done once by a supervisor or administrator;</li>
+<li>what is recorded on the encounter, every day;</li>
+<li>what the claim window then does for you;</li>
+<li>the auto-claim;</li>
+<li>the tags you will meet, and what to do about each one;</li>
+<li>a short daily checklist.</li>
+</ol>
+<h2 id="which-program-you-use">Which program you use</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Your practice</th>
+<th>The encounter</th>
+<th>The anesthesia claim</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Professional</strong> (an anesthesia group billing its own
+claims)</td>
+<td><strong>PrBill10</strong></td>
+<td><strong>PrBill10</strong></td>
+</tr>
+<tr>
+<td><strong>Institutional</strong> (a facility that also bills the
+anesthesia)</td>
+<td><strong>Patients10</strong> or <strong>MpBill10</strong></td>
+<td><strong>MpBill10</strong>, as a second primary claim beside the
+facility claim on the same encounter</td>
+</tr>
+</tbody>
+</table>
+<p>Everything in this guide is about the Windows programs. Mp10 Web, the
+browser version, does not have the encounter’s Anesthesia tab, and its
+claim page does not fill units from the anesthesia times. Record the
+times and the physical status in the Windows programs.</p>
+<h2 id="other-guides-this-one-points-to">Other guides this one points
+to</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Guide</th>
+<th>What it covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>Mp10 Patients, Billing and Payments — User’s Guide</em></td>
+<td>The whole billing cycle: encounters, claims, coding, sending,
+posting. Its chapter <em>Creating a claim</em> describes Auto-claim in
+general, and its sections <em>Anesthesia practices</em> and
+<em>Anesthesia price</em> are the reference for what this guide
+summarises</td>
+</tr>
+<tr>
+<td><em>Mp10 Orders — User’s Guide</em></td>
+<td>The order catalogue and how orders are entered</td>
+</tr>
+<tr>
+<td><em>Mp10 Dashboard — User’s Guide</em></td>
+<td>Every claim check and its tag</td>
+</tr>
+</tbody>
+</table>
+<h1 id="why-record-the-case-in-mp10">Why record the case in Mp10</h1>
+<h2 id="what-mp10-can-do-for-you">What Mp10 can do for you</h2>
+<p>Mp10 can do two things for an anesthesia biller:</p>
+<ul>
+<li><strong>Build the anesthesia claim for you.</strong> The
+<strong>auto-claim</strong> creates the claim of an encounter from what
+is recorded on it: the code each payer is billed for that procedure, the
+units, the physical-status modifier, the price and the diagnoses. You
+then review the claim instead of typing it.</li>
+<li><strong>Fill in a line you add by hand.</strong> When you type an
+anesthesia code on a claim, Mp10 fills the <strong>units</strong> from
+the anesthesia time, adds the <strong>physical-status modifier</strong>
+for the payers that bill one, and <strong>prices</strong> the line with
+the payer’s anesthesia rate.</li>
+</ul>
+<p>The advantage is simple: fewer hand calculations, fewer tags to
+clear, and claims that go out the same day the case is recorded.</p>
+<h2 id="what-it-needs-and-what-happens-without-it">What it needs, and
+what happens without it</h2>
+<p>Mp10 can only work from what is recorded. Each item below is either
+entered for each case at the encounter, or kept once in the reference
+tables of the administration module.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>What Mp10 needs</th>
+<th>Where it is recorded</th>
+<th>What it gives you</th>
+<th>What happens without it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>The procedure</strong>, as an order</td>
+<td>The encounter’s <strong>Orders</strong> tab, by the front desk</td>
+<td>The auto-claim works out the code to bill for the claim’s payer</td>
+<td>PrBill10’s auto-claim skips the encounter with
+<code>no orders</code>, and the claim is built by hand. (MpBill10 builds
+the anesthesia claim from the facility claim instead, so it needs no
+orders.)</td>
+</tr>
+<tr>
+<td><strong>Anesthesia start and stop</strong></td>
+<td>The encounter’s <strong>Anesthesia</strong> tab</td>
+<td>Units calculated from the time, not estimated</td>
+<td>The auto-claim estimates the units from the payer’s past claims and
+tags the claim <strong>Anesthesia Units Estimated</strong>: you must
+check the units against the anesthesia record. A line you add by hand
+starts at 1 unit, and you type the units</td>
+</tr>
+<tr>
+<td><strong>Physical status</strong> (P1 to P6)</td>
+<td>The encounter’s <strong>Anesthesia</strong> tab</td>
+<td>The modifier is added to the anesthesia code for the payers that
+bill one</td>
+<td>For those payers the claim is tagged <strong>Physical Status
+Missing</strong>, and you add the modifier by hand</td>
+</tr>
+<tr>
+<td><strong>The anesthesia code of each surgical procedure</strong></td>
+<td>Administration module, <strong>Anesthesia Codes</strong></td>
+<td>The auto-claim can bill the anesthesia code to the payers that are
+billed one for that procedure</td>
+<td>The procedure can only be billed under its surgical code, even to a
+payer that is billed anesthesia codes</td>
+</tr>
+<tr>
+<td><strong>CMS base units</strong></td>
+<td>Administration module, <strong>Load Anesthesia Base
+Units</strong></td>
+<td>The base units in the price, and in the units of the payers whose
+units include them</td>
+<td>No formula price for payers whose price adds the base units, and no
+units from the time for payers whose units include them</td>
+</tr>
+<tr>
+<td><strong>The rate per unit of each payer</strong></td>
+<td>Administration module, <strong>Anesthesia Rates</strong></td>
+<td>The price formula, and whether the payer’s units include the base
+units</td>
+<td>No formula price: the line is priced from the fee schedule row, and
+units from the time are time units only</td>
+</tr>
+<tr>
+<td><strong>The code on the payer’s fee schedule</strong></td>
+<td>Administration module, <strong>Fee Schedule</strong></td>
+<td>The line can be billed at all</td>
+<td>The claim window does not accept the code for that payer, and the
+auto-claim skips the encounter with
+<code>no fee for &lt;code&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="what-you-still-check">What you still check</h2>
+<p>Mp10 does the arithmetic and remembers each payer’s habits. It does
+not see the anesthesia record. You still check:</p>
+<ul>
+<li>that the times on the encounter are the ones on the anesthesia
+record;</li>
+<li>that the physical status is the one the anesthesiologist
+recorded;</li>
+<li>the modifiers that depend on the case: who provided the anesthesia
+(AA, QK, QX, QY, QZ) and 57, 58, 59 and the like. The auto-claim uses
+the code and modifiers the payer is usually billed for the procedure,
+which may not fit this case;</li>
+<li>the diagnoses;</li>
+<li>every tag on the claim, before it is sent.</li>
+</ul>
+<h1 id="one-time-setup">One-time setup</h1>
+<p>This chapter is done once, by a billing supervisor or an
+administrator, and revisited when a payer changes its rate. Billers do
+not need to do it, but it is worth reading: it is what makes the rest
+work.</p>
+<h2 id="who-does-it">Who does it</h2>
+<p>The setup screens are in the administration module
+(<strong>PrAdmin10</strong> for a professional practice,
+<strong>MpAdmin10</strong> for an institutional one), in the
+<strong>File</strong> menu. The four anesthesia options (<strong>Load
+Anesthesia Base Units</strong>, <strong>Anesthesia Rates</strong>,
+<strong>Anesthesia Codes</strong> and <strong>Build Procedure
+Catalogue</strong>) are open to everyone who can open the administration
+module: members of the <strong>Supervisors</strong> and
+<strong>Administrators</strong> groups, and the ADSSYS login. The
+settings are kept in the module’s <strong>System Registry</strong> (the
+<em>Actions</em> panel).</p>
+<p>The decisions in the codes and rates screens are billing decisions,
+which is why a billing supervisor can open them. Review each suggestion,
+and approve it or correct it. Updating the data dictionary (step 1) is
+still the administrator’s job.</p>
+<h2 id="step-1-update-the-data-dictionary">Step 1: update the data
+dictionary</h2>
+<p>These features need new columns and tables. The administrator runs
+<strong>Update Data Dictionary</strong> from the administration module’s
+<strong>Actions</strong> panel, after hours, with nobody else in Mp10,
+as for any new version. Until it has run, the Anesthesia tab does not
+appear and the anesthesia options cannot be used.</p>
+<h2 id="step-2-turn-the-settings-on">Step 2: turn the settings on</h2>
+<p>In the administration module’s <strong>System Registry</strong>:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Section / Entry</th>
+<th>Value</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BILLING</code> / <code>ANESTHESIA-TIME</code></td>
+<td><code>YES</code></td>
+<td>Shows the encounter’s <strong>Anesthesia</strong> tab (start, stop,
+physical status) and lets the claim window fill units and the physical
+status from it. <code>NO</code> (the default) leaves everything as it
+was</td>
+</tr>
+<tr>
+<td><code>BILLING</code> / <code>AUTOCLAIM-CODE-SOURCE</code></td>
+<td><code>PAYER-HISTORY</code></td>
+<td>The auto-claim bills each payer the code its own past claims used
+for the procedure. This is the mode anesthesia practices use.
+<code>NO</code> hides Auto-claim; <code>ITEM</code> bills the ordered
+item’s code as it is</td>
+</tr>
+<tr>
+<td><code>BILLING</code> / <code>AUTOCLAIM-HISTORY-MONTHS</code></td>
+<td><code>24</code> (the default)</td>
+<td>How many months of past claims the auto-claim, the rate suggestions
+and the physical-status rule learn from</td>
+</tr>
+<tr>
+<td><code>BILLING</code> / <code>AUTOCLAIM-ICD10-HISTORY-MIN</code></td>
+<td><code>0</code> (off) or a percentage, for example
+<code>70</code></td>
+<td>For a practice with no reports: an order with no report gets the
+procedure’s most billed primary diagnosis when it is at least that share
+of at least 20 claims</td>
+</tr>
+<tr>
+<td><code>BILLING</code> / <code>IS_LAB_ORDERS_PRACTICE</code></td>
+<td><code>YES</code></td>
+<td>Lets the front desk enter orders. A practice that has never entered
+orders may have it at <code>NO</code></td>
+</tr>
+</tbody>
+</table>
+<p>PrBill10, MpBill10 and Patients10 read <code>ANESTHESIA-TIME</code>
+once per session: close and reopen them after changing it.</p>
+<h2 id="step-3-load-the-cms-base-units">Step 3: load the CMS base
+units</h2>
+<p>CMS publishes a file of anesthesia base units by code each year.</p>
+<ol type="1">
+<li>Download it from CMS (a text file, one line per anesthesia
+code).</li>
+<li>In the administration module: <strong>File → Anesthesia → Load
+Anesthesia Base Units</strong>.</li>
+<li>Pick the file. Mp10 reads the year from the file name; confirm it or
+correct it when asked (<em>Year of this file:</em>).</li>
+<li>The load ends with <em>N base units loaded for YYYY.</em></li>
+</ol>
+<p>Load the base units <strong>before</strong> reviewing the rates: the
+rate suggestions use them. AutoTasks also loads a newer CMS file each
+week when one is posted.</p>
+<h2 id="step-4-the-procedure-catalogue">Step 4: the procedure
+catalogue</h2>
+<p>The front desk orders the <strong>procedure</strong> (for example the
+endoscopy or the knee arthroscopy), once, whatever the payer. Mp10 then
+works out the code to bill for each payer. For that, the catalogue needs
+one item per procedure.</p>
+<p><strong>File → Build Procedure Catalogue</strong> adds one item for
+each procedure (and each side) on your fee schedule. It states the
+counts and asks first. Existing items are never deleted: the ones it
+replaces are marked inactive, and orders that point at them keep
+working. Run again, it adds only what is new. The <em>Patients, Billing
+and Payments</em> guide describes it in its section <em>Setting it
+up</em>, under <em>Anesthesia practices</em>.</p>
+<h2 id="step-5-review-and-approve-the-anesthesia-codes">Step 5: review
+and approve the anesthesia codes</h2>
+<p>Each surgical procedure item needs the anesthesia code it is billed
+as. That is what lets the auto-claim bill <code>00731AA</code> to one
+payer and <code>43239AA</code> to another for the same ordered
+procedure, and what lets MpBill10 turn the facility claim’s surgical
+line into the anesthesia line.</p>
+<p>Open <strong>File → Anesthesia → Anesthesia Codes</strong>. Mp10
+reads the last 36 months of claims first; a progress bar shows it, and
+<strong>Cancel</strong> stops it.</p>
+<p>The screen lists the active surgical items, the most billed
+first:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Column</th>
+<th>What it shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>Item</em></td>
+<td>The item’s procedure code</td>
+</tr>
+<tr>
+<td><em>Description</em></td>
+<td>The item’s description</td>
+</tr>
+<tr>
+<td><em>Suggested</em></td>
+<td>The anesthesia code Mp10 suggests</td>
+</tr>
+<tr>
+<td><em>Score</em></td>
+<td>How sure the suggestion is (below)</td>
+</tr>
+<tr>
+<td><em>Current</em></td>
+<td>The anesthesia code saved on the item, if any</td>
+</tr>
+<tr>
+<td><em>To save</em></td>
+<td>The code you have accepted or typed and not saved yet;
+<em>(clear)</em> when you are removing one</td>
+</tr>
+</tbody>
+</table>
+<p><strong>How the suggestion is made.</strong> The <em>Score</em> says
+which of two kinds it is:</p>
+<ul>
+<li><strong>paired <em>n</em></strong> — at a practice that bills the
+facility claim and the anesthesia claim of the same encounter,
+<em>n</em> encounters billed this surgical code on one and the suggested
+anesthesia code on the other. This is the strongest evidence there
+is.</li>
+<li><strong>mix <em>nn</em>%</strong> — how alike the diagnoses billed
+with the surgical code are to those billed with the anesthesia code.
+100% would be identical mixes. A high score is usually right; a low one,
+or several anesthesia codes scoring close together, needs your
+judgement.</li>
+</ul>
+<p><strong>Reviewing, row by row:</strong></p>
+<ul>
+<li><strong>Accept</strong> takes the suggestion for the highlighted
+item.</li>
+<li><strong>Edit</strong> lets you type the code yourself
+(<em>Anesthesia code</em>, five digits, 00100 to 01999).</li>
+<li><strong>Clear</strong> removes the item’s code.</li>
+</ul>
+<p><strong>Accepting many at once.</strong> Type a score in <em>scoring
+at least … %</em> (70 by default) and click <strong>Accept all</strong>.
+It takes the suggestion on every item that has no code saved and none
+typed, when the suggestion scores at least that much (a <em>paired</em>
+suggestion counts as 100). It never replaces a code that is already
+there. It says how many it took and how many items are still without a
+code.</p>
+<p><strong>Nothing is written until you click Save.</strong> Save writes
+every row whose code changed and says how many were saved.</p>
+<p>A practical way to work: accept all at a high score, then go down the
+list from the top (the most billed procedures) and check each code
+yourself. A few dozen procedures usually cover most of a practice’s
+cases.</p>
+<h2 id="step-6-review-and-approve-the-anesthesia-rates">Step 6: review
+and approve the anesthesia rates</h2>
+<p>Each payer’s anesthesia price is a rate per unit, and the payers
+count units in two different ways: some bill the time units and add the
+base units in the price, others bill units that already include the base
+units. Mp10 needs to know both for each payer.</p>
+<p>Open <strong>File → Anesthesia → Anesthesia Rates</strong>. Mp10
+reads the payers that have anesthesia lines in the last 24 months (the
+<code>AUTOCLAIM-HISTORY-MONTHS</code> setting), and opens on the first
+one. Pick the payer in <strong>Payer</strong>.</p>
+<p>The screen has two lists.</p>
+<p><strong>Suggested from the last 24 months of this payer’s
+claims</strong> — for each year, the rate and the unit convention that
+reproduce most of the prices the payer was billed:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Column</th>
+<th>What it shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>Year</em></td>
+<td>The year of service</td>
+</tr>
+<tr>
+<td><em>$ per unit</em></td>
+<td>The suggested rate</td>
+</tr>
+<tr>
+<td><em>Units include base</em></td>
+<td><em>Yes</em> when the payer’s billed units already include the base
+units</td>
+</tr>
+<tr>
+<td><em>Lines agreeing</em></td>
+<td>The share of that year’s lines this rate and convention
+reproduce</td>
+</tr>
+<tr>
+<td><em>Lines</em></td>
+<td>How many lines the year had</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Confirmed rates (what the claim price formula uses)</strong>
+— the rows you have approved:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Column</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>From</em></td>
+<td>The first date of service the rate applies to. It applies until the
+next row’s date</td>
+</tr>
+<tr>
+<td><em>$ per unit</em></td>
+<td>Dollars per unit</td>
+</tr>
+<tr>
+<td><em>Units include base</em></td>
+<td>The claim’s units already include the base units</td>
+</tr>
+<tr>
+<td><em>P modifiers add units</em></td>
+<td>P3, P4 and P5 add 1, 2 and 3 units to the price, as in the ASA
+convention</td>
+</tr>
+</tbody>
+</table>
+<p><strong>To approve a suggestion,</strong> highlight its year and
+click <strong>Accept the suggestion</strong>. It becomes a confirmed
+rate from January 1 of that year. If the payer already has a rate from
+that date, Mp10 asks before replacing it.</p>
+<p><strong>To enter or correct a rate yourself,</strong> click
+<strong>Add</strong> or <strong>Edit</strong>, and fill in:</p>
+<ul>
+<li><em>From (first service date)</em>;</li>
+<li><em>Dollars per unit</em> (more than 0);</li>
+<li><em>The claim’s units already include the base units</em>;</li>
+<li><em>P3 / P4 / P5 modifiers add 1 / 2 / 3 units</em>.</li>
+</ul>
+<p><strong>Delete</strong> removes a confirmed rate, after asking.</p>
+<p><strong>How to judge a suggestion.</strong> Look at <em>Lines
+agreeing</em>:</p>
+<ul>
+<li><strong>High (90% or more)</strong> — the payer pays one rate, and
+the suggestion has found it. Accept it, after checking it against a
+recent remittance.</li>
+<li><strong>About half, or lower</strong> — the payer’s prices do not
+follow one rate. The payer may pay different rates in different cases,
+or the past prices were typed by hand inconsistently. Do not accept it
+blindly: take the rate from the payer’s contract or its remittances, and
+enter it with <strong>Add</strong>.</li>
+</ul>
+<p>A rate change from a date (a new year’s conversion factor, say) is a
+new row with <strong>Add</strong>, not an edit of the old row: the old
+row keeps pricing the claims of earlier dates.</p>
+<p>Rates are matched on the <strong>payer’s name</strong> as the claim
+bills it. PrBill10 and MpBill10 see a new or changed rate after they are
+restarted.</p>
+<p>A payer with no confirmed rate is not priced by the formula; its
+anesthesia lines are priced from the fee schedule row, as before.</p>
+<h2 id="step-7-check-the-fee-schedules">Step 7: check the fee
+schedules</h2>
+<p>Each anesthesia code you bill a payer must be on that payer’s fee
+schedule (the administration module’s <strong>Fee Schedule</strong>), in
+the form the payer is billed: <code>00731AA</code>, for example, or
+<code>00731AAP1</code> to <code>00731AAP4</code> for a payer whose
+schedule keeps the physical status in the code. The rate prices the
+line, but a code that is not on the payer’s schedule cannot be billed to
+it at all: the claim window does not accept it, and the auto-claim skips
+the encounter with <code>no fee for &lt;code&gt;</code>.</p>
+<h1 id="at-the-encounter">At the encounter</h1>
+<h2 id="orders-the-procedure">Orders: the procedure</h2>
+<p>The front desk orders the <strong>procedure</strong> the patient is
+having, once, on the encounter’s <strong>Orders</strong> tab, as for any
+order. The <em>Mp10 Orders</em> guide explains how, and its item search
+finds an item by words, by CPT or by an abbreviation.</p>
+<p>Order the procedure, not a billing variant of it: not
+<code>00731AA</code> or <code>43239AA</code>, just the endoscopy. Order
+the pre-anesthesia evaluation and the EKG too, when the practice bills
+them: the auto-claim leaves them off for the payers that are never
+billed them with the procedure.</p>
+<p>An institutional practice does not need orders for the anesthesia
+claim: MpBill10 builds it from the facility claim (see <em>The
+auto-claim for anesthesia</em>).</p>
+<h2 id="the-anesthesia-tab">The Anesthesia tab</h2>
+<p>With <code>BILLING / ANESTHESIA-TIME</code> set to <code>YES</code>,
+the encounter window has an <strong>Anesthesia</strong> tab, after the
+others. It is on the professional encounter window (PrBill10) and on the
+institutional one (Patients10 and MpBill10), but not when an encounter
+is opened from the appointment calendar (MpXtrmCal10). The window still
+opens on its first tab.</p>
+<h3 id="start-and-stop">Start and stop</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>Anesthesia start</em>: <em>Date</em> and <em>Time (hh:mm, 24
+h)</em></td>
+<td>When anesthesia time began, as on the anesthesia record. When you
+type the time and leave the date empty, the date fills in with the
+encounter’s date</td>
+</tr>
+<tr>
+<td><em>Anesthesia stop</em>: <em>Date</em> and <em>Time (hh:mm, 24
+h)</em></td>
+<td>When anesthesia time ended. <strong>Leave the stop date empty for
+the start’s day; a stop earlier than the start is then the next
+day.</strong> Type a stop date only for a case that ends on another day
+than that</td>
+</tr>
+</tbody>
+</table>
+<p>Times are typed in 24-hour form: <code>07:42</code>,
+<code>13:05</code>, <code>00:35</code>.</p>
+<p>As soon as both times are in, a line under them shows the result, for
+example <em>49 minutes = 4 time units (15 min, rounded up)</em>. A time
+unit is 15 minutes, rounded up: 15 minutes is 1 unit, 16 minutes is
+2.</p>
+<p>A case from 23:50 to 00:35 needs no stop date: the stop is earlier
+than the start, so it is the next day, and the line reads <em>45 minutes
+= 3 time units (15 min, rounded up)</em>.</p>
+<p><strong>Clear</strong> empties both times. It does not change the
+physical status.</p>
+<h3 id="what-save-refuses-and-what-it-asks">What Save refuses and what
+it asks</h3>
+<p>When you save the encounter, Mp10 checks the times. It
+<strong>refuses</strong> to save, and shows the Anesthesia tab,
+when:</p>
+<ul>
+<li>only one of the two is filled in: <em>Enter both the anesthesia
+start and stop, or neither.</em></li>
+<li>the stop is not after the start: <em>The anesthesia stop must be
+after the start.</em></li>
+<li>a time is not a valid hour and minute: <em>The anesthesia time is
+not a valid hh:mm.</em></li>
+</ul>
+<p>It <strong>asks</strong> before saving, and you answer Yes to save as
+it is, when:</p>
+<ul>
+<li>the anesthesia time is over 12 hours (<em>Anesthesia time is 13h
+05m. Save it?</em>);</li>
+<li>the start is on another day than the encounter (<em>Anesthesia
+starts on …; the encounter is …. Save it?</em>).</li>
+</ul>
+<p>It asks only when the times have changed since they were last saved,
+so an answer you have given is not asked again on every save.</p>
+<h3 id="physical-status">Physical status</h3>
+<p>Under the times, <strong>Physical status</strong> has seven choices;
+one is always selected:</p>
+<table>
+<thead>
+<tr>
+<th>Choice</th>
+<th>Means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>Not recorded</em></td>
+<td>No status recorded (the starting choice)</td>
+</tr>
+<tr>
+<td><em>P1 - Healthy</em></td>
+<td>P1</td>
+</tr>
+<tr>
+<td><em>P2 - Mild systemic disease</em></td>
+<td>P2</td>
+</tr>
+<tr>
+<td><em>P3 - Severe systemic disease</em></td>
+<td>P3</td>
+</tr>
+<tr>
+<td><em>P4 - Severe disease, constant threat to life</em></td>
+<td>P4</td>
+</tr>
+<tr>
+<td><em>P5 - Not expected to survive without the operation</em></td>
+<td>P5</td>
+</tr>
+<tr>
+<td><em>P6 - Brain-dead donor</em></td>
+<td>P6</td>
+</tr>
+</tbody>
+</table>
+<p>It is saved with the encounter. Picking <em>Not recorded</em> and
+saving removes a status recorded earlier.</p>
+<h3 id="when-to-fill-it-in">When to fill it in</h3>
+<p>Fill in the tab <strong>before the claim is created</strong>. A claim
+line takes the times and the status when the line is added; lines
+already on a claim do not change by themselves when the encounter is
+corrected later (see <em>Lines already on a claim</em>).</p>
+<p>If the encounter window says <em>The anesthesia data could not be
+read; the Anesthesia tab is not shown.</em>, Mp10 could not read what is
+stored. The tab is left out so that nothing stored is overwritten. Close
+the encounter and open it again; if it keeps happening, tell your
+administrator.</p>
+<h1 id="on-the-claim">On the claim</h1>
+<p>This chapter is about the claim window, in PrBill10 and MpBill10,
+when you add an anesthesia line yourself. It applies to anesthesia
+codes, 00100 to 01999. A surgical code billed with AA, at one unit, is
+left alone.</p>
+<h2 id="units-from-the-time">Units from the time</h2>
+<p>When you type or pick an anesthesia code on a line, and the claim’s
+encounter has its start and stop, the line’s units (the <em>Unts</em>
+column) are filled from them instead of 1:</p>
+<blockquote>
+<p>units = time units, plus the CMS base units when the payer’s rate
+says its units include the base units</p>
+</blockquote>
+<p>where the time units are the minutes divided by 15, rounded up. The
+physical status never adds to <em>Unts</em>; where a payer counts it, it
+is added in the price (below).</p>
+<p><strong>Hover over the <em>Unts</em> cell</strong> to see how the
+number was reached, for example <em>anesthesia 07:42-08:31, 49 min = 4
+time units + 5 base</em>. The text shows only while the line still has
+those units: once you type another number, it is gone.</p>
+<p><strong>The button in the <em>Unts</em> cell</strong> recalculates
+the line from the encounter’s times now, and prices it again. Use it
+after the times were entered or corrected on the encounter. It tells you
+why when it cannot:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Message</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>This encounter has no anesthesia times; enter them on the
+encounter’s Anesthesia tab.</em></td>
+<td>Record the times first</td>
+</tr>
+<tr>
+<td><em>Not an anesthesia code.</em></td>
+<td>The line is not an anesthesia code</td>
+</tr>
+<tr>
+<td><em>no CMS base units for 00731</em> (for example)</td>
+<td>The payer’s units include the base units, and that code’s base units
+are not loaded</td>
+</tr>
+<tr>
+<td><em>no anesthesia rate for …: time units only</em></td>
+<td>The units were set to the time units; the payer has no confirmed
+rate, so Mp10 cannot know whether its units include the base units</td>
+</tr>
+</tbody>
+</table>
+<p>You can always type the units yourself: what you type wins.</p>
+<p>The button, the fill and the hover need
+<code>BILLING / ANESTHESIA-TIME</code> set to <code>YES</code>. With it
+off, the <em>Unts</em> cell works as it always did.</p>
+<h2 id="the-physical-status-on-the-code">The physical status on the
+code</h2>
+<p>When you add an anesthesia code without a physical status, and the
+encounter has one recorded, Mp10 adds it as the code’s last modifier,
+<strong>for the payers that bill one</strong>: a payer that has billed a
+physical status on at least 1 in 5 of its anesthesia lines in the last
+24 months (<code>AUTOCLAIM-HISTORY-MONTHS</code>), the same rule as the
+<em>Physical Status Missing</em> tag. For any other payer the code is
+left as you typed it.</p>
+<ul>
+<li><code>00731AA</code> on a P2 encounter, for such a payer, becomes
+<code>00731AAP2</code>.</li>
+<li>If the payer’s fee schedule has the code with the status
+(<code>00731AAP2</code>), that row is the one used for the line. If it
+has only the code without the status, that row is used and the status is
+still added.</li>
+<li><strong>A status you type is kept.</strong> Type
+<code>00731AAP3</code> and the line stays P3, whatever the encounter
+says.</li>
+<li>A code that already carries a status keeps it, even when it was
+picked from the list with one.</li>
+</ul>
+<p>The status comes first, then the units, then the price, so a payer
+that adds units for P3 to P5 is priced with the right status.</p>
+<h2 id="the-price">The price</h2>
+<p>For a payer with a confirmed <strong>Anesthesia Rate</strong>, the
+line is priced by the formula whenever you add the code or change its
+units or modifiers:</p>
+<blockquote>
+<p>price = (units + base units + P units) × rate</p>
+</blockquote>
+<ul>
+<li><strong>Base units</strong> are the code’s CMS base units for the
+date of service, counted as 0 for a payer whose units already include
+them.</li>
+<li><strong>P units</strong> are added only for a payer whose rate is
+set to add them: P3 adds 1, P4 adds 2, P5 adds 3.</li>
+<li><strong>Rate</strong> is the payer’s dollars per unit in force on
+the date of service.</li>
+</ul>
+<p><strong>Hover over the Fee cell</strong> to see how the price was
+made, for example <em>(5 base + 4) x 22.0300, rate of 2026-01-01</em>.
+The text shows only while the price is still the formula’s. You can
+still type over the price. The <em>Patients, Billing and Payments</em>
+guide, section <em>Anesthesia price</em>, is the reference for the
+formula.</p>
+<p>A payer with no rate is priced from its fee schedule row, as before:
+changing the units then scales <em>Expected</em> and the deductible, and
+leaves <em>Fee</em> as it was. Check <em>Fee</em> yourself.</p>
+<h2 id="worked-examples">Worked examples</h2>
+<p>The numbers below are examples. Use your own payers’ rates.</p>
+<p><strong>A 49-minute case.</strong> Code 00731 (CMS base units 5),
+anesthesia from 07:42 to 08:31: 49 minutes, 4 time units. The physical
+status on the encounter is P2.</p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr>
+<th>Payer (example)</th>
+<th>How it counts units</th>
+<th>The line Mp10 fills</th>
+<th>Units</th>
+<th>Price</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MCS Classicare: bills a physical status, units are time only, 22.03
+per unit</td>
+<td>Time only</td>
+<td><code>00731AAP2</code></td>
+<td>4</td>
+<td>(5 + 4) × 22.03 = <strong>198.27</strong></td>
+</tr>
+<tr>
+<td>Triple-S Advantage: no physical status, units include base, 20.51
+per unit</td>
+<td>Time + base</td>
+<td><code>00731AA</code></td>
+<td>9 (4 + 5)</td>
+<td>9 × 20.51 = <strong>184.59</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>A case past midnight.</strong> Anesthesia from 23:50 to
+00:35: 45 minutes, 3 time units. The first payer above is billed 3
+units, the second 8 (3 + 5).</p>
+<p><strong>A payer that adds units for the status.</strong> If the first
+payer’s rate were set to add P units, a P3 encounter would give
+<code>00731AAP3</code>, still 4 units, and a price of (5 + 4 + 1) ×
+22.03 = 220.30.</p>
+<h2 id="lines-already-on-a-claim">Lines already on a claim</h2>
+<p>Lines already on a claim <strong>never change by themselves</strong>
+when the times or the status are entered or corrected on the encounter
+later. That is deliberate: a claim you have checked does not change
+behind your back.</p>
+<ul>
+<li><strong>To bring the units up to date,</strong> click the button in
+the line’s <em>Unts</em> cell.</li>
+<li><strong>To bring the physical status up to date,</strong> type the
+code again without the status (for example <code>00731AA</code>): the
+line takes the encounter’s status, and its units and price are filled
+again.</li>
+</ul>
+<h1 id="the-auto-claim-for-anesthesia">The auto-claim for
+anesthesia</h1>
+<p>The auto-claim is described in the <em>Patients, Billing and
+Payments</em> guide, chapter <em>Creating a claim</em>, section
+<em>Auto-claim</em>, and in its section <em>Anesthesia practices</em>.
+This chapter summarises what it does with an anesthesia case.</p>
+<h2 id="what-it-does">What it does</h2>
+<p>In PrBill10, highlight encounters in the <strong>Unbilled
+encounters</strong> list and click <strong>Auto-claim</strong> in the
+side panel. Only BillingUsers and Administrators see it. For each
+encounter, Mp10:</p>
+<ol type="1">
+<li><strong>Works out the code to bill from the ordered
+procedure.</strong> For the claim’s payer, it uses the code the payer’s
+own reviewed claims were billed for that procedure: the anesthesia code
+with AA, the surgical code with AA, or the surgical code alone. The
+anesthesia code comes from the item’s code saved in <strong>Anesthesia
+Codes</strong>.</li>
+<li><strong>Leaves off what the payer is not billed.</strong> A consult
+or an EKG is left off when the payer was billed it on fewer than half of
+its anesthesia claims.</li>
+<li><strong>Adds the physical status</strong> recorded on the encounter,
+for a payer that bills one (the 1-in-5 rule above). It replaces any
+status the payer’s history would have suggested. Without a status on the
+encounter, the code is built without one, and the claim is tagged
+<strong>Physical Status Missing</strong> for such a payer.</li>
+<li><strong>Sets the units.</strong> With the anesthesia start and stop
+on the encounter, the units come from the time, exactly as in the claim
+window, and <strong>no tag is added</strong>. Without them, the units
+are estimated from the units the payer usually bills for that code, and
+the claim is tagged <strong>Anesthesia Units Estimated</strong>.</li>
+<li><strong>Prices the line</strong> with the payer’s anesthesia rate;
+without a rate, at the payer’s usual price for those units in its
+history; failing that, the fee row times the units.</li>
+<li><strong>Adds the diagnoses</strong> on the encounter, those the
+report confirms, and, when the practice has set it up, one diagnosis
+from history.</li>
+<li>Runs the same checks as when you save a claim, and saves the claim
+with the tag <strong>Auto-created - review</strong>.</li>
+</ol>
+<p>The auto-claim uses the times and the status wherever they are
+recorded.</p>
+<p><strong>Only one anesthesia line takes its units from the
+time.</strong> On a claim with two anesthesia lines, the first takes the
+time; the second keeps the estimate and its tag, so the same minutes are
+never billed twice. Its explanation says <em>anesthesia time already
+used by</em> the first line’s code.</p>
+<p><strong>MpBill10.</strong> In an institutional practice the
+auto-claim builds the anesthesia claim from the encounter’s
+<strong>facility claim</strong>, not from orders: the facility claim’s
+surgical lines are taken to their anesthesia code (the code saved in
+<strong>Anesthesia Codes</strong>, else the one most often paired with
+it in history), and the claim has one anesthesia line. The payer is the
+encounter’s insurance, taken to its anesthesia payer through the
+history. The times, the status, the units and the price work as above.
+The <em>Patients, Billing and Payments</em> guide explains this path
+under <em>MpBill10: the anesthesia claim from the facility
+claim</em>.</p>
+<h2 id="reviewing-what-it-built">Reviewing what it built</h2>
+<p>Every auto-created claim waits for a person. Open <strong>Auto-claims
+to review</strong> (the toolbar button after <strong>Unbilled
+encounters</strong>, or <em>Tables → Auto-claims to review</em>). The
+Billing dashboard’s <em>Needs attention</em> card also counts the
+auto-created claims <strong>you</strong> made that nobody has reviewed;
+click that line to open the list on just those claims.</p>
+<p>For each claim:</p>
+<ol type="1">
+<li>Open it. Check the payer, the code on each line and its
+modifiers.</li>
+<li>Check the units against the anesthesia record. Hover over the
+<em>Unts</em> cell: when the units came from the encounter’s times, it
+says how.</li>
+<li>Check the price. Hover over the <em>Fee</em> cell for the
+formula.</li>
+<li>Check the diagnoses.</li>
+<li>Deal with each tag (next chapter).</li>
+<li>Remove <strong>Auto-created - review</strong> with its
+<strong>x</strong>, and click <strong>Save</strong>.</li>
+</ol>
+<p>Only claims reviewed this way teach the auto-claim; see
+<em>Auto-claims to review</em> in the <em>Patients, Billing and
+Payments</em> guide.</p>
+<h1 id="the-tags-you-will-meet">The tags you will meet</h1>
+<p>A tag is a coloured label at the bottom of the claim window. Hover
+over it to see what it found; click it for the full explanation. The
+full list of checks is in the <em>Mp10 Dashboard</em> guide, chapter
+<em>The claim checks</em>.</p>
+<h2 id="anesthesia-units-estimated">Anesthesia Units Estimated</h2>
+<p><strong>What it means.</strong> The auto-claim estimated the units of
+an anesthesia line from the payer’s past claims, because it could not
+calculate them from the time.</p>
+<p><strong>Why it appeared.</strong> One of these:</p>
+<ul>
+<li>the encounter had no anesthesia start and stop;</li>
+<li>the payer’s units include the base units, and the code’s CMS base
+units are not loaded (the explanation ends <em>anesthesia time not used:
+no CMS base units for …</em>);</li>
+<li>the line is the claim’s second anesthesia line (<em>anesthesia time
+already used by …</em>).</li>
+</ul>
+<p>The explanation gives, for each estimated line, the units, the range
+the payer’s history shows (for example <em>4 units (history 2-10)</em>),
+and where the price came from: the payer’s rate, the history, or the fee
+row times the units.</p>
+<p><strong>What to do.</strong> Check the units against the anesthesia
+record and correct them; with a rate, the price follows. If the
+encounter is missing its times, record them on the Anesthesia tab, then
+click the button in the <em>Unts</em> cell. Remove the tag with its
+<strong>x</strong> and save. This tag does not go away by itself: it is
+cleared by the person who checked the units.</p>
+<h2 id="physical-status-missing">Physical Status Missing</h2>
+<p><strong>What it means.</strong> An anesthesia-code line has no
+physical-status modifier, and the claim’s payer is one that bills it: it
+has billed a physical status on at least 1 in 5 of its anesthesia lines.
+The explanation names the line and the payer’s share.</p>
+<p><strong>Why it appeared.</strong> The encounter had no physical
+status recorded when the line was added, or the line was typed with a
+code that did not get one.</p>
+<p><strong>What to do.</strong> Add the modifier to the code (for
+example <code>00731AAP2</code>) and save; the tag clears by itself on
+that save. Where the Anesthesia tab is in use, the explanation adds
+<em>Record it on the encounter’s Anesthesia tab: anesthesia lines added
+after that get it.</em> Recording it there helps the next lines and the
+auto-claim; it does not change the lines already on the claim.</p>
+<p>This check runs on every claim you save, made by hand or by the
+auto-claim. A practice whose payers never bill a physical status never
+sees it. It counts in the dashboard’s claims with error tags.</p>
+<h2 id="icd10-from-history">ICD10 From History</h2>
+<p><strong>What it means.</strong> The auto-claim added the encounter’s
+only diagnosis from the history of claims billing the procedure, because
+there was no report. The explanation gives the code and how many past
+claims it came from.</p>
+<p><strong>What to do.</strong> Check the diagnosis against the chart,
+correct it if needed, remove the tag with its <strong>x</strong> and
+save. It appears only where <code>AUTOCLAIM-ICD10-HISTORY-MIN</code> is
+turned on.</p>
+<h2 id="auto-created---review">Auto-created - review</h2>
+<p><strong>What it means.</strong> The auto-claim made this claim and
+nobody has checked it yet.</p>
+<p><strong>What to do.</strong> Review the claim as in <em>Reviewing
+what it built</em>, then remove the tag with its <strong>x</strong> and
+save. The tag does not stop a claim from being sent. In PrBill10, tick
+<strong>Hide unreviewed</strong> in the Claims grid before sending, to
+keep unchecked claims out of the 837.</p>
+<h1 class="unnumbered" id="daily-checklist">Daily checklist</h1>
+<ol type="1">
+<li><strong>Front desk:</strong> on each encounter, order the procedure
+(and the evaluation and EKG, if billed).</li>
+<li><strong>After the case:</strong> fill in the Anesthesia tab from the
+anesthesia record: start, stop and physical status. Save.</li>
+<li><strong>Billing:</strong> run <strong>Auto-claim</strong> on the
+day’s encounters in the Unbilled encounters list, or add the anesthesia
+line by hand and let Mp10 fill the units, the status and the price.</li>
+<li>Open <strong>Auto-claims to review</strong> (or the dashboard line
+for your own claims).</li>
+<li>On each claim, check units, code and modifiers, price and diagnoses
+against the record; deal with every tag.</li>
+<li>Remove <em>Auto-created - review</em> and save.</li>
+<li>Send (in PrBill10, with <strong>Hide unreviewed</strong>
+ticked).</li>
+<li><strong>When a payer’s rate changes:</strong> add a dated row in
+<strong>Anesthesia Rates</strong>.</li>
+</ol>
+</body>
+</html>
