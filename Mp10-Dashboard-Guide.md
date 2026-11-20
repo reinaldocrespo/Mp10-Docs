@@ -389,6 +389,7 @@ checked when someone opens and saves them.
 | Refused For This Patient | A code this payer refused for this same patient, with nothing paid for it since |
 | Prior Auth Missing | A code your rules say this payer wants a prior authorization for, and no authorization on the claim |
 | Physical Status Missing | An anesthesia-code line with no P1-P6 modifier, for a payer that usually bills one |
+| POA Missing | An inpatient claim with a diagnosis that has no POA answer |
 
 ## Diagnosis codes
 
@@ -715,6 +716,21 @@ list as a report, by code, with a total.
 later corrected by filling in the physician no longer counts, so the payers
 are learned from the claims still left blank. A site that has not built its
 denial history never sees this tag.
+
+### POA Missing
+
+Institutional only. The claim is inpatient (its type of bill starts with 11)
+and at least one diagnosis of the encounter has no POA (present on admission)
+answer. Clicking the tag names the
+codes.
+
+The coder answers them on the encounter's **Coding** screen in Patients10
+(Icd10s tab, *POA* column): Y, N, U, W, or 1 for a code that is exempt from
+POA reporting. Then open the claim and press **Save**; the tag clears.
+
+Mp10 does not guess. A blank answer is sent to the payer as nothing at all,
+which the payer accepts only for exempt codes, so a claim still carrying this
+tag is likely to be refused.
 
 ### Physical Status Missing
 

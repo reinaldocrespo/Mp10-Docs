@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-11-18" />
+  <meta name="dcterms.date" content="2026-11-20" />
   <title>Mp10 Dashboard — User’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -148,7 +148,7 @@ a { color: inherit; }
 <p class="subtitle">The cards on the Billing and Patients main windows,
 and what to do about what they show</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">18 November 2026</p>
+<p class="date">20 November 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -241,6 +241,7 @@ Before</a></li>
 Physician</a></li>
 <li><a href="#prior-auth-missing" id="toc-prior-auth-missing">Prior Auth
 Missing</a></li>
+<li><a href="#poa-missing" id="toc-poa-missing">POA Missing</a></li>
 <li><a href="#physical-status-missing" id="toc-physical-status-missing">Physical Status Missing</a></li>
 <li><a href="#refused-for-this-patient" id="toc-refused-for-this-patient">Refused For This Patient</a></li>
 </ul></li>
@@ -779,6 +780,10 @@ and no authorization on the claim</td>
 <td>An anesthesia-code line with no P1-P6 modifier, for a payer that
 usually bills one</td>
 </tr>
+<tr>
+<td>POA Missing</td>
+<td>An inpatient claim with a diagnosis that has no POA answer</td>
+</tr>
 </tbody>
 </table>
 <h2 id="diagnosis-codes">Diagnosis codes</h2>
@@ -1103,6 +1108,17 @@ claim refused for this and later corrected by filling in the physician
 no longer counts, so the payers are learned from the claims still left
 blank. A site that has not built its denial history never sees this
 tag.</p>
+<h3 id="poa-missing">POA Missing</h3>
+<p>Institutional only. The claim is inpatient (its type of bill starts
+with 11) and at least one diagnosis of the encounter has no POA (present
+on admission) answer. Clicking the tag names the codes.</p>
+<p>The coder answers them on the encounter’s <strong>Coding</strong>
+screen in Patients10 (Icd10s tab, <em>POA</em> column): Y, N, U, W, or 1
+for a code that is exempt from POA reporting. Then open the claim and
+press <strong>Save</strong>; the tag clears.</p>
+<p>Mp10 does not guess. A blank answer is sent to the payer as nothing
+at all, which the payer accepts only for exempt codes, so a claim still
+carrying this tag is likely to be refused.</p>
 <h3 id="physical-status-missing">Physical Status Missing</h3>
 <p>An anesthesia-code line (00100-01999) has no physical status
 modifier, P1 to P6, and this payer carries one on at least

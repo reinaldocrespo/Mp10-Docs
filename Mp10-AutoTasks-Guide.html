@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-11-18" />
+  <meta name="dcterms.date" content="2026-11-20" />
   <title>Mp10 AutoTasks — Administrator’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -148,7 +148,7 @@ a { color: inherit; }
 <p class="subtitle">Backups, electronic remittances, modality worklist,
 and automated reports</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">18 November 2026</p>
+<p class="date">20 November 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -318,12 +318,18 @@ reference data current</a>
 <ul>
 <li><a href="#turning-it-off" id="toc-turning-it-off">Turning it
 off</a></li>
-<li><a href="#the-settings-1" id="toc-the-settings-1">The
-settings</a></li>
+<li><a href="#the-settings-1" id="toc-the-settings-1">The settings</a>
+<ul>
+<li><a href="#when-the-look-happens" id="toc-when-the-look-happens">When
+the look happens</a></li>
+</ul></li>
 <li><a href="#being-told-what-happened-1" id="toc-being-told-what-happened-1">Being told what happened</a></li>
-<li><a href="#the-yearly-icd-10-release" id="toc-the-yearly-icd-10-release">The yearly ICD-10 release</a></li>
+<li><a href="#the-yearly-icd-10-release-and-its-april-update" id="toc-the-yearly-icd-10-release-and-its-april-update">The yearly
+ICD-10 release, and its April update</a></li>
 <li><a href="#the-index-to-diseases-searching-diagnoses-by-words" id="toc-the-index-to-diseases-searching-diagnoses-by-words">The Index to
 Diseases (searching diagnoses by words)</a></li>
+<li><a href="#icd-10-pcs-procedure-codes-institutional" id="toc-icd-10-pcs-procedure-codes-institutional">ICD-10-PCS procedure
+codes (institutional)</a></li>
 <li><a href="#diagnosis-suggestions-by-procedure" id="toc-diagnosis-suggestions-by-procedure">Diagnosis suggestions by
 procedure</a></li>
 <li><a href="#procedure-code-search-counts" id="toc-procedure-code-search-counts">Procedure code search
@@ -2945,13 +2951,14 @@ modifier-50 checks), updated every quarter,</li>
 <li>the <strong>NCCI tables</strong> (code pairs and unit limits),
 updated every quarter, and</li>
 <li>the <strong>ICD-10-CM code set</strong> (every diagnosis check),
-updated every October 1st.</li>
+updated every October 1st, with a smaller update on April 1st in the
+years CMS publishes one.</li>
 </ul>
-<p>AutoTasks keeps all three current on its own. Once a day it looks at
-the CMS website; when a new quarter or a new ICD-10 year has been
-published, it downloads the files and imports them into your data.
-Nothing needs to be remembered, and the import menus in Admin10 remain
-available for loading a file by hand.</p>
+<p>AutoTasks keeps all three current on its own. Once a night it looks
+at the CMS website; when a new quarter, a new ICD-10 year or an April
+update has been published, it downloads the files and imports them into
+your data. Nothing needs to be remembered, and the import menus in
+Admin10 remain available for loading a file by hand.</p>
 <h2 id="turning-it-off">Turning it off</h2>
 <p>This is on by default. To switch it off entirely, set:</p>
 <table>
@@ -2999,9 +3006,18 @@ everywhere.</p>
 </tr>
 <tr>
 <td>AUTOTASKS</td>
+<td>CMSFETCH_CHECK_AT</td>
+<td>1</td>
+<td>Hour of the night (0-23) from which AutoTasks looks at the CMS site,
+once a night. 1 means 1 AM. Empty means no fixed time: see the next
+entry</td>
+</tr>
+<tr>
+<td>AUTOTASKS</td>
 <td>CMSFETCH_CHECK_HOURS</td>
 <td>24</td>
-<td>Hours between looks at the CMS site</td>
+<td>Hours between looks at the CMS site. Only used when
+CMSFETCH_CHECK_AT is empty</td>
 </tr>
 <tr>
 <td>AUTOTASKS</td>
@@ -3020,10 +3036,19 @@ AutoTasks.exe, one subfolder per quarter plus one per ICD-10 year</td>
 </table>
 <p>AutoTasks also keeps its own bookkeeping under the
 <strong>CMSFETCH</strong> section: <code>LAST_CHECK</code>,
-<code>ICD10_YEAR</code> (the latest ICD-10 year downloaded) and
-<code>ICD10_IMPORTED</code> (the latest year imported). Those entries
-are written by the service; leave them alone unless this guide says
-otherwise.</p>
+<code>ICD10_YEAR</code> (the latest ICD-10 release downloaded) and
+<code>ICD10_IMPORTED</code> (the latest release imported:
+<code>2027</code>, or <code>2027-04</code> for an April update). Those
+entries are written by the service; leave them alone unless this guide
+says otherwise.</p>
+<h3 id="when-the-look-happens">When the look happens</h3>
+<p>AutoTasks looks at the CMS site <strong>once a night</strong>, at the
+first cycle from the hour in <code>CMSFETCH_CHECK_AT</code> (1 AM unless
+you change it) and within the six hours after it. If AutoTasks was not
+running that night, it waits for the next one; if it missed a whole day,
+it looks as soon as it runs again. A look on which nothing new can exist
+costs nothing: with this year’s ICD-10 release already imported,
+AutoTasks does not even open the ICD-10 page until April 1st.</p>
 <h2 id="being-told-what-happened-1">Being told what happened</h2>
 <p>After any check that imported, downloaded or failed something,
 AutoTasks sends one e-mail listing each event — for example that the
@@ -3036,13 +3061,20 @@ NOTIFY_EMAIL</strong>) is used instead; if both are empty, no mail is
 sent and the log still records everything. As with every notice
 AutoTasks sends, e-mail must be set up first — see <strong>E-mail has to
 be set up first</strong> in the backups chapter.</p>
-<h2 id="the-yearly-icd-10-release">The yearly ICD-10 release</h2>
-<p>The ICD-10-CM set changes every October 1st. AutoTasks downloads the
-year’s order file and addendum, imports them — new codes added, retired
-codes end-dated so older claims still read correctly, titles and
-laterality updated — and writes a <strong>report of every
-change</strong> beside the downloaded files. The e-mail names that
-report.</p>
+<h2 id="the-yearly-icd-10-release-and-its-april-update">The yearly
+ICD-10 release, and its April update</h2>
+<p>The ICD-10-CM set changes every October 1st, and in some years CMS
+adds a smaller update on <strong>April 1st</strong>. CMS posts the April
+files months ahead; AutoTasks imports them from April 1st, not before,
+and dates what they change April 1st (codes they retire end March 31st).
+The April files land in their own folder, <code>icd10-YYYY-04</code>,
+beside the year’s <code>icd10-YYYY</code>. The same goes for the
+Alphabetic Index used by the diagnosis search.</p>
+<p>AutoTasks downloads the release’s order file and addendum, imports
+them — new codes added, retired codes end-dated so older claims still
+read correctly, titles and laterality updated — and writes a
+<strong>report of every change</strong> beside the downloaded files. The
+e-mail names that report.</p>
 <p>If the import cannot run — most often because another session had the
 diagnosis table open at that moment — nothing is changed, the e-mail
 says so, and AutoTasks tries again on its next check until it
@@ -3075,6 +3107,40 @@ the code descriptions alone.</p>
 <p>To load it sooner, use <strong>Admin10 → File → Code Sets → Load
 ICD10 Index</strong> and pick the folder that holds
 <code>icd10cm_index_YYYY.xml</code>.</p>
+<h2 id="icd-10-pcs-procedure-codes-institutional">ICD-10-PCS procedure
+codes (institutional)</h2>
+<p>Hospitals code inpatient procedures in ICD-10-PCS. The encounter
+coding screen of Patients10 checks, searches and suggests those codes
+from a table AutoTasks keeps current.</p>
+<p>At each check AutoTasks reads the CMS ICD-10 page and picks the
+newest release in force:</p>
+<ul>
+<li>the fiscal year’s set, which takes effect every <strong>October
+1st</strong>. From June on AutoTasks asks for the coming year, and uses
+the current one until CMS posts it;</li>
+<li>that year’s <strong>April 1st update</strong>, when CMS publishes
+one. CMS posts it months ahead; AutoTasks loads it from April 1st, not
+before.</li>
+</ul>
+<p>Every release is a whole code set. AutoTasks downloads it into an
+<code>icd10pcs-YYYY</code> (or <code>icd10pcs-YYYY-04</code>) folder and
+replaces the table with it. A newer release replaces an older one, never
+the other way round. If CMS reissues a release under another file name,
+the reissue is loaded too. The e-mail of the check says which release
+was loaded.</p>
+<p>Two entries under <strong>CMSFETCH</strong> record what is loaded:
+<code>ICD10PCS_IMPORTED</code> (the release: <code>2027</code>, or
+<code>2027-04</code> for an April update) and <code>ICD10PCS_FILE</code>
+(the CMS file it came from). Clearing either one makes AutoTasks load
+the release again at its next check.</p>
+<p>Until the Data Dictionary has been updated (version 10.99) the table
+does not exist, and AutoTasks waits quietly. To load the codes right
+away, or where AutoTasks is not running, use <strong>MpAdmin10 → File →
+Code Sets → Download ICD-10-PCS Procedure Codes from CMS</strong>. It
+does the same step and writes the same two entries, so AutoTasks does
+not repeat it.</p>
+<p>One case is not caught: CMS replacing a file without renaming it. Run
+the menu item, which offers to load the release again.</p>
 <h2 id="diagnosis-suggestions-by-procedure">Diagnosis suggestions by
 procedure</h2>
 <p>The ICD10 tab also suggests the diagnoses most often billed with the
@@ -3276,11 +3342,11 @@ payers actually paid (see <em>The factor alert</em>).</li>
 <strong>undone</strong> (see <em>Undo last update, and Apply
 again</em>).</p>
 <h2 id="when-it-runs">When it runs</h2>
-<p>There is no fixed day. The step is part of AutoTasks’ look at the CMS
-site, every <code>AUTOTASKS</code> / <code>CMSFETCH_CHECK_HOURS</code>
-hours (24 by default), and it runs only while <code>CMS_ASC</code> /
-<code>DOWNLOAD</code> and <code>AUTOTASKS</code> /
-<code>FETCH_CMS</code> are both <code>YES</code>.</p>
+<p>There is no fixed day. The step is part of AutoTasks’ nightly look at
+the CMS site (from the hour in <code>AUTOTASKS</code> /
+<code>CMSFETCH_CHECK_AT</code>, 1 AM by default), and it runs only while
+<code>CMS_ASC</code> / <code>DOWNLOAD</code> and <code>AUTOTASKS</code>
+/ <code>FETCH_CMS</code> are both <code>YES</code>.</p>
 <ul>
 <li><strong>A new quarter</strong> (January, April, July, October): each
 look checks whether CMS has posted the current quarter’s rates. The
@@ -3299,11 +3365,12 @@ server) is tried again at every look until it applies.</li>
 <em>The factor alert</em>).</li>
 </ul>
 <p><strong>By hand:</strong> there is no command that makes AutoTasks
-look at CMS now; a smaller <code>CMSFETCH_CHECK_HOURS</code> makes it
-look more often. What can be done by hand is in <strong>CMS ASC
-Setup</strong>: saving a different factor reprices that year’s loaded
-quarters at once, <strong>Undo last update</strong> reverses the newest
-update and <strong>Apply again</strong> puts it back.</p>
+look at CMS now; clearing <code>CMSFETCH_CHECK_AT</code> and setting a
+smaller <code>CMSFETCH_CHECK_HOURS</code> makes it look more often. What
+can be done by hand is in <strong>CMS ASC Setup</strong>: saving a
+different factor reprices that year’s loaded quarters at once,
+<strong>Undo last update</strong> reverses the newest update and
+<strong>Apply again</strong> puts it back.</p>
 <p><strong>A quarter that changes no price</strong> still loads and is
 recorded (<em>Last update</em> shows it), nothing is written to the fee
 schedule, and the e-mail’s subject is <em>Mp10 CMS ASC: update</em>.

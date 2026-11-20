@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Structured Systems · www.structuredsystems.com" />
-  <meta name="dcterms.date" content="2026-11-18" />
+  <meta name="dcterms.date" content="2026-11-20" />
   <title>Mp10 Patients, Billing and Payments — User’s Guide</title>
   <style>
 code{white-space: pre-wrap;}
@@ -149,7 +149,7 @@ Guide</h1>
 <p class="subtitle">From the patient at the front desk to the payment on
 the claim</p>
 <p class="author">Structured Systems · www.structuredsystems.com</p>
-<p class="date">18 November 2026</p>
+<p class="date">20 November 2026</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -230,6 +230,8 @@ the administrator</a></li>
 <li><a href="#encounters" id="toc-encounters">Encounters</a>
 <ul>
 <li><a href="#creating-an-encounter" id="toc-creating-an-encounter">Creating an encounter</a></li>
+<li><a href="#which-printer-the-form-and-the-label-go-to" id="toc-which-printer-the-form-and-the-label-go-to">Which printer the
+form and the label go to</a></li>
 <li><a href="#encounters-made-from-the-calendar" id="toc-encounters-made-from-the-calendar">Encounters made from the
 calendar</a></li>
 <li><a href="#encounters-dated-in-the-future" id="toc-encounters-dated-in-the-future">Encounters dated in the
@@ -321,6 +323,24 @@ schedule dates</a></li>
 <li><a href="#modifiers" id="toc-modifiers">Modifiers</a></li>
 <li><a href="#checking-a-batch-of-claims-before-sending" id="toc-checking-a-batch-of-claims-before-sending">Checking a batch of
 claims before sending</a></li>
+</ul></li>
+<li><a href="#coding-the-encounter-in-patients10-institutional" id="toc-coding-the-encounter-in-patients10-institutional">Coding the
+encounter in Patients10 (institutional)</a>
+<ul>
+<li><a href="#opening-the-coding-screen" id="toc-opening-the-coding-screen">Opening the Coding screen</a></li>
+<li><a href="#the-icd10s-tab-diagnoses" id="toc-the-icd10s-tab-diagnoses">The Icd10s tab: diagnoses</a>
+<ul>
+<li><a href="#present-on-admission-poa" id="toc-present-on-admission-poa">Present on admission (POA)</a></li>
+</ul></li>
+<li><a href="#the-cpts-tab-procedures-of-an-ambulatory-case" id="toc-the-cpts-tab-procedures-of-an-ambulatory-case">The Cpts tab:
+procedures of an ambulatory case</a></li>
+<li><a href="#the-icd-procs-tab-procedures-of-an-inpatient-stay" id="toc-the-icd-procs-tab-procedures-of-an-inpatient-stay">The ICD-Procs
+tab: procedures of an inpatient stay</a></li>
+<li><a href="#saving" id="toc-saving">Saving</a></li>
+<li><a href="#what-billing-does-with-the-codes" id="toc-what-billing-does-with-the-codes">What billing does with the
+codes</a></li>
+<li><a href="#for-the-administrator-the-icd-10-pcs-table" id="toc-for-the-administrator-the-icd-10-pcs-table">For the
+administrator: the ICD-10-PCS table</a></li>
 </ul></li>
 <li><a href="#saving-the-claim-and-error-tags" id="toc-saving-the-claim-and-error-tags">Saving the claim, and error
 tags</a>
@@ -792,6 +812,21 @@ it. Once saved, the window’s title shows it.</p>
 because they need the record number: the insurance cards, the HIPAA
 signature, the encounters and tags. <strong>Save the patient first, then
 carry on.</strong></p>
+<p>Mp10 never gives a new patient a number that already belongs to
+someone. If the next number in line is taken, it moves on to the next
+one that is free, so now and then a number is skipped. If a great many
+numbers in a row are taken, the patient is <strong>not saved</strong>
+and the message says so: <em>This new patient was NOT saved: record
+numbers … all belong to patients already</em>. The administrator then
+sets the counter in the administration module, <strong>Actions → Next
+Record Number</strong>, and you save the patient again.</p>
+<p><strong>For the administrator.</strong> <em>Next Record Number</em>
+shows where the counter stands and the record number of the last patient
+created. Type the <strong>last number used</strong>, normally the
+highest one in use; the next patient gets that number plus one. If the
+number after it already belongs to a patient, Mp10 asks before taking
+it. Every change is written to the audit log with the old and the new
+value and who made it.</p>
 <h2 id="when-mp10-thinks-the-patient-already-exists">When Mp10 thinks
 the patient already exists</h2>
 <p>On a new patient, as you leave the name, SSN or date-of-birth fields,
@@ -1250,6 +1285,48 @@ weight and height. The encounter window prints its own form and label.
 Orders are entered from the Encounters grid, not from a tab (next
 chapter).</p>
 </blockquote>
+<h2 id="which-printer-the-form-and-the-label-go-to">Which printer the
+form and the label go to</h2>
+<p>Mp10 finds the printer <strong>by its Windows name</strong>:</p>
+<ul>
+<li>the form printer’s name must contain
+<strong><code>FORMS</code></strong></li>
+<li>the label printer’s name must contain
+<strong><code>LABELS</code></strong></li>
+</ul>
+<p>Capitals do not matter, but the word must be the plural:
+<code>HP 4200 FORMS</code> and <code>Zebra ZD410 labels</code> both
+work, while <code>Zebra LABEL</code> does not. To rename a printer, open
+<em>Printers &amp; scanners</em> in Windows Settings (or <em>Devices and
+Printers</em> in the Control Panel), choose the printer, open
+<em>Printer properties</em>, type the new name on the <em>General</em>
+tab and click <strong>OK</strong>. A shared printer is renamed on each
+workstation that uses it.</p>
+<p>Where the printers cannot be renamed, they can be named in the
+<code>[PRINT]</code> section of the <code>Mp10.ini</code> that sits
+beside the program instead:</p>
+<pre><code>[PRINT]
+FORMS=HP LaserJet 4200 (Front Desk)
+LABELS=Zebra ZD410</code></pre>
+<p>Mp10 looks in this order, separately for forms and for labels:</p>
+<ol type="1">
+<li>the printer named in <code>Mp10.ini</code>, if it is installed on
+this workstation;</li>
+<li>a printer whose name contains <code>FORMS</code> /
+<code>LABELS</code>;</li>
+<li>neither: Mp10 shows the list of printers and asks which to use, and
+then asks <em>Remember this printer?</em> Answering <strong>Yes</strong>
+writes the choice to <code>Mp10.ini</code>, so this desk is not asked
+again. Mp10 Web reads the same setting.</li>
+</ol>
+<p>When the printer comes from rule 1 or 2, the encounter form and label
+print <strong>straight away, without the print dialog</strong>. The
+dialog only opens when you had to pick the printer from the list and did
+not ask Mp10 to remember it.</p>
+<p>If the same printer appears twice in the list, once with
+<code>FORMS</code> in its name and once without, those are two printers
+installed in Windows. Mp10 uses the one with <code>FORMS</code>; delete
+the other so nobody prints to it by mistake.</p>
 <h2 id="encounters-made-from-the-calendar">Encounters made from the
 calendar</h2>
 <p>In the appointment calendar (MpXtrmCal10), an appointment for someone
@@ -1355,7 +1432,9 @@ your practice has orders switched on.</p>
 <strong>Encounters Table</strong>, highlight the encounter and click
 <strong>Orders</strong> in the side panel. On institutional claims the
 procedure lines come from the charges posted to the encounter, not from
-the orders.</p>
+the orders. The same side panel has <strong>Coding</strong>, where the
+record room codes the case: see <em>Coding the encounter in Patients10
+(institutional)</em> in Part II.</p>
 </blockquote>
 <h1 id="the-patients-signature-on-the-encounter">The patient’s signature
 on the encounter</h1>
@@ -2526,6 +2605,9 @@ pointers.</li>
 </ul>
 <h2 id="warnings-on-the-encounter-coding-screen">Warnings on the
 encounter coding screen</h2>
+<p>The screen itself, with its four tabs, is described in <em>Coding the
+encounter in Patients10 (institutional)</em>. This section is about its
+<em>Warnings</em> column.</p>
 <p>When one person codes in Patients10 and another bills, a coding
 problem used to surface only when the biller saw an error tag on the
 claim and went back to the coder. The <strong>Coding</strong> screen of
@@ -2799,6 +2881,362 @@ claims before sending</h2>
 of warnings: missing or invalid codes, duplicate diagnoses, codes that
 need a seventh character or a side, missing place of service, the tags
 each claim carries. Nothing is changed or sent.</p>
+<h1 id="coding-the-encounter-in-patients10-institutional">Coding the
+encounter in Patients10 (institutional)</h1>
+<p>In a hospital or facility the codes are usually set by the record
+room, not by the biller. The coder works in <strong>Patients10</strong>,
+on the encounter’s <strong>Coding</strong> screen, and the biller finds
+the result on the claim in <strong>MpBill10</strong>. This chapter is
+for that coder. It covers both kinds of institutional case:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th>Inpatient stay</th>
+<th>Ambulatory / outpatient case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Diagnoses</td>
+<td><strong>Icd10s</strong> tab, with <strong>POA</strong> on every
+code</td>
+<td><strong>Icd10s</strong> tab; POA is not needed</td>
+</tr>
+<tr>
+<td>What was done</td>
+<td><strong>ICD-Procs</strong> tab: ICD-10-PCS codes, each with its
+date</td>
+<td><strong>Cpts</strong> tab: CPT/HCPCS codes, with units</td>
+</tr>
+<tr>
+<td>The other tab</td>
+<td><strong>Cpts</strong> only if the payer also asks for CPT codes</td>
+<td><strong>ICD-Procs</strong> stays empty</td>
+</tr>
+</tbody>
+</table>
+<p>ICD-10-PCS is the code set for procedures on hospital
+<strong>inpatient</strong> claims. Outpatient and surgery-center claims
+report procedures with CPT and HCPCS codes instead. Mp10 follows that
+rule when it sends the claim: see <em>What billing does with the
+codes</em> at the end of this chapter.</p>
+<h2 id="opening-the-coding-screen">Opening the Coding screen</h2>
+<ol type="1">
+<li>In Patients10, open the <strong>Encounters Table</strong> and
+highlight the encounter.</li>
+<li>Click <strong>Coding</strong> in the side panel.</li>
+</ol>
+<p>The window is titled <em>ICD codes</em>, with the encounter number
+and the patient’s name. It does not block the rest of Patients10: you
+can leave it open, look at the encounter or the patient, and come back.
+Asking for the same encounter’s coding again brings the open window
+forward instead of opening a second one.</p>
+<p>It has four tabs: <strong>Icd10s</strong>, <strong>Icd9s</strong>,
+<strong>Cpts</strong> and <strong>ICD-Procs</strong>. Each one is a list
+with the same four buttons on the right:</p>
+<ul>
+<li><strong>Add</strong> adds an empty row. An empty row is never
+saved.</li>
+<li><strong>Delete</strong> removes the highlighted row.</li>
+<li><strong>Move Up</strong> and <strong>Move Down</strong> change the
+order. The order matters: the first diagnosis is the principal
+diagnosis, and the first ICD procedure is the principal procedure.</li>
+</ul>
+<p>On the Icd10s and Cpts tabs the keyboard does the same: Ins or F5
+adds, Del or F6 deletes.</p>
+<p><strong>Save</strong> (bottom of the window) saves all four tabs at
+once. <strong>Exit</strong> closes without saving.</p>
+<p>On every tab you can simply start typing on a cell; you do not need
+to press Enter first.</p>
+<h2 id="the-icd10s-tab-diagnoses">The Icd10s tab: diagnoses</h2>
+<p>This tab works like the claim’s ICD10 tab, described in <em>Coding
+the diagnoses (ICD-10)</em>: type a code with its dot in <em>Icd10</em>,
+or type words in <em>Description</em> and pick from the list that opens
+under the grid. The cell’s button, and Enter on the list’s <em>No
+matches</em> row, open the Diagnosis Table. The button with the AI icon
+reads the encounter’s reports and proposes codes.</p>
+<p>What is different here:</p>
+<ul>
+<li><strong>POA</strong> (present on admission). The column appears only
+on an <strong>inpatient</strong> encounter, because POA is not reported
+on any other claim. Answer it for every diagnosis: after Enter on a code
+the cursor moves along the row, so you pass through POA on the way. See
+<em>Present on admission (POA)</em> below.</li>
+<li><strong>DateCoded</strong> and <strong>Operator</strong> show when
+the code was entered and by whom. You do not type them.</li>
+<li><strong>Suggestions on an empty row</strong> are the diagnoses your
+facility has billed most often with the codes on this encounter’s
+<strong>Cpts</strong> tab. Code the Cpts first and the suggestions fit
+the case.</li>
+<li><strong>Warnings.</strong> The <em>Warnings</em> column judges the
+codes while you work. See <em>Warnings on the encounter coding
+screen</em>.</li>
+</ul>
+<p>The <strong>Icd9s</strong> tab is only for encounters before
+10/01/2015. Leave it alone on anything newer.</p>
+<h3 id="present-on-admission-poa">Present on admission (POA)</h3>
+<p>POA says whether the patient already had the condition when the
+inpatient stay began. Payers use it to tell a condition the patient
+arrived with from one that developed in the hospital. Pick one of these
+in the <em>POA</em> cell:</p>
+<table>
+<thead>
+<tr>
+<th>POA</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Y</strong></td>
+<td>Present at the time of admission</td>
+</tr>
+<tr>
+<td><strong>N</strong></td>
+<td>Not present at admission: it developed during the stay</td>
+</tr>
+<tr>
+<td><strong>U</strong></td>
+<td>The documentation is not enough to tell</td>
+</tr>
+<tr>
+<td><strong>W</strong></td>
+<td>The provider cannot determine it clinically</td>
+</tr>
+<tr>
+<td><strong>1</strong></td>
+<td>This code is exempt from POA reporting</td>
+</tr>
+<tr>
+<td>blank</td>
+<td>Not answered yet</td>
+</tr>
+</tbody>
+</table>
+<p>Resting the mouse on the cell shows the same list.</p>
+<ul>
+<li>A new diagnosis starts <strong>blank</strong>. Mp10 never fills in
+an answer for you.</li>
+<li>Use <strong>U</strong> only when the record truly does not say. It
+is not the same as leaving the cell blank.</li>
+<li><strong>1</strong> is for the codes on the official list of
+POA-exempt codes (many external-cause and “history of” codes, for
+example). Nothing is sent to the payer for an exempt code, which is what
+the payers expect.</li>
+<li>The answer belongs to the code. If the biller later moves or deletes
+diagnoses on the claim, each code keeps its own POA.</li>
+</ul>
+<p>A claim that needs POA and has a diagnosis left blank is tagged
+<strong>POA Missing</strong>; see <em>What billing does with the
+codes</em>.</p>
+<blockquote>
+<p>The POA cell used to offer only Y and N, and its answers were never
+sent correctly. Answers entered before this version are not kept: on an
+inpatient encounter coded earlier, answer POA again.</p>
+</blockquote>
+<h2 id="the-cpts-tab-procedures-of-an-ambulatory-case">The Cpts tab:
+procedures of an ambulatory case</h2>
+<p>One row per code: <em>Cpt</em>, <em>Description</em> and
+<em>Units</em>.</p>
+<ul>
+<li><strong>If you know the code,</strong> type it in <em>Cpt</em> and
+press Enter. Its description fills in. The code must be one of your
+facility’s billing codes.</li>
+<li><strong>If you do not,</strong> type in the <em>Description</em>
+cell. An empty row shows the gray hint <em>Type a code or keywords,
+e.g. 6698 or cataract</em>. After three characters a list opens under
+the grid and narrows as you type. Words are matched against every
+description your facility has used for a code, so your own abbreviations
+find it.</li>
+<li><strong>Down arrow</strong>, or <strong>Enter</strong> after words,
+moves into the list. <strong>Enter</strong> or a double-click picks the
+code. <strong>Esc</strong> closes the list.</li>
+<li><strong>No matches:</strong> Enter on the <em>No matches</em> row
+opens the full list of billing codes. The <em>Cpt</em> cell’s button
+opens it too.</li>
+<li>Type the <strong>Units</strong> when there is more than one.</li>
+</ul>
+<p>What you type in <em>Description</em> is only a search. It is never
+saved; the description saved is the code’s own.</p>
+<p><strong>Which codes the list offers.</strong> The list is taken from
+the fee schedule of the encounter’s payer, as it stands on the admission
+date. Coding is not pricing, so the list is more generous than the one
+on the claim:</p>
+<ul>
+<li>a code appears once, whatever revenue codes the schedule prices it
+on;</li>
+<li>a code is offered even if the payer has no fee for it;</li>
+<li>when the payer has no fee schedule, or nothing on it matches, the
+list comes from all your fee schedules.</li>
+</ul>
+<p><strong>Suggestions on an empty row.</strong> The list opens by
+itself, with a heading that says where it comes from: <em>Billed with
+this encounter’s diagnoses, then most billed</em> when the Icd10s tab
+already has codes, otherwise <em>Most billed on the … fee schedule</em>
+or <em>Most billed on all fee schedules</em>. Codes already on the tab
+are left out.</p>
+<h2 id="the-icd-procs-tab-procedures-of-an-inpatient-stay">The ICD-Procs
+tab: procedures of an inpatient stay</h2>
+<p>One row per procedure: <em>IcdProc</em>, <em>Description</em> and
+<em>Date</em>.</p>
+<p>An ICD-10-PCS code is <strong>seven letters and digits with no
+dot</strong>, for example <code>0DTJ4ZZ</code> (laparoscopic removal of
+the appendix). The letters I and O are never used, so they cannot be
+mistaken for 1 and 0. The code set is not only surgery: imaging,
+transfusions, deliveries, radiation therapy and rehabilitation done
+during the stay have codes too. That is why the third column is called
+<em>Date</em> and not <em>surgery date</em>.</p>
+<p>There are three ways to enter a procedure.</p>
+<p><strong>Type the whole code.</strong> Type the seven characters in
+<em>IcdProc</em> and press Enter. Lower case and dots are corrected for
+you. If the code exists, its title fills <em>Description</em>. If it
+does not, Mp10 says <em>“…” is not an ICD-10-PCS procedure code</em> and
+empties the cell.</p>
+<p><strong>Search as you type.</strong> An empty row’s
+<em>Description</em> cell shows the gray hint <em>Type part of a code or
+keywords, e.g. 0DTJ or appendix resection</em>. Type either one
+there:</p>
+<ul>
+<li><strong>keywords</strong>, such as <code>appendix resection</code>
+or <code>knee replacement right</code>. Every word has to be in the
+code’s title, and the start of a word is enough:
+<code>append resect</code> finds the same codes;</li>
+<li><strong>the start of a code</strong>, such as <code>0DTJ</code>.
+This also works in the <em>IcdProc</em> cell.</li>
+</ul>
+<p>After three characters a list opens under the grid with
+<em>Code</em>, <em>Description</em> and <em>Used</em> (how many
+encounters at your facility carry the code). It shows up to 50 codes, in
+code order; type more to narrow it.</p>
+<ul>
+<li><strong>Down arrow</strong> or <strong>Enter</strong> moves into the
+list.</li>
+<li><strong>Enter</strong> or a <strong>double-click</strong> picks the
+highlighted code and fills the row. The cursor goes to a new empty
+row.</li>
+<li><strong>Esc</strong> closes the list.</li>
+<li><strong>No matches:</strong> press Enter on the <em>No matches</em>
+row to open the procedure code table (below).</li>
+</ul>
+<p>A partial code is never saved as a code. Enter on less than seven
+characters takes you into the list, not out of the cell.</p>
+<p><strong>Open the procedure code table.</strong> The <em>IcdProc</em>
+cell has a button. It opens <em>ICD-10-PCS Procedure Codes</em>, one
+window with a search box over the whole table:</p>
+<ol type="1">
+<li>Type part of a code or keywords in <strong>Search by code or
+keywords</strong>. The list updates a moment after you stop typing. With
+the box empty the table is listed from its first code.</li>
+<li>Move to the code with the arrow keys or the mouse.</li>
+<li>Press <strong>Enter</strong>, double-click, or click
+<strong>Select</strong>. The code and its title go to the row.
+<strong>Cancel</strong> or Esc leaves the row as it was.</li>
+</ol>
+<p>The window shows up to 500 codes at a time and says so above the
+list; add a word to see fewer.</p>
+<p><strong>Suggestions on an empty row.</strong> Under the heading
+<em>Procedure codes used most here</em>, the list offers the procedure
+codes your facility has coded most often, most used first, leaving out
+the ones already on this encounter. A facility that has just started
+coding in ICD-10-PCS sees no suggestions until some encounters have been
+coded.</p>
+<p><strong>The date.</strong> <em>Date</em> starts as today’s date.
+Change it to the day the procedure was done; the payer receives it with
+the code.</p>
+<h2 id="saving">Saving</h2>
+<p><strong>Save</strong> writes all four tabs. If the <em>Warnings</em>
+column of the Icd10s tab still shows something in red, your codes are
+saved and Mp10 then lists what to check. It never refuses to save.</p>
+<h2 id="what-billing-does-with-the-codes">What billing does with the
+codes</h2>
+<p>The codes belong to the <strong>encounter</strong>. Every claim of
+that encounter uses them, and the biller does not type them again.</p>
+<ul>
+<li><strong>In MpBill10’s claim window, the <em>Rec Room</em>
+tab</strong> shows the encounter’s diagnoses, ICD procedures and CPT
+codes as the coder left them, to read.</li>
+<li><strong>Diagnoses</strong> go on the claim in the order of the
+Icd10s tab. The first one is the principal diagnosis.</li>
+<li><strong>POA</strong> is sent with each diagnosis, the principal one
+included, on an <strong>inpatient</strong> claim, whatever the payer.
+The payer gets exactly what the coder answered: Y, N, U or W. A code
+marked exempt (1) and a code left blank send nothing.</li>
+<li><strong>POA Missing.</strong> When such a claim is saved with a
+diagnosis still blank, it is tagged <strong>POA Missing</strong>.
+Clicking the tag names the codes. The coder answers them on the Coding
+screen, the biller saves the claim again and the tag clears. The tag
+warns; it does not stop the claim.</li>
+<li><strong>ICD procedures</strong> are sent only on an inpatient claim:
+the first row as the principal procedure, the rest as other procedures,
+each with its date. They also print on the paper UB-04. On any other
+claim they stay on the encounter and are not sent.</li>
+<li><strong>POA on the paper UB-04.</strong> The form prints POA only
+where its layout asks for it. In the form’s script, <code>^POA[1]</code>
+is the POA of the diagnosis that <code>^ICD[1]</code> prints,
+<code>^POA[2]</code> of the second, and so on: Y, N, U or W on an
+inpatient claim, and nothing on any other claim, for an exempt code, or
+for one not answered. On the UB-04 the POA is the eighth character of
+each diagnosis box (FL 67 and 67A-Q), so a diagnosis line of the form
+reads <code>~PADR( &quot;^ICD[1]&quot;, 7 ) + &quot;^POA[1]&quot;~</code>. A form whose
+script does not use <code>^POA</code> prints as it always has.</li>
+<li><strong>MpWeb.</strong> The claim window of MpWeb shows the same POA
+column on an inpatient claim, with the same six choices, and tags
+<strong>POA Missing</strong> by the same rule.</li>
+</ul>
+<p><strong>Which claims are inpatient.</strong> A claim is inpatient
+when its type of bill starts with <strong>11</strong> (hospital
+inpatient). The third digit only says whether the claim is an original,
+a replacement or a void, so all of them carry POA and the ICD
+procedures. The type of bill comes from the payer’s record when it has
+one, otherwise from the encounter’s admission type.</p>
+<p><strong>Every payer receives POA on an inpatient claim.</strong>
+There is no setting: Medicare and most other payers require it there,
+and a payer that does not use it ignores it. The hospital types that are
+exempt from POA reporting (critical access, psychiatric, rehabilitation,
+long-term care and the like) may still send it.</p>
+<ul>
+<li><strong>CPT codes</strong> from the Cpts tab are the record room’s
+coding of the case. The claim’s lines still come from the charges posted
+to the encounter, so the biller compares the two on the <em>Rec
+Room</em> tab.</li>
+</ul>
+<p>If the coder changes a diagnosis after the claim was made, the biller
+opens the claim and presses <strong>Save</strong> so its error tags are
+judged again.</p>
+<h2 id="for-the-administrator-the-icd-10-pcs-table">For the
+administrator: the ICD-10-PCS table</h2>
+<p>The search, the suggestions and the check of a typed code need the
+CMS ICD-10-PCS code set in your data. It arrives in two steps.</p>
+<ol type="1">
+<li><strong>Update Data Dictionary</strong> (version 10.99 or later)
+creates the table and its search index. The same update adds the new POA
+field to the diagnoses; until it has run, the Coding screen shows no POA
+column and no claim carries POA. Until then the ICD-Procs tab works as
+it always did: the code is taken as typed, with no list and no
+check.</li>
+<li><strong>Load the codes.</strong> In MpAdmin10: <strong>File → Code
+Sets → Download ICD-10-PCS Procedure Codes from CMS</strong>. Answer
+<strong>Yes</strong>. It downloads the current release from cms.gov and
+loads it in under a minute, then names the release and the file it came
+from. The computer needs internet access.</li>
+</ol>
+<p>After that nothing has to be done by hand. AutoTasks looks at the CMS
+site at each of its checks and loads a new release when one is in force:
+the new fiscal year every October 1st, and the April 1st update when CMS
+publishes one. Each release is a whole code set and replaces the one
+before it. The <em>Mp10 AutoTasks</em> guide describes it under
+<em>Keeping the CMS reference data current</em>.</p>
+<p>Run the menu item again at any time to check: if the newest release
+is already loaded it says so, and offers to download and load it
+again.</p>
+<p>A code already on an encounter is never changed or removed by a new
+release.</p>
 <h1 id="saving-the-claim-and-error-tags">Saving the claim, and error
 tags</h1>
 <h2 id="when-you-save">When you save</h2>
@@ -2859,6 +3297,10 @@ claim has none and this payer has refused claims sent without one.</p>
 <p><strong>Prior Auth Missing</strong> does not learn anything: it
 follows the <strong>Prior Auth Rules</strong> table your supervisors
 keep. See the chapter <em>Prior authorizations</em>.</p>
+<p><strong>POA Missing</strong> (institutional) is placed on an
+inpatient claim when a diagnosis of the encounter has no POA answer.
+Answer it on the encounter’s Coding screen and save the claim again. See
+<em>Coding the encounter in Patients10 (institutional)</em>.</p>
 <p><strong>Physical Status Missing</strong> is placed on an
 anesthesia-code line with no P1-P6 modifier, for a payer whose
 anesthesia lines carry one at least 20% of the time. It runs on every
@@ -4777,6 +5219,21 @@ saves it)</td>
 <td>Find a printed quote</td>
 <td>Saved Quotes (in the quote, the patient browser, or Patients10’s
 Actions menu)</td>
+</tr>
+<tr>
+<td>Code an encounter (institutional)</td>
+<td>Patients10 → Encounters Table → highlight → <strong>Coding</strong>
+→ Icd10s, then Cpts (ambulatory) or ICD-Procs (inpatient) → Save</td>
+</tr>
+<tr>
+<td>Find an ICD-10-PCS procedure code</td>
+<td>ICD-Procs tab → type part of the code or keywords in
+<em>Description</em>; or the <em>IcdProc</em> cell’s button</td>
+</tr>
+<tr>
+<td>Load the ICD-10-PCS codes</td>
+<td>MpAdmin10 → File → Code Sets → Download ICD-10-PCS Procedure Codes
+from CMS</td>
 </tr>
 <tr>
 <td>Send</td>
